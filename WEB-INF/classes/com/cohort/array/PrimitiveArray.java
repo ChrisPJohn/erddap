@@ -2837,7 +2837,7 @@ public abstract class PrimitiveArray {
      *   second item in the sorted list, ...).
      */
     public int[] rank(boolean ascending) {
-        ArrayList table = new ArrayList();
+        ArrayList<PrimitiveArray> table = new ArrayList<>();
         table.add(this);
         return rank(table, new int[]{0}, new boolean[]{ascending});
     }
@@ -2861,22 +2861,22 @@ public abstract class PrimitiveArray {
      *   in the sorted list, rank[1] is the row number of the
      *   second item in the sorted list, ...).
      */
-    public static int[] rank(List table, int keys[], boolean[] ascending) {
+    public static int[] rank(List<PrimitiveArray> table, int keys[], boolean[] ascending) {
         return lowRank(new RowComparator(table, keys, ascending), table);
     }
 
     /** This is like rank, but StringArrays are tested case insensitively.   */
-    public static int[] rankIgnoreCase(List table, int keys[], boolean[] ascending) {
+    public static int[] rankIgnoreCase(List<PrimitiveArray> table, int keys[], boolean[] ascending) {
         return lowRank(new RowComparatorIgnoreCase(table, keys, ascending), table);
     }
     
-    private static int[] lowRank(RowComparator comparator, List table) {
+    private static int[] lowRank(RowComparator comparator, List<PrimitiveArray> table) {
 
         //create the rowArray with pointer to specific rows
-        int n = ((PrimitiveArray)table.get(0)).size();
+        int n = table.get(0).size();
         Integer rowArray[] = new Integer[n];
         for (int i = 0; i < n; i++)
-            rowArray[i] = new Integer(i);
+            rowArray[i] = i;
 
         //sort the rows
         Arrays.sort(rowArray, comparator);   //this is "stable"
@@ -3295,9 +3295,11 @@ public abstract class PrimitiveArray {
     }
 
     /**
-     * This returns a new (always) PrimitiveArray of type elementType
+     * This returns a PrimitiveArray of type elementType
      * which has unpacked values (scale then addOffset values applied).
      * Calculations are done as doubles then, if necessary, rounded and stored.
+     * The returned PrimitiveArray is new if the destination type does not
+     * match the source type.
      *
      * @param destElementPAType
      * @param sourceIsUnsigned if true, integer-type source values will be 
@@ -3308,7 +3310,11 @@ public abstract class PrimitiveArray {
      */
     public PrimitiveArray scaleAddOffset(boolean sourceIsUnsigned, 
         PAType destElementPAType, double scale, double addOffset) {
-        PrimitiveArray pa = factory(destElementPAType, size, true);
+        // Don't create a new PA if we don't need to.
+        PrimitiveArray pa = this;
+        if (this.elementType() != destElementPAType) {
+            pa = factory(destElementPAType, size, true);    
+        }
         if (sourceIsUnsigned) {
             for (int i = 0; i < size; i++)
                 pa.setDouble(i, getUnsignedDouble(i) * scale + addOffset); //NaNs remain NaNs
