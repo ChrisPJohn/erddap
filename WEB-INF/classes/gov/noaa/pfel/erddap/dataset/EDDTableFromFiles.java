@@ -241,7 +241,7 @@ public abstract class EDDTableFromFiles extends EDDTable{
         String tDefaultDataQuery = null;
         String tDefaultGraphQuery = null;
         String tAddVariablesWhere = null;
-        int tNThreads = -1; //unspecified
+        int tNThreads = 4; //unspecified
         String tCacheFromUrl = null;
         int tCacheSizeGB = -1;
         String tCachePartialPathRegex = null;

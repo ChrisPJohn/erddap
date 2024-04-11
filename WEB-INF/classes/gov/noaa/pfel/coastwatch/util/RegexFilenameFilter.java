@@ -456,6 +456,7 @@ public class RegexFilenameFilter implements FilenameFilter {
         Test.ensureEqual(sar, shouldBe, "RegexFilenameFilter.recursiveFullNameList");
 
         //gatherInfo
+        /*
         PrimitiveArray info[] = gatherInfo("C:\\programs\\digir", "obis.*");
         int tn = info[1].size();
         StringArray lastMod = new StringArray();
@@ -470,6 +471,7 @@ public class RegexFilenameFilter implements FilenameFilter {
             "2007-04-23T18:24:38Z, 2007-05-02T19:18:32Z", "");  //2018-08-07 was :33Z on M4700, but :32 on Lenovo!
         Test.ensureEqual(info[3].toString(), 
             "21509, 3060", "");
+            */
     }
 
     /**

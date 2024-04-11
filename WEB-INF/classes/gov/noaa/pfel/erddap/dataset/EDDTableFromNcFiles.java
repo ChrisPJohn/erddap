@@ -18054,17 +18054,58 @@ nThreads=4 time=26
         String id = tDatasetID; 
         userDapQuery = "station,latitude,longitude,time,wd,wspd,wtmp&wd=15&wspd=10&station=~\"4....\"&time<2020-01-01";
 
-        EDDTableFromNcFiles eddTable = (EDDTableFromNcFiles)oneFromDatasetsXml(null, id); 
+        EDDTableFromNcFiles eddTable = (EDDTableFromNcFiles)oneFromDatasetsXml(null, id);
+        
+        eddTable.nThreads = 0;
+        long startTime = System.currentTimeMillis();
+        tName = eddTable.makeNewFileForDapQuery(language, null, null, userDapQuery, dir, 
+            "testNThreads2_" + 0, ".csv"); 
+
+        String msg = "nThreads=" + 0 + 
+            " time=" + (System.currentTimeMillis() - startTime)/1000 + "s\n";
+        String2.log(msg);
+        bigResults.append(msg);
+
+        results = File2.directReadFrom88591File(dir + tName);
+        //String2.log(results);            
+        expected =  //ensure that order is correct   //2019-07-27 results change once in awhile
+"station,latitude,longitude,time,wd,wspd,wtmp\n"
++ ",degrees_north,degrees_east,UTC,degrees_true,m s-1,degree_C\n"
++ "41001,34.675,-72.698,1988-12-12T14:00:00Z,15,10.0,20.4\n"
++ "41001,34.675,-72.698,1990-09-04T19:00:00Z,15,10.0,26.8\n"
++ "41004,32.501,-79.099,1994-12-02T15:00:00Z,15,10.0,22.7\n"
++ "41004,32.501,-79.099,1995-01-29T21:00:00Z,15,10.0,18.8\n"
++ "41004,32.501,-79.099,1996-01-22T10:00:00Z,15,10.0,16.8\n"
++ "41004,32.501,-79.099,2015-02-05T17:00:00Z,15,10.0,20.3\n"
++ "41006,29.3,-77.4,1990-02-13T00:00:00Z,15,10.0,24.2\n"
++ "41008,31.402,-80.869,1997-10-16T10:00:00Z,15,10.0,25.9\n"
++ "41008,31.402,-80.869,2002-10-24T12:00:00Z,15,10.0,24.6\n"
++ "41008,31.402,-80.869,2003-01-12T19:00:00Z,15,10.0,12.4\n"
++ "41008,31.402,-80.869,2004-02-26T20:00:00Z,15,10.0,12.9\n"
++ "41008,31.402,-80.869,2007-01-17T08:00:00Z,15,10.0,16.6\n"
++ "41008,31.402,-80.869,2009-12-07T10:00:00Z,15,10.0,16.7\n"
++ "41010,28.906,-78.471,2003-10-01T22:00:00Z,15,10.0,28.5\n"
++ "41012,30.041,-80.533,2008-10-19T10:00:00Z,15,10.0,26.0\n"
++ "41012,30.041,-80.533,2008-10-19T17:00:00Z,15,10.0,26.3\n"
++ "41012,30.041,-80.533,2011-02-10T16:00:00Z,15,10.0,16.6\n"
++ "41013,33.436,-77.743,2003-11-26T16:00:00Z,15,10.0,22.9\n"
++ "41013,33.436,-77.743,2008-10-30T13:00:00Z,15,10.0,21.6\n"
++ "41013,33.436,-77.743,2009-05-18T01:00:00Z,15,10.0,23.5\n"
++ "41013,33.436,-77.743,2009-12-06T08:00:00Z,15,10.0,20.1\n"
++ "41013,33.436,-77.743,2010-05-09T13:00:00Z,15,10.0,21.1\n"
++ "41013,33.436,-77.743,2012-09-20T09:00:00Z,15,10.0,27.2\n";
+        Test.ensureEqual(results.substring(0, expected.length()), expected, "\nresults=\n" + results);
+        
         for (int i = startNThreads; i <= endNThreads; i++) {  
             if (i == 0)
                 continue;
             eddTable.nThreads = Math.abs(i);
 
-            long startTime = System.currentTimeMillis();
+            startTime = System.currentTimeMillis();
             tName = eddTable.makeNewFileForDapQuery(language, null, null, userDapQuery, dir, 
                 "testNThreads2_" + i, ".csv"); 
 
-            String msg = "nThreads=" + i + 
+            msg = "nThreads=" + i + 
                 " time=" + (System.currentTimeMillis() - startTime)/1000 + "s\n";
             String2.log(msg);
             bigResults.append(msg);
@@ -18072,26 +18113,31 @@ nThreads=4 time=26
             results = File2.directReadFrom88591File(dir + tName);
             //String2.log(results);            
             expected =  //ensure that order is correct   //2019-07-27 results change once in awhile
-"station,latitude,longitude,time,wd,wspd,wtmp\n" +
-",degrees_north,degrees_east,UTC,degrees_true,m s-1,degree_C\n" +
-"41001,34.675,-72.698,1988-12-12T14:00:00Z,15,10.0,20.4\n" +
-"41001,34.675,-72.698,1990-09-04T19:00:00Z,15,10.0,26.8\n" +
-"41001,34.675,-72.698,2016-02-18T04:20:00Z,15,10.0,20.8\n" +
-"41001,34.675,-72.698,2019-10-09T18:20:00Z,15,10.0,26.1\n" +
-"41002,31.887,-74.921,1994-10-17T02:00:00Z,15,10.0,24.6\n" +
-"41002,31.887,-74.921,1994-10-17T03:00:00Z,15,10.0,24.6\n" +
-"41002,31.887,-74.921,2013-11-08T22:50:00Z,15,10.0,24.6\n" +
-"41004,32.501,-79.099,1994-12-02T15:00:00Z,15,10.0,22.7\n" +
-"41004,32.501,-79.099,1995-01-29T21:00:00Z,15,10.0,18.8\n" +
-"41004,32.501,-79.099,1996-01-22T10:00:00Z,15,10.0,16.8\n" +
-"41004,32.501,-79.099,2015-02-05T16:50:00Z,15,10.0,20.3\n" +
-"41004,32.501,-79.099,2018-11-11T20:10:00Z,15,10.0,23.0\n" +
-"41004,32.501,-79.099,2019-02-04T01:40:00Z,15,10.0,22.5\n" +
-"41004,32.501,-79.099,2019-08-26T02:20:00Z,15,10.0,28.4\n" +
-"41004,32.501,-79.099,2019-10-10T15:00:00Z,15,10.0,26.6\n" +
-"41004,32.501,-79.099,2019-11-09T17:50:00Z,15,10.0,26.0\n" +
-"41006,29.3,-77.4,1990-02-13T00:00:00Z,15,10.0,24.2\n" +
-"41008,31.402,-80.869,1997-10-16T10:00:00Z,15,10.0,25.9\n";
+"station,latitude,longitude,time,wd,wspd,wtmp\n"
++ ",degrees_north,degrees_east,UTC,degrees_true,m s-1,degree_C\n"
++ "41001,34.675,-72.698,1988-12-12T14:00:00Z,15,10.0,20.4\n"
++ "41001,34.675,-72.698,1990-09-04T19:00:00Z,15,10.0,26.8\n"
++ "41004,32.501,-79.099,1994-12-02T15:00:00Z,15,10.0,22.7\n"
++ "41004,32.501,-79.099,1995-01-29T21:00:00Z,15,10.0,18.8\n"
++ "41004,32.501,-79.099,1996-01-22T10:00:00Z,15,10.0,16.8\n"
++ "41004,32.501,-79.099,2015-02-05T17:00:00Z,15,10.0,20.3\n"
++ "41006,29.3,-77.4,1990-02-13T00:00:00Z,15,10.0,24.2\n"
++ "41008,31.402,-80.869,1997-10-16T10:00:00Z,15,10.0,25.9\n"
++ "41008,31.402,-80.869,2002-10-24T12:00:00Z,15,10.0,24.6\n"
++ "41008,31.402,-80.869,2003-01-12T19:00:00Z,15,10.0,12.4\n"
++ "41008,31.402,-80.869,2004-02-26T20:00:00Z,15,10.0,12.9\n"
++ "41008,31.402,-80.869,2007-01-17T08:00:00Z,15,10.0,16.6\n"
++ "41008,31.402,-80.869,2009-12-07T10:00:00Z,15,10.0,16.7\n"
++ "41010,28.906,-78.471,2003-10-01T22:00:00Z,15,10.0,28.5\n"
++ "41012,30.041,-80.533,2008-10-19T10:00:00Z,15,10.0,26.0\n"
++ "41012,30.041,-80.533,2008-10-19T17:00:00Z,15,10.0,26.3\n"
++ "41012,30.041,-80.533,2011-02-10T16:00:00Z,15,10.0,16.6\n"
++ "41013,33.436,-77.743,2003-11-26T16:00:00Z,15,10.0,22.9\n"
++ "41013,33.436,-77.743,2008-10-30T13:00:00Z,15,10.0,21.6\n"
++ "41013,33.436,-77.743,2009-05-18T01:00:00Z,15,10.0,23.5\n"
++ "41013,33.436,-77.743,2009-12-06T08:00:00Z,15,10.0,20.1\n"
++ "41013,33.436,-77.743,2010-05-09T13:00:00Z,15,10.0,21.1\n"
++ "41013,33.436,-77.743,2012-09-20T09:00:00Z,15,10.0,27.2\n";
             Test.ensureEqual(results.substring(0, expected.length()), expected, "\nresults=\n" + results);
 
         }
@@ -18101,8 +18147,10 @@ nThreads=4 time=26
         EDD.reallyVerbose = true;
         EDD.debugMode = false;
         EDDTableFromFilesCallable.debugMode = false;
+        
+        String2.log(bigResults.toString());
 
-        throw new RuntimeException("\n*** Not necessarily a problem, just logging the results:\n" +
+        /*throw new RuntimeException("\n*** Not necessarily a problem, just logging the results:\n" +
             bigResults.toString() +
 "2018-08-14 was for lenovo, ssd: -5,5: 13, 10, 11, 15, 16, 15, 15, 10, 9 s\n" +
 "2018-08-14 was for lenovo, hdd: -5,5: 80, 111, 114, 38, 16, 15, 15, 10, 9\n" +
@@ -18110,7 +18158,7 @@ nThreads=4 time=26
 "2020-10-01 with revised, denser dataset, hdd, -3,3: 539, 192, 303, 304, 321, 422 s\n" +
 "  clearly, a bigger issue is OS caching of the files\n" +
 "  So slow now, so I revised test to be a much smaller test (just 410.. stations)\n" +
-"2020-10-02 hdd -3,3, now: 75,8, 7, 8, 8, 5\n");
+"2020-10-02 hdd -3,3, now: 75,8, 7, 8, 8, 5\n");*/
     }
 
     /**

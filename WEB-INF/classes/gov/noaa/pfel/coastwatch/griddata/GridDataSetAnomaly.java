@@ -341,7 +341,7 @@ public class GridDataSetAnomaly extends GridDataSet {
      * This tests this class.
      */
     public static void basicTest() throws Exception {
-        String2.log("\n*** GridDataSetAnomaly.basicTest   NOTE: this requires data in C:/u00/data/QC/mday/grd/ ");
+        String2.log("\n*** GridDataSetAnomaly.basicTest   NOTE: this requires data in e:/u00/data/QC/mday/grd/ ");
         FileNameUtility.verbose = true;
         FileNameUtility fnu = new FileNameUtility("gov.noaa.pfel.coastwatch.CWBrowser");
         Grid.verbose = true;
@@ -356,7 +356,7 @@ public class GridDataSetAnomaly extends GridDataSet {
             "https://thredds1.pfeg.noaa.gov/thredds/Satellite/aggregsatQS/ux10/",
             "BlueWhiteRed", "Linear", "-10", "10", -1, "", null, null, "S", 1, 1, "", 1, 1);
         GridDataSetCWLocalClimatology climatologyDataSet = new GridDataSetCWLocalClimatology(
-            fnu, "CQCux10", "c:/u00/data/", dir); 
+            fnu, "CQCux10", "e:/u00/data/", dir); 
         GridDataSetAnomaly anomalyDataSet = new GridDataSetAnomaly(
             "AQSuxan", fnu, gridDataSet, climatologyDataSet,  
             "Wind Anomaly, QuikSCAT SeaWinds, 0.25 degrees, Global, Science Quality, Zonal",

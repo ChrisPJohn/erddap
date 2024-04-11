@@ -357,12 +357,15 @@ public class GridDataAccessor {
         boolean reducedNThreads = false;
         
         // If the threads are going to use too much memory, reduce the threads to an appropriate number.
-        while (nThreads > 1 &&
+        /*while (nThreads > 1 &&
             (nThreads * nBytesPerPartialRequest > Math2.maxSafeMemory / 8 ||   //this alone justifies nThreads=1
             Math2.getMemoryInUse() + nThreads * nBytesPerPartialRequest > Math2.maxSafeMemory / 4)) {
             nThreads--;
             reducedNThreads = true;
-        }
+        }*/
+        // Quick change here while I'm moving the threading to EddGridFromFiles.
+        nThreads = 1;
+        reducedNThreads = true;
 
         //finish up
         Math2.ensureMemoryAvailable(nBytesPerPartialRequest, "GridDataAccessor");
@@ -577,11 +580,11 @@ public class GridDataAccessor {
     protected void getChunk() throws Throwable {
 
         long etime = System.currentTimeMillis();
-        PrimitiveArray tPartialDataValues[];
+        //PrimitiveArray tPartialDataValues[];
         //String2.pressEnterToContinue("chunk=" + chunk + " task=" + task + " at start of getChunk.");
 
         try {
-            if (futureTasks.isEmpty()) {
+            /*if (futureTasks.isEmpty()) {
                 //If first call to getChunk, actually start getting actual data.
                 //Don't do this in constructor because some users of GridDataAccessor
                 //  just want to check request sizes and that no errors in request.
@@ -600,7 +603,8 @@ public class GridDataAccessor {
             if (executorService == null) {
                 futureTask.run();
             }
-            tPartialDataValues = (PrimitiveArray[])(futureTask.get());   //blocks until done, throws ExecutionException
+            tPartialDataValues = (PrimitiveArray[])(futureTask.get());   //blocks until done, throws ExecutionException*/
+            System.arraycopy(getChunk(this, 0, driverIndex.getCurrent().clone()), 0, partialDataValues, 0, partialDataValues.length);
 
         } catch (Throwable t) {
             //throwable while getting a chunk
@@ -633,7 +637,7 @@ public class GridDataAccessor {
                     "\n(" + EDStatic.errorFromDataSource + tToString + ")", t); 
         }
         
-        System.arraycopy(tPartialDataValues, 0, partialDataValues, 0, partialDataValues.length);
+        //System.arraycopy(tPartialDataValues, 0, partialDataValues, 0, partialDataValues.length);
         if (reallyVerbose) String2.log("getChunk #" + chunk + " time=" +
             (System.currentTimeMillis() - etime));
         //last
@@ -661,6 +665,136 @@ public class GridDataAccessor {
         if (executorService != null) {
             // Shutdown will execute currently submitted tasks.
             try {executorService.shutdown();} catch (Exception e) {} //it's done
+        }
+    }
+    
+    private PrimitiveArray[] getChunk(GridDataAccessor gda,
+    int cTask,
+    int driverCurrent[]) throws Exception  {
+        try {
+            long time = System.currentTimeMillis();
+            if (debugMode) {
+                String2.log(">> thread=" + Thread.currentThread().getName() + 
+                    " nThreads=" + gda.nThreads + " cTask=" + cTask + ".1 Alive");
+            }
+
+            //check often for interrupted
+            if (Thread.currentThread().interrupted()) //not isInterrupted -- consume it
+                throw new InterruptedException();
+
+            //generate the partial constraint
+            IntArray partialConstraints = new IntArray(gda.constraints);
+            int pcPo = 0;
+            double avInDriverExpectedValues[] = new double[gda.nAxisVariables]; //source value
+            for (int av = 0; av < gda.nAxisVariables; av++) {
+                if (gda.avInDriver[av]) {
+                    //get 1 value: driverCurrent indicates 'which' in 0,1,2... form
+                    //so need calculate source 'which' based on total constraint
+                    int which = gda.constraints.get(pcPo + 0) +
+                        driverCurrent[av] * gda.constraints.get(pcPo + 1);
+                    partialConstraints.set(pcPo + 0, which);
+                    partialConstraints.set(pcPo + 1, 1);
+                    partialConstraints.set(pcPo + 2, which);
+                    avInDriverExpectedValues[av] = gda.axisVariables[av].sourceValues().getDouble(which);
+                } //no change if !avInDriver[av]
+                pcPo += 3;
+            }
+
+            //get the data
+            PrimitiveArray partialResults[] = null;
+            partialResults = gda.eddGrid.getSourceData(language, gda.tDirTable, gda.tFileTable, 
+                gda.dataVariables, partialConstraints);
+
+            //there is similar code in GridDataAccessor and Table.decodeCharsAndStrings()
+            for (int dv = 0; dv < gda.dataVariables.length; dv++) {
+                if (gda.dataEncodingLC[dv] == null ||
+                    partialResults[dv] == null ||
+                    partialResults[dv].elementType() != PAType.STRING)
+                    continue;
+
+                //decode UTF-8
+                if (gda.dataEncodingLC[dv].equals(File2.UTF_8_LC)) {
+                    ((StringArray)partialResults[dv]).fromUTF8();
+
+                //unchanged ISO-8859-1 becomes the first page of unicode encoded strings
+                //} else if (enc.equals(File2.ISO_8859_1_LC)) {
+                    //nothing to do
+
+                } //other encodings are left in place
+            }
+
+            //check often for interrupted
+            if (Thread.currentThread().interrupted()) //not isInterrupted -- consume it
+                throw new InterruptedException();
+
+            if (debugMode) 
+                String2.log(">> thread=" + Thread.currentThread().getName() + 
+                    " nThreads=" + gda.nThreads +
+                    " cTask=" + cTask + ".2 getSourceData done. nDV=" + gda.dataVariables.length +
+                    " nElements/dv=" + partialResults[partialResults.length - 1].size() +
+                    " timeInCallable=" + (System.currentTimeMillis() - time) + "ms");
+            //for (int i = 0; i < partialResults.length; i++)
+            //    String2.log("!pa[" + i + "]=" + partialResults[i]);
+
+            //check that axisValues are as expected
+            for (int av = 0; av < gda.nAxisVariables; av++) {
+                PrimitiveArray pa = partialResults[av];
+                if (gda.avInDriver[av]) {
+                    if (pa.size() != 1 ||
+                        !Math2.almostEqual(9, pa.getDouble(0), avInDriverExpectedValues[av])) { //source values
+                        throw new WaitThenTryAgainException(
+                            EDStatic.simpleBilingual(language, EDStatic.waitThenTryAgainAr) + 
+                            "\n(Details: GridDataAccessor.increment: partialResults[" + av +
+                            "]=\"" + pa + "\" was expected to be " + 
+                            avInDriverExpectedValues[av] + ".)");
+                    }
+                } else {
+                    //convert source values to destination values
+                    pa = gda.axisVariables[av].toDestination(pa);
+                    String tError = gda.axisValues[av].almostEqual(pa); //destination values
+                    if (tError.length() > 0) 
+                        throw new WaitThenTryAgainException(
+                            EDStatic.simpleBilingual(language, EDStatic.waitThenTryAgainAr) + 
+                            "\n(Details: GridDataAccessor.increment: partialResults[" + 
+                            av + "] was not as expected.\n" + 
+                            tError + ")");
+                }
+            }
+                
+            //process the results
+            PrimitiveArray partialDataValues[] = new PrimitiveArray[gda.dataVariables.length];
+            for (int dv = 0; dv < gda.dataVariables.length; dv++) { //dv in the query
+                //convert source values to destination values and store
+                //String2.log("!source  dv=" + gda.dataVariables[dv].destinationName() + " " + partialResults[gda.nAxisVariables + dv]);
+                partialDataValues[dv] = gda.dataVariables[dv].toDestination(partialResults[gda.nAxisVariables + dv]); //handles maxIsMV
+                //String2.log("!dest    dv=" + gda.dataVariables[dv].destinationName() + " " + partialDataValues[dv]);
+
+                //save memory
+                partialResults[gda.nAxisVariables + dv] = null;
+
+                //convert missing_value to NaN
+                if (gda.convertToNaN) {
+                    double mv = gda.dataVariables[dv].destinationMissingValue();
+                    double fv = gda.dataVariables[dv].destinationFillValue();
+                    if (!Double.isNaN(mv))
+                        partialDataValues[dv].switchFromTo("" + mv, ""); //for e.g., byte mv=127, ByteArray will detect 127=127 and do nothing
+                    if (!Double.isNaN(fv) && fv != mv)   //if mv is NaN, fv!=mv will be true
+                        partialDataValues[dv].switchFromTo("" + fv, "");
+                }
+            }
+
+            if (debugMode) 
+                String2.log(">> thread=" + Thread.currentThread().getName() + " nThreads=" + gda.nThreads +
+                    " cTask=" + cTask + ".9 completely done. timeInCallable=" + 
+                    (System.currentTimeMillis() - time) + "ms");
+
+            return partialDataValues;
+
+        } catch (Exception e) {
+            throw e;  //allowed in call()
+
+        } catch (Throwable t) {
+            throw new ExecutionException(t); //not allowed in call(), so wrap it so it will be unwrapped later
         }
     }
 

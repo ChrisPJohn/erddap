@@ -19,6 +19,7 @@ import java.util.BitSet;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import ucar.ma2.StructureData;
 
@@ -1171,7 +1172,37 @@ public class DoubleArray extends PrimitiveArray {
                 array[size + i] = pa.getRawDouble(i); //this DOESN'T convert mv's
         }
         size += otherSize; //do last to minimize concurrency problems
-    }    
+    }
+    
+    /**
+     * For all values, this unpacks the values by multiplying by scale and then adding addOffset.
+     * DoubleArray overrides the PrimitiveArray version for optimization purposes.
+     *
+     * @param scale
+     * @param addOffset
+     */
+    @Override
+    public void scaleAddOffset(double scale, double addOffset) {
+        if (scale == 1 && addOffset == 0)
+            return;
+        for (int i = 0; i < size; i++)
+            array[i] = array[i] * scale + addOffset; //NaNs remain NaNs 
+    }
+     
+    /**
+     * For all values, this packs the values by adding addOffset then multiplying by scale.
+     * DoubleArray overrides the PrimitiveArray version for optimization purposes.
+     *
+     * @param scale
+     * @param addOffset
+     */
+    @Override
+    public void addOffsetScale(double addOffset, double scale) {
+        if (scale == 1 && addOffset == 0)
+            return;
+        for (int i = 0; i < size; i++)
+            array[i] = (array[i] + addOffset) * scale ; //NaNs remain NaNs
+    }
 
     /**
      * This populates 'indices' with the indices (ranks) of the values in this DoubleArray

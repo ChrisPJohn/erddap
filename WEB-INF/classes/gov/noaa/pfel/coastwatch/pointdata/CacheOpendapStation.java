@@ -829,7 +829,7 @@ public class CacheOpendapStation {
             "response=" + response);
 
         //M0: make cache file 
-        fileName = "c:/temp/MBARI_M0_NRT_adcp.nc";
+        fileName = "e:/temp/MBARI_M0_NRT_adcp.nc";
         cos = new CacheOpendapStation( //throws exception if trouble
             "http://dods.mbari.org/cgi-bin/nph-nc/data/ssdsdata/deployments/m0/200607/m0_adcp1267_20060731.nc",
             fileName,

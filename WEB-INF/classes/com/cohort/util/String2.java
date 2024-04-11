@@ -197,8 +197,8 @@ public class String2 {
     public static int longTimeoutSeconds = 300; //5 minutes. This is >= other timeouts in the system. This is used in places that previously waited forever.
 
     //EDStatic may change this
-    public static String unitTestDataDir    = "/erddapTest/";
-    public static String unitTestBigDataDir = "/erddapTestBig/";
+    public static String unitTestDataDir    = "E:/erddapTest/";
+    public static String unitTestBigDataDir = "E:/erddapTestBig/";
 
     /**
      * This returns the images dir in the unitTestDataDir.

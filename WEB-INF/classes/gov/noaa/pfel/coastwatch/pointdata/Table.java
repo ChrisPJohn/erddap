@@ -9628,7 +9628,7 @@ Dataset {
         String results, expected;
 
         //test  no vars specified,  4D,  only 2nd dim has >1 value,  getMetadata
-        String fiName = "c:/u00/data/points/erdCalcofiSubsurface/1950/subsurface_19500106_69_144.nc";
+        String fiName = "e:/u00/data/points/erdCalcofiSubsurface/1950/subsurface_19500106_69_144.nc";
         table.readNDNc(fiName, null, 0,  //standardizeWhat=0
             null, 0, 0);
         results = table.toString();
@@ -9830,7 +9830,7 @@ Dataset {
         verbose = true;
         reallyVerbose = true;
         String2.log("\n*** Table.testReadNDNc2");
-        String fiName = "c:/data/wod/monthly/APB/199804-199804/wod_008015632O.nc";
+        String fiName = "e:/data/wod/monthly/APB/199804-199804/wod_008015632O.nc";
         Table table = new Table();
         String results, expected;
 
@@ -12886,7 +12886,7 @@ String2.log(table.toString());
 
         //******* another test file, from Kevin O'Brien
         try {
-            table.readNcCF("c:/data/kevin/interpolated_gld.20120620_045152_meta_2.nc", 
+            table.readNcCF("e:/data/kevin/interpolated_gld.20120620_045152_meta_2.nc", 
                 null, 0,  //standardizeWhat=0
                 null, null, null);
             throw new SimpleException("Shouldn't get here.");
@@ -13349,7 +13349,7 @@ String2.log(table.toString());
         //  this tests if var[scalarDim][obs] was read (e.g., depth[obs]
         //File dims are outerDim=[scalarDim], inner=[time], obs=[obs]
         table = new Table();
-        fileName = "/data/gocd/gocd_v3_madcp.nc"; 
+        fileName = "e:/data/gocd/gocd_v3_madcp.nc"; 
         String2.log("\n\n** Testing " + fileName);
         results = NcHelper.ncdump(fileName, "-h");
         String2.log(results);
@@ -33652,7 +33652,7 @@ expected =
     /** Test the speed of readASCII */
     public static void testReadASCIISpeed() throws Exception {
 
-        String fileName = "/u00/data/points/ndbcMet2HistoricalTxt/41009h1990.txt"; 
+        String fileName = "E:/u00/data/points/ndbcMet2HistoricalTxt/41009h1990.txt"; 
         long time = 0;
 
         for (int attempt = 0; attempt < 4; attempt++) {
@@ -33737,7 +33737,7 @@ expected =
     /** Test the speed of readNDNc */
     public static void testReadNDNcSpeed() throws Exception {
 
-        String fileName = "c:/u00/data/points/ndbcMet2/historical/NDBC_41004_met.nc"; 
+        String fileName = "e:/u00/data/points/ndbcMet2/historical/NDBC_41004_met.nc"; 
         Table table = new Table();
         long time = 0;
         String2.log(NcHelper.ncdump(fileName, "-h"));
@@ -33834,7 +33834,7 @@ expected =
 
         //warmup
         String2.log("\n*** Table.testSaveAsSpeed\n");
-        String sourceName = "/u00/data/points/ndbcMet2HistoricalTxt/41009h1990.txt"; 
+        String sourceName = "E:/u00/data/points/ndbcMet2HistoricalTxt/41009h1990.txt"; 
         String destName = File2.getSystemTempDirectory() + "testSaveAsSpeed";
         Table table = new Table();
         table.readASCII(sourceName);
@@ -34817,7 +34817,7 @@ readAsNcCF?
 
         Table table = new Table();
         long time = System.currentTimeMillis();
-        table.readASCII("/data/biddle/3937_v1_CTD_Profiles.tsv.gz");
+        table.readASCII("E:/data/biddle/3937_v1_CTD_Profiles.tsv.gz");
         time = System.currentTimeMillis() - time;
         Math2.gcAndWait(); Math2.gcAndWait(); String2.log(" done. " + Math2.memoryString() + "\n" +
             String2.canonicalStatistics());  //in a test

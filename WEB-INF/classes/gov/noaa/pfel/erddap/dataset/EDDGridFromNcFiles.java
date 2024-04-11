@@ -11722,7 +11722,7 @@ expected =
 
         //debugMode AFTER first request
         GridDataAccessor.debugMode = true;
-        for (int i = 3; i >= -3; i--) {  //usually +3 -3
+        for (int i = 5; i >= -5; i--) {  //usually +3 -3
             if (i == 0)
                 continue;
             try {

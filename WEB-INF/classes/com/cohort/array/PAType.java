@@ -28,7 +28,9 @@ public enum PAType {
     ULONG,
 
     //BOOLEAN is only used temporarily. There is no BooleanArray.
-    BOOLEAN;
+    BOOLEAN,
+    
+    SPARSEDOUBLE;
 
     /** This returns true for UBYTe, USHORT, UINT, and ULONG. */
     public boolean isUnsigned() {

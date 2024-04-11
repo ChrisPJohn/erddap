@@ -234,12 +234,12 @@ public class DoubleCenterGrids {
 
 
         //delete old files
-        String newDir = "c:/u00/centeredSatellite/AG";
+        String newDir = "e:/u00/centeredSatellite/AG";
         RegexFilenameFilter.recursiveDelete(newDir);
-        String fullName = "c:/u00/centeredSatellite/AG/ssta/1day/AG2005040_2005040_ssta.nc";
+        String fullName = "e:/u00/centeredSatellite/AG/ssta/1day/AG2005040_2005040_ssta.nc";
 
         //copy a dir and subdirs and files
-        main(new String[]{"c:/u00/centeredSatellite/AGsource", newDir});
+        main(new String[]{"e:/u00/centeredSatellite/AGsource", newDir});
 
         //do tests
         String ncdump = NcHelper.ncdump(fullName, "-h");
@@ -385,7 +385,7 @@ String reference3=
 
         //just ensure the other file exists
         Test.ensureTrue(File2.isFile(
-            "c:/u00/centeredSatellite/AG/ssta/1day/AG2005041_2005041_ssta.nc"),
+            "e:/u00/centeredSatellite/AG/ssta/1day/AG2005041_2005041_ssta.nc"),
             "");
 
         //delete the log file

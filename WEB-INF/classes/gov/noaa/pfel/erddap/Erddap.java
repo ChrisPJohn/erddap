@@ -4667,6 +4667,7 @@ writer.write(EDStatic.dpf_congratulationAr[language]
                 fileTypeName.equals(".subset")) { 
                 //handle locally
             } else {
+            	// TODO- comment this out to handle some requests locally.
                 //redirect the request
                 String tUrl = fromErddap.getPublicSourceErddapUrl() + fileTypeName;
                 String tqs = EDStatic.questionQuery(request.getQueryString());  //still encoded

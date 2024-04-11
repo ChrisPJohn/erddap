@@ -2415,7 +2415,7 @@ String2.log(pas13.toString());
      */
     public static void testFindAllVariablesWithDims() throws Exception {
         StringArray sa = new StringArray();
-        NetcdfFile ncFile = openFile("c:/data/nodcTemplates/ncCFMA2a.nc");
+        NetcdfFile ncFile = openFile(File2.getSystemTempDirectory() + "nodcTemplates/ncCFMA2a.nc");
         try {
             Variable vars[] = findAllVariablesWithDims(ncFile);
             for (int v = 0; v < vars.length; v++)
@@ -2436,7 +2436,7 @@ String2.log(pas13.toString());
     /** This is a test of unlimitedDimension
      */
     public static void testUnlimited() throws Exception {
-        String testUnlimitedFileName = "/temp/unlimited.nc";
+        String testUnlimitedFileName = File2.getSystemTempDirectory() + "unlimited.nc";
         String2.log("\n* Projects.testUnlimited() " + testUnlimitedFileName);
         int strlen = 6;
         int row = -1;
@@ -2692,7 +2692,7 @@ String2.log(pas13.toString());
         for (int i = 0; i < 65536; i++) 
             sa.add("a" + (i==8?" " : (char)i) + "z");  //backspace not saved
         //write to file
-        fullName = "c:/temp/PAsInNc.nc";
+        fullName = File2.getSystemTempDirectory() + "PAsInNc.nc";
         File2.delete(fullName); //for test, make double sure it doesn't already exist
         StringArray varNames = new StringArray(new String[]{
             "ba", "sha", "ia", "la", "ca", "fa", "da", "sa"});
@@ -2724,7 +2724,7 @@ String2.log(pas13.toString());
         Test.ensureEqual(pas[varNames.indexOf("sa")].toJsonCsvString(), pas2[0].toJsonCsvString(), "");
 
         //test writeAttributesToNc
-        fullName = "c:/temp/AttsInNc.nc";
+        fullName = File2.getSystemTempDirectory() + "AttsInNc.nc";
         Attributes atts = new Attributes();
         for (int i = 0; i < pas.length; i++)
             atts.set(varNames.get(i), pas[i]);
@@ -2802,12 +2802,12 @@ String2.log(pas13.toString());
         }
 
         //test if defining >2GB throws exception
-        fullName = "c:/temp/TooBig.nc";
+        fullName = File2.getSystemTempDirectory() + "TooBig.nc";
         File2.delete(fullName);
         NetcdfFormatWriter ncWriter = null;
     
         //*** test writing Strings to nc files
-        fullName = "c:/temp/StringsInNc.nc";
+        fullName = File2.getSystemTempDirectory() + "StringsInNc.nc";
         File2.delete(fullName);
         ncWriter = null;
         try {
@@ -2870,7 +2870,7 @@ String2.log(pas13.toString());
 
         //*** test writing too-long Strings to nc files
         //Must the char[][] be the exact right size?  What if too long?
-        fullName = "c:/temp/StringsInNc2.nc";
+        fullName = File2.getSystemTempDirectory() + "StringsInNc2.nc";
         File2.delete(fullName);
         ncWriter = null;
         try {

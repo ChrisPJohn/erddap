@@ -243,6 +243,7 @@ public abstract class PrimitiveArray {
         if (elementType == PAType.UBYTE)  return new UByteArray(capacity, active);
         if (elementType == PAType.CHAR)   return new CharArray(capacity, active);
         if (elementType == PAType.STRING) return new StringArray(capacity, active);
+        if (elementType == PAType.SPARSEDOUBLE) return new SparseDoubleArray(capacity, active);
 
         throw new IllegalArgumentException(String2.ERROR + 
             " in PrimitiveArray.factory: unexpected elementType: " + elementType);
@@ -272,6 +273,7 @@ public abstract class PrimitiveArray {
         if (elementType == PAType.UBYTE)  return new UByteArray(pa);
         if (elementType == PAType.CHAR)   return new CharArray(pa);
         if (elementType == PAType.STRING) return new StringArray(pa);
+        if (elementType == PAType.SPARSEDOUBLE) return new SparseDoubleArray(pa);
 
         throw new IllegalArgumentException(String2.ERROR + 
             " in PrimitiveArray.factory: unexpected elementType: " + elementType);
@@ -533,7 +535,7 @@ public abstract class PrimitiveArray {
      */
     public String getSqlTypeString(double stringLengthFactor) {
         PAType type = elementType();
-        if (type == PAType.DOUBLE) return "double precision";
+        if (type == PAType.DOUBLE || type == PAType.SPARSEDOUBLE) return "double precision";
         if (type == PAType.FLOAT)  return "real";  //postgres treats "float" as double precision
         if (type == PAType.LONG ||
             type == PAType.ULONG)  return "bigint"; //not universally supported (pgsql does support it)

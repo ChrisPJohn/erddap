@@ -43,7 +43,12 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Collections;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeoutException;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -2357,10 +2362,26 @@ String2.log(">>> tp=" + tp);
         int axis0Stride = tConstraints.get(1);
         int axis0Stop   = tConstraints.get(2);
         int ftRow = 0;
+        
+        int tnThreads = nThreads >= 1 && nThreads < Integer.MAX_VALUE? nThreads : EDStatic.nTableThreads; 
+        ArrayList<FutureTask> futureTasks = new ArrayList<>();
+        ExecutorService executorService = null;
+        int task = 0;       //number for next task to be created
+        int nProcessed = 0; //number for next task to be processed
+        
+     
+        //To isolate requests, I make a new executorService each time.
+        if (tnThreads > 1 && executorService == null) {
+            //executorService = Executors.newFixedThreadPool(tnThreads);
+        }
+        
         while (axis0Start <= axis0Stop) {
-            if (Thread.currentThread().isInterrupted())
+            if (Thread.currentThread().isInterrupted()) {
+                if (executorService != null)
+                    executorService.shutdownNow();
                 throw new SimpleException("EDDGridFromFiles.getDataForDapQuery" + 
                     EDStatic.caughtInterruptedAr[0]);
+            }
 
             //find next relevant file
             ftRow = ftStartIndex.binaryFindLastLE(ftRow, nFiles - 1, PAOne.fromInt(axis0Start));
@@ -2384,14 +2405,82 @@ String2.log(">>> tp=" + tp);
                     " local=" + tStart + ":" + axis0Stride + ":" + tStop +
                     " " + tFileDir + tFileName);
 
-            //get the data
-            PrimitiveArray[] tResults;
+            //FutureTask<PrimitiveArray[]> futureTask = new FutureTask<>(new GetGridFromFileCallable(this,
+            //        tFileDir, tFileName, //it calls ensureInCache()
+            //       tDataVariables, ttConstraints, ftDirIndex.get(ftRow), ftLastMod.get(ftRow)));
+            //futureTasks.add(futureTask);
+            if (executorService != null) {
+                //executorService.submit(futureTask);
+            } else {
+                //futureTask.run();
+                // When running on 1 thread, clear out the just completed future task from the futureTasks list
+                // to allow it to be garbage collected. This is important when running large jobs on a single thread.
+                //futureTasks.set(nProcessed++, null);   
+                //PrimitiveArray[] tResults = futureTask.get();
+                // merge dataVariables   (converting to sourceDataPAType if needed)
+                
+                PrimitiveArray[] tResults = new GetGridFromFileCallable(this,
+                               tFileDir, tFileName, //it calls ensureInCache()
+                               tDataVariables, ttConstraints, ftDirIndex.get(ftRow), ftLastMod.get(ftRow)).call();
+                        
+                nProcessed++;
+                for (int dv = 0; dv < ndv; dv++) {
+                    results[nav + dv].append(tResults[dv]);
+                    tResults[dv].clear();
+                }
+            }
+            task++;
+            //String2.log("!merged tResults[1stDV]=" + results[nav].toString());
+
+            //set up for next while-iteration
+            axis0Start += (tStop - tStart) + axis0Stride; 
+            ftRow++; //first possible file is next file
+        }
+        
+        if (executorService != null)
+            executorService.shutdown();
+
+        /*while (task > nProcessed) {
+            //get results table from a futureTask
+            //Put null in that position in futureTasks so it can be gc'd after this method
+            FutureTask<PrimitiveArray[]> futureTask = futureTasks.set(nProcessed++, null);   
+            PrimitiveArray[] tResults = futureTask.get();
+            // merge dataVariables   (converting to sourceDataPAType if needed)
+            for (int dv = 0; dv < ndv; dv++) {
+                results[nav + dv].append(tResults[dv]);
+                tResults[dv].clear();
+            }
+        }*/
+        return results;
+    }
+
+    private class GetGridFromFileCallable  implements Callable< PrimitiveArray[]>  {
+        private final EDDGridFromFiles caller;
+        private final String tFileDir;
+        private final String tFileName;
+        private final EDV[] tDataVariables;
+        private final IntArray tConstraints;
+        private final int dirIndex;
+        private final long modIndex;
+        
+        public GetGridFromFileCallable(EDDGridFromFiles caller,
+                String tFileDir, String tFileName, EDV[] tDataVariables, IntArray tConstraints,
+                int dirIndex, long modIndex) {
+            this.caller = caller;
+            this.tFileDir = tFileDir;
+            this.tFileName = tFileName;
+            this.tDataVariables = tDataVariables;
+            this.tConstraints = tConstraints;
+            this.dirIndex = dirIndex;
+            this.modIndex = modIndex;
+        }
+        
+        @Override
+        public PrimitiveArray[] call() throws Exception {
             try {
-                tResults = getSourceDataFromFile(tFileDir, tFileName, //it calls ensureInCache()
-                    tDataVariables, ttConstraints);
-                //String2.log("!tResults[0]=" + tResults[0].toString());
+                return caller.getSourceDataFromFile(tFileDir, tFileName, //it calls ensureInCache()
+                        tDataVariables, tConstraints);
             } catch (Throwable t) {
-                EDStatic.rethrowClientAbortException(t);  //first thing in catch{}
 
                 //if OutOfMemory or too much data or Too many open files, rethrow t so request fails
                 String tToString = t.toString();
@@ -2401,37 +2490,25 @@ String2.log(">>> tp=" + tp);
                     t instanceof OutOfMemoryError ||
                     tToString.indexOf(Math2.memoryTooMuchData) >= 0 ||
                     tToString.indexOf(Math2.TooManyOpenFiles) >= 0)
-                    throw t;
+                    throw new ExecutionException(t);
 
                 //sleep and give it one more try
                 try {
                     Thread.sleep(1000); //not Math2.sleep(1000);
-                    tResults = getSourceDataFromFile(tFileDir, tFileName, 
-                        tDataVariables, ttConstraints);
+                    return caller.getSourceDataFromFile(tFileDir, tFileName, 
+                        tDataVariables, tConstraints);
                 } catch (Throwable t2) {
-                    EDStatic.rethrowClientAbortException(t2);  //first thing in catch{}
-
                     //mark the file as bad   and reload the dataset
-                    addBadFileToTableOnDisk(ftDirIndex.get(ftRow), tFileName, 
-                        ftLastMod.get(ftRow), MustBe.throwableToShortString(t)); 
+                    caller.addBadFileToTableOnDisk(dirIndex, tFileName, 
+                        modIndex, MustBe.throwableToShortString(t)); 
                     //an exception here will cause data request to fail (as it should)
                     String2.log(MustBe.throwableToString(t));
-                    throw t instanceof WaitThenTryAgainException? t : //original exception
+                    throw t instanceof WaitThenTryAgainException? new ExecutionException(t) : //original exception
                         new WaitThenTryAgainException(t);  
                 }
             }
-
-            //merge dataVariables   (converting to sourceDataPAType if needed)
-            for (int dv = 0; dv < ndv; dv++) 
-                results[nav + dv].append(tResults[dv]);
-            //String2.log("!merged tResults[1stDV]=" + results[nav].toString());
-
-            //set up for next while-iteration
-            axis0Start += (tStop - tStart) + axis0Stride; 
-            ftRow++; //first possible file is next file
         }
-        return results;
+        
     }
-
 
 }
