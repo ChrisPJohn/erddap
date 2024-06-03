@@ -5,7 +5,6 @@
 package gov.noaa.pfel.erddap.dataset;
 
 import com.cohort.array.Attributes;
-import com.cohort.array.ByteArray;
 import com.cohort.array.DoubleArray;
 import com.cohort.array.IntArray;
 import com.cohort.array.LongArray;
@@ -36,20 +35,15 @@ import gov.noaa.pfel.erddap.util.ThreadedWorkManager;
 import gov.noaa.pfel.erddap.variable.*;
 
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.StringWriter;
 import java.nio.file.WatchEvent;
 import java.text.MessageFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.BitSet;
-import java.util.Collections;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
-import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
@@ -694,7 +688,7 @@ public abstract class EDDGridFromFiles extends EDDGrid{
         }
 
         //skip loading until after intial loadDatasets?
-        if (fileTable.nRows() == 0 && EDStatic.initialLoadDatasets()) {
+        if (EDStatic.allowDeferedLoading && fileTable.nRows() == 0 && EDStatic.initialLoadDatasets()) {
             requestReloadASAP();
             throw new RuntimeException(DEFER_LOADING_DATASET_BECAUSE + "fileTable.nRows=0.");
         } 
@@ -1989,7 +1983,7 @@ public abstract class EDDGridFromFiles extends EDDGrid{
             Table dirTable  = getDirTable();  //no need to get copy since not changing it
             Table fileTable = getFileTable(); //no need to get copy since not changing it 
             PrimitiveArray dirNames = dirTable.getColumn(0); //the only column
-            int dirIndex = dirNames.indexOf(localDir);
+            int dirIndex = FileVisitorDNLS.indexOfDirectory(dirNames, localDir);
             if (dirIndex < 0) {
                 String2.log(msg + "localDir=" + localDir + " not in dirTable.");
                 return null;

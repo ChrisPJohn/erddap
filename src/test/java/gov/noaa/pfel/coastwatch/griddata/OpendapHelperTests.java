@@ -16,6 +16,7 @@ import dods.dap.DAS;
 import dods.dap.DConnect;
 import dods.dap.DDS;
 import tags.TagExternalERDDAP;
+import tags.TagIncompleteTest;
 import tags.TagThredds;
 
 class OpendapHelperTests {
@@ -68,7 +69,9 @@ class OpendapHelperTests {
 
   /** This tests dapToNc DArray. */
   @org.junit.jupiter.api.Test
-  @TagThredds
+  // TODO- look into out of memory. It happens within dods.dap, it's unclear what version is here.
+  //   Maybe get a new version.
+  @TagIncompleteTest
   void testDapToNcDArray() throws Throwable {
     String2.log("\n\n*** OpendapHelper.testDapToNcDArray()");
     String fileName, expected, results;
@@ -1038,11 +1041,10 @@ class OpendapHelperTests {
    * @param whichTests -1 for all, or 0.. for specific ones
    */
   @org.junit.jupiter.api.Test
-  @TagThredds
   void testAllDapToNc() throws Throwable {
     // tests from nodc template examples https://www.ncei.noaa.gov/netcdf-templates
     String2.log("\n*** OpendapHelper.testAllDapToNc()");
-    String dir = OpendapHelperTests.class.getResource("/nodcTemplates/").getPath();
+    String dir = OpendapHelperTests.class.getResource("/data/nodcTemplates/").getPath();
     // 2023-02-15 This method hadn't been run since 2020 because tdsUrl often
     // stalled, so I had commented it out.
     // tdsUrl was

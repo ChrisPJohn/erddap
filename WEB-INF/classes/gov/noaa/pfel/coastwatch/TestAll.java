@@ -5,7 +5,6 @@
 package gov.noaa.pfel.coastwatch;
 
 import com.cohort.array.*;
-import com.cohort.ema.*;
 import com.cohort.util.*;
 
 import gov.noaa.pfel.coastwatch.*;
@@ -827,21 +826,11 @@ public class TestAll  {
 Attributes att;       
 AttributedString2 as2;
 Boundaries boun;
-Browser browser;
 ByteArray ba;
 Calendar2 calendar2; 
 CharArray chara;
 CompoundColorMap ccm;
 CompoundColorMapLayerChild ccmlc;
-ContourScreen cons;
-CWUser cwUser;
-CWBrowser cwBrowser;
-//CWBrowserHAB cwBrowserHAB;  INACTIVE
-//CWBrowserAK cwBrowserAK;    INACTIVE
-//CWBrowserSA cwBrowserSA;    INACTIVE
-CWBrowserWW180 cwBrowserWW180;
-CWBrowserWW360 cwBrowserWW360;
-CWDataBrowser cwDataBrowser;
 dods.dap.DConnect dConnect;
 dods.dap.DFloat64 dFloat64;
 dods.dap.DInt16 dInt16;
@@ -853,24 +842,15 @@ DigirHelper dh2;
 dods.dap.DSequence dseq;
 DoubleArray doublea;
 EDDTableFromAllDatasets etfad;
-EmaAttribute ea;
-EmaClass ec;
-EmaColor ecolor;
 File2 f2;
 FileNameUtility fnu;
 FileVisitorDNLS fvdnls;
 FileVisitorSubdir fvsd;
 FilledMarkerRenderer fmr;
 FloatArray floata;
-GDateTime gdt;
 GenerateThreddsXml gtx;
 GraphDataLayer gdl;
 Grid grid;
-GridDataSet gds;
-GridDataSetAnomaly gdsa;
-GridDataSetOpendap gdso;
-GridDataSetThredds gdst;
-GridScreen gs;
 GSHHS gshhs;
 HashDigest hd;
 Image2 i2;
@@ -878,23 +858,16 @@ IntArray inta;
 JSONObject jo;
 org.json.JSONTokener jt;
 LongArray la;
-MakeErdJavaZip mejz;
-MapScreen mapScreen;
 Math2 m2;
 Matlab matlab;     
 MustBe mb;
 NcHelper ncHelper;
 NetCheck netCheck;
-OneOf oneOf;
 OpendapHelper opendapHelper;
 PAOne paOne;
-ParseJSON parseJSON;
 PauseTest pt;
 PlainAxis2 sgtpa2;
-PointScreen ps;
-PointVectorScreen pvs;
 PrimitiveArray primitiveArray; 
-Projects projects;
 RegexFilenameFilter rff;
 ResourceBundle2 rb2;
 RowComparator rc;
@@ -904,7 +877,6 @@ SdsReader sr;
 SgtGraph sgtGraph; 
 SgtMap sgtMap;     
 SgtUtil sgtUtil;
-Shared shared;
 gov.noaa.pfel.coastwatch.sgt.PathCartesianRenderer sgtptcr;
 gov.noaa.pmel.sgt.AnnotationCartesianRenderer sgtacr;
 gov.noaa.pmel.sgt.AxisTransform sgtat;
@@ -966,9 +938,7 @@ Table myTable;
 TableXmlHandler txh;
 Tally tally;
 Test test;
-TestBrowsers tb;
 Touch touch;
-TrajectoryScreen trajs;
 UByteArray uba;
 UIntArray uia;
 ULongArray ula;
@@ -976,7 +946,6 @@ Units2 u2;
 UShortArray usa;
 gov.noaa.pmel.sgt.VectorCartesianRenderer vcr;
 VectorPointsRenderer vpr;
-VectorScreen vs;
 WatchDirectory wdir;
 XML xml;
 
@@ -1045,7 +1014,6 @@ EmailThread et;
 Erddap erddap;       
 ErddapRedirect erddapRedirect;       
 FindDuplicateTime findDuplicateTime;
-FishBase fb;
 GenerateDatasetsXml gdx;
 GridDataAccessor gda;
 GridDataAllAccessor gdaacc;
@@ -1060,7 +1028,6 @@ OutputStreamFromHttpResponse osfhr;
 OutputStreamFromHttpResponseViaAwsS3 osfhrvas;
 OutputStreamViaAwsS3 osvas;
 PersistentTable pert;
-Projects2 proj2;
 RunLoadDatasets rld;
 
 Subscriptions sub;
@@ -1106,150 +1073,21 @@ WaitThenTryAgainException wttae;
 
         //*** All of the unit tests for CWBrowsers and ERDDAP. 
 
-        //low level utilities
-        TestUtil.test(                   errorSB, interactive, doSlowTestsToo, 0, -1);
-        XML.test(                        errorSB, interactive, doSlowTestsToo, 0, -1);
-        LRUCache.test(                   errorSB, interactive, doSlowTestsToo, 0, -1);
-
-        CharArray.test(                  errorSB, interactive, doSlowTestsToo, 0, -1);
-        ShortArray.test(                 errorSB, interactive, doSlowTestsToo, 0, -1);
-        IntArray.test(                   errorSB, interactive, doSlowTestsToo, 0, -1);
-        LongArray.test(                  errorSB, interactive, doSlowTestsToo, 0, -1);
-        FloatArray.test(                 errorSB, interactive, doSlowTestsToo, 0, -1);
-        DoubleArray.test(                errorSB, interactive, doSlowTestsToo, 0, -1);
-        StringArray.test(                errorSB, interactive, doSlowTestsToo, 0, -1);
-        UByteArray.test(                 errorSB, interactive, doSlowTestsToo, 0, -1);
-        UShortArray.test(                errorSB, interactive, doSlowTestsToo, 0, -1);
-        UIntArray.test(                  errorSB, interactive, doSlowTestsToo, 0, -1);
-        ULongArray.test(                 errorSB, interactive, doSlowTestsToo, 0, -1);
-        PrimitiveArray.test(             errorSB, interactive, doSlowTestsToo, 0, -1);
-        PAOne.test(                      errorSB, interactive, doSlowTestsToo, 0, -1);
-        Attributes.test(                 errorSB, interactive, doSlowTestsToo, 0, -1);
-        ResourceBundle2.test(            errorSB, interactive, doSlowTestsToo, 0, -1);
-        Tally.test(                      errorSB, interactive, doSlowTestsToo, 0, -1);
-        PersistentTable.test(            errorSB, interactive, doSlowTestsToo, 0, -1);
-
-        //give antivirus a chance to get caught up
-        if (!interactive) for (int i = 0; i < 3; i++) Math2.gc("TestAll (between tests)", 20000); //in TestAll
-
-
         //data
-        DataStream.test(                 errorSB, interactive, doSlowTestsToo, 0, -1);
-        SimpleXMLReader.test(            errorSB, interactive, doSlowTestsToo, 0, -1);
-        TimePeriods.test(                errorSB, interactive, doSlowTestsToo, 0, -1);
-        FileNameUtility.test(            errorSB, interactive, doSlowTestsToo, 0, -1);
-        ParseJSON.test(                  errorSB, interactive, doSlowTestsToo, 0, -1);
-
-        ValidateDataSetProperties.test(  errorSB, interactive, doSlowTestsToo, 0, -1);       
-        Matlab.test(                     errorSB, interactive, doSlowTestsToo, 0, -1);
 
         //need tests of data.Grid2DDataSet classes
         //hdf.SdsWriter.main(null); //needs work
-        DataHelper.test(                 errorSB, interactive, doSlowTestsToo, 0, -1);  
-        Grid.test(                       errorSB, interactive, doSlowTestsToo, 0, -1);
         //GridDataSetCWOpendap.test(     errorSB, interactive, doSlowTestsToo, 0, -1);  //INACTIVE. The test files are no longer available since we are moving to thredds
-        SaveOpendap.test(                errorSB, interactive, doSlowTestsToo, 0, -1); 
-        TwoGrids.test(                   errorSB, interactive, doSlowTestsToo, 0, -1);
-        DoubleCenterGrids.test(          errorSB, interactive, doSlowTestsToo, 0, -1); 
-
-        Shared.test(                     errorSB, interactive, doSlowTestsToo, 0, -1);   
-        Table.test(                      errorSB, interactive, doSlowTestsToo, 0, -1); 
-        DigirHelper.test(                errorSB, interactive, doSlowTestsToo, 0, -1); 
-        PointIndex.test(                 errorSB, interactive, doSlowTestsToo, 0, -1); 
-        StoredIndex.test(                errorSB, interactive, doSlowTestsToo, 0, -1); 
-
-        CacheOpendapStation.test(        errorSB, interactive, doSlowTestsToo, 0, -1); 
-        PointDataSetFromStationVariables.test(
-                                         errorSB, interactive, doSlowTestsToo, 0, -1); 
-        TableDataSet4DNc.test(           errorSB, interactive, doSlowTestsToo, 0, -1); 
-        GenerateThreddsXml.test(         errorSB, interactive, doSlowTestsToo, 0, -1); 
 
         //other
-        GSHHS.test(                      errorSB, interactive, doSlowTestsToo, 0, -1); 
-        Boundaries.test(                 errorSB, interactive, doSlowTestsToo, 0, -1); 
-        //Browser.test(                    errorSB, interactive, doSlowTestsToo, 0, -1); //INACTIVE. The cwbrowsers are no longer supported.
-        DecimalDegreeFormatter.test(     errorSB, interactive, doSlowTestsToo, 0, -1);  
-        DegreeMinuteFormatter.test(      errorSB, interactive, doSlowTestsToo, 0, -1); 
-        CompoundColorMap.test(           errorSB, interactive, doSlowTestsToo, 0, -1); 
-        SgtMap.test(                     errorSB, interactive, doSlowTestsToo, 0, -1); 
-        SgtUtil.test(                    errorSB, interactive, doSlowTestsToo, 0, -1);  
-        CartesianProjection.test(        errorSB, interactive, doSlowTestsToo, 0, -1); 
-        SgtGraph.test(                   errorSB, interactive, doSlowTestsToo, 0, -1);   
-        NDimensionalIndex.test(          errorSB, interactive, doSlowTestsToo, 0, -1); 
-        ScriptRow.test(                  errorSB, interactive, doSlowTestsToo, 0, -1);
-        
-        //give antivirus a chance to get caught up
-        if (!interactive) for (int i = 0; i < 3; i++) Math2.gc("TestAll (between tests)", 20000); //in TestAll
+        //Browser.test(                    errorSB, interactive, doSlowTestsToo, 0, -1); //INACTIVE. The cwbrowsers are no longer supported.        
 
         //ERDDAP
-        HtmlWidgets.test(                errorSB, interactive, doSlowTestsToo, 0, -1); 
-        CfToFromGcmd.test(               errorSB, interactive, doSlowTestsToo, 0, -1); 
-        EDStatic.test(                   errorSB, interactive, doSlowTestsToo, 0, -1); 
-        EDV.test(                        errorSB, interactive, doSlowTestsToo, 0, -1); 
-        EDVTimeStamp.test(               errorSB, interactive, doSlowTestsToo, 0, -1); 
-        Units2.test(                     errorSB, interactive, doSlowTestsToo, 0, -1); 
-        Subscriptions.test(              errorSB, interactive, doSlowTestsToo, 0, -1);  
-        FileVisitorDNLS.test(            errorSB, interactive, doSlowTestsToo, 0, -1);
-        FileVisitorSubdir.test(          errorSB, interactive, doSlowTestsToo, 0, -1);  
-        WatchDirectory.test(             errorSB, interactive, doSlowTestsToo, 0, -1); 
-        FindDuplicateTime.test(          errorSB, interactive, doSlowTestsToo, 0, -1); 
-
-        //give antivirus a chance to get caught up
-        if (!interactive) for (int i = 0; i < 3; i++) Math2.gc("TestAll (between tests)", 20000); //in TestAll
 
         //EDDGrid
-        EDD.test(                        errorSB, interactive, doSlowTestsToo, 0, -1);  
-        EDDGrid.test(                    errorSB, interactive, doSlowTestsToo, 0, -1);
-        EDDGridFromDap.test(             errorSB, interactive, doSlowTestsToo, 0, -1);  
         //EDDGridFromBinaryFile.test(    errorSB, interactive, doSlowTestsToo, 0, -1);  class not finished / not in use
-        EDDGridFromErddap.test(          errorSB, interactive, doSlowTestsToo, 0, -1);  
-        EDDGridFromEtopo.test(           errorSB, interactive, doSlowTestsToo, 0, -1);  
-        EDDGridAggregateExistingDimension.test(    
-                                         errorSB, interactive, doSlowTestsToo, 0, -1);  
-        EDDGridFromNcFiles.test(         errorSB, interactive, doSlowTestsToo, 0, -1);  
-        EDDGridFromNcFilesUnpacked.test( errorSB, interactive, doSlowTestsToo, 0, -1);  
-        EDDGridFromMergeIRFiles.test(    errorSB, interactive, doSlowTestsToo, 0, -1);  
-        EDDGridFromAudioFiles.test(      errorSB, interactive, doSlowTestsToo, 0, -1);  
-        EDDGridFromEDDTable.test(        errorSB, interactive, doSlowTestsToo, 0, -1);  
-        EDDGridCopy.test(                errorSB, interactive, doSlowTestsToo, 0, -1);
-        EDDGridSideBySide.test(          errorSB, interactive, doSlowTestsToo, 0, -1);  //the best grid graphics tests are here
-        EDDGridLonPM180.test(            errorSB, interactive, doSlowTestsToo, 0, -1);
-        EDDGridLon0360.test(             errorSB, interactive, doSlowTestsToo, 0, -1);
-
-        //give antivirus a chance to get caught up
-        if (!interactive) for (int i = 0; i < 3; i++) Math2.gc("TestAll (between tests)", 20000); //in TestAll
-
 
         //EDDTable
-        EDDTableFromFiles.test(          errorSB, interactive, doSlowTestsToo, 0, -1); 
-        EDDTableFromNcFiles.test(        errorSB, interactive, doSlowTestsToo, 0, -1);
-        EDDTableFromNcCFFiles.test(      errorSB, interactive, doSlowTestsToo, 0, -1);  
-        EDDTableFromMultidimNcFiles.test(errorSB, interactive, doSlowTestsToo, 0, -1);
-        EDDTableFromNccsvFiles.test(     errorSB, interactive, doSlowTestsToo, 0, -1);
-        EDDTableFromHyraxFiles.test(     errorSB, interactive, doSlowTestsToo, 0, -1); 
-        EDDTableFromAsciiFiles.test(     errorSB, interactive, doSlowTestsToo, 0, -1); 
-        EDDTableFromColumnarAsciiFiles.test(
-                                         errorSB, interactive, doSlowTestsToo, 0, -1); 
-        EDDTableFromAwsXmlFiles.test(    errorSB, interactive, doSlowTestsToo, 0, -1); 
-        EDDTableFromThreddsFiles.test(   errorSB, interactive, doSlowTestsToo, 0, -1); 
-        EDDTableFromInvalidCRAFiles.test(errorSB, interactive, doSlowTestsToo, 0, -1); 
-        EDDTableFromJsonlCSVFiles.test(  errorSB, interactive, doSlowTestsToo, 0, -1); 
-        EDDTableFromAudioFiles.test(     errorSB, interactive, doSlowTestsToo, 0, -1); 
-        EDDTableFromFileNames.test(      errorSB, interactive, doSlowTestsToo, 0, -1); 
-        EDDTableFromEDDGrid.test(        errorSB, interactive, doSlowTestsToo, 0, -1); 
-        EDDTableFromDapSequence.test(    errorSB, interactive, doSlowTestsToo, 0, -1);  
-        EDDTableFromDatabase.test(       errorSB, interactive, doSlowTestsToo, 0, -1);  
-        EDDTableFromCassandra.test(      errorSB, interactive, doSlowTestsToo, 0, -1);    
-        EDDTableFromAsciiServiceNOS.test(errorSB, interactive, doSlowTestsToo, 0, -1);
-        EDDTableFromErddap.test(         errorSB, interactive, doSlowTestsToo, 0, -1); 
-        EDDTableFromOBIS.test(           errorSB, interactive, doSlowTestsToo, 0, -1);
-        EDDTableFromHttpGet.test(        errorSB, interactive, doSlowTestsToo, 0, -1); 
-        EDDTableFromSOS.test(            errorSB, interactive, doSlowTestsToo, 0, -1); 
-        EDDTableAggregateRows.test(      errorSB, interactive, doSlowTestsToo, 0, -1); 
-        EDDTableCopy.test(               errorSB, interactive, doSlowTestsToo, 0, -1);
-        EDDTableFromAllDatasets.test(    errorSB, interactive, doSlowTestsToo, 0, -1);
-        EDDTable.test(                   errorSB, interactive, doSlowTestsToo, 0, -1);  //mostly currently-inactive SOS server tests
-
         //EDDTableFromWFSFiles.test(     errorSB, interactive, doSlowTestsToo, 0, -1);  //INACTIVE 2021-06-25 because test server is gone
         //EDDTableFromMWFS.test(         errorSB, interactive, doSlowTestsToo, 0, -1);  //INACTIVE as of 2009-01-14 
         //EDDTableFromNOS.test(          errorSB, interactive, doSlowTestsToo, 0, -1);  //INACTIVE as of 2010-09-08
@@ -1257,14 +1095,6 @@ WaitThenTryAgainException wttae;
         //EDDTableFromBMDE.test(         errorSB, interactive, doSlowTestsToo, 0, -1);  //INACTIVE
         //EDDTableFromPostDatabase.test( errorSB, interactive, doSlowTestsToo, 0, -1);  //INACTIVE.  very slow?        
         //EDDTableCopyPost.test(-1, false);                                             //INACTIVE   which, reallyVerbose?
-
-        Erddap.test(                     errorSB, interactive, doSlowTestsToo, 0, -1);
-        TranslateMessages.test(          errorSB, interactive, doSlowTestsToo, 0, -1);
-        ArchiveADataset.test(            errorSB, interactive, doSlowTestsToo, 0, -1);
-
-        //give antivirus a chance to get caught up
-        if (!interactive) for (int i = 0; i < 3; i++) Math2.gc("TestAll (between tests)", 20000); //in TestAll
-
 
         //NetCheckTests
         //NetCheck.unitTest(); which does 3 tests:
@@ -1274,23 +1104,23 @@ WaitThenTryAgainException wttae;
 
 
         //a test of oceanwatch THREDDS   (should run great)
-        try {
-            int nTimes = 0; //0 to disable, 5 for a full test
-            for (int i = 0; i < nTimes; i++) {  
-                long time9 = System.currentTimeMillis();
-                Opendap.doOceanWatchSpeedTests(false, false); //dotTest, asciiTest 
-                time9 = System.currentTimeMillis() - time9;
-                if (i > 0 && time9 > 10000) //2014-08 was 1000 in ERD building. Now 10000 from outside
-                    String2.pressEnterToContinue("OceanWatch Thredds too slow: " + time9); 
-            }
-            //don't run often
-            //Opendap.threddsTunnelTest(10,  //200 for a good test 
-            //    "https://oceanwatch.pfeg.noaa.gov/thredds/dodsC/satellite/CM/usfc/hday",
-            //    "CMusfc"); 
-        } catch (Exception e) {
-            String2.pressEnterToContinue(MustBe.throwableToString(e) + 
-                "\nUnexpected oceanwatch error."); 
-        }
+        // try {
+        //     int nTimes = 0; //0 to disable, 5 for a full test
+        //     for (int i = 0; i < nTimes; i++) {  
+        //         long time9 = System.currentTimeMillis();
+        //         Opendap.doOceanWatchSpeedTests(false, false); //dotTest, asciiTest 
+        //         time9 = System.currentTimeMillis() - time9;
+        //         if (i > 0 && time9 > 10000) //2014-08 was 1000 in ERD building. Now 10000 from outside
+        //             String2.pressEnterToContinue("OceanWatch Thredds too slow: " + time9); 
+        //     }
+        //     //don't run often
+        //     //Opendap.threddsTunnelTest(10,  //200 for a good test 
+        //     //    "https://oceanwatch.pfeg.noaa.gov/thredds/dodsC/satellite/CM/usfc/hday",
+        //     //    "CMusfc"); 
+        // } catch (Exception e) {
+        //     String2.pressEnterToContinue(MustBe.throwableToString(e) + 
+        //         "\nUnexpected oceanwatch error."); 
+        // }
 
         //INACTIVE: a test of thredds1 THREDDS 8081
         //try {
@@ -1312,23 +1142,23 @@ WaitThenTryAgainException wttae;
         //}
 
         //a test of erddap
-        try {
-            int nTimes = 0; //0 to disable, 5 for a full test
-            for (int i = 0; i < nTimes; i++) {
-                long time9 = System.currentTimeMillis();
-                Opendap.doErddapSpeedTests(false, false); //dotTest, asciiTest 
-                time9 = System.currentTimeMillis() - time9;
-                if (i > 0 && time9 > 3000) //2014-08 was 1000 in ERD building. Now 3000 from outside
-                    String2.pressEnterToContinue("Erddap too slow: " + time9); 
-            }
-            //don't run often
-            Opendap.threddsTunnelTest(10,  //200 for a good test
-                "https://coastwatch.pfeg.noaa.gov/erddap/griddap/erdCMsfc",
-                "eastCurrent"); 
-        } catch (Exception e) {
-            String2.pressEnterToContinue(MustBe.throwableToString(e) + 
-                "\nUnexpected erddap error."); 
-        }
+        // try {
+        //     int nTimes = 0; //0 to disable, 5 for a full test
+        //     for (int i = 0; i < nTimes; i++) {
+        //         long time9 = System.currentTimeMillis();
+        //         Opendap.doErddapSpeedTests(false, false); //dotTest, asciiTest 
+        //         time9 = System.currentTimeMillis() - time9;
+        //         if (i > 0 && time9 > 3000) //2014-08 was 1000 in ERD building. Now 3000 from outside
+        //             String2.pressEnterToContinue("Erddap too slow: " + time9); 
+        //     }
+        //     //don't run often
+        //     Opendap.threddsTunnelTest(10,  //200 for a good test
+        //         "https://coastwatch.pfeg.noaa.gov/erddap/griddap/erdCMsfc",
+        //         "eastCurrent"); 
+        // } catch (Exception e) {
+        //     String2.pressEnterToContinue(MustBe.throwableToString(e) + 
+        //         "\nUnexpected erddap error."); 
+        // }
 
         //Touch.thredds();  //run as needed to tell thredds to cache PISCO datasets?   or usually runs really fast?
 

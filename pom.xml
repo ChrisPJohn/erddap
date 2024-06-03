@@ -23,7 +23,6 @@
                               //    WARNINGS for postgresql.jar and Cassandra dependencies:
                               //      slf4j, guava, lz4, metrics, netty, snappy, aws-crt.
       mvn package             //Creates a war in \programs\mavenERDDAP\ERDDAP\target
-      (then copy netcdfAll-x.x.x.jar into /lib)
 
    or: mvn clean install -U   //clears out cached information (more thoroughly than 'clean') and does it all?
 
@@ -46,6 +45,9 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <erddapcontent.download.version>v2.23</erddapcontent.download.version>
         <erddapreffiles.download.version>1.0.0</erddapreffiles.download.version>
+        <netcdfJavaVersion>5.5.3</netcdfJavaVersion>
+        <test.resources.version>test1.0</test.resources.version>
+        <jettyVersion>12.0.8</jettyVersion>
     </properties>
 
     <repositories>
@@ -67,6 +69,9 @@
         <resources>
             <resource>
                 <directory>WEB-INF/classes</directory>
+                <excludes>
+                    <exclude>**/*.java</exclude>
+                </excludes>
             </resource>
         </resources>
         <plugins>
@@ -74,6 +79,7 @@
                 <artifactId>maven-dependency-plugin</artifactId>
                 <executions>
                     <execution>
+                        <?m2e execute onConfiguration?>
                         <phase>validate</phase>
                         <goals>
                             <goal>copy-dependencies</goal>
@@ -97,11 +103,10 @@
                 </configuration>
             </plugin>
             <plugin>
-
                 <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-compiler-plugin -->
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.10.1</version>
+                <version>3.11.0</version>
                 <configuration>
                     <failOnError>true</failOnError>
                     <source>17</source>   <!-- java version -->
@@ -141,95 +146,142 @@
                 <version>3.3.2</version>
                 <configuration>
                     <warSourceDirectory>${project.basedir}</warSourceDirectory>
-                    <warSourceExcludes>WEB-INF/lib/**, target/**, data/**, content/**, .settings/**, *.*</warSourceExcludes>
+                    <warSourceExcludes>content/**, data/**, development/**, download_cache/**, /src/test/**, target/**, src/**, WEB-INF/lib/**, *.*, **/*.java, .settings/**, .github/**, .vscode/**</warSourceExcludes>
                 </configuration>
             </plugin>
 
-            <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-antrun-plugin -->
+            <!-- https://mvnrepository.com/artifact/org.eclipse.jetty/jetty-maven-plugin -->
+            <plugin>
+                <groupId>org.eclipse.jetty.ee10</groupId>
+                <artifactId>jetty-ee10-maven-plugin</artifactId>
+                <version>${jettyVersion}</version>
+                <configuration>
+                    <webApp>
+                        <contextPath>/erddap</contextPath>
+                        <descriptor>${project.basedir}/WEB-INF/web.xml</descriptor>
+                    </webApp>
+                    <!-- necessary to override the default classesDirectory ${project.basedir}/target/classes due to:
+                    https://github.com/ERDDAP/erddap/blob/33e6e531484b0cc6ed461f0640b1f0ad3b83e45b/WEB-INF/classes/com/cohort/util/File2.java#L216-->
+                    <classesDirectory>${project.build.directory}/${project.build.finalName}/WEB-INF/classes</classesDirectory>
+                    <scan>0</scan>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
                 <version>3.1.0</version>
                 <executions>
-                <execution>
-                        <?m2e execute onConfiguration?>
-                        <id>make-lib</id>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                        <configuration>
-                            <target>
-                                <mkdir dir="${project.basedir}/WEB-INF/lib"/>
-                            </target>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <?m2e execute onConfiguration,onIncremental?>
-                        <id>download-netcdf</id>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                        <configuration>
-                            <target>
-                                <get src="https://downloads.unidata.ucar.edu/netcdf-java/5.5.3/netcdfAll-5.5.3.jar" dest="${project.basedir}/WEB-INF/lib/netcdfAll-5.5.3.jar" skipexisting="true" verbose="true"/>
-                            </target>
-                        </configuration>
-                    </execution>
+                    <!-- create data directory for testing -->
                     <execution>
                         <?m2e execute onConfiguration?>
-                        <id>make-download-cache-dir</id>
+                        <id>make-data-dir</id>
                         <phase>initialize</phase>
                         <goals>
                             <goal>run</goal>
                         </goals>
                         <configuration>
                             <target>
-                                <mkdir dir="${project.basedir}/download_cache"/>
+                                <mkdir dir="${project.basedir}/data"/>
                             </target>
                         </configuration>
                     </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.googlecode.maven-download-plugin</groupId>
+                <artifactId>download-maven-plugin</artifactId>
+                <version>1.8.1</version>
+                <executions>
                     <execution>
-                        <?m2e execute onConfiguration?>
-                        <id>download-erddap-content</id>
+                        <id>download-content</id>
                         <phase>initialize</phase>
                         <goals>
-                            <goal>run</goal>
+                            <goal>wget</goal>
                         </goals>
                         <configuration>
-                            <target>
-                                <get src="https://github.com/ERDDAP/erddap/releases/download/${erddapcontent.download.version}/erddapContent.zip" dest="${project.basedir}/download_cache/erddapContent.zip" skipexisting="true" verbose="true"/>
-                                <unzip src="${project.basedir}/download_cache/erddapContent.zip" dest="${project.basedir}" overwrite="false" />
-                            </target>
+                            <url>https://github.com/ERDDAP/erddap/releases/download/${erddapcontent.download.version}/erddapContent.zip</url>
+                            <unpack>true</unpack>
+                            <outputDirectory>${project.basedir}</outputDirectory>
+                            <cacheDirectory>${project.basedir}/download_cache</cacheDirectory>
                         </configuration>
                     </execution>
                     <execution>
-                        <?m2e execute onConfiguration?>
                         <id>download-etopo</id>
                         <phase>initialize</phase>
                         <goals>
-                            <goal>run</goal>
+                            <goal>wget</goal>
                         </goals>
                         <configuration>
-                            <target>
-                            <get src="https://github.com/ERDDAP/ERDDAPRefFiles/releases/download/${erddapreffiles.download.version}/etopo1_ice_g_i2.zip" dest="${project.basedir}/download_cache/etopo1_ice_g_i2.zip" skipexisting="true" verbose="true"/>
-                                <unzip src="${project.basedir}/download_cache/etopo1_ice_g_i2.zip" dest="${project.basedir}/WEB-INF/ref/" overwrite="false" />
-                            </target>
+                            <url>https://github.com/ERDDAP/ERDDAPRefFiles/releases/download/${erddapreffiles.download.version}/etopo1_ice_g_i2.zip</url>
+                            <unpack>true</unpack>
+                            <outputDirectory>${project.basedir}/WEB-INF/ref/</outputDirectory>
+                            <cacheDirectory>${project.basedir}/download_cache</cacheDirectory>
                         </configuration>
                     </execution>
                     <execution>
-                        <?m2e execute onConfiguration?>
-                        <id>download-ref-files</id>
+                        <id>download-ref</id>
                         <phase>initialize</phase>
                         <goals>
-                            <goal>run</goal>
+                            <goal>wget</goal>
                         </goals>
                         <configuration>
-                            <target>
-                            <get src="https://github.com/ERDDAP/ERDDAPRefFiles/releases/download/${erddapreffiles.download.version}/ref_files.zip" dest="${project.basedir}/download_cache/ref_files.zip" skipexisting="true" verbose="true"/>
-                                <unzip src="${project.basedir}/download_cache/ref_files.zip" dest="${project.basedir}/WEB-INF/ref/" overwrite="false" />
-                            </target>
+                            <url>https://github.com/ERDDAP/ERDDAPRefFiles/releases/download/${erddapreffiles.download.version}/ref_files.zip</url>
+                            <unpack>true</unpack>
+                            <outputDirectory>${project.basedir}/WEB-INF/ref/</outputDirectory>
+                            <cacheDirectory>${project.basedir}/download_cache</cacheDirectory>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>download-test-resources-data</id>
+                        <phase>generate-test-resources</phase>
+                        <goals>
+                            <goal>wget</goal>
+                        </goals>
+                        <configuration>
+                            <url>https://github.com/ERDDAP/erddapTest/releases/download/${test.resources.version}/data.zip</url>
+                            <unpack>true</unpack>
+                            <outputDirectory>${project.basedir}/src/test/resources/</outputDirectory>
+                            <cacheDirectory>${project.basedir}/download_cache</cacheDirectory>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>download-test-resources-largeFiles</id>
+                        <phase>generate-test-resources</phase>
+                        <goals>
+                            <goal>wget</goal>
+                        </goals>
+                        <configuration>
+                            <url>https://github.com/ERDDAP/erddapTest/releases/download/${test.resources.version}/largeFiles.zip</url>
+                            <unpack>true</unpack>
+                            <outputDirectory>${project.basedir}/src/test/resources/</outputDirectory>
+                            <cacheDirectory>${project.basedir}/download_cache</cacheDirectory>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>download-test-resources-largePoints</id>
+                        <phase>generate-test-resources</phase>
+                        <goals>
+                            <goal>wget</goal>
+                        </goals>
+                        <configuration>
+                            <url>https://github.com/ERDDAP/erddapTest/releases/download/${test.resources.version}/largePoints.zip</url>
+                            <unpack>true</unpack>
+                            <outputDirectory>${project.basedir}/src/test/resources/</outputDirectory>
+                            <cacheDirectory>${project.basedir}/download_cache</cacheDirectory>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>download-test-resources-largeSatellite</id>
+                        <phase>generate-test-resources</phase>
+                        <goals>
+                            <goal>wget</goal>
+                        </goals>
+                        <configuration>
+                            <url>https://github.com/ERDDAP/erddapTest/releases/download/${test.resources.version}/largeSatellite.zip</url>
+                            <unpack>true</unpack>
+                            <outputDirectory>${project.basedir}/src/test/resources/</outputDirectory>
+                            <cacheDirectory>${project.basedir}/download_cache</cacheDirectory>
                         </configuration>
                     </execution>
                 </executions>
@@ -238,8 +290,27 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.2.1</version>
                 <configuration>
-                    <excludedGroups>AWS, LocalERDDAP, Password, Thredds, ExternalERDDAP, MissingFile, LargeFile, ExternalOther, IncompleteTest, WebInfStructureDependency</excludedGroups>
+                    <excludedGroups>LargeFiles, Flaky, AWS, LocalERDDAP, Password, Thredds, ExternalERDDAP, MissingFile, ExternalOther, IncompleteTest, RequiresContent, MissingDataset</excludedGroups>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.11</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>generate-code-coverage-report</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
         <pluginManagement>
@@ -311,6 +382,27 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-server</artifactId>
+            <version>${jettyVersion}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.jetty.ee10</groupId>
+            <artifactId>jetty-ee10-servlet</artifactId>
+            <version>${jettyVersion}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.jetty.ee10</groupId>
+            <artifactId>jetty-ee10-webapp</artifactId>
+            <version>${jettyVersion}</version>
             <scope>test</scope>
         </dependency>
 
@@ -454,149 +546,97 @@
             <version>2.0.0</version>
         </dependency>
 
-        <!-- To use downloaded local netcdf-all:
-            download from https://downloads.unidata.ucar.edu/netcdf-java/
-            or e.g., repo/edu/ucar/netcdfAll/5.5.3/netcdfAll-5.5.3.jar 
-            [This approach is based on second answer from 
-             https://stackoverflow.com/questions/3765903/how-to-include-local-jar-files-in-maven-project ]
-         -->
         <dependency>
-            <groupId>edu.ucar</groupId>
-            <artifactId>netcdfAll</artifactId>
-            <version>5.5.3</version>  <!-- version number duplicated several times below -->
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-jdk14</artifactId>
+            <version>2.0.13</version>
+            <scope>runtime</scope>
         </dependency>
 
-        <!-- These will be needed if I ever switch away from netcdfAll.
-          Published advice https://docs.unidata.ucar.edu/netcdf-java/current/userguide/using_netcdf_java_artifacts.html 
-            and Jan 24, 2022 email from Jennifer Oxelson Ganter
-            and a set of runtime modules from https://docs.unidata.ucar.edu/netcdf-java/current/userguide/file_types.html 
-          To figure out which module has a given class, Google, e.g.: github netcdf-java ucar nc2 geotiff GeotiffWriter 
-
-          Browse repository (probably unidata-all): https://artifacts.unidata.ucar.edu/#browse/browse
-          -->
-
-        <!-- Version options: https://artifacts.unidata.ucar.edu/#browse/browse:unidata-all:edu%2Fucar%2Fbufr - ->
-        <dependency>
-            <groupId>edu.ucar</groupId>
-            <artifactId>bufr</artifactId>
-            <version>5.5.3</version>  <!- - this number duplicated many times below - ->
-            <scope>runtime</scope>  
-        </dependency>
-        <!- - Version options: https://artifacts.unidata.ucar.edu/#browse/browse:unidata-all:edu%2Fucar%2Fcdm-core  
-             Fundamental! 
-             Has ucar.nc2.Variable and Variable.Builder (and other builders).
-             Has ucar.nc2.ncml.NcmlReader, Aggregation, AggregationExisting, AggregationFmrc, AggregationOuterDimension, 
-               AggregationUnion, etc- ->
         <dependency>
             <groupId>edu.ucar</groupId>
             <artifactId>cdm-core</artifactId>
-            <version>5.5.3</version>
+            <version>${netcdfJavaVersion}</version>
             <scope>compile</scope>
         </dependency>
-        <!- - Version options: https://artifacts.unidata.ucar.edu/#browse/browse:unidata-all:edu%2Fucar%2Fcdm-image  - ->
+
         <dependency>
             <groupId>edu.ucar</groupId>
-            <artifactId>cdm-image</artifactId>
-            <version>5.5.3</version>
-            <scope>runtime</scope>
+            <artifactId>cdm-misc</artifactId>
+            <version>${netcdfJavaVersion}</version>
         </dependency>
-       <!- - Version options: https://artifacts.unidata.ucar.edu/#browse/browse:unidata-all:edu%2Fucar%2Fcdm-mcidas  - ->
-        <dependency>
-            <groupId>edu.ucar</groupId>
-            <artifactId>cdm-mcidas</artifactId>
-            <version>5.5.3</version>
-            <scope>runtime</scope>
-        </dependency>
-        <!- - Version options: https://artifacts.unidata.ucar.edu/#browse/browse:unidata-all:edu%2Fucar%2Fcdm-misc  
-             Has ucar.nc2.geotiff. - ->
-        <dependency>
-            <groupId>edu.ucar</groupId>
-            <artifactId>cdm-misc</artifactId> 
-            <version>5.5.3</version>
-            <scope>compile</scope>  
-        </dependency>
-        <!- - Version options: https://artifacts.unidata.ucar.edu/#browse/browse:unidata-all:edu%2Fucar%2Fcdm-radial  
-             probably not needed- ->
-        <dependency>
-            <groupId>edu.ucar</groupId>
-            <artifactId>cdm-radial</artifactId>
-            <version>5.5.3</version>
-            <scope>runtime</scope>
-        </dependency>
-        <!- - Version options: https://artifacts.unidata.ucar.edu/#browse/browse:unidata-all:edu%2Fucar%2Fcdm-vis5d  - ->
-        <dependency>
-            <groupId>edu.ucar</groupId>
-            <artifactId>cdm-vis5d</artifactId>
-            <version>5.5.3</version>
-            <scope>runtime</scope>
-        </dependency>
-        <!- - Version options: https://artifacts.unidata.ucar.edu/#browse/browse:unidata-all:edu%2Fucar%2Fcdm-zarr  
-             zarr isn't included in netcdfAll 
-             BUG in 5.5.3 detected at EDDGridFromNcFiles.testNcml(EDDGridFromNcFiles.java:5529)
-               so I can't include zarr module v5.5.3 with distribution - ->
-        <dependency>
-            <groupId>edu.ucar</groupId>
-            <artifactId>cdm-zarr</artifactId>
-            <version>5.5.3</version>
-            <scope>runtime</scope>
-        </dependency> 
-        <!- - Version options: https://artifacts.unidata.ucar.edu/#browse/browse:unidata-all:edu%2Fucar%2Fclcommon 
-             Referenced in Jennifer's email. Has ucar.nc2.dt.image... and some ucar.nc2.iosp... 
-             But I distrust artifacts with version=5.1.0. - ->
-        <dependency>
-            <groupId>edu.ucar</groupId>
-            <artifactId>clcommon</artifactId>
-            <version>5.1.0</version>
-            <scope>compile</scope>
-        </dependency> - ->
-        <!- - d4* is probably dap4: not needed - ->        
-        <!- - Version options: https://artifacts.unidata.ucar.edu/#browse/browse:unidata-all:edu%2Fucar%2Fgrib  - ->
-        <dependency>
-            <groupId>edu.ucar</groupId>
-            <artifactId>grib</artifactId>
-            <version>5.5.3</version>
-            <scope>runtime</scope>
-        </dependency>
-        <!- - Version options: https://artifacts.unidata.ucar.edu/#browse/browse:unidata-all:edu%2Fucar%2Fhttpservices  - ->
-        <dependency>
-            <groupId>edu.ucar</groupId>
-            <artifactId>httpservices</artifactId>
-            <version>5.5.3</version>
-            <scope>compile</scope>
-        </dependency>
-        <!- - Version options: https://artifacts.unidata.ucar.edu/#browse/browse:unidata-all:edu%2Fucar%2Flegacy  - ->
-        <dependency>
-            <groupId>edu.ucar</groupId>
-            <artifactId>legacy</artifactId>
-            <version>5.5.3</version>
-            <scope>compile</scope>
-        </dependency>
-        <!- - Version options: https://artifacts.unidata.ucar.edu/#browse/browse:unidata-all:edu%2Fucar%2Fnetcdf  doesn't have 5.x - ->
-        <!- - Version options: https://artifacts.unidata.ucar.edu/#browse/browse:unidata-all:edu%2Fucar%2Fnetcdf-java  doesn't have 5.5.3+ - ->
-        <!- - Version options: https://artifacts.unidata.ucar.edu/#browse/browse:unidata-all:edu%2Fucar%2Fnetcdf4 
-             This is for writing netcdf4 files with linked C library. - ->
-        <dependency>
-            <groupId>edu.ucar</groupId>
-            <artifactId>netcdf4</artifactId>
-            <version>5.5.3</version>
-            <scope>runtime</scope>
-        </dependency> 
-        <!- - Version options: https://artifacts.unidata.ucar.edu/#browse/browse:unidata-all:edu%2Fucar%2Fopendap  - ->
-        <dependency>
-            <groupId>edu.ucar</groupId>
-            <artifactId>opendap</artifactId>
-            <version>5.5.3</version>
-            <scope>compile</scope>
-        </dependency>
-        <!- - Version options: https://artifacts.unidata.ucar.edu/#browse/browse:unidata-all:edu%2Fucar%2Fudunits 
-             Marked as needed by dependency:analyze - ->
+
         <dependency>
             <groupId>edu.ucar</groupId>
             <artifactId>udunits</artifactId>
-            <version>5.5.3</version>
-            <scope>compile</scope> 
+            <version>${netcdfJavaVersion}</version>
         </dependency>
-        <!- - Version options: https://artifacts.unidata.ucar.edu/#browse/browse:unidata-all:edu%2Fwisc%2Fssec%2Fvisad  
+
+        <!-- The following are from netcdf and add support for various file types. -->
+        <dependency>
+            <groupId>edu.ucar</groupId>
+            <artifactId>netcdf4</artifactId>
+            <version>${netcdfJavaVersion}</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>edu.ucar</groupId>
+            <artifactId>grib</artifactId>
+            <version>${netcdfJavaVersion}</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>edu.ucar</groupId>
+            <artifactId>bufr</artifactId>
+            <version>${netcdfJavaVersion}</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>edu.ucar</groupId>
+            <artifactId>opendap</artifactId>
+            <version>${netcdfJavaVersion}</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>edu.ucar</groupId>
+            <artifactId>cdm-radial</artifactId>
+            <version>${netcdfJavaVersion}</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>edu.ucar</groupId>
+            <artifactId>cdm-image</artifactId>
+            <version>${netcdfJavaVersion}</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>edu.ucar</groupId>
+            <artifactId>cdm-mcidas</artifactId>
+            <version>${netcdfJavaVersion}</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>edu.ucar</groupId>
+            <artifactId>cdm-s3</artifactId>
+            <version>${netcdfJavaVersion}</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>edu.ucar</groupId>
+            <artifactId>cdm-zarr</artifactId>
+            <version>${netcdfJavaVersion}</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- Version options: https://artifacts.unidata.ucar.edu/#browse/browse:unidata-all:edu%2Fwisc%2Fssec%2Fvisad  
              Marked as needed by dependency:analyze - ->
         <dependency>
             <groupId>edu.wisc.ssec</groupId>
