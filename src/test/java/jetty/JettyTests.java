@@ -8179,7 +8179,7 @@ class JettyTests {
                 "QT_5025,missing_value,1.0E35f\n" +
                 "QT_5025,name,QT\n" +
                 "ST_6025,*DATA_TYPE*,float\n" +
-                (results.indexOf("\"ST_6025,_FillValue,1.0E35f") > -1 ? "\"ST_6025,_FillValue,1.0E35f\n" : "") +
+                (results.indexOf("ST_6025,_FillValue,1.0E35f") > -1 ? "ST_6025,_FillValue,1.0E35f\n" : "") +
                 "ST_6025,actual_range,0.0f,5.0f\n" +
                 "ST_6025,colorBarContinuous,false\n" +
                 "ST_6025,colorBarMaximum,8.0d\n" +
