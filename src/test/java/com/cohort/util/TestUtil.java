@@ -7207,8 +7207,10 @@ class TestUtil {
                 // String2.log(" bytes/string=" + ((memoryInUse - oMemoryInUse) / (n + 0.0)));
                 // too inaccurate to be useful
                 Test.ensureTrue(memoryInUse - oMemoryInUse < 5000000, "Memory use is growing!");
-                Test.ensureTrue(memoryInUse < 50L * Math2.BytesPerMB,
-                        "Unexpected memoryInUse=" + (memoryInUse / Math2.BytesPerMB));
+                // Disable this total memory usage check because with new test approach there is no guarantee
+                // about what else might be running. If we need this check, make an isolated test to do this. 
+                // Test.ensureTrue(memoryInUse < 50L * Math2.BytesPerMB,
+                //         "Unexpected memoryInUse=" + (memoryInUse / Math2.BytesPerMB));
             }
             Test.ensureEqual(String2.canonicalSize(), canSize,
                     "Unexpected String2.canonicalSize!");

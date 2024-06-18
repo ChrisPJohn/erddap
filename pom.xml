@@ -212,7 +212,7 @@
                 <artifactId>download-maven-plugin</artifactId>
                 <version>1.9.0</version>
                 <executions>
-                    <!-- <execution>
+                    <execution>
                         <id>download-content</id>
                         <phase>initialize</phase>
                         <goals>
@@ -303,7 +303,7 @@
                             <outputDirectory>${project.basedir}/src/test/resources/</outputDirectory>
                             <cacheDirectory>${project.basedir}/download_cache</cacheDirectory>
                         </configuration>
-                    </execution> -->
+                    </execution>
                 </executions>
             </plugin>
             <plugin>

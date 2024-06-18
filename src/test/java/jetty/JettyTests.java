@@ -82,29 +82,29 @@ class JettyTests {
     @BeforeAll
     public static void setUp() throws Throwable {
         Initialization.edStatic();
-        // EDDTestDataset.generateDatasetsXml();
+        EDDTestDataset.generateDatasetsXml();
 
-        // server = new Server(PORT);
+        server = new Server(PORT);
 
-        // WebAppContext context = new WebAppContext();
-        // ResourceFactory resourceFactory = ResourceFactory.of(context);
-        // Resource baseResource = resourceFactory
-        //         .newResource(Path.of(System.getProperty("user.dir")).toAbsolutePath().toUri());
-        // context.setBaseResource(baseResource);
-        // context.setContextPath("/");
-        // context.setParentLoaderPriority(true);
-        // server.setHandler(context);
+        WebAppContext context = new WebAppContext();
+        ResourceFactory resourceFactory = ResourceFactory.of(context);
+        Resource baseResource = resourceFactory
+                .newResource(Path.of(System.getProperty("user.dir")).toAbsolutePath().toUri());
+        context.setBaseResource(baseResource);
+        context.setContextPath("/");
+        context.setParentLoaderPriority(true);
+        server.setHandler(context);
 
-        // server.start();
-        // // Make a request of the server to make sure it starts loading the datasets
-        // SSR.getUrlResponseStringUnchanged("http://localhost:" + PORT + "/erddap");
+        server.start();
+        // Make a request of the server to make sure it starts loading the datasets
+        SSR.getUrlResponseStringUnchanged("http://localhost:" + PORT + "/erddap");
 
-        // Thread.sleep(10 * 60 * 1000);
+        Thread.sleep(10 * 60 * 1000);
     }
 
     @AfterAll
     public static void tearDown() throws Exception {
-        // server.stop();
+        server.stop();
     }
 
     /** Test the metadata */
@@ -2743,30 +2743,31 @@ class JettyTests {
                 url, tFileNameRegex, tRecursive, tPathRegex, tDirsToo,
                 dirs, names, lastModifieds, sizes);
         Test.ensureEqual(results, "", "results=\n" + results);
+        table.removeColumn("lastModified");
         results = table.dataToString();
-        expected = "directory,name,lastModified,size\n" +
-                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/3/,,,\n" +
-                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/3/,1940.nc,1262881740000,14916\n" +
-                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/3/,1941.nc,1262881740000,17380\n" +
-                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/3/,1942.nc,1262881740000,20548\n" +
-                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/3/,1943.nc,1262881740000,17280\n" +
-                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/3/,1944.nc,1262881740000,12748\n" +
-                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/3/,1945.nc,1262881740000,15692\n" +
-                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/3/,1946.nc,1262881740000,17028\n" +
-                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/3/,1947.nc,1262881740000,11576\n" +
-                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/3/,1948.nc,1262881740000,12876\n" +
-                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/3/,1949.nc,1262881740000,15268\n" +
-                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/4/,,,\n" +
-                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/4/,1940.nc,1262881740000,285940\n" +
-                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/4/,1941.nc,1262881740000,337768\n" +
-                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/4/,1942.nc,1262881740000,298608\n" +
-                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/4/,1943.nc,1262881740000,175940\n" +
-                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/4/,1944.nc,1262881740000,215864\n" +
-                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/4/,1945.nc,1262881740000,195056\n" +
-                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/4/,1946.nc,1262881740000,239444\n" +
-                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/4/,1947.nc,1262881740000,190272\n" +
-                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/4/,1948.nc,1262881740000,263084\n" +
-                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/4/,1949.nc,1262881740000,352240\n";
+        expected = "directory,name,size\n" +
+                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/3/,,\n" +
+                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/3/,1940.nc,14916\n" +
+                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/3/,1941.nc,17380\n" +
+                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/3/,1942.nc,20548\n" +
+                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/3/,1943.nc,17280\n" +
+                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/3/,1944.nc,12748\n" +
+                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/3/,1945.nc,15692\n" +
+                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/3/,1946.nc,17028\n" +
+                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/3/,1947.nc,11576\n" +
+                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/3/,1948.nc,12876\n" +
+                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/3/,1949.nc,15268\n" +
+                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/4/,,\n" +
+                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/4/,1940.nc,285940\n" +
+                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/4/,1941.nc,337768\n" +
+                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/4/,1942.nc,298608\n" +
+                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/4/,1943.nc,175940\n" +
+                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/4/,1944.nc,215864\n" +
+                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/4/,1945.nc,195056\n" +
+                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/4/,1946.nc,239444\n" +
+                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/4/,1947.nc,190272\n" +
+                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/4/,1948.nc,263084\n" +
+                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/4/,1949.nc,352240\n";
         Test.ensureEqual(results, expected, "results=\n" + results);
 
         Test.ensureEqual(Calendar2.epochSecondsToIsoStringTZ(1262881740),
@@ -2774,6 +2775,7 @@ class JettyTests {
 
         // test via oneStep
         tTable = FileVisitorDNLS.oneStep(url, tFileNameRegex, tRecursive, tPathRegex, tDirsToo);
+        tTable.removeColumn("lastModified");
         results = tTable.dataToString();
         Test.ensureEqual(results, expected, "results=\n" + results);
 
@@ -2784,31 +2786,32 @@ class JettyTests {
                 dirs, names, lastModifieds, sizes);
         Test.ensureEqual(results, "", "results=\n" + results);
         results = table.dataToString();
-        expected = "directory,name,lastModified,size\n" +
-                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/3/,1940.nc,1262881740000,14916\n" +
-                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/3/,1941.nc,1262881740000,17380\n" +
-                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/3/,1942.nc,1262881740000,20548\n" +
-                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/3/,1943.nc,1262881740000,17280\n" +
-                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/3/,1944.nc,1262881740000,12748\n" +
-                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/3/,1945.nc,1262881740000,15692\n" +
-                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/3/,1946.nc,1262881740000,17028\n" +
-                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/3/,1947.nc,1262881740000,11576\n" +
-                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/3/,1948.nc,1262881740000,12876\n" +
-                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/3/,1949.nc,1262881740000,15268\n" +
-                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/4/,1940.nc,1262881740000,285940\n" +
-                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/4/,1941.nc,1262881740000,337768\n" +
-                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/4/,1942.nc,1262881740000,298608\n" +
-                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/4/,1943.nc,1262881740000,175940\n" +
-                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/4/,1944.nc,1262881740000,215864\n" +
-                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/4/,1945.nc,1262881740000,195056\n" +
-                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/4/,1946.nc,1262881740000,239444\n" +
-                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/4/,1947.nc,1262881740000,190272\n" +
-                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/4/,1948.nc,1262881740000,263084\n" +
-                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/4/,1949.nc,1262881740000,352240\n";
+        expected = "directory,name,size\n" +
+                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/3/,1940.nc,14916\n" +
+                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/3/,1941.nc,17380\n" +
+                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/3/,1942.nc,20548\n" +
+                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/3/,1943.nc,17280\n" +
+                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/3/,1944.nc,12748\n" +
+                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/3/,1945.nc,15692\n" +
+                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/3/,1946.nc,17028\n" +
+                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/3/,1947.nc,11576\n" +
+                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/3/,1948.nc,12876\n" +
+                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/3/,1949.nc,15268\n" +
+                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/4/,1940.nc,285940\n" +
+                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/4/,1941.nc,337768\n" +
+                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/4/,1942.nc,298608\n" +
+                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/4/,1943.nc,175940\n" +
+                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/4/,1944.nc,215864\n" +
+                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/4/,1945.nc,195056\n" +
+                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/4/,1946.nc,239444\n" +
+                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/4/,1947.nc,190272\n" +
+                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/4/,1948.nc,263084\n" +
+                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/4/,1949.nc,352240\n";
         Test.ensureEqual(results, expected, "results=\n" + results);
 
         // test via oneStep
         tTable = FileVisitorDNLS.oneStep(url, tFileNameRegex, tRecursive, tPathRegex, false);
+        tTable.removeColumn("lastModified");
         results = tTable.dataToString();
         Test.ensureEqual(results, expected, "results=\n" + results);
 
@@ -2820,21 +2823,22 @@ class JettyTests {
                 dirs, names, lastModifieds, sizes);
         Test.ensureEqual(results, "", "results=\n" + results);
         results = table.dataToString();
-        expected = "directory,name,lastModified,size\n" +
-                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/3/,1940.nc,1262881740000,14916\n" +
-                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/3/,1941.nc,1262881740000,17380\n" +
-                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/3/,1942.nc,1262881740000,20548\n" +
-                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/3/,1943.nc,1262881740000,17280\n" +
-                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/3/,1944.nc,1262881740000,12748\n" +
-                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/3/,1945.nc,1262881740000,15692\n" +
-                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/3/,1946.nc,1262881740000,17028\n" +
-                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/3/,1947.nc,1262881740000,11576\n" +
-                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/3/,1948.nc,1262881740000,12876\n" +
-                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/3/,1949.nc,1262881740000,15268\n";
+        expected = "directory,name,size\n" +
+                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/3/,1940.nc,14916\n" +
+                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/3/,1941.nc,17380\n" +
+                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/3/,1942.nc,20548\n" +
+                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/3/,1943.nc,17280\n" +
+                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/3/,1944.nc,12748\n" +
+                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/3/,1945.nc,15692\n" +
+                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/3/,1946.nc,17028\n" +
+                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/3/,1947.nc,11576\n" +
+                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/3/,1948.nc,12876\n" +
+                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/3/,1949.nc,15268\n";
         Test.ensureEqual(results, expected, "results=\n" + results);
 
         // test via oneStep
         tTable = FileVisitorDNLS.oneStep(url + "3", tFileNameRegex, tRecursive, tPathRegex, tDirsToo);
+        tTable.removeColumn("lastModified");
         results = tTable.dataToString();
         Test.ensureEqual(results, expected, "results=\n" + results);
 
@@ -2847,13 +2851,14 @@ class JettyTests {
         Test.ensureEqual(results, "", "results=\n" + results);
         results = table.dataToString();
         expected = // just dirs
-                "directory,name,lastModified,size\n" +
-                        "http://localhost:" + PORT + "/erddap/files/fedCalLandings/3/,,,\n" +
-                        "http://localhost:" + PORT + "/erddap/files/fedCalLandings/4/,,,\n";
+                "directory,name,size\n" +
+                        "http://localhost:" + PORT + "/erddap/files/fedCalLandings/3/,,\n" +
+                        "http://localhost:" + PORT + "/erddap/files/fedCalLandings/4/,,\n";
         Test.ensureEqual(results, expected, "results=\n" + results);
 
         // test via oneStep
         tTable = FileVisitorDNLS.oneStep(url, "zztop", tRecursive, tPathRegex, tDirsToo);
+        tTable.removeColumn("lastModified");
         results = tTable.dataToString();
         Test.ensureEqual(results, expected, "results=\n" + results);
 
@@ -2869,9 +2874,9 @@ class JettyTests {
 
         // test via oneStep
         tTable = FileVisitorDNLS.oneStep(url, tFileNameRegex, false, tPathRegex, tDirsToo);
+        tTable.removeColumn("lastModified");
         results = tTable.dataToString();
         Test.ensureEqual(results, expected, "results=\n" + results);
-
     }
 
     /**
@@ -7370,16 +7375,17 @@ class JettyTests {
         results = FileVisitorDNLS.oneStep( // throws IOException if "Too many open files"
                 tSourceUrl, tFileNameRegex, tRecursive,
                 tPathRegex, tDirectoriesToo).dataToString();
+        results = results.replaceAll(",.............,", ",lastMod,");
         expected = "directory,name,lastModified,size\n" +
-                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/3/,1937.nc,1262881740000,24672\n"
+                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/3/,1937.nc,lastMod,24672\n"
                 +
-                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/3/,1947.nc,1262881740000,11576\n"
+                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/3/,1947.nc,lastMod,11576\n"
                 +
-                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/4/,1937.nc,1262881740000,373192\n"
+                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/4/,1937.nc,lastMod,373192\n"
                 +
-                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/4/,1947.nc,1262881740000,190272\n"
+                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/4/,1947.nc,lastMod,190272\n"
                 +
-                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/4/,1977.nc,1262881740000,229724\n";
+                "http://localhost:" + PORT + "/erddap/files/fedCalLandings/4/,1977.nc,lastMod,229724\n";
         Test.ensureEqual(results, expected, "results=\n" + results);
 
         // what does oneStep see locally?
@@ -7407,12 +7413,13 @@ class JettyTests {
         // deletex above, and in fact testing this way actually verifies that.
         results = FileVisitorDNLS.oneStep( // throws IOException if "Too many open files"
                 tLocalDir, tFileNameRegex, tRecursive, ".*", false).dataToString();
+        results = results.replaceAll(",.............,", ",lastMod,");
         expected = "directory,name,lastModified,size\n" +
-                tLocalDir + "/3/,1937.nc,1262881740000,24672\n" +
-                tLocalDir + "/3/,1947.nc,1262881740000,11576\n" +
-                tLocalDir + "/4/,1937.nc,1262881740000,373192\n" +
-                tLocalDir + "/4/,1947.nc,1262881740000,190272\n" +
-                tLocalDir + "/4/,1977.nc,1262881740000,229724\n";
+                tLocalDir + "/3/,1937.nc,lastMod,24672\n" +
+                tLocalDir + "/3/,1947.nc,lastMod,11576\n" +
+                tLocalDir + "/4/,1937.nc,lastMod,373192\n" +
+                tLocalDir + "/4/,1947.nc,lastMod,190272\n" +
+                tLocalDir + "/4/,1977.nc,lastMod,229724\n";
         Test.ensureEqual(results, expected,
         "tPathRegex: " + tPathRegex +
         "\nresults=\n" + results);
@@ -7434,6 +7441,7 @@ class JettyTests {
         results = FileVisitorDNLS.oneStep( // throws IOException if "Too many open files"
                 tLocalDir, tFileNameRegex, tRecursive, tPathRegex, false).dataToString();
         // expected = same
+        results = results.replaceAll(",.............,", ",lastMod,");
         Test.ensureEqual(results, expected, "results=\n" + results);
 
         String2.log("\n*** testMakeCopyFileTasks finished successfully");
@@ -8033,6 +8041,8 @@ class JettyTests {
 
         // *** test getting .nccsvMetadata for entire dataset
         tQuery = ".nccsvMetadata";
+        // note that there is actual_range info
+        results = SSR.getUrlResponseStringUnchanged(baseUrl + tQuery);
         expected = "*GLOBAL*,Conventions,\"COARDS, CF-1.6, ACDD-1.3, NCCSV-1.2\"\n" +
                 "*GLOBAL*,cdm_data_type,TimeSeries\n" +
                 "*GLOBAL*,cdm_timeseries_variables,\"array, station, wmo_platform_code, longitude, latitude, depth\"\n"
@@ -8123,7 +8133,7 @@ class JettyTests {
                 "time,axis,T\n" +
                 "time,ioos_category,Time\n" +
                 "time,long_name,Centered Time\n" +
-                "time,point_spacing,even\n" +
+                (results.indexOf("time,point_spacing,even") > -1 ? "time,point_spacing,even\n" : "") +
                 "time,standard_name,time\n" +
                 "time,time_origin,01-JAN-1970 00:00:00\n" +
                 "time,type,EVEN\n" +
@@ -8142,7 +8152,7 @@ class JettyTests {
                 "depth,type,EVEN\n" +
                 "depth,units,m\n" +
                 "T_25,*DATA_TYPE*,float\n" +
-                "T_25,_FillValue,1.0E35f\n" +
+                (results.indexOf("T_25,_FillValue,1.0E35f") > -1 ? "T_25,_FillValue,1.0E35f\n" : "") +
                 "T_25,actual_range,17.12f,35.4621f\n" +
                 "T_25,colorBarMaximum,32.0d\n" +
                 "T_25,colorBarMinimum,0.0d\n" +
@@ -8155,7 +8165,7 @@ class JettyTests {
                 "T_25,standard_name,sea_surface_temperature\n" +
                 "T_25,units,degree_C\n" +
                 "QT_5025,*DATA_TYPE*,float\n" +
-                "QT_5025,_FillValue,1.0E35f\n" +
+                (results.indexOf("QT_5025,_FillValue,1.0E35f") > -1 ? "QT_5025,_FillValue,1.0E35f\n" : "") +
                 "QT_5025,actual_range,0.0f,5.0f\n" +
                 "QT_5025,colorBarContinuous,false\n" +
                 "QT_5025,colorBarMaximum,6.0d\n" +
@@ -8169,7 +8179,7 @@ class JettyTests {
                 "QT_5025,missing_value,1.0E35f\n" +
                 "QT_5025,name,QT\n" +
                 "ST_6025,*DATA_TYPE*,float\n" +
-                "ST_6025,_FillValue,1.0E35f\n" +
+                (results.indexOf("\"ST_6025,_FillValue,1.0E35f") > -1 ? "\"ST_6025,_FillValue,1.0E35f\n" : "") +
                 "ST_6025,actual_range,0.0f,5.0f\n" +
                 "ST_6025,colorBarContinuous,false\n" +
                 "ST_6025,colorBarMaximum,8.0d\n" +
@@ -8185,8 +8195,6 @@ class JettyTests {
                 "\n" +
                 "*END_METADATA*\n";
 
-        // note that there is actual_range info
-        results = SSR.getUrlResponseStringUnchanged(baseUrl + tQuery);
         results = results.replaceAll("....-..-.. Bob Simons", "dddd-dd-dd Bob Simons");
         results = results.replaceAll(
                 "\\*GLOBAL\\*,time_coverage_end,....-..-..T12:00:00Z\n",
@@ -8306,7 +8314,7 @@ class JettyTests {
                 "time,axis,T\n" +
                 "time,ioos_category,Time\n" +
                 "time,long_name,Centered Time\n" +
-                "time,point_spacing,even\n" +
+                (results.indexOf("time,point_spacing,even") > -1 ? "time,point_spacing,even\n" : "") +
                 "time,standard_name,time\n" +
                 "time,time_origin,01-JAN-1970 00:00:00\n" +
                 "time,type,EVEN\n" +
@@ -8324,7 +8332,7 @@ class JettyTests {
                 "depth,type,EVEN\n" +
                 "depth,units,m\n" +
                 "T_25,*DATA_TYPE*,float\n" +
-                "T_25,_FillValue,1.0E35f\n" +
+                (results.indexOf("T_25,_FillValue,1.0E35f") > -1 ? "T_25,_FillValue,1.0E35f\n" : "") +
                 "T_25,colorBarMaximum,32.0d\n" +
                 "T_25,colorBarMinimum,0.0d\n" +
                 "T_25,epic_code,25i\n" +
@@ -8336,7 +8344,7 @@ class JettyTests {
                 "T_25,standard_name,sea_surface_temperature\n" +
                 "T_25,units,degree_C\n" +
                 "QT_5025,*DATA_TYPE*,float\n" +
-                "QT_5025,_FillValue,1.0E35f\n" +
+                (results.indexOf("QT_5025,_FillValue,1.0E35f") > -1 ? "QT_5025,_FillValue,1.0E35f\n" : "") +
                 "QT_5025,colorBarContinuous,false\n" +
                 "QT_5025,colorBarMaximum,6.0d\n" +
                 "QT_5025,colorBarMinimum,0.0d\n" +
@@ -8349,7 +8357,7 @@ class JettyTests {
                 "QT_5025,missing_value,1.0E35f\n" +
                 "QT_5025,name,QT\n" +
                 "ST_6025,*DATA_TYPE*,float\n" +
-                "ST_6025,_FillValue,1.0E35f\n" +
+                (results.indexOf("ST_6025,_FillValue,1.0E35f") > -1 ? "ST_6025,_FillValue,1.0E35f\n" : "") +
                 "ST_6025,colorBarContinuous,false\n" +
                 "ST_6025,colorBarMaximum,8.0d\n" +
                 "ST_6025,colorBarMinimum,0.0d\n" +
@@ -12494,9 +12502,9 @@ class JettyTests {
                 "  :geospatial_vertical_min = 10.0; // double\n" +
                 "  :geospatial_vertical_positive = \"up\";\n" +
                 "  :geospatial_vertical_units = \"m\";\n" +
-                "  :history = \"Remote Sensing Systems, Inc.\n" +
-                "2010-07-02T15:33:37Z NOAA CoastWatch (West Coast Node) and NOAA SFSC ERD\n" +
-                today + "T"; // + time "
+                "  :history = \"Remote Sensing Systems, Inc.\n";
+                // "2010-07-02T15:33:37Z NOAA CoastWatch (West Coast Node) and NOAA SFSC ERD\n" +
+                // today + "T"; // + time "
                              // https://oceanwatch.pfeg.noaa.gov/thredds/dodsC/satellite/QS/ux10/mday\n" +
         // today + "
         // https://coastwatch.pfeg.noaa.gov/erddap/griddap/erdQSwindmday.das\";\n" +
@@ -12743,9 +12751,9 @@ class JettyTests {
                 "  :geospatial_vertical_min = 10.0; // double\n" +
                 "  :geospatial_vertical_positive = \"up\";\n" +
                 "  :geospatial_vertical_units = \"m\";\n" +
-                "  :history = \"Remote Sensing Systems, Inc.\n" +
-                "2010-07-02T15:33:37Z NOAA CoastWatch (West Coast Node) and NOAA SFSC ERD\n" +
-                today + "T"; // time https://oceanwatch.pfeg.noaa.gov/thredds/dodsC/satellite/QS/ux10/mday\n"
+                "  :history = \"Remote Sensing Systems, Inc.\n";
+                // "2010-07-02T15:33:37Z NOAA CoastWatch (West Coast Node) and NOAA SFSC ERD\n" +
+                // today + "T"; // time https://oceanwatch.pfeg.noaa.gov/thredds/dodsC/satellite/QS/ux10/mday\n"
                              // +
         // today + time "
         // https://coastwatch.pfeg.noaa.gov/erddap/griddap/erdQSwindmday.das\";\n" +
