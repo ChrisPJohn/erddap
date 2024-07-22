@@ -1,71 +1,103 @@
 package gov.noaa.pfel.erddap.handler;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import com.cohort.array.StringArray;
+import gov.noaa.pfel.erddap.Erddap;
+import gov.noaa.pfel.erddap.handlers.SaxHandler;
+import gov.noaa.pfel.erddap.handlers.SaxParsingContext;
 import gov.noaa.pfel.erddap.handlers.TopLevelHandler;
 import gov.noaa.pfel.erddap.util.EDStatic;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.HashSet;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.xml.sax.SAXException;
 import testDataset.Initialization;
 
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Arrays;
-import java.util.HashMap;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 public class TopLevelHandlerTests {
 
-    private static SAXParserFactory factory;
-    private static SAXParser saxParser;
-    private static InputStream inputStream;
+  private static TopLevelHandler topLevelHandler;
+  private static SAXParserFactory factory;
+  private static SAXParser saxParser;
+  private static InputStream inputStream;
+  private static SaxHandler saxHandler;
+  private static SaxParsingContext context;
 
-    @BeforeAll
-    static void initAll() throws ParserConfigurationException, SAXException {
-        Initialization.edStatic();
+  @BeforeAll
+  static void initAll() throws Throwable {
+    Initialization.edStatic();
+    context = new SaxParsingContext();
 
-        factory = SAXParserFactory.newInstance();
-        factory.setNamespaceAware(true);
-        factory.setXIncludeAware(true);
-        saxParser = factory.newSAXParser();
+    context.setNTryAndDatasets(new int[2]);
+    context.setChangedDatasetIDs(new StringArray());
+    context.setOrphanIDSet(new HashSet<>());
+    context.setDatasetIDSet(new HashSet<>());
+    context.setDuplicateDatasetIDs(new StringArray());
+    context.setWarningsFromLoadDatasets(new StringBuilder());
+    context.settUserHashMap(new HashMap());
+    context.setMajorLoad(false);
+    context.setErddap(new Erddap());
+    context.setLastLuceneUpdate(0);
+    context.setDatasetsRegex(EDStatic.datasetsRegex);
+    context.setReallyVerbose(false);
+
+    factory = SAXParserFactory.newInstance();
+    factory.setNamespaceAware(true);
+    factory.setXIncludeAware(true);
+    saxParser = factory.newSAXParser();
+    saxHandler = new SaxHandler();
+    topLevelHandler = new TopLevelHandler(saxHandler, context);
+    saxHandler.setState(topLevelHandler);
+  }
+
+  @BeforeEach
+  void init() throws IOException, SAXException {
+    inputStream =
+        TopLevelHandlerTests.class.getResourceAsStream("/datasets/topLevelHandlerTest.xml");
+    if (inputStream == null) {
+      throw new IllegalArgumentException("File not found: /datasets/topLevelHandlerTest.xml");
     }
+    saxParser.parse(inputStream, saxHandler);
+  }
 
-    @BeforeEach
-    void init() {
-        inputStream = TopLevelHandlerTests.class.getResourceAsStream("/datasets/topLevelHandlerTest.xml");
-        if (inputStream == null) {
-            throw new IllegalArgumentException("File not found: /datasets/topLevelHandlerTest.xml");
-        }
-    }
+  @Test
+  void convertToPublicSourceUrlTest() {
+    assertEquals(
+        EDStatic.convertToPublicSourceUrl.get("http://example.com/"), "http://public.example.com/");
+  }
 
-    @Test
-    void convertToPublicSourceUrlTest() throws SAXException, IOException {
-        saxParser.parse(inputStream, new TopLevelHandler(null, null));
-        assertEquals(EDStatic.convertToPublicSourceUrl.get("http://example.com/"), "http://public.example.com/");
-    }
+  @Test
+  void angularDegreeUnitsTest() {
+    assertEquals(
+        EDStatic.angularDegreeUnitsSet.toString(), "[angular, for, degree, units, content]");
+  }
 
-    @Test
-    void angularDegreeUnitsTest() throws SAXException, IOException {
-        saxParser.parse(inputStream, new TopLevelHandler(null, null));
-        assertEquals(EDStatic.angularDegreeUnitsSet.toString(), "[angular, for, degree, units, content]");
-    }
+  @Test
+  void unusualActivityTest() {
+    assertEquals(EDStatic.unusualActivity, 25);
+  }
 
-    @Test
-    void unusualActivityTest() throws IOException, SAXException {
-        saxParser.parse(inputStream, new TopLevelHandler(null, null));
-        assertEquals(EDStatic.unusualActivity, 25);
-    }
+  @Test
+  void userTest() {
+    Object[] user1Data = (Object[]) context.gettUserHashMap().get("user1");
+    assertEquals("pass1", user1Data[0]);
+  }
 
-    @Test
-    void userTest() throws IOException, SAXException {
-        var tUserHashMap = new HashMap();
-        saxParser.parse(inputStream, new TopLevelHandler(null, tUserHashMap));
-        Object[] user1Data = (Object[]) tUserHashMap.get("user1");
-        assertEquals("pass1", user1Data[0]);
-    }
+  @Test
+  void datasetTest() {
+    assertEquals(2, context.getNTryAndDatasets()[1]);
+  }
 
+  // Takes some time because loads a dataset and skips the other. Hence also verifies the
+  // skipDataset function
+  @Test
+  void NTryTest() {
+    assertEquals(1, context.getNTryAndDatasets()[0]);
+  }
 }
