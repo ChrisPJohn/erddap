@@ -1,41 +1,46 @@
 package gov.noaa.pfel.erddap.handlers;
 
+import static gov.noaa.pfel.erddap.dataset.EDD.DEFAULT_RELOAD_EVERY_N_MINUTES;
+
 import com.cohort.array.StringArray;
 import com.cohort.util.String2;
 import gov.noaa.pfel.erddap.dataset.EDD;
-import gov.noaa.pfel.erddap.dataset.EDDTableFromErddap;
+import gov.noaa.pfel.erddap.dataset.EDDGridFromErddap;
 import gov.noaa.pfel.erddap.util.EDStatic;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
-public class EDDTableFromErddapHandler extends State {
+public class EDDGridFromErddapHandler extends State {
   private StringBuilder content = new StringBuilder();
   private String datasetID;
   private State completeState;
 
-  public EDDTableFromErddapHandler(SaxHandler saxHandler, String datasetID, State completeState) {
+  public EDDGridFromErddapHandler(SaxHandler saxHandler, String datasetID, State completeState) {
     super(saxHandler);
     this.datasetID = datasetID;
     this.completeState = completeState;
   }
 
-  private int tReloadEveryNMinutes = Integer.MAX_VALUE;
+  private int tReloadEveryNMinutes = DEFAULT_RELOAD_EVERY_N_MINUTES;
+  private int tUpdateEveryNMillis = 0;
   private String tAccessibleTo = null;
   private String tGraphsAccessibleTo = null;
+  private boolean tAccessibleViaWMS = true;
   private boolean tAccessibleViaFiles = EDStatic.defaultAccessibleViaFiles;
-  private StringArray tOnChange = new StringArray();
   private boolean tSubscribeToRemoteErddapDataset = EDStatic.subscribeToRemoteErddapDataset;
   private boolean tRedirect = true;
+  private StringArray tOnChange = new StringArray();
   private String tFgdcFile = null;
   private String tIso19115File = null;
-  private String tSosOfferingPrefix = null;
   private String tLocalSourceUrl = null;
   private String tDefaultDataQuery = null;
   private String tDefaultGraphQuery = null;
-  private String tAddVariablesWhere = null;
+  private int tnThreads = -1; // interpret invalid values (like -1) as EDStatic.nGridThreads
+  private boolean tDimensionValuesInMemory = true;
 
   @Override
-  public void startElement(String uri, String localName, String qName, Attributes attributes) {}
+  public void startElement(String uri, String localName, String qName, Attributes attributes)
+      throws SAXException {}
 
   @Override
   public void characters(char[] ch, int start, int length) throws SAXException {
@@ -45,41 +50,45 @@ public class EDDTableFromErddapHandler extends State {
   @Override
   public void endElement(String uri, String localName, String qName) throws Throwable {
     String contentStr = content.toString().trim();
+
     switch (localName) {
       case "reloadEveryNMinutes" -> tReloadEveryNMinutes = String2.parseInt(contentStr);
+      case "updateEveryNMillis" -> tUpdateEveryNMillis = String2.parseInt(contentStr);
       case "accessibleTo" -> tAccessibleTo = contentStr;
       case "graphsAccessibleTo" -> tGraphsAccessibleTo = contentStr;
+      case "accessibleViaWMS" -> tAccessibleViaWMS = String2.parseBoolean(contentStr);
       case "accessibleViaFiles" -> tAccessibleViaFiles = String2.parseBoolean(contentStr);
+      case "subscribeToRemoteErddapDataset" ->
+          tSubscribeToRemoteErddapDataset = String2.parseBoolean(contentStr);
       case "sourceUrl" -> tLocalSourceUrl = contentStr;
       case "onChange" -> tOnChange.add(contentStr);
       case "fgdcFile" -> tFgdcFile = contentStr;
       case "iso19115File" -> tIso19115File = contentStr;
-      case "sosOfferingPrefix" -> tSosOfferingPrefix = contentStr;
       case "defaultDataQuery" -> tDefaultDataQuery = contentStr;
       case "defaultGraphQuery" -> tDefaultGraphQuery = contentStr;
-      case "addVariablesWhere" -> tAddVariablesWhere = contentStr;
-      case "subscribeToRemoteErddapDataset" ->
-          tSubscribeToRemoteErddapDataset = String2.parseBoolean(contentStr);
+      case "nThreads" -> tnThreads = String2.parseInt(contentStr);
+      case "dimensionValuesInMemory" -> tDimensionValuesInMemory = String2.parseBoolean(contentStr);
       case "redirect" -> tRedirect = String2.parseBoolean(contentStr);
       case "dataset" -> {
         EDD dataset =
-            new EDDTableFromErddap(
+            new EDDGridFromErddap(
                 datasetID,
                 tAccessibleTo,
                 tGraphsAccessibleTo,
+                tAccessibleViaWMS,
                 tAccessibleViaFiles,
                 tOnChange,
                 tFgdcFile,
                 tIso19115File,
-                tSosOfferingPrefix,
                 tDefaultDataQuery,
                 tDefaultGraphQuery,
-                tAddVariablesWhere,
                 tReloadEveryNMinutes,
+                tUpdateEveryNMillis,
                 tLocalSourceUrl,
                 tSubscribeToRemoteErddapDataset,
-                tRedirect);
-
+                tRedirect,
+                tnThreads,
+                tDimensionValuesInMemory);
         this.completeState.handleDataset(dataset);
         saxHandler.setState(this.completeState);
       }
