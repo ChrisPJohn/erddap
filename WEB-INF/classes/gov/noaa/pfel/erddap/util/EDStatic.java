@@ -56,6 +56,7 @@ import java.io.PrintStream;
 import java.io.Writer;
 import java.lang.management.ManagementFactory;
 import java.lang.management.OperatingSystemMXBean;
+import java.nio.file.Path;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -262,6 +263,7 @@ public class EDStatic {
   // doesn't need to be
 
   public static String datasetsThatFailedToLoad = "";
+  public static String failedDatasetsWithErrors = "";
   public static String errorsDuringMajorReload = "";
   public static StringBuffer majorLoadDatasetsTimeSeriesSB =
       new StringBuffer(""); // thread-safe (1 thread writes but others may read)
@@ -1862,6 +1864,12 @@ public class EDStatic {
       setLogLevel(getSetupEVString(setup, ev, "logLevel", DEFAULT_logLevel));
       bigParentDirectory = getSetupEVNotNothingString(setup, ev, "bigParentDirectory", "");
       bigParentDirectory = File2.addSlash(bigParentDirectory);
+      Path bpd = Path.of(bigParentDirectory);
+      if (!bpd.isAbsolute()) {
+        if (!File2.isDirectory(bigParentDirectory)) {
+          bigParentDirectory = File2.webInfParentDirectory() + bigParentDirectory;
+        }
+      }
       Test.ensureTrue(
           File2.isDirectory(bigParentDirectory),
           "bigParentDirectory (" + bigParentDirectory + ") doesn't exist.");
@@ -5127,6 +5135,7 @@ public class EDStatic {
     sb.append("nTableDatasets = " + tnTableDatasets + "\n");
     sb.append("nTotalDatasets = " + (tnGridDatasets + tnTableDatasets) + "\n");
     sb.append(datasetsThatFailedToLoad);
+    sb.append(failedDatasetsWithErrors);
     sb.append(errorsDuringMajorReload);
     sb.append(
         "Unique users (since startup)                            n = "
@@ -6130,7 +6139,7 @@ public class EDStatic {
 
           stopThread(taskThread, 10); // short time; it is already in trouble
           // runningThreads.remove   not necessary since new one is put() in below
-          lastFinishedTask = nextTask.decrementAndGet();
+          lastFinishedTask = nextTask.get() - 1;
           taskThread = null;
           return false;
         }
@@ -6140,7 +6149,7 @@ public class EDStatic {
         String2.log(
             "%%% TaskThread: EDStatic noticed that taskThread is finished at "
                 + Calendar2.getCurrentISODateTimeStringLocalTZ());
-        lastFinishedTask = nextTask.decrementAndGet();
+        lastFinishedTask = nextTask.get() - 1;
         taskThread = null;
         return false;
       }
@@ -6176,7 +6185,7 @@ public class EDStatic {
 
           stopThread(touchThread, 10); // short time; it is already in trouble
           // runningThreads.remove   not necessary since new one is put() in below
-          lastFinishedTouch = nextTouch.decrementAndGet();
+          lastFinishedTouch = nextTouch.get() - 1;
           touchThread = null;
           return false;
         }
@@ -6186,7 +6195,7 @@ public class EDStatic {
         String2.log(
             "%%% TouchThread: EDStatic noticed that touchThread isn't alive at "
                 + Calendar2.getCurrentISODateTimeStringLocalTZ());
-        lastFinishedTouch = nextTouch.decrementAndGet();
+        lastFinishedTouch = nextTouch.get() - 1;
         touchThread = null;
         return false;
       }
