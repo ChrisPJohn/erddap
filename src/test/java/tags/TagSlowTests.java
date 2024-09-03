@@ -7,9 +7,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import org.junit.jupiter.api.Tag;
 
-/** TODO: Make tests with this tag runnable. */
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Tag("ExternalERDDAP")
-public @interface TagExternalERDDAP {}
+@Tag("Slow")
+public @interface TagSlowTests {}
