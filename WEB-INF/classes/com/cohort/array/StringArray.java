@@ -196,7 +196,7 @@ public class StringArray extends PrimitiveArray {
    * @param iterator which needs to be thread-safe if the backing data store may be changed by
    *     another thread (e.g., use ConcurrentHashMap instead of HashMap).
    */
-  public StringArray(final Iterator iterator) {
+  public StringArray(final Iterator<?> iterator) {
     array = new StringHolder[8];
     while (iterator.hasNext()) {
       add(iterator.next().toString());
@@ -209,7 +209,7 @@ public class StringArray extends PrimitiveArray {
    * @param enumeration which needs to be thread-safe if the backing data store may be changed by
    *     another thread (e.g., use ConcurrentHashMap instead of HashMap).
    */
-  public StringArray(final Enumeration enumeration) {
+  public StringArray(final Enumeration<?> enumeration) {
     array = new StringHolder[8];
     while (enumeration.hasMoreElements()) {
       add(enumeration.nextElement().toString());
@@ -1907,7 +1907,7 @@ public class StringArray extends PrimitiveArray {
 
     // make a hashMap with all the unique values (associated values are initially all dummy)
     final Integer dummy = -1;
-    final HashMap hashMap = new HashMap(Math2.roundToInt(1.4 * size));
+    final HashMap<String, Integer> hashMap = new HashMap<>(Math2.roundToInt(1.4 * size));
     String lastValue = get(0); // since lastValue often equals currentValue, cache it
     hashMap.put(lastValue, dummy); // special for String
     boolean alreadySorted = true;
@@ -1924,7 +1924,7 @@ public class StringArray extends PrimitiveArray {
     }
 
     // quickly deal with: all unique and already sorted
-    final Set keySet = hashMap.keySet();
+    final Set<String> keySet = hashMap.keySet();
     final int nUnique = keySet.size();
     if (nUnique == size && alreadySorted) {
       indices.ensureCapacity(size);
@@ -1935,9 +1935,9 @@ public class StringArray extends PrimitiveArray {
 
     // store all the elements in an array
     final String unique[] = new String[nUnique];
-    final Iterator iterator = keySet.iterator();
+    final Iterator<String> iterator = keySet.iterator();
     int count = 0;
-    while (iterator.hasNext()) unique[count++] = (String) iterator.next();
+    while (iterator.hasNext()) unique[count++] = iterator.next();
     if (nUnique != count)
       throw new RuntimeException(
           "StringArray.makeRankArray nUnique(" + nUnique + ") != count(" + count + ")!");
@@ -1957,14 +1957,14 @@ public class StringArray extends PrimitiveArray {
     // convert original values to ranks
     final int ranks[] = new int[size];
     lastValue = get(0);
-    ranks[0] = (Integer) hashMap.get(lastValue);
+    ranks[0] = hashMap.get(lastValue);
     int lastRank = ranks[0];
     for (int i = 1; i < size; i++) {
       if (get(i).equals(lastValue)) {
         ranks[i] = lastRank;
       } else {
         lastValue = get(i);
-        ranks[i] = (Integer) hashMap.get(lastValue);
+        ranks[i] = hashMap.get(lastValue);
         lastRank = ranks[i];
       }
     }
@@ -2372,7 +2372,6 @@ public class StringArray extends PrimitiveArray {
           ch = csv.charAt(po++);
           if (ch == '\\' && po < n) {
             po++;
-            continue;
           } else if (ch == '"') {
             // matching close quote
             break;
@@ -2381,7 +2380,6 @@ public class StringArray extends PrimitiveArray {
 
       } else if (ch == '\\' && po < n) {
         po++;
-        continue;
 
       } else if (ch == ',') {
         // end of item
@@ -2437,7 +2435,6 @@ public class StringArray extends PrimitiveArray {
           ch = csv.charAt(po++);
           if (ch == '\\') { // if there is no next char, that will be caught
             po++; // eat the next char
-            continue;
           } else if (ch == '"') {
             // matching close quote
             break;
@@ -2691,7 +2688,7 @@ public class StringArray extends PrimitiveArray {
    * This adds the values in hs to this StringArray and returns this StringArray for convenience.
    * The order of the elements in this StringArray is not specified.
    */
-  public StringArray addSet(final Set hs) {
+  public StringArray addSet(final Set<?> hs) {
     ensureCapacity(size + (long) hs.size());
     for (Object o : hs) add(o.toString());
     return this;

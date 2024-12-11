@@ -5131,7 +5131,6 @@ public abstract class EDDTable extends EDD {
       String xScale = "", yScale = ""; // (default) or Linear or Log
       double fontScale = 1, vectorStandard = Double.NaN;
       String currentDrawLandMask = null; // not yet set
-      StringBuilder title2 = new StringBuilder();
       Color bgColor = EDStatic.graphBackgroundColor;
       String ampParts[] =
           Table.getDapQueryParts(userDapQuery); // decoded.  always at least 1 part (may be "")
@@ -5334,15 +5333,7 @@ public abstract class EDDTable extends EDD {
           // don't include in title2  (better to leave in, but space often limited)
 
           // constraints on other vars
-        } else {
-          // add to title2
-          if (title2.length() > 0) title2.append(", ");
-          title2.append(ampPart);
         }
-      }
-      if (title2.length() > 0) {
-        title2.insert(0, "(");
-        title2.append(")");
       }
       if (xScale.length() == 0) {
         // use the default from colorBarScale
@@ -6379,7 +6370,7 @@ public abstract class EDDTable extends EDD {
       // String2.log("unlimitied dimension exists: " + (nc.getUnlimitedDimension() != null));
 
       // add the variables
-      Variable.Builder newVars[] = new Variable.Builder[nColumns];
+      Variable.Builder<?> newVars[] = new Variable.Builder[nColumns];
       for (int col = 0; col < nColumns; col++) {
         PAType type = twawm.columnType(col);
         String tColName = twawm.columnName(col);
@@ -6761,8 +6752,8 @@ public abstract class EDDTable extends EDD {
           NcHelper.addDimension(rootGroup, "obs", nodcMode ? maxFeatureNRows : totalNObs);
 
       // add the feature variables, then the obs variables
-      Variable.Builder newVars[] = new Variable.Builder[ncNCols];
-      Variable.Builder rowSizeVar = null;
+      Variable.Builder<?>[] newVars = new Variable.Builder[ncNCols];
+      Variable.Builder<?> rowSizeVar = null;
       for (int so = 0; so < 2; so++) { // 0=feature 1=obs
         for (int col = 0; col < ncNCols; col++) {
           if ((isFeatureVar[col] && so == 0)
@@ -10959,7 +10950,6 @@ public abstract class EDDTable extends EDD {
     StringArray nonLLSA = new StringArray();
     StringArray axisSA = new StringArray();
     StringArray nonAxisSA = new StringArray();
-    String time_precision[] = new String[dataVariables.length];
     for (int dv = 0; dv < dataVariables.length; dv++) {
       EDV edv = dataVariables[dv];
       if (edv.destinationDataPAType() != PAType.STRING) {
@@ -10977,9 +10967,6 @@ public abstract class EDDTable extends EDD {
         } else {
           nonAxisSA.add(dn);
         }
-
-        if (edv instanceof EDVTimeStamp)
-          time_precision[dv] = edv.combinedAttributes().getString(EDV.TIME_PRECISION);
 
         if (dv != lonIndex && dv != latIndex) nonLLSA.add(dn);
 

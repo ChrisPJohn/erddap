@@ -47,6 +47,7 @@ import java.util.HashSet;
 import java.util.TimeZone;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentHashMap.KeySetView;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 import java.util.regex.Matcher;
@@ -183,8 +184,8 @@ public abstract class EDDGridFromFiles extends EDDGrid implements WatchUpdateHan
     String tFgdcFile = null;
     String tIso19115File = null;
     Attributes tGlobalAttributes = null;
-    ArrayList tAxisVariables = new ArrayList();
-    ArrayList tDataVariables = new ArrayList();
+    ArrayList<Object[]> tAxisVariables = new ArrayList<>();
+    ArrayList<Object[]> tDataVariables = new ArrayList<>();
     int tReloadEveryNMinutes = Integer.MAX_VALUE;
     int tUpdateEveryNMillis = 0;
     String tFileDir = null;
@@ -277,13 +278,11 @@ public abstract class EDDGridFromFiles extends EDDGrid implements WatchUpdateHan
     }
     int nav = tAxisVariables.size();
     Object ttAxisVariables[][] = new Object[nav][];
-    for (int i = 0; i < tAxisVariables.size(); i++)
-      ttAxisVariables[i] = (Object[]) tAxisVariables.get(i);
+    for (int i = 0; i < tAxisVariables.size(); i++) ttAxisVariables[i] = tAxisVariables.get(i);
 
     int ndv = tDataVariables.size();
     Object ttDataVariables[][] = new Object[ndv][];
-    for (int i = 0; i < tDataVariables.size(); i++)
-      ttDataVariables[i] = (Object[]) tDataVariables.get(i);
+    for (int i = 0; i < tDataVariables.size(); i++) ttDataVariables[i] = tDataVariables.get(i);
 
     if (tType == null) tType = "";
     return switch (tType) {
@@ -731,7 +730,7 @@ public abstract class EDDGridFromFiles extends EDDGrid implements WatchUpdateHan
     }
 
     // load badFileMap
-    ConcurrentHashMap badFileMap = readBadFileMap();
+    ConcurrentHashMap<String, Object[]> badFileMap = readBadFileMap();
 
     // if trouble reading any, recreate all
     if (dirTable == null || fileTable == null || badFileMap == null) {
@@ -1023,10 +1022,10 @@ public abstract class EDDGridFromFiles extends EDDGrid implements WatchUpdateHan
           // String2.log("tFileSet add: " +   tFileDirIndexPA.get(i) + "/" + tFileNamePA.get(i));
         }
 
-        Object badFileNames[] = badFileMap.keySet().toArray();
+        KeySetView<String, Object[]> badFileNames = badFileMap.keySet();
         int nMissing = 0;
-        int nbfn = badFileNames.length;
-        for (Object name : badFileNames) {
+        int nbfn = badFileNames.size();
+        for (String name : badFileNames) {
           if (!tFileSet.contains(name)) {
             if (reallyVerbose) String2.log("previously bad file now missing: " + name);
             nMissing++;
@@ -1818,7 +1817,8 @@ public abstract class EDDGridFromFiles extends EDDGrid implements WatchUpdateHan
     }
 
     // get BadFile and FileTable info and make local copies
-    ConcurrentHashMap badFileMap = readBadFileMap(); // already a copy of what's in file
+    ConcurrentHashMap<String, Object[]> badFileMap =
+        readBadFileMap(); // already a copy of what's in file
     Table tDirTable = getDirTableCopy(); // not null, throws Throwable
     Table tFileTable = getFileTableCopy(); // not null, throws Throwable
     if (debugMode)

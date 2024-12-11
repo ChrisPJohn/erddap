@@ -55,4 +55,45 @@ public class LoadDatasetsTests {
         EDStatic.errorsDuringMajorReload,
         "ERROR: Duplicate datasetIDs in datasets.xml:\n" + "    etopo180\n");
   }
+
+  @Test
+  @SuppressWarnings("DoNotCall")
+  void failedToLoadDatasetsTest_simpleXml() throws Throwable {
+    EDStatic.useSaxParser = false;
+    String pathToDatasetsXml =
+        Objects.requireNonNull(
+                LoadDatasets.class.getResource("/datasets/failedToLoadDatasetsTest.xml"))
+            .getPath();
+    loadDatasets =
+        new LoadDatasets(
+            new Erddap(),
+            EDStatic.datasetsRegex,
+            File2.getBufferedInputStream(pathToDatasetsXml),
+            true);
+    loadDatasets.run();
+    assertEquals(
+        EDStatic.datasetsThatFailedToLoad,
+        "n Datasets Failed To Load (in the last major LoadDatasets) = 1\n"
+            + "    etopo36, (end)\n");
+  }
+
+  @Test
+  @SuppressWarnings("DoNotCall")
+  void duplicateDatasetsTest_simpleXml() throws Throwable {
+    EDStatic.useSaxParser = false;
+    String pathToDatasetsXml =
+        Objects.requireNonNull(
+                LoadDatasets.class.getResource("/datasets/duplicateDatasetsTest.xml"))
+            .getPath();
+    loadDatasets =
+        new LoadDatasets(
+            new Erddap(),
+            EDStatic.datasetsRegex,
+            File2.getBufferedInputStream(pathToDatasetsXml),
+            true);
+    loadDatasets.run();
+    assertEquals(
+        EDStatic.errorsDuringMajorReload,
+        "ERROR: Duplicate datasetIDs in datasets.xml:\n" + "    etopo180\n");
+  }
 }

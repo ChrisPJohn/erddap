@@ -61,7 +61,7 @@ public abstract class EDDTableFromAsciiService extends EDDTable {
     String tDatasetType = xmlReader.attributeValue("type");
 
     Attributes tGlobalAttributes = null;
-    ArrayList tDataVariables = new ArrayList();
+    ArrayList<Object[]> tDataVariables = new ArrayList<>();
     int tReloadEveryNMinutes = Integer.MAX_VALUE;
     String tAccessibleTo = null;
     String tGraphsAccessibleTo = null;
@@ -149,8 +149,7 @@ public abstract class EDDTableFromAsciiService extends EDDTable {
     }
     int ndv = tDataVariables.size();
     Object ttDataVariables[][] = new Object[ndv][];
-    for (int i = 0; i < tDataVariables.size(); i++)
-      ttDataVariables[i] = (Object[]) tDataVariables.get(i);
+    for (int i = 0; i < tDataVariables.size(); i++) ttDataVariables[i] = tDataVariables.get(i);
 
     if (tDatasetType.equals("EDDTableFromAsciiServiceNOS")) {
 
@@ -304,11 +303,6 @@ public abstract class EDDTableFromAsciiService extends EDDTable {
 
     // create structures to hold the sourceAttributes temporarily
     int ndv = tDataVariables.length;
-    String tDataSourceNames[] = new String[ndv];
-    for (int dv = 0; dv < ndv; dv++) {
-      tDataSourceNames[dv] = (String) tDataVariables[dv][0];
-    }
-
     // create dataVariables[]
     dataVariables = new EDV[ndv];
     responseSubstringStart = new int[ndv];

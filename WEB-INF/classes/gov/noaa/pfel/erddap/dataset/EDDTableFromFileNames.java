@@ -112,7 +112,7 @@ public class EDDTableFromFileNames extends EDDTable {
     if (verbose) String2.log("\n*** constructing EDDTableFromFileNames(xmlReader)...");
     String tDatasetID = xmlReader.attributeValue("datasetID");
     Attributes tGlobalAttributes = null;
-    ArrayList tDataVariables = new ArrayList();
+    ArrayList<Object[]> tDataVariables = new ArrayList<>();
     int tReloadEveryNMinutes = Integer.MAX_VALUE;
     // this doesn't support updateEveryNMillis because (unless remote dir, which is cached)
     //  this always gets file info anew for every request.
@@ -178,8 +178,7 @@ public class EDDTableFromFileNames extends EDDTable {
     }
     int ndv = tDataVariables.size();
     Object ttDataVariables[][] = new Object[ndv][];
-    for (int i = 0; i < tDataVariables.size(); i++)
-      ttDataVariables[i] = (Object[]) tDataVariables.get(i);
+    for (int i = 0; i < tDataVariables.size(); i++) ttDataVariables[i] = tDataVariables.get(i);
 
     return new EDDTableFromFileNames(
         tDatasetID,
@@ -1336,7 +1335,6 @@ public class EDDTableFromFileNames extends EDDTable {
             Matcher matcher = pat.matcher(namePA.get(row));
             pa.addString(matcher.matches() ? matcher.group(extractGroup[dvi]) : "");
           }
-          continue;
         }
 
         // Remaining columns are script columns. Handle below.

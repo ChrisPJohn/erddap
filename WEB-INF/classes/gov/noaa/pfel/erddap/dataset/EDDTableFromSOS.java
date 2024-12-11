@@ -206,7 +206,7 @@ public class EDDTableFromSOS extends EDDTable {
     double tAltitudeSourceMaximum = Double.NaN;
     String tTimeSourceName = null;
     String tTimeSourceFormat = null;
-    ArrayList tDataVariables = new ArrayList();
+    ArrayList<Object[]> tDataVariables = new ArrayList<>();
     int tReloadEveryNMinutes = Integer.MAX_VALUE;
     String tAccessibleTo = null;
     String tGraphsAccessibleTo = null;
@@ -305,8 +305,7 @@ public class EDDTableFromSOS extends EDDTable {
     }
     int ndv = tDataVariables.size();
     Object ttDataVariables[][] = new Object[ndv][];
-    for (int i = 0; i < tDataVariables.size(); i++)
-      ttDataVariables[i] = (Object[]) tDataVariables.get(i);
+    for (int i = 0; i < tDataVariables.size(); i++) ttDataVariables[i] = tDataVariables.get(i);
 
     return new EDDTableFromSOS(
         tDatasetID,
@@ -634,15 +633,13 @@ public class EDDTableFromSOS extends EDDTable {
     stationTable.addColumn("EndTime", new DoubleArray());
     stationTable.addColumn("ID", new StringArray());
     stationTable.addColumn("Procedure", new StringArray());
-    ArrayList tStationHasObsPropAL = new ArrayList(); // for each valid station, the boolean[]
+    ArrayList<boolean[]> tStationHasObsPropAL =
+        new ArrayList<>(); // for each valid station, the boolean[]
     // values that persist for a while
     double tLon = Double.NaN, tLat = Double.NaN, tBeginTime = Double.NaN, tEndTime = Double.NaN;
     String tIndeterminateEnd = null, tStationID = "", tStationProcedure = "";
     double currentEpochSeconds = Calendar2.gcToEpochSeconds(Calendar2.newGCalendarZulu());
     boolean tStationHasObsProp[] = new boolean[uniqueSourceObservedProperties.size()];
-    String tDVNames[] = new String[tDataVariables.length];
-    for (int dv = 0; dv < tDataVariables.length; dv++)
-      tDVNames[dv] = (String) tDataVariables[dv][0];
     // use KVP (KeyValuePair) HTTP GET request to getCapabilities
     // see section 7.2.3 of OGC 06-121r3 (OGC Web Services Common Specification) ver 1.1.0
     String tUrl = localSourceUrl + "?service=SOS&request=GetCapabilities";
@@ -757,7 +754,6 @@ public class EDDTableFromSOS extends EDDTable {
         } else if (tags.startsWith(offeringTag)) {
           String endOfTag = tags.substring(offeringTag.length());
           String content = xmlReader.content();
-          String fatalError = null;
 
           // String2.log("endOfTag=" + endOfTag + xmlReader.content());
 
@@ -965,18 +961,6 @@ public class EDDTableFromSOS extends EDDTable {
             }
           }
 
-          // handle the error
-          // but this isn't used; problems above are logged, but only cause this station not to be
-          // used (see 'invalid' below)
-          if (fatalError != null)
-            throw new IllegalArgumentException(
-                "Error on xml line #"
-                    + xmlReader.lineNumber()
-                    + " stationID="
-                    + tStationID
-                    + ": "
-                    + fatalError);
-
           // all data gathered; create the station
         } else if (tags.equals(offeringEndTag)) {
 
@@ -1052,7 +1036,7 @@ public class EDDTableFromSOS extends EDDTable {
       throw new RuntimeException(datasetID + " has no valid stations.");
     stationHasObsProp = new boolean[tStationHasObsPropAL.size()][];
     for (int i = 0; i < tStationHasObsPropAL.size(); i++)
-      stationHasObsProp[i] = (boolean[]) tStationHasObsPropAL.get(i);
+      stationHasObsProp[i] = tStationHasObsPropAL.get(i);
     if (reallyVerbose)
       String2.log("Station Table=\n" + stationTable.saveAsJsonString(stationBeginTimeCol, true));
 
@@ -1467,7 +1451,6 @@ public class EDDTableFromSOS extends EDDTable {
     int nStations = stationTable.nRows();
     boolean aConstraintShown = false;
     boolean matchingStation = false;
-    STATION_LOOP:
     for (int station = 0; station < nStations; station++) {
       if (Thread.currentThread().isInterrupted())
         throw new SimpleException(
@@ -1703,11 +1686,6 @@ public class EDDTableFromSOS extends EDDTable {
             String2.log("  requestURL=" + localSourceUrl + getSB);
             // aConstraintShown = true;
           }
-          if (false) { // debugMode) {
-            String2.log("*** Begin response");
-            String2.log(SSR.getUrlResponseStringUnchanged(localSourceUrl + getSB.toString()));
-            String2.log("*** End response");
-          }
 
           // *** read the data
           if (whoiServer) {
@@ -1744,7 +1722,7 @@ public class EDDTableFromSOS extends EDDTable {
         llatHash.clear(); // llat info -> table row number (as a String)
         if (tableWriter.noMoreDataPlease) {
           tableWriter.logCaughtNoMoreDataPlease(datasetID);
-          break STATION_LOOP;
+          break;
         }
       }
     } // end station loop
@@ -1880,7 +1858,7 @@ public class EDDTableFromSOS extends EDDTable {
               xmlReader.nextTag();
               tags = xmlReader.allTags();
             } while (!tags.startsWith("</"));
-            if (errorText == null)
+            if (errorText == null || errorText.isEmpty())
               throw new RuntimeException("Source sent an ExceptionReport (no text).");
             else return;
 
@@ -2081,17 +2059,15 @@ public class EDDTableFromSOS extends EDDTable {
     int tableTimeCol = table.findColumnNumber(timeSourceName);
     int tableStationIdCol = table.findColumnNumber(stationIdSourceName);
 
-    // make tableDVI, tableObservedProperties, isStringCol   (lon/lat/time/alt/id will be null)
+    // make tableDVI, isStringCol   (lon/lat/time/alt/id will be null)
     String tDataVariableSourceNames[] = dataVariableSourceNames();
     int nCol = table.nColumns();
     IntArray tableDVI = new IntArray();
-    String tableObservedProperties[] = new String[nCol];
     boolean isStringCol[] = new boolean[nCol];
     for (int col = 0; col < nCol; col++) {
       int dvi = String2.indexOf(tDataVariableSourceNames, table.getColumnName(col));
       tableDVI.add(dvi);
       EDV edv = dataVariables[dvi];
-      tableObservedProperties[col] = edv.combinedAttributes().getString("observedProperty");
       isStringCol[col] = edv.sourceDataPAType().equals(PAType.STRING);
     }
 
@@ -2197,7 +2173,6 @@ public class EDDTableFromSOS extends EDDTable {
           if (tags.startsWith(ofInterest)) { // i.e., within <om:Observation>
             String endOfTag = tags.substring(ofInterest.length());
             String content = xmlReader.content();
-            String error = null;
 
             switch (endOfTag) {
               case "<om:observedProperty><swe:CompositePhenomenon><swe:component>" -> {
@@ -2372,11 +2347,6 @@ public class EDDTableFromSOS extends EDDTable {
                 }
               }
             }
-
-            // handle the error
-            if (error != null)
-              throw new RuntimeException(
-                  "Data source error on xml line #" + xmlReader.lineNumber() + ": " + error);
           }
 
           // get the next tag
@@ -2516,7 +2486,6 @@ public class EDDTableFromSOS extends EDDTable {
           if (tags.startsWith(ofInterest)) { // i.e., within <om:Observation>
             String endOfTag = tags.substring(ofInterest.length());
             String content = xmlReader.content();
-            String error = null;
 
             switch (endOfTag) {
               case "<om:featureOfInterest><swe:GeoReferenceableFeature>"
@@ -2728,11 +2697,6 @@ public class EDDTableFromSOS extends EDDTable {
                 }
               }
             }
-
-            // handle the error
-            if (error != null)
-              throw new RuntimeException(
-                  "Data source error on xml line #" + xmlReader.lineNumber() + ": " + error);
           }
 
           // get the next tag
@@ -3089,7 +3053,6 @@ public class EDDTableFromSOS extends EDDTable {
         } else if (tags.startsWith(offeringTag)) {
           String endOfTag = tags.substring(offeringTag.length());
           String content = xmlReader.content();
-          String error = null;
           if (tags.equals(offeringTag)) offeringTagCount++;
           // if (debugMode) String2.log("offering=" + endOfTag + xmlReader.content());
 
@@ -3178,16 +3141,6 @@ public class EDDTableFromSOS extends EDDTable {
               tStationObsPropList.setCharAt(opPo, (char) (65 + opPo));
             }
           }
-
-          // handle the error
-          if (error != null)
-            throw new RuntimeException(
-                "Error on capabilities xml line #"
-                    + xmlReader.lineNumber()
-                    + " stationID="
-                    + tStationID
-                    + ": "
-                    + error);
 
           // end of a station
         } else if (tags.startsWith(offeringEndTag)) {
@@ -3517,7 +3470,6 @@ public class EDDTableFromSOS extends EDDTable {
         } else if (tags.startsWith(offeringTag)) {
           String endOfTag = tags.substring(offeringTag.length());
           String content = xmlReader.content();
-          String error = null;
           // String2.log("endOfTag=" + endOfTag + xmlReader.content());
 
           /* separate phenomena
@@ -3606,16 +3558,6 @@ public class EDDTableFromSOS extends EDDTable {
               tStationObsPropList.setCharAt(opPo, (char) (65 + opPo));
             }
           }
-
-          // handle the error
-          if (error != null)
-            throw new RuntimeException(
-                "Error on SOS GetCapabilities xml line #"
-                    + xmlReader.lineNumber()
-                    + " stationID="
-                    + tStationID
-                    + ": "
-                    + error);
 
           // end of a station
         } else if (tags.startsWith(offeringEndTag)) {

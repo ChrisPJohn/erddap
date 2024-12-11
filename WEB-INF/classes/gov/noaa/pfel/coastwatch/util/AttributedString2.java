@@ -37,11 +37,12 @@ public class AttributedString2 {
   protected final StringBuilder cumulative = new StringBuilder();
   protected int lastStart = 0;
 
-  protected final ArrayList baseAttributes = new ArrayList();
-  protected final ArrayList baseObjects = new ArrayList();
+  protected final ArrayList<AttributedCharacterIterator.Attribute> baseAttributes =
+      new ArrayList<>();
+  protected final ArrayList<Object> baseObjects = new ArrayList<>();
 
-  protected final ArrayList attributes = new ArrayList();
-  protected final ArrayList objects = new ArrayList();
+  protected final ArrayList<AttributedCharacterIterator.Attribute> attributes = new ArrayList<>();
+  protected final ArrayList<Object> objects = new ArrayList<>();
   protected final IntArray start = new IntArray();
   protected final IntArray end = new IntArray();
 
@@ -156,20 +157,14 @@ public class AttributedString2 {
     // apply the base attributes
     int n = baseAttributes.size();
     for (int i = 0; i < n; i++)
-      as.addAttribute(
-          (AttributedCharacterIterator.Attribute) baseAttributes.get(i),
-          baseObjects.get(i)); // , 0, nChar);
+      as.addAttribute(baseAttributes.get(i), baseObjects.get(i)); // , 0, nChar);
 
     // apply the subsection attributes
     n = start.size();
     for (int i = 0; i < n; i++) {
       // String2.log("attributedString attributes " + attributes.get(i).toString() +
       //    " start=" + start.get(i) + " end=" + end.get(i));
-      as.addAttribute(
-          (AttributedCharacterIterator.Attribute) attributes.get(i),
-          objects.get(i),
-          start.get(i),
-          end.get(i));
+      as.addAttribute(attributes.get(i), objects.get(i), start.get(i), end.get(i));
     }
 
     // draw the text
@@ -245,12 +240,12 @@ public class AttributedString2 {
           if (tag.equals("b") || tag.equals("strong")) {
             if (boldStart < 0) boldStart = as2.size();
           } else if (tag.equals("/b") || tag.equals("/strong")) {
-            if (boldStart == as2.size()) {
-              // do nothing
-            } else if (boldStart >= 0) {
-              as2.addAttribute(TextAttribute.WEIGHT, 2F, boldStart, as2.size());
-              boldStart = -1;
-            } else String2.log(errorInMethod + "unexpected /b or /strong at position " + po);
+            if (boldStart != as2.size()) {
+              if (boldStart >= 0) {
+                as2.addAttribute(TextAttribute.WEIGHT, 2F, boldStart, as2.size());
+                boldStart = -1;
+              } else String2.log(errorInMethod + "unexpected /b or /strong at position " + po);
+            }
 
             // color
           } else if (tag.startsWith("color=#")) {
@@ -260,35 +255,38 @@ public class AttributedString2 {
             int i = String2.parseInt("0x" + tag.substring(7));
             color = new Color(i == Integer.MAX_VALUE ? 0xFFFFFF : (i & 0xFFFFFF));
           } else if (tag.equals("/color")) {
-            if (colorStart == as2.size()) {
-              // do nothing
-            } else if (colorStart >= 0) {
-              as2.addAttribute(TextAttribute.FOREGROUND, color, colorStart, as2.size());
-              colorStart = -1;
-            } else String2.log(errorInMethod + "unexpected /color at position " + po);
+            if (colorStart != as2.size()) {
+              if (colorStart >= 0) {
+                as2.addAttribute(TextAttribute.FOREGROUND, color, colorStart, as2.size());
+                colorStart = -1;
+              } else String2.log(errorInMethod + "unexpected /color at position " + po);
+            }
 
             // italic
           } else if (tag.equals("i") || tag.equals("em")) {
             if (italicStart < 0) italicStart = as2.size();
           } else if (tag.equals("/i") || tag.equals("/em")) {
-            if (italicStart == as2.size()) {
-              // do nothing
-            } else if (italicStart >= 0) {
-              as2.addAttribute(TextAttribute.POSTURE, 0.2f, italicStart, as2.size());
-              italicStart = -1;
-            } else String2.log(errorInMethod + "unexpected /i or /em at position " + po);
+            if (italicStart != as2.size()) {
+              if (italicStart >= 0) {
+                as2.addAttribute(TextAttribute.POSTURE, 0.2f, italicStart, as2.size());
+                italicStart = -1;
+              } else String2.log(errorInMethod + "unexpected /i or /em at position " + po);
+            }
 
             // underline
           } else if (tag.equals("u")) {
             if (underlineStart < 0) italicStart = as2.size();
           } else if (tag.equals("/u")) {
             if (underlineStart == as2.size()) {
-              // do nothing
-            } else if (underlineStart >= 0) {
-              as2.addAttribute(
-                  TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON, underlineStart, as2.size());
-              underlineStart = -1;
-            } else String2.log(errorInMethod + "unexpected /u at position " + po);
+              if (underlineStart >= 0) {
+                as2.addAttribute(
+                    TextAttribute.UNDERLINE,
+                    TextAttribute.UNDERLINE_ON,
+                    underlineStart,
+                    as2.size());
+                underlineStart = -1;
+              } else String2.log(errorInMethod + "unexpected /u at position " + po);
+            }
 
             // unrecognized -- ignore it
           } else {

@@ -155,63 +155,67 @@ public class AxisDataAccessor {
       int iMax = Math2.roundToInt(dMax);
       if (rAxisVariables[av] instanceof EDVLonGridAxis) {
         globalAttributes.set("geospatial_lon_units", rAxisVariables[av].units());
-        if (Double.isNaN(dMin)) {
-        } else if (minMax instanceof FloatArray) {
-          globalAttributes.set("geospatial_lon_min", fMin);
-          globalAttributes.set("geospatial_lon_max", fMax);
-          globalAttributes.set("Westernmost_Easting", fMin);
-          globalAttributes.set("Easternmost_Easting", fMax);
-        } else {
-          globalAttributes.set("geospatial_lon_min", dMin);
-          globalAttributes.set("geospatial_lon_max", dMax);
-          globalAttributes.set("Westernmost_Easting", dMin);
-          globalAttributes.set("Easternmost_Easting", dMax);
+        if (!Double.isNaN(dMin)) {
+          if (minMax instanceof FloatArray) {
+            globalAttributes.set("geospatial_lon_min", fMin);
+            globalAttributes.set("geospatial_lon_max", fMax);
+            globalAttributes.set("Westernmost_Easting", fMin);
+            globalAttributes.set("Easternmost_Easting", fMax);
+          } else {
+            globalAttributes.set("geospatial_lon_min", dMin);
+            globalAttributes.set("geospatial_lon_max", dMax);
+            globalAttributes.set("Westernmost_Easting", dMin);
+            globalAttributes.set("Easternmost_Easting", dMax);
+          }
         }
       } else if (rAxisVariables[av] instanceof EDVLatGridAxis) {
         globalAttributes.set("geospatial_lat_units", rAxisVariables[av].units());
-        if (Double.isNaN(dMin)) {
-        } else if (minMax instanceof FloatArray) {
-          globalAttributes.set("geospatial_lat_min", fMin);
-          globalAttributes.set("geospatial_lat_max", fMax);
-          globalAttributes.set("Southernmost_Northing", fMin);
-          globalAttributes.set("Northernmost_Northing", fMax);
-        } else {
-          globalAttributes.set("geospatial_lat_min", dMin);
-          globalAttributes.set("geospatial_lat_max", dMax);
-          globalAttributes.set("Southernmost_Northing", dMin);
-          globalAttributes.set("Northernmost_Northing", dMax);
+        if (!Double.isNaN(dMin)) {
+          if (minMax instanceof FloatArray) {
+            globalAttributes.set("geospatial_lat_min", fMin);
+            globalAttributes.set("geospatial_lat_max", fMax);
+            globalAttributes.set("Southernmost_Northing", fMin);
+            globalAttributes.set("Northernmost_Northing", fMax);
+          } else {
+            globalAttributes.set("geospatial_lat_min", dMin);
+            globalAttributes.set("geospatial_lat_max", dMax);
+            globalAttributes.set("Southernmost_Northing", dMin);
+            globalAttributes.set("Northernmost_Northing", dMax);
+          }
         }
       } else if (rAxisVariables[av] instanceof EDVAltGridAxis) {
         globalAttributes.set("geospatial_vertical_units", rAxisVariables[av].units());
         globalAttributes.set("geospatial_vertical_positive", "up");
-        if (Double.isNaN(dMin)) {
-        } else if (minMax instanceof FloatArray) {
-          globalAttributes.set("geospatial_vertical_min", fMin); // unidata-related
-          globalAttributes.set("geospatial_vertical_max", fMax);
-        } else if (minMax instanceof IntArray
-            || minMax instanceof ShortArray
-            || minMax instanceof ByteArray) {
-          globalAttributes.set("geospatial_vertical_min", iMin); // unidata-related
-          globalAttributes.set("geospatial_vertical_max", iMax);
-        } else {
-          globalAttributes.set("geospatial_vertical_min", dMin); // unidata-related
-          globalAttributes.set("geospatial_vertical_max", dMax);
+        if (!Double.isNaN(dMin)) {
+          if (minMax instanceof FloatArray) {
+            globalAttributes.set("geospatial_vertical_min", fMin); // unidata-related
+            globalAttributes.set("geospatial_vertical_max", fMax);
+          } else if (minMax instanceof IntArray
+              || minMax instanceof ShortArray
+              || minMax instanceof ByteArray) {
+            globalAttributes.set("geospatial_vertical_min", iMin); // unidata-related
+            globalAttributes.set("geospatial_vertical_max", iMax);
+          } else {
+            globalAttributes.set("geospatial_vertical_min", dMin); // unidata-related
+            globalAttributes.set("geospatial_vertical_max", dMax);
+          }
         }
       } else if (rAxisVariables[av] instanceof EDVDepthGridAxis) {
         globalAttributes.set("geospatial_vertical_units", rAxisVariables[av].units());
         globalAttributes.set("geospatial_vertical_positive", "down");
-        if (Double.isNaN(dMin)) {
-        } else if (minMax instanceof FloatArray) {
-          globalAttributes.set("geospatial_vertical_min", fMin); // unidata-related
-          globalAttributes.set("geospatial_vertical_max", fMax);
-        } else if (minMax instanceof IntArray
-            || minMax instanceof ShortArray
-            || minMax instanceof ByteArray) {
-          globalAttributes.set("geospatial_vertical_min", iMin); // unidata-related
-          globalAttributes.set("geospatial_vertical_max", iMax);
-        } else {
-          globalAttributes.set("geospatial_vertical_min", dMin); // unidata-related
-          globalAttributes.set("geospatial_vertical_max", dMax);
+        if (!Double.isNaN(dMin)) {
+          if (minMax instanceof FloatArray) {
+            globalAttributes.set("geospatial_vertical_min", fMin); // unidata-related
+            globalAttributes.set("geospatial_vertical_max", fMax);
+          } else if (minMax instanceof IntArray
+              || minMax instanceof ShortArray
+              || minMax instanceof ByteArray) {
+            globalAttributes.set("geospatial_vertical_min", iMin); // unidata-related
+            globalAttributes.set("geospatial_vertical_max", iMax);
+          } else {
+            globalAttributes.set("geospatial_vertical_min", dMin); // unidata-related
+            globalAttributes.set("geospatial_vertical_max", dMax);
+          }
         }
       } else if (rAxisVariables[av] instanceof EDVTimeGridAxis) {
         String tp = rAxisVariables[av].combinedAttributes().getString(EDV.TIME_PRECISION);

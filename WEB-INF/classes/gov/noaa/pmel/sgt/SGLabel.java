@@ -15,7 +15,6 @@ package gov.noaa.pmel.sgt;
 import com.cohort.util.MustBe;
 import com.cohort.util.String2;
 import gov.noaa.pmel.util.Point2D;
-import gov.noaa.pmel.util.Rectangle2D;
 import java.awt.*;
 import java.beans.*;
 import java.io.Serializable;
@@ -545,15 +544,6 @@ public class SGLabel implements Cloneable, LayerChild, Moveable, Serializable {
       if (changes_ == null) changes_ = new PropertyChangeSupport(this);
       changes_.firePropertyChange("location", temp, loc);
     }
-  }
-
-  /**
-   * Get the label bounds in physical units.
-   *
-   * @return the label bounds
-   */
-  public Rectangle2D.Double getBoundsP() {
-    return proxy_.getBoundsP();
   }
 
   /**

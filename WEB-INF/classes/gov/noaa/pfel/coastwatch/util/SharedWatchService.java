@@ -14,6 +14,7 @@ import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class SharedWatchService {
@@ -111,8 +112,7 @@ public class SharedWatchService {
     HashMap<String, StringArray> contextsByHandler = new HashMap<>();
     HashSet<String> handlerToReset = new HashSet<>();
 
-    for (String fsId : fileSystemToService.keySet()) {
-      WatchService watchService = fileSystemToService.get(fsId);
+    for (WatchService watchService : fileSystemToService.values()) {
       WatchKey key = null;
       while ((key = watchService.poll()) != null) {
 
@@ -159,8 +159,8 @@ public class SharedWatchService {
       handlerIdToHandler.get(handlerId).doReload();
     }
 
-    for (String handlerId : contextsByHandler.keySet()) {
-      handlerIdToHandler.get(handlerId).handleUpdates(contextsByHandler.get(handlerId));
+    for (Map.Entry<String, StringArray> entry : contextsByHandler.entrySet()) {
+      handlerIdToHandler.get(entry.getKey()).handleUpdates(entry.getValue());
     }
   }
 }

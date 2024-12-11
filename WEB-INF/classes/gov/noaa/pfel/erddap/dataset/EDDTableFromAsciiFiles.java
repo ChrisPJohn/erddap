@@ -814,12 +814,9 @@ public class EDDTableFromAsciiFiles extends EDDTableFromFiles {
     String entityID = null;
     String entityPre = "";
     int nChildItems = 0;
-    StringBuilder childItems = new StringBuilder();
     String childItemsPre = "";
-    StringBuilder dataQuality = new StringBuilder();
     String dataQualityPre = "InPort_data_quality_";
     int nDistributions = 0;
-    StringBuilder distribution = new StringBuilder();
     String distPre = "";
     // String distID = null;
     String distUrl = null;
@@ -843,8 +840,6 @@ public class EDDTableFromAsciiFiles extends EDDTableFromFiles {
     int nSupportRoles = 0;
     String supportRolesPre = "";
     int nUrls = 0;
-    String pendingUrl = "?";
-    StringBuilder urls = new StringBuilder();
     String urlsPre = "";
 
     // HashMap<String,String> child0RelationHM = new HashMap(); //for whichChild=0
@@ -1303,7 +1298,6 @@ public class EDDTableFromAsciiFiles extends EDDTableFromFiles {
                   + " download-url="
                   + distUrl
                   + "\n";
-          distribution.append(msg);
           background.append("> #" + nDistributions + ": " + msg);
         }
 
@@ -1319,21 +1313,14 @@ public class EDDTableFromAsciiFiles extends EDDTableFromFiles {
         //   </urls>
       } else if (tags.startsWith("<urls>")) {
         if (tags.equals("<urls><url>")) {
-          urls.append("URL #" + ++nUrls);
           // skip cc-id: it's an internal DB identifier
-          pendingUrl = "?";
-          urlsPre = "InPort_url_" + nUrls + "_";
+          urlsPre = "InPort_url_" + ++nUrls + "_";
         } else if (tags.equals("<urls><url></url>") && hasContent) {
-          pendingUrl = content;
           gAddAtts.add(urlsPre + "url", content);
         } else if (tags.equals("<urls><url></url-type>") && hasContent) {
-          urls.append(sep + " type=" + content);
           gAddAtts.add(urlsPre + "type", content);
         } else if (tags.equals("<urls><url></description>") && hasContent) {
-          urls.append(sep + " description=" + content);
           gAddAtts.add(urlsPre + "description", content);
-        } else if (tags.equals("<urls></url>")) {
-          urls.append(sep + " url=" + pendingUrl + "\n");
         }
 
         // activity-logs  /u00/data/points/inportXml/NOAA/NMFS/AKRO/inport-xml/xml/27377.xml
@@ -1379,25 +1366,18 @@ public class EDDTableFromAsciiFiles extends EDDTableFromFiles {
         // data-quality   /u00/data/points/inportXml/NOAA/NMFS/AKRO/inport-xml/xml/27377.xml
       } else if (tags.startsWith("<data-quality>")) {
         if (tags.endsWith("</representativeness>") && hasContent) {
-          dataQuality.append("* Representativeness: " + content + "\n");
           gAddAtts.add(dataQualityPre + "representativeness", content);
         } else if (tags.endsWith("</accuracy>") && hasContent) {
-          dataQuality.append("* Accuracy: " + content + "\n");
           gAddAtts.add(dataQualityPre + "accuracy", content);
         } else if (tags.endsWith("</analytical-accuracy>") && hasContent) {
-          dataQuality.append("* Analytical-accuracy: " + content + "\n");
           gAddAtts.add(dataQualityPre + "analytical_accuracy", content);
         } else if (tags.endsWith("</completeness-measure>") && hasContent) {
-          dataQuality.append("* Completeness-measure: " + content + "\n");
           gAddAtts.add(dataQualityPre + "completeness_measure", content);
         } else if (tags.endsWith("</field-precision>") && hasContent) {
-          dataQuality.append("* Field-precision: " + content + "\n");
           gAddAtts.add(dataQualityPre + "field_precision", content);
         } else if (tags.endsWith("</sensitivity>") && hasContent) {
-          dataQuality.append("* Sensitivity: " + content + "\n");
           gAddAtts.add(dataQualityPre + "sensitivity", content);
         } else if (tags.endsWith("</quality-control-procedures>") && hasContent) {
-          dataQuality.append("* Quality-control-procedures: " + content + "\n");
           gAddAtts.add(dataQualityPre + "control_procedures", content);
         }
 
@@ -1488,18 +1468,12 @@ public class EDDTableFromAsciiFiles extends EDDTableFromFiles {
           childItemsPre = "InPort_child_item_" + (whichChild > 0 ? "" : nChildItems + "_");
 
         } else if (tags.equals("<child-items><child-item></catalog-item-id>")) {
-          childItems.append(
-              "Child Item #" + nChildItems + ": item-id=" + (hasContent ? content : "?"));
           background.append("> child-item #" + nChildItems + " catalog-item-id=" + content + "\n");
           if (hasContent) gAddAtts.add(childItemsPre + "catalog_id", content);
         } else if (tags.equals("<child-items><child-item></catalog-item-type>") && hasContent) {
-          childItems.append(sep + " item-type=" + content + "\n"); // e.g., Entity
           gAddAtts.add(childItemsPre + "item_type", content);
         } else if (tags.equals("<child-items><child-item></title>") && hasContent) {
-          childItems.append("Title: " + content + "\n");
           gAddAtts.add(childItemsPre + "title", content);
-        } else if (tags.equals("<child-items></child-item>")) {
-          childItems.append('\n');
         }
 
         // faqs    /u00/data/points/inportXml/NOAA/NMFS/AKRO/inport-xml/xml/27377.xml

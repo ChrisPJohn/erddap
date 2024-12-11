@@ -190,8 +190,9 @@ public class Erddap extends HttpServlet {
 
   public final ConcurrentHashMap<String, int[]> failedLogins =
       new ConcurrentHashMap<>(16, 0.75f, 4);
-  public final ConcurrentHashMap<String, ConcurrentHashMap> categoryInfo =
-      new ConcurrentHashMap<>(16, 0.75f, 4);
+  public final ConcurrentHashMap<
+          String, ConcurrentHashMap<String, ConcurrentHashMap<String, Object>>>
+      categoryInfo = new ConcurrentHashMap<>(16, 0.75f, 4);
   public long lastClearedFailedLogins = System.currentTimeMillis();
 
   /**
@@ -333,7 +334,7 @@ public class Erddap extends HttpServlet {
     // make new catInfo with first level hashMaps
     int nCat = EDStatic.categoryAttributes.length;
     for (int cat = 0; cat < nCat; cat++)
-      categoryInfo.put(EDStatic.categoryAttributes[cat], new ConcurrentHashMap(16, 0.75f, 4));
+      categoryInfo.put(EDStatic.categoryAttributes[cat], new ConcurrentHashMap<>(16, 0.75f, 4));
 
     // start RunLoadDatasets
     runLoadDatasets = new RunLoadDatasets(this);
@@ -407,7 +408,7 @@ public class Erddap extends HttpServlet {
    * @return the category values for a given category attribute (or empty StringArray if none).
    */
   public StringArray categoryInfo(String attribute) {
-    ConcurrentHashMap hm = categoryInfo.get(attribute);
+    ConcurrentHashMap<String, ConcurrentHashMap<String, Object>> hm = categoryInfo.get(attribute);
     if (hm == null) return new StringArray();
     StringArray sa = new StringArray(hm.keys());
     sa.sortIgnoreCase();
@@ -424,9 +425,9 @@ public class Erddap extends HttpServlet {
    *     StringArray if none).
    */
   public StringArray categoryInfo(String attribute, String value) {
-    ConcurrentHashMap hm = categoryInfo.get(attribute);
+    ConcurrentHashMap<String, ConcurrentHashMap<String, Object>> hm = categoryInfo.get(attribute);
     if (hm == null) return new StringArray();
-    ConcurrentHashMap hs = (ConcurrentHashMap) hm.get(value);
+    ConcurrentHashMap<String, ?> hs = hm.get(value);
     if (hs == null) return new StringArray();
     StringArray sa = new StringArray(hs.keys());
     sa.sortIgnoreCase();
@@ -1815,7 +1816,6 @@ public class Erddap extends HttpServlet {
       loginSucceeded(email);
       // sendRedirect(response, loginUrl + "?message=" +
       //    SSR.minimalPercentEncode(EDStatic.loginSucceededAr[language]));
-      return;
 
     } catch (Throwable t) {
       EDStatic.rethrowClientAbortException(t); // first thing in catch{}
@@ -1824,7 +1824,6 @@ public class Erddap extends HttpServlet {
       // sendRedirect(response, loginUrl + "?message=" +
       //    SSR.minimalPercentEncode(EDStatic.loginFailedAr[language] + ": " +
       //        MustBe.getShortErrorMessage(t)));
-      return;
     }
   }
 
@@ -23653,7 +23652,7 @@ widgets.select("frequencyOption", "", 1, frequencyOptions, frequencyOption, "") 
    * @param catInfo the new categoryInfo hashMap of hashMaps of hashSets
    * @param edd the dataset who's info should be added to catInfo
    */
-  protected void addRemoveDatasetInfo(boolean add, ConcurrentHashMap catInfo, EDD edd) {
+  protected void addRemoveDatasetInfo(boolean add, ConcurrentHashMap<String, ?> catInfo, EDD edd) {
 
     // go through the gridDatasets
     String id = edd.datasetID();

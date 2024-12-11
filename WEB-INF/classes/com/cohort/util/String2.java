@@ -9,9 +9,7 @@ import com.cohort.array.StringComparatorIgnoreCase;
 import com.google.common.collect.ImmutableList;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
-import java.awt.datatransfer.Transferable;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -20,7 +18,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PushbackInputStream;
 import java.lang.ref.WeakReference;
-import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
@@ -29,14 +26,12 @@ import java.security.MessageDigest;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.BitSet;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Vector;
 import java.util.WeakHashMap;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.regex.Matcher;
@@ -472,36 +467,6 @@ public class String2 {
   }
 
   /**
-   * Finds the first instance of s at or after fromIndex (0.. ) in sb.
-   *
-   * @param sb a StringBuilder
-   * @param s the String you want to find
-   * @param fromIndex the index number of the position to start the search
-   * @return The starting position of s. If s is null or not found, it returns -1.
-   */
-  public static int indexOf(final StringBuilder sb, final String s, final int fromIndex) {
-    if (s == null) return -1;
-    final int sLength = s.length();
-    if (sLength == 0) return -1;
-
-    final char ch = s.charAt(0);
-    int index = Math.max(fromIndex, 0);
-    final int tSize = sb.length() - sLength + 1; // no point in searching last few char
-    while (index < tSize) {
-      if (sb.charAt(index) == ch) {
-        int nCharsMatched = 1;
-        while ((nCharsMatched < sLength)
-            && (sb.charAt(index + nCharsMatched) == s.charAt(nCharsMatched))) nCharsMatched++;
-        if (nCharsMatched == sLength) return index;
-      }
-
-      index++;
-    }
-
-    return -1;
-  }
-
-  /**
    * This finds (case-sensitive) the first whole word instance of 'word' in s. It will find 'word'
    * at the start or end of s. I.e., the character before and after (if any) mustn't be a letter or
    * digit or '_'.
@@ -517,30 +482,6 @@ public class String2 {
     final Pattern pattern = Pattern.compile("\\b(" + word + ")\\b");
     final Matcher matcher = pattern.matcher(s);
     return matcher.find() ? matcher.start(1) : -1;
-  }
-
-  /**
-   * This creates a hashset of the unique acronyms in a string. An acronym here is defined by the
-   * regular expression: [^a-zA-Z0-9][A-Z]{2,}[^a-zA-Z0-9]
-   *
-   * @param text
-   * @return hashset of the unique acronyms in text.
-   */
-  public static Set<String> findAcronyms(final String text) {
-    final HashSet<String> hs = new HashSet<>();
-    if (text == null || text.length() < 2) return hs;
-    final Pattern pattern = Pattern.compile("[^a-zA-Z0-9]([A-Z]{2,})[^a-zA-Z0-9]");
-    final Matcher matcher = pattern.matcher(text);
-    int po = 0;
-    while (po < text.length()) {
-      if (matcher.find(po)) {
-        hs.add(matcher.group(1));
-        po = matcher.end();
-      } else {
-        return hs;
-      }
-    }
-    return hs;
   }
 
   /**
@@ -633,44 +574,6 @@ public class String2 {
       fromIndex = m.end();
     }
     return al.toArray(new String[0]);
-  }
-
-  /**
-   * This returns the index of the first value that matches the regex.
-   *
-   * @param ar an array of objects which will be tested via ar[i].toString()
-   * @param regex
-   * @return the index of the first value that matches the regex, or -1 if none matches.
-   * @throws RuntimeException if regex won't compile.
-   */
-  public int firstMatch(final Object ar[], final String regex) {
-    return firstMatch(ar, Pattern.compile(regex));
-  }
-
-  /**
-   * This returns the index of the first value that matches the regex pattern p.
-   *
-   * @param ar an array of objects which will be tested via ar[i].toString()
-   * @param p
-   * @return the index of the first value that matches the regex pattern p, or -1 if none matches.
-   */
-  public int firstMatch(final Object ar[], final Pattern p) {
-    if (ar == null) return -1;
-    for (int i = 0; i < ar.length; i++) {
-      final Object s = ar[i];
-      if (s != null && p.matcher(s.toString()).matches()) return i;
-    }
-    return -1;
-  }
-
-  /** This converts a hashset to a String[] via o.toString(). */
-  public static String[] setToStringArray(final Set set) {
-    final int n = set.size();
-    final String sar[] = new String[n];
-    int i = 0;
-    for (Object o : set) sar[i++] = o.toString();
-    Arrays.sort(sar, STRING_COMPARATOR_IGNORE_CASE);
-    return sar;
   }
 
   /** This converts a String[] to a HashSet&lt;String&gt;. */
@@ -1460,25 +1363,6 @@ public class String2 {
   }
 
   /**
-   * This counts all occurrences of <tt>findS</tt> in sb. if (sb == null || findS == null ||
-   * findS.length() == 0) return 0;
-   *
-   * @param sb the source StringBuilder
-   * @param findS the string to be searched for
-   */
-  public static int countAll(final StringBuilder sb, final String findS) {
-    if (sb == null || findS == null || findS.length() == 0) return 0;
-    int n = 0;
-    int sLength = findS.length();
-    int po = sb.indexOf(findS, 0);
-    while (po >= 0) {
-      n++;
-      po = sb.indexOf(findS, po + sLength);
-    }
-    return n;
-  }
-
-  /**
    * This counts all occurrences of <tt>findS</tt> in s. if (s == null || findS == null ||
    * findS.length() == 0) return 0;
    *
@@ -1661,30 +1545,6 @@ public class String2 {
     final StringBuilder sb = new StringBuilder(s);
     replaceAll(sb, oldS, newS, true);
     return sb.toString();
-  }
-
-  /**
-   * This repeatedly replaces the text matched in the capture group with the replacement text.
-   *
-   * @param sb a StringBuilder
-   * @param regex a regular Expression
-   * @param captureGroup a capture in the regex
-   * @param replacement the replacement string
-   * @return sb for convenience
-   */
-  public static StringBuilder regexReplaceAll(
-      final StringBuilder sb,
-      final String regex,
-      final int captureGroup,
-      final String replacement) {
-
-    final Pattern pattern = Pattern.compile(regex);
-    Matcher matcher = pattern.matcher(sb);
-    while (matcher.find()) {
-      sb.replace(matcher.start(1), matcher.end(1), replacement);
-      matcher = pattern.matcher(sb); // sb has changed, so need new matcher
-    }
-    return sb;
   }
 
   /**
@@ -2398,19 +2258,6 @@ public class String2 {
   /**
    * This creates an ArrayList from an Object[].
    *
-   * @param objectArray an Object[]
-   * @return arrayList with the objects
-   */
-  public static List<Object> toArrayList(final Object objectArray[]) {
-    final int n = objectArray.length;
-    final ArrayList<Object> al = new ArrayList<>(n);
-    al.addAll(Arrays.asList(objectArray));
-    return al;
-  }
-
-  /**
-   * This creates an ArrayList from an Object[].
-   *
    * @param objectArray an PrimitiveArray[]
    * @return arrayList with the objects
    */
@@ -2455,19 +2302,6 @@ public class String2 {
     return msgSB.toString();
   }
 
-  /** This returns a CSV (not CSSV) String. */
-  public static String toCSVString(final Enumeration<String> en) {
-    return toSVString(toArrayList(en).toArray(), ",", false);
-  }
-
-  public static String toCSVString(final List<Object> al) {
-    return toSVString(al.toArray(), ",", false);
-  }
-
-  public static String toCSVString(final Vector<Object> v) {
-    return toSVString(v.toArray(), ",", false);
-  }
-
   public static String toCSVString(final Object ar[]) {
     return toSVString(ar, ",", false);
   }
@@ -2476,25 +2310,6 @@ public class String2 {
     final Object ar[] = set.toArray();
     Arrays.sort(ar, STRING_COMPARATOR_IGNORE_CASE);
     return toCSVString(ar);
-  }
-
-  /**
-   * Generates a Comma-Space-Separated-Value (CSSV) string.
-   *
-   * <p>WARNING: This does not have a sychronized block: if your enumeration needs thread-safety,
-   * wrap this call in something like <tt>synchronized(enum) {String2.toArrayList(enum); }</tt>.
-   *
-   * <p>CHANGED: before 2011-03-06, this didn't do anything special for strings with internal commas
-   * or quotes. Now it uses toJson for that string.
-   *
-   * <p>CHANGED: before 2011-09-04, this was called toCSVString.
-   *
-   * @param en an enumeration of objects
-   * @return a CSSV String with the values with ", " after all but the last value. Returns null if
-   *     ar is null. null elements are represented as "[null]".
-   */
-  public static String toCSSVString(final Enumeration<String> en) {
-    return toSVString(toArrayList(en).toArray(), ", ", false);
   }
 
   /**
@@ -2511,36 +2326,6 @@ public class String2 {
    */
   public static String toCSSVString(final ImmutableList<String> al) {
     return toSVString(al.toArray(), ", ", false);
-  }
-
-  /**
-   * Generates a Comma-Space-Separated-Value (CSSV) string.
-   *
-   * <p>CHANGED: before 2011-03-06, this didn't do anything special for strings with internal commas
-   * or quotes. Now it uses toJson for that string.
-   *
-   * <p>CHANGED: before 2011-09-04, this was called toCSVString.
-   *
-   * @param al an arrayList of objects
-   * @return a CSV String with the values with ", " after all but the last value. Returns null if ar
-   *     is null. null elements are represented as "[null]".
-   */
-  public static String toCSSVString(final List<Object> al) {
-    return toSVString(al.toArray(), ", ", false);
-  }
-
-  /**
-   * Generates a Comma-Space-Separated-Value (CSSV) string.
-   *
-   * <p>CHANGED: before 2011-03-06, this didn't do anything special for strings with internal commas
-   * or quotes. Now it uses toJson for that string.
-   *
-   * @param v a vector of objects
-   * @return a CSSV String with the values with ", " after all but the last value. Returns null if
-   *     ar is null. null elements are represented as "[null]".
-   */
-  public static String toCSSVString(final Vector<Object> v) {
-    return toSVString(v.toArray(), ", ", false);
   }
 
   /**
@@ -2929,153 +2714,6 @@ public class String2 {
       sa[i] = o == null ? (String) o : o.toString();
     }
     return sa;
-  }
-
-  /**
-   * Add the items in the array (if any) to the arrayList.
-   *
-   * @param arrayList
-   * @param ar the items to be added
-   */
-  public static void add(final List<Object> arrayList, final Object ar[]) {
-    if (arrayList == null || ar == null) return;
-    arrayList.addAll(Arrays.asList(ar));
-  }
-
-  /**
-   * This displays the contents of a bitSet as a String.
-   *
-   * @param bitSet
-   * @return the corresponding String (the 'true' bits, comma separated)
-   */
-  public static String toString(final BitSet bitSet) {
-    if (bitSet == null) return null;
-    final StringBuilder sb = new StringBuilder(1024);
-
-    String separator = "";
-    int i = bitSet.nextSetBit(0);
-    while (i >= 0) {
-      sb.append(separator + i);
-      separator = ", ";
-      i = bitSet.nextSetBit(i + 1);
-    }
-    return sb.toString();
-  }
-
-  /**
-   * This displays the contents of a map as a String. See also StringArray(Map)
-   *
-   * @param map if it needs to be thread-safe, use ConcurrentHashMap
-   * @return the corresponding String, with one entry on each line (key = value) sorted (case
-   *     insensitive) by key
-   */
-  public static String toString(final Map map) {
-    if (map == null) return null;
-    final StringBuilder sb = new StringBuilder(1024);
-
-    final Set entrySet = map.entrySet();
-    for (Object o : entrySet) {
-      final Map.Entry me = (Map.Entry) o;
-      sb.append(me.getKey().toString() + " = " + me.getValue().toString() + "\n");
-    }
-    return sb.toString();
-  }
-
-  /**
-   * From an arrayList which alternates attributeName (a String) and attributeValue (an object),
-   * this generates a String with " name=value" on each line. If arrayList == null, this returns "
-   * [null]\n".
-   *
-   * @param arrayList
-   * @return the desired string representation
-   */
-  public static String alternateToString(final List<Object> arrayList) {
-    if (arrayList == null) return "    [null]\n";
-    final int n = arrayList.size();
-    // estimate 32 bytes/element
-    final StringBuilder sb = new StringBuilder(32 * Math.min(n, (Integer.MAX_VALUE - 8192) / 32));
-    for (int i = 0; i < n; i += 2) {
-      sb.append("    ");
-      sb.append(arrayList.get(i).toString());
-      sb.append('=');
-      sb.append(arrayToCSSVString(arrayList.get(i + 1)));
-      sb.append('\n');
-    }
-    return sb.toString();
-  }
-
-  /**
-   * From an arrayList which alternates attributeName (a String) and attributeValue (an object),
-   * this an array of attributeNames. If arrayList == null, this returns " [null]\n".
-   *
-   * @param arrayList
-   * @return the attributeNames in the arrayList
-   */
-  public static String[] alternateGetNames(final List<Object> arrayList) {
-    if (arrayList == null) return null;
-    final int n = arrayList.size();
-    final String[] sar = new String[n / 2];
-    int i2 = 0;
-    for (int i = 0; i < n / 2; i++) {
-      sar[i] = arrayList.get(i2).toString();
-      i2 += 2;
-    }
-    return sar;
-  }
-
-  /**
-   * From an arrayList which alternates attributeName (a String) and attributeValue (an object),
-   * this returns the attributeValue associated with the supplied attributeName. If array == null or
-   * there is no matching value, this returns null.
-   *
-   * @param arrayList
-   * @param attributeName
-   * @return the associated value
-   */
-  public static Object alternateGetValue(final List<Object> arrayList, final String attributeName) {
-    if (arrayList == null) return null;
-    final int n = arrayList.size();
-    for (int i = 0; i < n; i += 2) {
-      if (arrayList.get(i).toString().equals(attributeName)) return arrayList.get(i + 1);
-    }
-    return null;
-  }
-
-  /**
-   * Given an arrayList which alternates attributeName (a String) and attributeValue (an object),
-   * this either removes the attribute (if value == null), adds the attribute and value (if it isn't
-   * in the list), or changes the value (if the attriubte is in the list).
-   *
-   * @param arrayList
-   * @param attributeName
-   * @param value the value associated with the attributeName
-   * @return the previous value for the attribute (or null)
-   * @throws RuntimeException of trouble (e.g., if arrayList is null)
-   */
-  public static Object alternateSetValue(
-      final List<Object> arrayList, final String attributeName, final Object value) {
-    if (arrayList == null)
-      throw new SimpleException(ERROR + " in String2.alternateSetValue: arrayList is null.");
-    final int n = arrayList.size();
-    for (int i = 0; i < n; i += 2) {
-      if (arrayList.get(i).toString().equals(attributeName)) {
-        final Object oldValue = arrayList.get(i + 1);
-        if (value == null) {
-          arrayList.remove(i + 1); // order of removal is important
-          arrayList.remove(i);
-        } else arrayList.set(i + 1, value);
-        return oldValue;
-      }
-    }
-
-    // attributeName not found?
-    if (value == null) {
-    } else {
-      // add it
-      arrayList.add(attributeName);
-      arrayList.add(value);
-    }
-    return null;
   }
 
   /**
@@ -4230,27 +3868,6 @@ public class String2 {
   }
 
   /**
-   * DON'T USE THIS; RELY ON THE FIXES AVAILABLE FOR JAVA: EITHER THE LATEST VERSION OF JAVA OR THE
-   * JAVA UPDATER TO FIX THE BUG ON EXISTING OLDER JAVA INSTALLATIONS
-   * https://www.oracle.com/technetwork/java/javase/fpupdater-tool-readme-305936.html
-   *
-   * <p>This returns true if s is a value that causes Java to hang. Avoid java hang. 2011-02-09
-   * http://www.exploringbinary.com/java-hangs-when-converting-2-2250738585072012e-308 This was
-   * Bob's work-around to avoid the Java bug.
-   *
-   * @param s a string representing a double value
-   * @return true if the value is the troublesome value. If true, the value can be interpreted as
-   *     either +/-Double.MIN_VALUE (not sure which) or (crudely) 0.
-   */
-  public static boolean isDoubleTrouble(String s) {
-    if (s == null || s.length() < 22) // this is a good quick reject
-    return false;
-
-    // all variants are relevant, so look for the mantissa
-    return replaceAll(s, ".", "").indexOf("2225073858507201") >= 0;
-  }
-
-  /**
    * Convert a string to an int, with rounding. Leading or trailing spaces are automatically
    * removed. This won't throw an exception if the number isn't formatted right.
    *
@@ -4836,25 +4453,6 @@ public class String2 {
   }
 
   /**
-   * This returns a string with the keys and values of the Map (sorted by the keys, ignoreCase).
-   *
-   * @param map (keys and values are objects with good toString methods). If it needs to be
-   *     thead-safe, use ConcurrentHashMap.
-   * @return a string with the sorted (ignoreCase) keys and their values ("key1: value1\nkey2:
-   *     value2\n")
-   */
-  public static String getKeysAndValuesString(Map<String, String> map) {
-    ArrayList<String> al = new ArrayList<>();
-
-    // synchronize so protected from changes in other threads
-    for (String key : map.keySet()) {
-      al.add(key + ": " + map.get(key));
-    }
-    al.sort(STRING_COMPARATOR_IGNORE_CASE);
-    return toNewlineString(al.toArray(new String[0]));
-  }
-
-  /**
    * This returns the number formatted with up to 6 digits to the left and right of the decimal and
    * trailing decimal 0's removed. If abs(d) &lt; 0.0999995 or abs(d) &gt;= 999999.9999995, the
    * number is displayed in scientific notation (e.g., 8.954321E-5). Thus the maximum length should
@@ -5128,10 +4726,9 @@ public class String2 {
     int c;
 
     try { // bob added
-      loop:
       while (true) {
         c = in.read();
-        if (c == -1 || c == '\n') break loop;
+        if (c == -1 || c == '\n') break;
         if (c == '\r') {
           int c2 = in.read();
           if ((c2 != '\n') && (c2 != -1)) {
@@ -5140,7 +4737,7 @@ public class String2 {
             }
             ((PushbackInputStream) in).unread(c2);
           } else {
-            break loop;
+            break;
           }
         }
 
@@ -5939,22 +5536,6 @@ public class String2 {
   }
 
   /**
-   * Get gets the String from the system clipboard (or null if none). This works in a standalone
-   * Java program, not an applet. From Java Developers Almanac. This won't throw an exception.
-   */
-  public static String getClipboardString() {
-    try {
-      Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-      Transferable t = clipboard.getContents(null);
-      if (t != null && t.isDataFlavorSupported(DataFlavor.stringFlavor))
-        return (String) t.getTransferData(DataFlavor.stringFlavor);
-    } catch (Throwable th) {
-      log(ERROR + " while getting the string from the clipboard:\n" + MustBe.throwableToString(th));
-    }
-    return null;
-  }
-
-  /**
    * This method writes a string to the system clipboard. This works in a standalone Java program,
    * not an applet. From Java Developers Almanac. This won't throw an exception.
    */
@@ -6333,11 +5914,6 @@ public class String2 {
     return true;
   }
 
-  /** This returns the text to make n system beeps if printed to the console. */
-  public static String beep(int n) {
-    return makeString('\u0007', n);
-  }
-
   /** This cleverly concatenates the 2 strings (with "", ". ", or " ", as appropriate. */
   public static String periodSpaceConcat(String a, String b) {
     if (!isSomething(a)) return isSomething(b) ? b : "";
@@ -6494,15 +6070,6 @@ public class String2 {
     return sb.toString();
   }
 
-  /** This lists the methods for a given object's class. */
-  public static void listMethods(Object v) {
-    Class tClass = v.getClass();
-    Method[] methods = tClass.getMethods();
-    for (int i = 0; i < methods.length; i++) {
-      String2.log("public method #" + i + ": " + methods[i]);
-    }
-  }
-
   /**
    * Given a map, this reasonably efficiently removes all entries where a value is in the set.
    *
@@ -6510,33 +6077,18 @@ public class String2 {
    * @param set The set of values. Presumably, each value in set is just a value in the map one
    *     time. Afterward, the set will contain just the values which weren't removed.
    */
-  public static void removeValues(Map map, Set set) {
+  public static void removeValues(Map<Integer, String> map, Set<String> set) {
     if (map == null || set == null || map.isEmpty() || set.isEmpty()) return;
 
-    Iterator<Map.Entry> it = map.entrySet().iterator();
+    Iterator<Map.Entry<Integer, String>> it = map.entrySet().iterator();
     while (it.hasNext()) {
-      Map.Entry entry = it.next();
-      Object val = entry.getValue();
+      Map.Entry<Integer, String> entry = it.next();
+      String val = entry.getValue();
       if (set.contains(val)) {
         it.remove(); // remove entry through iterator, or exception
         set.remove(val);
       }
     }
-  }
-
-  /**
-   * This encodes special regex characters to turn a string into a regex for that string. I'm not at
-   * all sure this is perfect!
-   */
-  public static String encodeAsRegex(String s) {
-    int length = s.length();
-    StringBuilder sb = new StringBuilder(length * 3 / 2);
-    for (int po = 0; po < length; po++) {
-      char ch = s.charAt(po);
-      if (".^$[](){}?*+\\".indexOf(ch) >= 0) sb.append('\\');
-      sb.append(ch);
-    }
-    return sb.toString();
   }
 
   public static String[] immutableListToArray(ImmutableList<String> list) {

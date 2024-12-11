@@ -593,7 +593,6 @@ public class ErrorParserTokenManager implements ErrorParserConstants {
     Token matchedToken;
     int curPos = 0;
 
-    EOFLoop:
     for (; ; ) {
       try {
         curChar = input_stream.BeginToken();
@@ -608,7 +607,7 @@ public class ErrorParserTokenManager implements ErrorParserConstants {
         while (curChar <= 32 && (0x100002600L & (1L << curChar)) != 0L)
           curChar = input_stream.BeginToken();
       } catch (java.io.IOException e1) {
-        continue EOFLoop;
+        continue;
       }
       jjmatchedKind = 0x7fffffff;
       jjmatchedPos = 0;
@@ -619,7 +618,7 @@ public class ErrorParserTokenManager implements ErrorParserConstants {
           matchedToken = jjFillToken();
           return matchedToken;
         } else {
-          continue EOFLoop;
+          continue;
         }
       }
       int error_line = input_stream.getEndLine();

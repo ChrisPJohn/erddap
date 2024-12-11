@@ -6287,7 +6287,6 @@ public class EDStatic {
           "%%% EmailThread: new emailThread started at "
               + Calendar2.getCurrentISODateTimeStringLocalTZ());
       emailThread.start();
-      return;
     }
   }
 
@@ -6314,7 +6313,6 @@ public class EDStatic {
               + " nPendingTasks="
               + nPending);
       taskThread.start();
-      return;
     }
   }
 
@@ -6332,7 +6330,6 @@ public class EDStatic {
           "%%% TouchThread: new touchThread started at "
               + Calendar2.getCurrentISODateTimeStringLocalTZ());
       touchThread.start();
-      return;
     }
   }
 

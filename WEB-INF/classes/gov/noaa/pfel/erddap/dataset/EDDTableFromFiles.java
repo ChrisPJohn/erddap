@@ -49,6 +49,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentHashMap.KeySetView;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 import java.util.regex.*;
@@ -1642,7 +1643,7 @@ public abstract class EDDTableFromFiles extends EDDTable implements WatchUpdateH
     }
 
     // load badFileMap
-    ConcurrentHashMap badFileMap = readBadFileMap();
+    ConcurrentHashMap<String, Object[]> badFileMap = readBadFileMap();
 
     // if trouble reading any, recreate all
     if (dirTable == null || fileTable == null || badFileMap == null) {
@@ -1827,10 +1828,10 @@ public abstract class EDDTableFromFiles extends EDDTable implements WatchUpdateH
           // tFileNamePA.get(i));
         }
 
-        Object badFileNames[] = badFileMap.keySet().toArray();
+        KeySetView<String, Object[]> badFileNames = badFileMap.keySet();
         int nMissing = 0;
-        int nbfn = badFileNames.length;
-        for (Object name : badFileNames) {
+        int nbfn = badFileNames.size();
+        for (String name : badFileNames) {
           if (!tFileSet.contains(name)) {
             if (reallyVerbose) String2.log("previously bad file now missing: " + name);
             nMissing++;
@@ -3212,7 +3213,8 @@ public abstract class EDDTableFromFiles extends EDDTable implements WatchUpdateH
     }
 
     // get BadFile and FileTable info and make local copies
-    ConcurrentHashMap badFileMap = readBadFileMap(); // already a copy of what's in file
+    ConcurrentHashMap<String, Object[]> badFileMap =
+        readBadFileMap(); // already a copy of what's in file
     Table tDirTable = getDirTableCopy(); // not null, throws Throwable
     Table tFileTable = getFileTableCopy(); // not null, throws Throwable
     if (debugMode)
@@ -4654,7 +4656,6 @@ public abstract class EDDTableFromFiles extends EDDTable implements WatchUpdateH
             });
 
     try {
-      FILE_LOOP:
       for (int f = 0; f < nFiles; f++) {
         if (Thread.interrupted()) {
           if (workManager != null) workManager.forceShutdown();
@@ -4886,7 +4887,7 @@ public abstract class EDDTableFromFiles extends EDDTable implements WatchUpdateH
             tableWriter.writeSome(distinctTable);
             if (tableWriter.noMoreDataPlease) {
               tableWriter.logCaughtNoMoreDataPlease(datasetID);
-              break FILE_LOOP;
+              break;
             }
           }
           distinctTable = null;

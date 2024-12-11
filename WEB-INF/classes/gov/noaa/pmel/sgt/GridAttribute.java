@@ -230,7 +230,6 @@ public class GridAttribute implements Attribute, Cloneable, PropertyChangeListen
    */
   public void setColorMap(ColorMap cmap) {
     if (cmap_ == null && cmap == null) {
-      return;
     } else {
       if (cmap_ != null) cmap_.removePropertyChangeListener(this);
       if (cmap_ == null || !cmap_.equals(cmap)) {

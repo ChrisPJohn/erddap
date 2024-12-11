@@ -16,12 +16,12 @@ import com.cohort.util.MustBe;
 import com.cohort.util.String2;
 import gov.noaa.pmel.sgt.swing.Draggable;
 import gov.noaa.pmel.util.Dimension2D;
-import gov.noaa.pmel.util.Rectangle2D;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Iterator;
@@ -433,12 +433,6 @@ public class Layer extends Component implements Cloneable, LayerControl {
     if (pane_ == null) throw new PaneNotFoundException();
     computeScale();
 
-    if (false) {
-      System.out.println("\nLayer.draw(g): " + ident_);
-      System.out.println("   layer.getBounds(" + ident_ + ") = " + getBounds());
-      System.out.println("   layer.getBoundsP(" + ident_ + ") = " + getBoundsP());
-      System.out.println("   pane.getBounds(" + pane_.getId() + ") = " + pane_.getBounds());
-    }
     /*    int x0, y0, x1, y1;
     x0 = getXPtoD(0.0f);
     y0 = getYPtoD(0.0f);

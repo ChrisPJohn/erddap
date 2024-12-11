@@ -116,14 +116,13 @@ public class LineCartesianRenderer extends CartesianRenderer {
     yout = new int[size];
     while (first < size) {
       nout = -1;
-      line:
       for (count = first; count < size; count++) {
         if (xp[count] != Integer.MIN_VALUE && yp[count] != Integer.MIN_VALUE) {
           nout++;
           xout[nout] = xp[count];
           yout[nout] = yp[count];
         } else if (nout >= 0) {
-          break line;
+          break;
         }
       }
       first = count + 1;

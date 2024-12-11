@@ -362,7 +362,6 @@ public class Math2 {
         // Yield lets other threads have time and may run incgc
         //  whether -Xincgc is on command line or not.
         Thread.sleep(0);
-        return;
       } else {
         // String2.log("sleep millis=" + millis);
         Thread.sleep(millis); // which is like yield

@@ -25,15 +25,25 @@ import com.cohort.util.Test;
 import gov.noaa.pfel.coastwatch.griddata.DataHelper;
 import gov.noaa.pfel.coastwatch.griddata.NcHelper;
 import gov.noaa.pfel.coastwatch.util.FileVisitorDNLS;
+import gov.noaa.pfel.coastwatch.util.SSR;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.StringReader;
+import java.math.BigInteger;
 import java.nio.file.Path;
+import java.sql.BatchUpdateException;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
+import java.sql.Date;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.Statement;
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.BitSet;
+import java.util.Calendar;
+import java.util.TimeZone;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -56,6 +66,484 @@ public class TableTests {
   @BeforeAll
   static void init() {
     Initialization.edStatic();
+  }
+
+  /**
+   * This reads data from the resultsSet from an sql query using jdbc. !!!WARNING - THIS APPROACH
+   * OFFERS NO PROTECTION FROM SQL INJECTION. ONLY USE THIS IF YOU, NOT SOME POSSIBLY MALICIOUS
+   * USER, SPECIFIED THE QUERY.
+   *
+   * <p>Examples of things done to prepare to use this method:
+   *
+   * <ul>
+   *   <li>Class.forName("org.postgresql.Driver");
+   *   <li>String url = "jdbc:postgresql://otter.pfeg.noaa.gov/posttest"; //database name
+   *   <li>String user = "postadmin";
+   *   <li>String password = String2.getPasswordFromSystemIn("Password for '" + user + "'? ");
+   *   <li>Connection con = DriverManager.getConnection(url, user, password);
+   * </ul>
+   *
+   * @param con a Connection (these are sometimes pooled to save time)
+   * @param query e.g., "SELECT * FROM names WHERE id = 3"
+   * @throws Exception if trouble
+   */
+  public void readSql(Table table, Connection con, String query) throws Exception {
+
+    String msg = "  Table.readSql " + query;
+    long time = System.currentTimeMillis();
+    table.clear();
+
+    // create the statement and execute the query
+    Statement statement = con.createStatement();
+    try {
+      table.readSqlResultSet(statement.executeQuery(query));
+      statement.close();
+      statement = null;
+    } catch (Throwable t) {
+      String2.log(msg);
+      if (statement != null)
+        try {
+          statement.close();
+        } catch (Throwable t9) {
+        }
+      throw t;
+    }
+  }
+
+  /**
+   * This inserts the rows of data in this table to a sql table, using jdbc.
+   *
+   * <ul>
+   *   <li>The column names in this table must match the column names in the database table.
+   *   <li>If createTable is true, the column names won't be changed (e.g., spaces in column names
+   *       will be retained.)
+   *   <li>If createTable is false, the column names in this table don't have to be all of the
+   *       column names in the database table, or in the same order.
+   *   <li>This assumes all columns (except primary key) accept nulls or have defaults defined. If a
+   *       value in this table is missing, the default value will be put in the database table.
+   *   <li>The database timezone (in pgsql/data/postgresql.conf) should be set to -0 (UTC) so that
+   *       dates and times are interpreted as being in UTC time zone.
+   * </ul>
+   *
+   * <p>Examples of things done to prepare to use this method:
+   *
+   * <ul>
+   *   <li>Class.forName("org.postgresql.Driver"); //to load the jdbc driver
+   *   <li>String url = "jdbc:postgresql://otter.pfeg.noaa.gov/posttest"; //database name
+   *   <li>String user = "postadmin";
+   *   <li>String password = String2.getPasswordFromSystemIn("Password for '" + user + "'? ");
+   *   <li>Connection con = DriverManager.getConnection(url, user, password);
+   * </ul>
+   *
+   * @param con a Connection (these are sometimes pooled to save time)
+   * @param createTable if createTable is true, a new table will be created with all columns (except
+   *     primaryKeyCol) allowing nulls. If you need more flexibility when creating the table, create
+   *     it separately, then use this method to insert data into it. If createTable is true and a
+   *     table by the same name exists, it will be deleted. If createTable is false, it must already
+   *     exist.
+   * @param tableName the database's name for the table that this table's data will be inserted
+   *     into, e.g., "myTable" (equivalent in postgres to "public.myTable") or "mySchema.myTable".
+   * @param primaryKeyCol is the primary key column (0..., or -1 if none). This is ignored if
+   *     createTable is false.
+   * @param dateCols a list of columns (0..) with dates, stored as seconds since epoch in
+   *     DoubleArrays.
+   * @param timestampCols a list of columns (0..) with timestamps (date + time), stored as seconds
+   *     since epoch in DoubleArrays. Here, timestamp precision (decimal digits for seconds value)
+   *     is always 0. If createTable is true, these columns show up (in postgresql) as "timestamp
+   *     without time zone".
+   * @param timeCols a list of columns (0..) with times (without dates), stored as strings in
+   *     StringArrays (with format "hh:mm:ss", e.g., "23:59:59" with implied time zone of UTC),
+   *     which will be stored as sql TIME values. Here, time precision (decimal digits for seconds
+   *     value) is always 0. Missing values can be stored as "" or null. Improperly formatted time
+   *     values throw an exception. If createTable is true, these columns show up (in postgresql) as
+   *     "time without time zone".
+   * @param stringLengthFactor for StringArrays, this is the factor (typically 1.5) to be multiplied
+   *     by the current max string length (then rounded up to a multiple of 10) to estimate the
+   *     varchar length.
+   * @throws Exception if trouble. If exception thrown, table may or may not have been created, but
+   *     no data rows have been inserted. If no exception thrown, table was created (if requested)
+   *     and all data was inserted.
+   */
+  public void saveAsSql(
+      Table table,
+      Connection con,
+      boolean createTable,
+      String tableName,
+      int primaryKeyCol,
+      int dateCols[],
+      int timestampCols[],
+      int timeCols[],
+      double stringLengthFactor)
+      throws Exception {
+
+    //    * @param timeZoneOffset this identifies the time zone associated with the
+    //    *    time columns.  (The Date and Timestamp columns are already UTC.)
+
+    String msg = "  Table.saveAsSql " + tableName;
+    String errorInMethod = String2.ERROR + " in" + msg + ":\n";
+    long elapsedTime = System.currentTimeMillis();
+    if (dateCols == null) dateCols = new int[0];
+    if (timestampCols == null) timestampCols = new int[0];
+    if (timeCols == null) timeCols = new int[0];
+    int nCols = table.nColumns();
+    int nRows = table.nRows();
+
+    // make a local 'table' for faster access
+    PrimitiveArray paArray[] = new PrimitiveArray[nCols];
+    String sqlType[] = new String[nCols];
+    for (int col = 0; col < nCols; col++) {
+      paArray[col] = table.getColumn(col);
+      sqlType[col] = paArray[col].getSqlTypeString(stringLengthFactor);
+    }
+
+    // swap in the dateCols
+    boolean isDateCol[] = new boolean[nCols];
+    for (int tCol : dateCols) {
+      isDateCol[tCol] = true;
+      sqlType[tCol] = "date";
+    }
+
+    // swap in the timestampCols
+    boolean isTimestampCol[] = new boolean[nCols];
+    for (int tCol : timestampCols) {
+      isTimestampCol[tCol] = true;
+      sqlType[tCol] = "timestamp";
+    }
+
+    // identify timeCols
+    boolean isTimeCol[] = new boolean[nCols];
+    for (int tCol : timeCols) {
+      isTimeCol[tCol] = true;
+      sqlType[tCol] = "time";
+    }
+
+    // *** create the table   (in postgres, default for columns is: allow null)
+    if (createTable) {
+      // delete the table (if it exists)
+      dropSqlTable(con, tableName, true);
+
+      try (Statement statement = con.createStatement()) {
+        StringBuilder create =
+            new StringBuilder(
+                "CREATE TABLE "
+                    + tableName
+                    + " ( \""
+                    + table.getColumnName(0)
+                    + "\" "
+                    + sqlType[0]
+                    + (primaryKeyCol == 0 ? " PRIMARY KEY" : ""));
+        for (int col = 1; col < nCols; col++)
+          create.append(
+              ", \""
+                  + table.getColumnName(col)
+                  + "\" "
+                  + sqlType[col]
+                  + (primaryKeyCol == col ? " PRIMARY KEY" : ""));
+        create.append(" )");
+        statement.executeUpdate(create.toString());
+      }
+    }
+
+    // *** insert the rows of data into the table
+    // There may be no improved efficiency from statement.executeBatch
+    // as postgres may still be doing commands one at a time
+    // (http://archives.free.net.ph/message/20070115.122431.93092975.en.html#pgsql-jdbc)
+    // and it is more memory efficient to just do one at a time.
+    // BUT batch is more efficient on other databases and
+    // most important, it allows us to rollback.
+    // See batch info:
+    // http://www.jguru.com/faq/view.jsp?EID=5079
+    // and  http://www.onjava.com/pub/a/onjava/excerpt/javaentnut_2/index3.html?page=2 (no error
+    // checking/rollback).
+
+    // timezones
+    // jdbc setTime setDate setTimestamp normally works with local time only.
+    // To specify UTC timezone, you need to call setDate, setTime, setTimestamp
+    //   with Calendar object which has the time zone used to interpret the date/time.
+    // see http://www.idssoftware.com/faq-j.html  see J15
+    Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+
+    // make the prepared statement
+    StringBuilder prep = new StringBuilder();
+    prep.append("INSERT INTO " + tableName + " ( \"" + table.getColumnName(0) + "\"");
+    for (int col = 1; col < nCols; col++) prep.append(", \"" + table.getColumnName(col) + "\"");
+    prep.append(") VALUES (?");
+    prep.append(", ?".repeat(Math.max(0, nCols - 1)));
+    prep.append(")");
+    PreparedStatement pStatement = con.prepareStatement(prep.toString());
+
+    // add each row's data to the prepared statement
+    for (int row = 0; row < nRows; row++) {
+      // clear parameters, to ensure previous row's data is cleared and new values are set
+      pStatement.clearParameters();
+
+      // add this row's values
+      for (int col = 0; col < nCols; col++) {
+        PrimitiveArray pa = paArray[col];
+        PAType et = pa.elementType();
+        // col+1 because sql counts columns as 1...
+        // check for date, timestamp, time columns before double and String
+        if (isDateCol[col]) {
+          double d = pa.getDouble(row);
+          if (Double.isFinite(d)) {
+            Date date = new Date(Math.round(d * 1000)); // set via UTC millis
+            pStatement.setDate(col + 1, date, cal); // cal specifies the UTC timezone
+          } else pStatement.setDate(col + 1, null);
+        } else if (isTimestampCol[col]) {
+          double d = pa.getDouble(row);
+          if (Double.isFinite(d)) {
+            Timestamp timestamp = new Timestamp(Math.round(d * 1000)); // set via UTC millis
+            pStatement.setTimestamp(col + 1, timestamp, cal); // cal specifies the UTC timezone
+          } else pStatement.setTimestamp(col + 1, null);
+        } else if (isTimeCol[col]) {
+          // data already a time string
+          String s = pa.getString(row);
+          if (s == null || s.length() == 0) {
+            pStatement.setTime(col + 1, null);
+          } else if ( // ensure that format is HH:MM:SS
+          s.length() == 8
+              && String2.isDigit(s.charAt(0))
+              && String2.isDigit(s.charAt(1))
+              && s.charAt(2) == ':'
+              && String2.isDigit(s.charAt(3))
+              && String2.isDigit(s.charAt(4))
+              && s.charAt(5) == ':'
+              && String2.isDigit(s.charAt(6))
+              && String2.isDigit(s.charAt(7))) {
+            // Time documentation says Time is java Date object with date set to 1970-01-01
+            try {
+              double d =
+                  Calendar2.isoStringToEpochSeconds(
+                      "1970-01-01T" + s); // throws exception if trouble
+              // String2.log("date=" + s + " -> " + Calendar2.epochSecondsToIsoStringTZ(d));
+              Time time = new Time(Math.round(d * 1000));
+              pStatement.setTime(col + 1, time, cal); // cal specifies the UTC timezone
+            } catch (Exception e) {
+              pStatement.setTime(col + 1, null);
+            }
+          } else {
+            throw new SimpleException(
+                errorInMethod
+                    + "Time format must be HH:MM:SS. Bad value="
+                    + s
+                    + " in row="
+                    + row
+                    + " col="
+                    + col);
+          }
+          // for integer types, there seems to be no true null, so keep my missing value, e.g.,
+          // Byte.MAX_VALUE
+        } else if (et == PAType.BYTE) {
+          pStatement.setByte(col + 1, ((ByteArray) pa).get(row));
+        } else if (et == PAType.SHORT) {
+          pStatement.setShort(col + 1, ((ShortArray) pa).get(row));
+        } else if (et == PAType.INT) {
+          pStatement.setInt(col + 1, pa.getInt(row));
+        } else if (et == PAType.LONG) {
+          pStatement.setLong(col + 1, pa.getLong(row));
+          // for double and float, NaN is fine
+        } else if (et == PAType.FLOAT) {
+          pStatement.setFloat(col + 1, pa.getFloat(row));
+        } else if (et == PAType.DOUBLE) {
+          pStatement.setDouble(col + 1, pa.getDouble(row));
+        } else if (et == PAType.STRING || et == PAType.CHAR) {
+          pStatement.setString(col + 1, pa.getString(row)); // null is ok
+        } else
+          throw new SimpleException(
+              errorInMethod + "Process column(" + col + ") unknown type=" + pa.elementTypeString());
+      }
+
+      // add this row's data to batch
+      pStatement.addBatch();
+    }
+
+    // try to executeBatch
+    // setAutoCommit(false) seems to perform an implicit postgresql
+    // BEGIN command to start a transaction.
+    // (Do this after all preparation in case exception thrown there.)
+    con.setAutoCommit(false); // must be false for rollback to work
+    int[] updateCounts = null;
+    Exception caughtException = null;
+    try {
+      // NOTE that I don't try/catch the stuff above.
+      //  If exception in preparation, no need to roll back
+      //  (and don't want to roll back previous statement).
+      //  But exception in executeBatch needs to be rolled back.
+
+      // process the batch
+      updateCounts = pStatement.executeBatch();
+
+      // got here without exception? save the changes
+      con.commit();
+
+    } catch (Exception e) {
+      // get the caught exception
+      caughtException = e;
+      try {
+        if (e instanceof BatchUpdateException t) {
+          // If e was BatchUpdateException there is additional information.
+          // Try to combine the e exception (identifies bad row's data)
+          // and bue.getNextException (says what the problem was).
+          Exception bue2 = t.getNextException();
+          caughtException =
+              new Exception(
+                  errorInMethod
+                      + "[BU ERROR] "
+                      + MustBe.throwableToString(e)
+                      + "[BU ERROR2] "
+                      + bue2.toString());
+        } else {
+        }
+      } catch (Exception e2) {
+        // oh well, e is best I can get
+      }
+
+      // since there was a failure, try to rollback the whole transaction.
+      try {
+        con.rollback();
+      } catch (Exception rbe) {
+        // hopefully won't happen
+        caughtException =
+            new Exception(
+                errorInMethod
+                    + "[C ERROR] "
+                    + MustBe.throwableToString(caughtException)
+                    + "[RB ERROR] "
+                    + rbe);
+        msg += "\nsmall ERROR during rollback:\n" + MustBe.throwableToString(caughtException);
+      }
+    }
+
+    // other clean up
+    try {
+      // pStatement.close(); //not necessary?
+      // go back to autoCommit; this signals end of transaction
+      con.setAutoCommit(true);
+    } catch (Exception e) {
+      // small potatoes
+      msg += "\nsmall ERROR during cleanup:\n" + MustBe.throwableToString(e);
+    }
+
+    // rethrow the big exception, so caller knows there was trouble
+    if (caughtException != null) throw caughtException;
+  }
+
+  /**
+   * Get a connection to an Access .mdb file. MS Access not needed.
+   *
+   * @param fileName (forward slash in example)
+   * @param user use "" if none specified
+   * @param password use "" if none specified
+   */
+  public static Connection getConnectionToMdb(String fileName, String user, String password)
+      throws Exception {
+
+    // from Sareth's answer at
+    // https://stackoverflow.com/questions/9543722/java-create-msaccess-database-file-mdb-0r-accdb-using-java
+    Class.forName("sun.jdbc.odbc.JdbcOdbcDriver"); // included in Java distribution
+    return DriverManager.getConnection(
+        "jdbc:odbc:Driver={Microsoft Access Driver (*.mdb, *.accdb)};"
+            + "DBQ="
+            + fileName, // ";DriverID=22;READONLY=true}",
+        "",
+        ""); // user, password
+  }
+
+  /**
+   * This returns a list of schemas (subdirectories of this database) e.g., "public"
+   *
+   * @return a list of schemas (subdirectories of this database) e.g., "public". Postgres always
+   *     returns all lowercase names.
+   * @throws Exception if trouble
+   */
+  public static StringArray getSqlSchemas(Connection con) throws Exception {
+
+    DatabaseMetaData dm = con.getMetaData();
+    Table schemas = new Table();
+    schemas.readSqlResultSet(dm.getSchemas());
+    return (StringArray) schemas.getColumn(0);
+  }
+
+  /**
+   * This returns a list of tables of a certain type or types.
+   *
+   * @param con
+   * @param schema a specific schema (a subdirectory of the database) e.g., "public" (not null)
+   * @param types null (for any) or String[] of one or more of "TABLE", "VIEW", "SYSTEM TABLE",
+   *     "GLOBAL TEMPORARY", "LOCAL TEMPORARY", "ALIAS", "SYNONYM".
+   * @return a StringArray of matching table names. Postgres always returns all lowercase names.
+   * @throws Exception if trouble
+   */
+  public static StringArray getSqlTableNames(Connection con, String schema, String types[])
+      throws Exception {
+
+    if (schema == null)
+      throw new SimpleException(String2.ERROR + " in Table.getSqlTableList: schema is null.");
+
+    // getTables(catalogPattern, schemaPattern, tableNamePattern, String[] types)
+    // "%" means match any substring of 0 or more characters, and
+    // "_" means match any one character.
+    // If a search pattern argument is set to null, that argument's criterion will be dropped from
+    // the search.
+    DatabaseMetaData dm = con.getMetaData();
+    Table tables = new Table(); // works with "posttest", "public", "names", null
+    tables.readSqlResultSet(dm.getTables(null, schema.toLowerCase(), null, types));
+    return (StringArray) tables.getColumn(2); // table name is always col (0..) 2
+  }
+
+  /**
+   * Determines the type of a table (or if the table exists).
+   *
+   * @param schema a specific schema (a subdirectory of the database) e.g., "public" (not null)
+   * @param tableName a specific tableName (can't be null)
+   * @return the table type: "TABLE", "VIEW", "SYSTEM TABLE", "GLOBAL TEMPORARY", "LOCAL TEMPORARY",
+   *     "ALIAS", "SYNONYM", or null if the table doesn't exist.
+   * @throws Exception if trouble
+   */
+  public static String getSqlTableType(Connection con, String schema, String tableName)
+      throws Exception {
+
+    if (schema == null)
+      throw new SimpleException(String2.ERROR + " in Table.getSqlTableType: schema is null.");
+    if (tableName == null)
+      throw new SimpleException(String2.ERROR + " in Table.getSqlTableType: tableName is null.");
+
+    // getTables(catalogPattern, schemaPattern, tableNamePattern, String[] types)
+    // "%" means match any substring of 0 or more characters, and
+    // "_" means match any one character.
+    // If a search pattern argument is set to null, that argument's criterion will be dropped from
+    // the search.
+    DatabaseMetaData dm = con.getMetaData();
+    Table tables = new Table(); // works with "posttest", "public", "names", null
+    tables.readSqlResultSet(
+        dm.getTables(null, schema.toLowerCase(), tableName.toLowerCase(), null));
+    if (tables.nRows() == 0) return null;
+    return tables.getStringData(3, 0); // table type is always col (0..) 3
+  }
+
+  /**
+   * Drops (deletes) an sql table (if it exists).
+   *
+   * @param tableName a specific table name (not null), e.g., "myTable" (equivalent in postgres to
+   *     "public.myTable") or "myShema.myTable".
+   * @param cascade This is only relevant if tableName is referenced by a view. If so, and cascade
+   *     == true, the table will be deleted. If so, and cascade == false, the table will not be
+   *     deleted.
+   * @throws Exception if trouble (e.g., the table existed but couldn't be deleted, perhaps because
+   *     connection's user doesn't have permission)
+   */
+  public static void dropSqlTable(Connection con, String tableName, boolean cascade)
+      throws Exception {
+
+    // create the statement and execute the query
+    // DROP TABLE [ IF EXISTS ] name [, ...] [ CASCADE | RESTRICT ]
+    try (Statement statement = con.createStatement()) {
+      statement.executeUpdate(
+          "DROP TABLE IF EXISTS "
+              + tableName
+              + // case doesn't matter here
+              (cascade ? " CASCADE" : ""));
+    }
   }
 
   /** This tests the little methods. */
@@ -229,6 +717,111 @@ public class TableTests {
     Test.ensureEqual(results, expected, "results=" + results);
   }
 
+  /**
+   * This removes all rows of data that have just missing_values ("missing_value", "_FillValue", or
+   * the PrimitiveArray's native MV).
+   *
+   * <p>CF 1.6 Discrete Sampling Geometry and Incomplete Multidimensional Arrays: the spec doesn't
+   * say which attribute is to be used: missing_value or _FillValue. It just says "missing value"
+   * (in the generic sense) repeatedly.
+   *
+   * @return the number of rows remaining
+   */
+  public int removeRowsWithoutData(Table table) {
+    table.justKeep(table.rowsWithData());
+    return table.nRows();
+  }
+
+  /**
+   * This finds the last row with data in some column (not missing_value or _FillValue or the
+   * PrimitiveArray's native MV).
+   *
+   * <p>CF 1.6 Discrete Sampling Geometry and Incomplete Multidimensional Arrays: the spec doesn't
+   * say which attribute is to be used: missing_value or _FillValue. It just says "missing value"
+   * (in the generic sense) repeatedly.
+   *
+   * @return the last row with data (perhaps -1)
+   */
+  public int lastRowWithData(Table table) {
+    int tnRows = table.nRows();
+    int tnCols = table.nColumns();
+    int lastRowWithData = -1;
+    for (int col = 0; col < tnCols; col++) {
+      // this is very similar to rowsWithData
+      PrimitiveArray pa = table.columns.get(col);
+      PAType paType = pa.elementType();
+      Attributes atts = table.columnAttributes(col);
+      if (paType == PAType.STRING) {
+        String mv = atts.getString("missing_value"); // may be null
+        String fv = atts.getString("_FillValue");
+        if (mv == null) mv = "";
+        if (fv == null) fv = "";
+        for (int row = tnRows - 1; row > lastRowWithData; row--) {
+          String t = pa.getString(row);
+          if (t != null && t.length() > 0 && !mv.equals(t) && !fv.equals(t)) {
+            lastRowWithData = row;
+            break;
+          }
+        }
+      } else if (paType == PAType.DOUBLE) {
+        double mv = atts.getDouble("missing_value"); // may be NaN
+        double fv = atts.getDouble("_FillValue");
+        for (int row = tnRows - 1; row > lastRowWithData; row--) {
+          double t = pa.getDouble(row);
+          if (Double.isFinite(t)
+              && // think carefully
+              !Math2.almostEqual(9, t, mv)
+              && // if mv=NaN, !M.ae will be true
+              !Math2.almostEqual(9, t, fv)) {
+            lastRowWithData = row;
+            break;
+          }
+        }
+      } else if (paType == PAType.FLOAT) {
+        float mv = atts.getFloat("missing_value"); // may be NaN
+        float fv = atts.getFloat("_FillValue");
+        for (int row = tnRows - 1; row > lastRowWithData; row--) {
+          float t = pa.getFloat(row);
+          if (Float.isFinite(t)
+              && // think carefully
+              !Math2.almostEqual(5, t, mv)
+              && // if mv=NaN, !M.ae will be true
+              !Math2.almostEqual(5, t, fv)) {
+            lastRowWithData = row;
+            break;
+          }
+        }
+      } else if (paType == PAType.ULONG) {
+        BigInteger mv = atts.getULong("missing_value"); // may be null
+        BigInteger fv = atts.getULong("_FillValue");
+        for (int row = tnRows - 1; row > lastRowWithData; row--) {
+          BigInteger t = pa.getULong(row);
+          if (t == null || t.equals(mv) || t.equals(fv)) {
+          } else {
+            lastRowWithData = row;
+            break;
+          }
+        }
+      } else {
+        long mv = atts.getLong("missing_value"); // may be Long.MAX_VALUE
+        long fv = atts.getLong("_FillValue");
+        for (int row = tnRows - 1; row > lastRowWithData; row--) {
+          long t = pa.getLong(row);
+          if (t != Long.MAX_VALUE
+              && t != mv
+              && t != fv) { // trouble: for LongArray, this works as if maxIsMV=true
+            lastRowWithData = row;
+            break;
+          }
+        }
+      }
+      // if (debugMode)
+      //    String2.log("  lastRowWithData=" + lastRowWithData + " after col#" + col);
+      if (lastRowWithData == tnRows - 1) return lastRowWithData;
+    }
+    return lastRowWithData;
+  }
+
   @org.junit.jupiter.api.Test
   void testLastRowWithData() throws Exception {
     Table table = new Table();
@@ -251,44 +844,44 @@ public class TableTests {
 
     table.clear();
     table.addColumn(0, "i", ia, iAtts);
-    Test.ensureEqual(table.lastRowWithData(), 0, "");
+    Test.ensureEqual(lastRowWithData(table), 0, "");
 
     table.clear();
     table.addColumn(0, "f", fa, fAtts);
-    Test.ensureEqual(table.lastRowWithData(), 0, "");
+    Test.ensureEqual(lastRowWithData(table), 0, "");
 
     table.clear();
     table.addColumn(0, "d", da, dAtts);
-    Test.ensureEqual(table.lastRowWithData(), 0, "");
+    Test.ensureEqual(lastRowWithData(table), 0, "");
 
     table.clear();
     table.addColumn(0, "s", sa, sAtts);
-    Test.ensureEqual(table.lastRowWithData(), 0, "");
+    Test.ensureEqual(lastRowWithData(table), 0, "");
 
     table.clear();
     table.addColumn(0, "i", ia, iAtts);
     table.addColumn(1, "f", fa, fAtts);
     table.addColumn(2, "d", da, dAtts);
     table.addColumn(3, "s", sa, sAtts);
-    Test.ensureEqual(table.lastRowWithData(), 0, "");
+    Test.ensureEqual(lastRowWithData(table), 0, "");
 
     // ***
     // String2.log("\n*** Table.testRemoveRowsWithoutData");
     table.clear();
     table.addColumn(0, "i", ia, iAtts);
-    Test.ensureEqual(table.removeRowsWithoutData(), 1, "");
+    Test.ensureEqual(removeRowsWithoutData(table), 1, "");
 
     table.clear();
     table.addColumn(0, "f", fa, fAtts);
-    Test.ensureEqual(table.removeRowsWithoutData(), 1, "");
+    Test.ensureEqual(removeRowsWithoutData(table), 1, "");
 
     table.clear();
     table.addColumn(0, "d", da, dAtts);
-    Test.ensureEqual(table.removeRowsWithoutData(), 1, "");
+    Test.ensureEqual(removeRowsWithoutData(table), 1, "");
 
     table.clear();
     table.addColumn(0, "s", sa, sAtts);
-    Test.ensureEqual(table.removeRowsWithoutData(), 1, "");
+    Test.ensureEqual(removeRowsWithoutData(table), 1, "");
 
     table.clear();
     table.addColumn(0, "i", ia, iAtts);
@@ -317,7 +910,7 @@ public class TableTests {
     sa.add("");
     sa.add("");
     sa.add("there");
-    table.removeRowsWithoutData();
+    removeRowsWithoutData(table);
     results = table.dataToString();
     expected =
         "i,f,d,s\n"
@@ -1839,7 +2432,7 @@ public class TableTests {
       // time it
       time = System.currentTimeMillis();
       Table table = new Table();
-      table.readOpendapSequence(url);
+      table.readOpendapSequence(url, false);
       String results = table.dataToString(3);
       String expected = // before 2011-06-14 was -80.17, 28.5
           // "station,longitude,latitude,time,wd,wspd,gst,wvht,dpd,apd,mwd,bar,atmp,wtmp,dewp,vis,ptdy,tide,wspu,wspv\n"
@@ -17544,7 +18137,7 @@ public class TableTests {
     // ...
 
     // test getSqlSchemas
-    StringArray schemas = Table.getSqlSchemas(con);
+    StringArray schemas = getSqlSchemas(con);
     Test.ensureTrue(schemas.indexOf("public") >= 0, "schemas=" + schemas.toString());
 
     // sometimes: make names table
@@ -17555,21 +18148,28 @@ public class TableTests {
           "first_name", PrimitiveArray.factory(new String[] {"Bob", "Nate", "Nancy"}));
       namesTable.addColumn(
           "last_name", PrimitiveArray.factory(new String[] {"Smith", "Smith", "Jones"}));
-      namesTable.saveAsSql(
-          con, true, // 'true' tests dropSqlTable, too
-          "names", 0, null, null, null, 2);
+      saveAsSql(
+          namesTable,
+          con,
+          true, // 'true' tests dropSqlTable, too
+          "names",
+          0,
+          null,
+          null,
+          null,
+          2);
     }
 
     // test getSqlTableNames
-    StringArray tableNames = Table.getSqlTableNames(con, "public", new String[] {"TABLE"});
+    StringArray tableNames = getSqlTableNames(con, "public", new String[] {"TABLE"});
     // String2.log("tableNames=" + tableNames);
     Test.ensureTrue(tableNames.indexOf("names") >= 0, "tableNames=" + tableNames.toString());
     Test.ensureTrue(
         tableNames.indexOf("zztop") < 0, "tableNames=" + tableNames.toString()); // doesn't exist
 
     // test getSqlTableType
-    Test.ensureEqual(Table.getSqlTableType(con, "public", "names"), "TABLE", "");
-    Test.ensureEqual(Table.getSqlTableType(con, "public", "zztop"), null, ""); // doesn't exist
+    Test.ensureEqual(getSqlTableType(con, "public", "names"), "TABLE", "");
+    Test.ensureEqual(getSqlTableType(con, "public", "zztop"), null, ""); // doesn't exist
 
     // *** test saveAsSql (create a table) (this tests dropSqlTable, too)
     if (true) {
@@ -17605,7 +18205,8 @@ public class TableTests {
       tempTable.addColumn("date", PrimitiveArray.factory(dateDoubles));
       tempTable.addColumn("timestamp", PrimitiveArray.factory(timestampDoubles));
       tempTable.addColumn("time", PrimitiveArray.factory(times));
-      tempTable.saveAsSql(
+      saveAsSql(
+          tempTable,
           con,
           true, // 'true' tests dropSqlTable, too
           tempTableName,
@@ -17617,7 +18218,7 @@ public class TableTests {
 
       // test readSql (read a table)
       Table tempTable2 = new Table();
-      tempTable2.readSql(con, "SELECT * FROM " + tempTableName);
+      readSql(tempTable2, con, "SELECT * FROM " + tempTableName);
       Test.ensureEqual(tempTable, tempTable2, "");
 
       // *** test rollback: add data that causes database to throw exception
@@ -17626,7 +18227,8 @@ public class TableTests {
       tempTable2.setIntData(0, 2, 7); // ok
       tempTable2.setIntData(0, 3, 1); // not ok because not unique
       try { // try to add new tempTable2 to database table
-        tempTable2.saveAsSql(
+        saveAsSql(
+            tempTable2,
             con,
             false, // false, so added to previous data
             tempTableName,
@@ -17657,7 +18259,7 @@ public class TableTests {
       }
 
       // and ensure database was rolled back to previous state
-      tempTable2.readSql(con, "SELECT * FROM " + tempTableName);
+      readSql(tempTable2, con, "SELECT * FROM " + tempTableName);
       Test.ensureEqual(tempTable, tempTable2, "");
 
       // *** test pre-execute errors: add data that causes saveAsSql to throw
@@ -17670,7 +18272,8 @@ public class TableTests {
       // invalid date will be caught before statement is fully prepared
       tempTable2.setStringData(timeCol, 3, "20.1/30"); // first 3 rows succeed, this should fail
       try { // try to add new tempTable2 to database table
-        tempTable2.saveAsSql(
+        saveAsSql(
+            tempTable2,
             con,
             false, // false, so added to previous data
             tempTableName,
@@ -17696,7 +18299,7 @@ public class TableTests {
       }
 
       // and ensure it rolls back to previous state
-      tempTable2.readSql(con, "SELECT * FROM " + tempTableName);
+      readSql(tempTable2, con, "SELECT * FROM " + tempTableName);
       Test.ensureEqual(tempTable, tempTable2, "");
 
       // *** test successfully add data (and ensure previous rollbacks worked
@@ -17706,7 +18309,8 @@ public class TableTests {
       tempTable2.setIntData(0, 1, 10); // ok
       tempTable2.setIntData(0, 2, 11); // ok
       tempTable2.setIntData(0, 3, 12); // ok
-      tempTable2.saveAsSql(
+      saveAsSql(
+          tempTable2,
           con,
           false, // false, so added to previous data
           tempTableName,
@@ -17717,7 +18321,7 @@ public class TableTests {
           1.5);
 
       // and ensure result has 8 rows
-      tempTable2.readSql(con, "SELECT uid, string FROM " + tempTableName);
+      readSql(tempTable2, con, "SELECT uid, string FROM " + tempTableName);
       Test.ensureEqual(tempTable2.getColumn(0).toString(), "1, 2, 3, 4, 9, 10, 11, 12", "");
       Test.ensureEqual(
           tempTable2.getColumn(1).toString(), "ab, , [null], longer, ab, , [null], longer", "");
@@ -17727,6 +18331,297 @@ public class TableTests {
 
     // how read just column names and types? query that returns no rows???
 
+  }
+
+  /**
+   * This gets data from the IOBIS website (http://www.iobis.org) by mimicing the Advanced Search
+   * form (http://www.iobis.org/OBISWEB/ObisControllerServlet) which has access to a cached version
+   * of all the data from all of the obis data providers/resources. So it lets you get results from
+   * all data providers/resources with one request. This calls setObisAttributes().
+   *
+   * @param url I think the only valid url is IOBIS_URL.
+   * @param genus case sensitive, use null or "" for no preference
+   * @param species case sensitive, use null or "" for no preference
+   * @param west the west boundary specified in degrees east, -180 to 180; use null or "" for no
+   *     preference; west must be &lt;= east.
+   * @param east the east boundary specified in degrees east, -180 to 180; use null or "" for no
+   *     preference;
+   * @param south the south boundary specified in degrees north; use null or "" for no preference;
+   *     south must be &lt;= north.
+   * @param north the north boundary specified in degrees north; use null or "" for no preference;
+   * @param minDepth in meters; use null or "" for no preference; positive equals down; minDepth
+   *     must be &lt;= maxDepth. Depth has few values, so generally good not to specify minDepth or
+   *     maxDepth.
+   * @param maxDepth in meters; use null or "" for no preference;
+   * @param startDate an ISO date string (optional time, space or T connected), use null or "" for
+   *     no preference; startDate must be &lt;= endDate. The time part of the string is used.
+   * @param endDate
+   * @param loadColumns which will follow LON,LAT,DEPTH,TIME,ID (which are always loaded) (use null
+   *     to load all). <br>
+   *     DEPTH is from Minimumdepth <br>
+   *     TIME is from Yearcollected|Monthcollected|Daycollected|Timeofday. <br>
+   *     ID is Institutioncode:Collectioncode:Catalognumber. <br>
+   *     The available column names are slightly different from obis schema (and without namespace
+   *     prefixes)!
+   *     <p>The loadColumns storing data as Strings are: "Res_name", "Scientificname",
+   *     "Institutioncode", "Catalognumber", "Collectioncode", "Datelastmodified", "Basisofrecord",
+   *     "Genus", "Species", "Class", "Kingdom", "Ordername", "Phylum", "Family", "Citation",
+   *     "Source", "Scientificnameauthor", "Recordurl", "Collector", "Locality", "Country",
+   *     "Fieldnumber", "Notes", "Ocean", "Timezone", "State", "County", "Collectornumber",
+   *     "Identifiedby", "Lifestage", "Depthrange", "Preparationtype", "Subspecies", "Typestatus",
+   *     "Sex", "Subgenus", "Relatedcatalogitem", "Relationshiptype", "Previouscatalognumber",
+   *     "Samplesize".
+   *     <p>The loadColumns storing data as doubles are "Latitude", "Longitude", "Minimumdepth",
+   *     "Maximumdepth", "Slatitude", "Starttimecollected", "Endtimecollected", "Timeofday",
+   *     "Slongitude", "Coordinateprecision", "Seprecision", "Observedweight", "Elatitude",
+   *     "Elongitude", "Temperature", "Starttimeofday", "Endtimeofday".
+   *     <p>The loadColumns storing data as ints are "Yearcollected", "Monthcollected",
+   *     "Daycollected", "Startyearcollected", "Startmonthcollected", "Startdaycollected",
+   *     "Julianday", "Startjulianday", "Endyearcollected", "Endmonthcollected", "Enddaycollected",
+   *     "Yearidentified", "Monthidentified", "Dayidentified", "Endjulianday", "Individualcount",
+   *     "Observedindividualcount".
+   * @throws Exception if trouble
+   */
+  public void readIobis(
+      Table table,
+      String url,
+      String genus,
+      String species,
+      String west,
+      String east,
+      String south,
+      String north,
+      String minDepth,
+      String maxDepth,
+      String startDate,
+      String endDate,
+      String loadColumns[])
+      throws Exception {
+
+    String errorInMethod = String2.ERROR + " in Table.readIobis: ";
+    table.clear();
+    if (genus == null) genus = "";
+    if (species == null) species = "";
+    if (startDate == null) startDate = "";
+    if (endDate == null) endDate = "";
+    if (minDepth == null) minDepth = "";
+    if (maxDepth == null) maxDepth = "";
+    if (south == null) south = "";
+    if (north == null) north = "";
+    if (west == null) west = "";
+    if (east == null) east = "";
+    // The website javascript tests that the constraints are supplied in pairs
+    // (and NESW must be all or none).
+    // I verified: if e.g., leave off north value, south is ignored.
+    // So fill in missing values where needed.
+    if (west.length() == 0) west = "-180";
+    if (east.length() == 0) east = "180";
+    if (south.length() == 0) south = "-90";
+    if (north.length() == 0) north = "90";
+    if (minDepth.length() > 0 && maxDepth.length() == 0) maxDepth = "10000";
+    if (minDepth.length() == 0 && maxDepth.length() > 0) minDepth = "0";
+    if (startDate.length() > 0 && endDate.length() == 0) endDate = "2100-01-01";
+    if (startDate.length() == 0 && endDate.length() > 0) startDate = "1500-01-01";
+    // I HAVE NEVER GOTTEN STARTDATE ENDDATE REQUESTS TO WORK,
+    // SO I DO THE TEST MANUALLY (BELOW) AFTER GETTING THE DATA.
+    // convert iso date time format to their format e.g., 1983/12/31
+    // if (startDate.length() > 10) startDate = startDate.substring(0, 10);
+    // if (endDate.length()   > 10) endDate   = endDate.substring(0, 10);
+    // startDate = String2.replaceAll(startDate, "-", "/");
+    // endDate   = String2.replaceAll(endDate,   "-", "/");
+
+    // submit the request
+    String userQuery = // the part specified by the user
+        "&genus="
+            + genus
+            + "&species="
+            + species
+            + "&date1="
+            + // startDate +
+            "&date2="
+            + // endDate +
+            "&depth1="
+            + minDepth
+            + "&depth2="
+            + maxDepth
+            + "&south="
+            + south
+            + "&ss=N"
+            + "&north="
+            + north
+            + "&nn=N"
+            + "&west="
+            + west
+            + "&ww=E"
+            + "&east="
+            + east
+            + "&ee=E";
+    String glue = "?site=null&sbox=null&searchCategory=/AdvancedSearchServlet";
+    String response = SSR.getUrlResponseStringUnchanged(url + glue + userQuery);
+    // String2.log(response);
+
+    // in the returned web page, search for .txt link, read into tTable
+    int po2 =
+        response.indexOf(".txt'); return false;\">.TXT</a>"); // changed just before 2007-09-10
+    int po1 = po2 == -1 ? -1 : response.lastIndexOf("http://", po2);
+    if (po1 < 0) {
+      String2.log(
+          errorInMethod
+              + ".txt link not found in OBIS response; "
+              + "probably because no data was found.\nresponse="
+              + response);
+      return;
+    }
+    String url2 = response.substring(po1, po2 + 4);
+
+    // get the .txt file
+    String dataLines = SSR.getUrlResponseStringUnchanged(url2);
+    dataLines = String2.replaceAll(dataLines, '|', '\t');
+
+    // read the data into a temporary table
+    Table tTable = new Table();
+    tTable.readASCII(
+        url2,
+        new BufferedReader(new StringReader(dataLines)),
+        "",
+        "",
+        0,
+        1,
+        "", // skipHeaderToRegex, skipLinesRegex, columnNamesLine, dataStartLine, colSeparator
+        null,
+        null,
+        null, // constraints
+        null,
+        false); // just load all the columns, and don't simplify
+    dataLines = null;
+
+    // immediatly remove 'index'
+    if (tTable.getColumnName(0).equals("index")) tTable.removeColumn(0);
+
+    // convert double columns to doubles, int columns to ints
+    int nRows = tTable.nRows();
+    int nCols = tTable.nColumns();
+    // I wasn't super careful with assigning to Double or Int
+    String doubleColumns[] = {
+      "Latitude",
+      "Longitude",
+      "Minimumdepth",
+      "Maximumdepth",
+      "Slatitude",
+      "Starttimecollected",
+      "Endtimecollected",
+      "Timeofday",
+      "Slongitude",
+      "Coordinateprecision",
+      "Seprecision",
+      "Observedweight",
+      "Elatitude",
+      "Elongitude",
+      "Temperature",
+      "Starttimeofday",
+      "Endtimeofday"
+    };
+    String intColumns[] = {
+      "Yearcollected",
+      "Monthcollected",
+      "Daycollected",
+      "Startyearcollected",
+      "Startmonthcollected",
+      "Startdaycollected",
+      "Julianday",
+      "Startjulianday",
+      "Endyearcollected",
+      "Endmonthcollected",
+      "Enddaycollected",
+      "Yearidentified",
+      "Monthidentified",
+      "Dayidentified",
+      "Endjulianday",
+      "Individualcount",
+      "Observedindividualcount"
+    };
+    for (int col = 0; col < nCols; col++) {
+      String s = tTable.getColumnName(col);
+      if (String2.indexOf(doubleColumns, s) >= 0)
+        tTable.setColumn(col, new DoubleArray(tTable.getColumn(col)));
+      if (String2.indexOf(intColumns, s) >= 0)
+        tTable.setColumn(col, new IntArray(tTable.getColumn(col)));
+    }
+
+    // create and add x,y,z,t,id columns    (numeric cols forced to be doubles)
+    table.addColumn(
+        DataHelper.TABLE_VARIABLE_NAMES.get(0), new DoubleArray(tTable.findColumn("Longitude")));
+    table.addColumn(
+        DataHelper.TABLE_VARIABLE_NAMES.get(1), new DoubleArray(tTable.findColumn("Latitude")));
+    table.addColumn(
+        DataHelper.TABLE_VARIABLE_NAMES.get(2), new DoubleArray(tTable.findColumn("Minimumdepth")));
+    DoubleArray tPA = new DoubleArray(nRows, false);
+    table.addColumn(DataHelper.TABLE_VARIABLE_NAMES.get(3), tPA);
+    StringArray idPA = new StringArray(nRows, false);
+    table.addColumn(DataHelper.TABLE_VARIABLE_NAMES.get(4), idPA);
+    PrimitiveArray yearPA = tTable.findColumn("Yearcollected");
+    PrimitiveArray monthPA = tTable.findColumn("Monthcollected");
+    PrimitiveArray dayPA = tTable.findColumn("Daycollected");
+    PrimitiveArray timeOfDayPA = tTable.findColumn("Timeofday");
+    //        PrimitiveArray timeZonePA = findColumn("Timezone"); //deal with ???
+    // obis schema says to construct id as
+    // "URN:catalog:[InstitutionCode]:[CollectionCode]:[CatalogNumber]"  but their example is more
+    // terse than values I see
+    PrimitiveArray insPA = tTable.findColumn("Institutioncode");
+    PrimitiveArray colPA = tTable.findColumn("Collectioncode");
+    PrimitiveArray catPA = tTable.findColumn("Catalognumber");
+    for (int row = 0; row < nRows; row++) {
+      // make the t value
+      double seconds = Double.NaN;
+      StringBuilder sb = new StringBuilder(yearPA.getString(row));
+      if (sb.length() > 0) {
+        String tMonth = monthPA.getString(row);
+        if (tMonth.length() > 0) {
+          sb.append("-" + tMonth); // month is 01 - 12
+          String tDay = dayPA.getString(row);
+          if (tDay.length() > 0) {
+            sb.append("-" + tDay);
+          }
+        }
+        try {
+          seconds = Calendar2.isoStringToEpochSeconds(sb.toString());
+          String tTime = timeOfDayPA.getString(row); // decimal hours since midnight
+          int tSeconds = Math2.roundToInt(String2.parseDouble(tTime) * Calendar2.SECONDS_PER_HOUR);
+          if (tSeconds < Integer.MAX_VALUE) seconds += tSeconds;
+        } catch (Exception e) {
+          if (Table.verbose) String2.log("Table.readObis unable to parse date=" + sb);
+        }
+      }
+      tPA.add(seconds);
+
+      // make the id value
+      idPA.add(insPA.getString(row) + ":" + colPA.getString(row) + ":" + catPA.getString(row));
+    }
+
+    // if loadColumns == null, make loadColumns with all the original column names ('index' already
+    // removed)
+    if (loadColumns == null) loadColumns = tTable.getColumnNames();
+
+    // add the loadColumns
+    for (String loadColumn : loadColumns)
+      table.addColumn(loadColumn, tTable.findColumn(loadColumn));
+
+    // no more need for tTable
+    tTable = null;
+
+    // do startDate endDate test (if one is specified, both are)
+    if (startDate.length() > 0)
+      table.subset(
+          new int[] {3},
+          new double[] {Calendar2.isoStringToEpochSeconds(startDate)},
+          new double[] {Calendar2.isoStringToEpochSeconds(endDate)});
+
+    // remove time=NaN rows? no, it gets rid of otherwise intesting data rows
+
+    // setAttributes  (this sets the coordinate variables' axis, long_name, standard_name, and
+    // units)
+    // add column attributes from DigirDarwin.properties and DigirObis.properties?
+    table.setObisAttributes(0, 1, 2, 3, url, new String[] {"AdvancedQuery"}, userQuery);
   }
 
   /** This tests readIObis. */
@@ -17739,7 +18634,8 @@ public class TableTests {
     String testName = "c:/programs/digir/Macrocyctis.nc";
     Table table = new Table();
     if (true) {
-      table.readIobis(
+      readIobis(
+          table,
           Table.IOBIS_URL,
           "Macrocystis",
           "", // String genus, String species,
@@ -18804,7 +19700,7 @@ public class TableTests {
             .getResource("/notIncludedFiles/calcofi2012/calcofi8102012.accdb")
             .getPath();
     // "c:/fishbase/COUNTRY.mdb";
-    Connection con = Table.getConnectionToMdb(fileName, "", ""); // user, password
+    Connection con = getConnectionToMdb(fileName, "", ""); // user, password
     // String2.log(getSqlSchemas(con).toString());
     // String schema = "";
     // String2.log(getSqlTableNames(con, schema, null).toString()); //null for all
@@ -18813,7 +19709,7 @@ public class TableTests {
     // query = "SELECT * FROM names WHERE id = 3"
     String query = "SELECT * FROM " + tableName;
     Table table = new Table();
-    table.readSql(con, query);
+    readSql(table, con, query);
     String2.log(table.dataToString(5));
   }
 

@@ -4,13 +4,20 @@
  */
 package com.cohort.util;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.cohort.array.StringArray;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
 import java.io.File;
 import java.io.Writer;
 import java.nio.file.Path;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -274,6 +281,7 @@ class TestUtil {
     String2.log("maxSafeMemory = " + Math2.maxSafeMemory);
     String2.log("getUsingMemory = " + Math2.getMemoryInUse());
     String2.log("memoryString = " + Math2.memoryString());
+    String2.log("array: " + Arrays.toString(da));
 
     // incgc
     String2.log("test incgc(3000)");
@@ -1169,7 +1177,8 @@ class TestUtil {
     String2.log(
         "TestUtil.timeCurrentTimeMillis  per call = "
             + ((System.currentTimeMillis() - time) / 1000000.0)
-            + " ms (typical=7.8e-5ms)");
+            + " ms (typical=7.8e-5ms) Sum value:"
+            + sum);
   }
 
   @org.junit.jupiter.api.Test
@@ -1261,13 +1270,21 @@ class TestUtil {
     time = System.currentTimeMillis();
     long t1 = 0;
     for (int i = 0; i < 1000000; i++) t1 += String2.parseInt("1023456789");
-    String2.log("time1 for 1000000 parseInt good=" + (System.currentTimeMillis() - time)); // 119
+    String2.log(
+        "time1 for 1000000 parseInt good="
+            + (System.currentTimeMillis() - time)
+            + " t1 value: "
+            + t1); // 119
 
     // speed of parseInt fail
     time = System.currentTimeMillis();
     long t2 = 0;
     for (int i = 0; i < 1000000; i++) t2 += String2.parseInt("102345678901");
-    String2.log("time2 for 1000000 parseInt  bad=" + (System.currentTimeMillis() - time)); // 1822
+    String2.log(
+        "time2 for 1000000 parseInt  bad="
+            + (System.currentTimeMillis() - time)
+            + " t2 value: "
+            + t2); // 1822
     // String2.pressEnterToContinue();
 
     // digestFile
@@ -1498,16 +1515,18 @@ class TestUtil {
     Test.ensureEqual(String2.findWholeWord(" a", "a"), 1, "");
 
     // removeValues(Map map, Set set)
-    Map<String, String> map = new HashMap<>();
-    map.put("0", "00");
-    map.put("1", "11");
-    map.put("2", "22");
+    Map<Integer, String> map = new HashMap<>();
+    map.put(0, "00");
+    map.put(1, "11");
+    map.put(2, "22");
     Set<String> set = new HashSet<String>();
     set.add("11");
     set.add("zz");
+    assertEquals(3, map.size());
     String2.removeValues(map, set);
-    Test.ensureEqual(
-        String2.toString(map), "0 = 00\n2 = 22\n", "results=\n" + String2.toString(map));
+    assertEquals(2, map.size());
+    assertEquals("00", map.get(0));
+    assertEquals("22", map.get(2));
     Test.ensureEqual(String2.toCSSVString(set), "zz", "");
 
     // noLongLinesAtSpace
@@ -1869,17 +1888,6 @@ class TestUtil {
     Test.ensureEqual(String2.indexOfIgnoreCase(s, "JKL", 0), -1, "");
     Test.ensureEqual(String2.indexOfIgnoreCase(s, "jk", 0), 9, "");
 
-    // indexOf(StringBuilder)
-    String2.log("test indexOf(StringBuilder)");
-    StringBuilder abcd = new StringBuilder("abcd");
-    Test.ensureEqual(String2.indexOf(abcd, "a", 0), 0, "a");
-    Test.ensureEqual(String2.indexOf(abcd, "a", 1), -1, "b");
-    Test.ensureEqual(String2.indexOf(abcd, "a", -1), 0, "c");
-    Test.ensureEqual(String2.indexOf(abcd, "cd", 0), 2, "d");
-    Test.ensureEqual(String2.indexOf(abcd, "ce", 0), -1, "e");
-    Test.ensureEqual(String2.indexOf(abcd, "d", 0), 3, "f");
-    Test.ensureEqual(String2.indexOf(abcd, "de", 0), -1, "g");
-
     // indexOf(int[])
     String2.log("test indexOf(int[])");
     iar = new int[] {6, 5, 4};
@@ -2231,15 +2239,6 @@ class TestUtil {
     sb = new StringBuilder("AbBbBaBBaB");
     Test.ensureEqual(String2.repeatedlyReplaceAll(sb, "c", "c", true).toString(), "AbBbBaBBaB", "");
 
-    // regexReplaceAll
-    sb =
-        new StringBuilder(
-            "test1 &term1; <kbd>&amp;justLettersNumbers3;</kbd> and <kbd>&amp;good;</kbd> but not &amp;bad; or <kbd>&amp;other_char;</kbd> or <kbd>&amp;noCloseSemi</kbd>!");
-    Test.ensureEqual(
-        String2.regexReplaceAll(sb, "<kbd>(&amp;)[a-zA-Z0-9]+;</kbd>", 1, "&").toString(),
-        "test1 &term1; <kbd>&justLettersNumbers3;</kbd> and <kbd>&good;</kbd> but not &amp;bad; or <kbd>&amp;other_char;</kbd> or <kbd>&amp;noCloseSemi</kbd>!",
-        "");
-
     // canonical
     s = "twopart";
     String s2 = "two";
@@ -2380,14 +2379,6 @@ class TestUtil {
     Test.ensureEqual(sar[0], "1", "b");
     Test.ensureEqual(sar[1], null, "c");
     Test.ensureEqual(sar[2], "333", "d");
-
-    // toString(map)
-    String2.log("test toString(map)");
-    map = new HashMap<>();
-    map.put("key a", "value a");
-    map.put("Bob", "Simons");
-    // order of elements is not specified and may change
-    Test.ensureEqual(String2.toString(map), "key a = value a\nBob = Simons\n", "a");
 
     // toByteArray(s)
     String2.log("test toByteArray(s)");
@@ -2809,18 +2800,6 @@ class TestUtil {
     File2.delete(utilDir + random + ".asc");
     File2.delete(utilDir + random + "b.asc");
 
-    // getKeysAndValuesString
-    String2.log("test getKeysAndValuesString");
-    HashMap<String, String> hm = new HashMap<>();
-    hm.put("key3", "value3");
-    hm.put("key2", "value2");
-    hm.put("key1", "value1");
-    hm.put("key4", "value4");
-    Test.ensureEqual(
-        String2.getKeysAndValuesString(hm),
-        "key1: value1\n" + "key2: value2\n" + "key3: value3\n" + "key4: value4\n",
-        "a");
-
     // genEFormat6
     String2.log("test genEFormat6");
     Test.ensureEqual(String2.genEFormat6(Double.NaN), "NaN", ""); // not finite
@@ -2956,26 +2935,6 @@ class TestUtil {
     Test.ensureEqual(String2.trimEnd("AB"), "AB", "");
     Test.ensureEqual(String2.trimEnd(""), "", "");
     Test.ensureEqual(String2.trimEnd(null), null, "");
-
-    // alternate
-    String2.log("test alternate");
-    Test.ensureEqual(String2.alternateToString(null), "    [null]\n", "test a");
-    Test.ensureEqual(
-        String2.alternateGetValue(null, "a"), null, "test b"); // 'get' when arraylist is null
-    ArrayList<Object> alternate = new ArrayList<>();
-    String2.alternateSetValue(alternate, "a", "able"); // "add 'a'");
-    Test.ensureEqual(String2.alternateSetValue(alternate, "b", "bob"), null, "set 'b' bob");
-    Test.ensureEqual(
-        String2.alternateSetValue(alternate, "b", "baker"), "bob", "replace 'bob' with 'baker'");
-    Test.ensureEqual(String2.alternateToString(alternate), "    a=able\n    b=baker\n", "test e");
-    Test.ensureEqual(String2.alternateGetValue(alternate, "a"), "able", "test f");
-    Test.ensureEqual(String2.alternateGetValue(alternate, "b"), "baker", "test g");
-    Test.ensureEqual(
-        String2.alternateGetValue(alternate, "c"), null, "look for something not there");
-    Test.ensureEqual(String2.alternateSetValue(alternate, "a", null), "able", "remove 'a'");
-    Test.ensureEqual(alternate.size(), 2, "size is smaller now");
-    Test.ensureEqual(String2.alternateGetValue(alternate, "a"), null, "'a' is gone");
-    Test.ensureEqual(String2.alternateGetValue(alternate, "b"), "baker", "'b' still there");
 
     // TODO: add test for getClassPath
     // getClassPath (with / separator and / at the end)
@@ -3188,9 +3147,26 @@ class TestUtil {
       disabledReason = "headless environment")
   void testString2Clipboard() throws Throwable {
     // clipboard
-    String2.log("Clipboard was: " + String2.getClipboardString());
+    String2.log("Clipboard was: " + getClipboardString());
     String2.setClipboardString("Test String2.setClipboardString.");
-    Test.ensureEqual(String2.getClipboardString(), "Test String2.setClipboardString.", "");
+    Test.ensureEqual(getClipboardString(), "Test String2.setClipboardString.", "");
+  }
+
+  /**
+   * Get gets the String from the system clipboard (or null if none). This works in a standalone
+   * Java program, not an applet. From Java Developers Almanac. This won't throw an exception.
+   */
+  public static String getClipboardString() {
+    try {
+      Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+      Transferable t = clipboard.getContents(null);
+      if (t != null && t.isDataFlavorSupported(DataFlavor.stringFlavor))
+        return (String) t.getTransferData(DataFlavor.stringFlavor);
+    } catch (Throwable th) {
+      String2.log(
+          "ERROR while getting the string from the clipboard:\n" + MustBe.throwableToString(th));
+    }
+    return null;
   }
 
   private static double nextEpochSecond() {
@@ -3679,7 +3655,6 @@ class TestUtil {
     Test.ensureTrue(!Calendar2.isIsoDate("-0001"), "");
 
     // test year 0000 manipulations
-    int ymdhmsmom[];
     gc = new GregorianCalendar(Calendar2.zuluTimeZone);
     gc.set(1970, 0, 1, 0, 0, 0);
     gc.set(Calendar2.YEAR, 0);
@@ -6396,7 +6371,7 @@ class TestUtil {
     for (int i = 0; i < willFail.length; i++) {
       try {
         double dar[] = Calendar2.parseNumberTimeUnits(willFail[i]);
-        throw new RuntimeException(willFail[i] + " should have failed.");
+        throw new RuntimeException(willFail[i] + " should have failed. value: " + dar[i]);
       } catch (Exception e) {
         String es = MustBe.throwableToString(e);
         if (es.indexOf("ERROR in parseNumberTimeUnits: ") < 0
@@ -8450,7 +8425,8 @@ class TestUtil {
             + reps
             + " time="
             + (System.currentTimeMillis() - time)
-            + "ms  (504ms on Lenovo, was ~115ms on Java 1.7M4700)");
+            + "ms  (504ms on Lenovo, was ~115ms on Java 1.7M4700) result1: "
+            + result1);
 
     time = System.currentTimeMillis();
     int result2 = 0;
@@ -8460,7 +8436,8 @@ class TestUtil {
             + reps
             + " time="
             + (System.currentTimeMillis() - time)
-            + "ms  (656ms on Lenovo, ~470ms on Java 1.7M4700)");
+            + "ms  (656ms on Lenovo, ~470ms on Java 1.7M4700) result2: "
+            + result2);
     // so if 1000 datasets (or 500 and 2word search), time~=9ms
     // and I think most dataset searchStrings are shorter
   }

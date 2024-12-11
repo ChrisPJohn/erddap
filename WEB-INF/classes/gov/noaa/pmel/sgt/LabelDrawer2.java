@@ -14,7 +14,6 @@ package gov.noaa.pmel.sgt;
 
 import gov.noaa.pmel.swing.MRJUtil;
 import gov.noaa.pmel.util.Point2D;
-import gov.noaa.pmel.util.Rectangle2D;
 import java.awt.*;
 import java.awt.font.FontRenderContext;
 import java.awt.font.TextAttribute;
@@ -40,7 +39,6 @@ public class LabelDrawer2 implements LabelDrawer, Cloneable {
   private final Point dorigin_;
   private Rectangle dbounds_;
   private Point2D.Double porigin_;
-  private final Rectangle2D.Double pbounds_;
   private double angle_;
   private double sinthta_;
   private double costhta_;
@@ -63,7 +61,6 @@ public class LabelDrawer2 implements LabelDrawer, Cloneable {
     //
     dbounds_ = new Rectangle();
     dorigin_ = new Point(0, 0);
-    pbounds_ = new Rectangle2D.Double();
   }
 
   public LabelDrawer copy() {
@@ -321,12 +318,6 @@ public class LabelDrawer2 implements LabelDrawer, Cloneable {
   }
 
   @Override
-  public Rectangle2D.Double getBoundsP() {
-    computeBoundsD(layer_.getPane().getComponent().getGraphics());
-    return pbounds_;
-  }
-
-  @Override
   public void setAngle(double angle) {
     angle_ = angle;
     double thta = angle_ * Math.PI / 180.0;
@@ -462,13 +453,6 @@ public class LabelDrawer2 implements LabelDrawer, Cloneable {
 
     Polygon dpolygon_ = new Polygon(xn, yn, 4);
     dbounds_ = dpolygon_.getBounds();
-    //
-    // compute pbounds
-    //
-    pbounds_.x = layer_.getXDtoP(dbounds_.x);
-    pbounds_.y = layer_.getYDtoP(dbounds_.y);
-    pbounds_.width = layer_.getXDtoP(dbounds_.x + dbounds_.width) - pbounds_.x;
-    pbounds_.height = pbounds_.y - layer_.getYDtoP(dbounds_.y + dbounds_.height);
   }
 
   //

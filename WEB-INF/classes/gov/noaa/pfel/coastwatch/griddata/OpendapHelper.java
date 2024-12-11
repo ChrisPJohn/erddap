@@ -666,37 +666,6 @@ public class OpendapHelper {
     return pa;
   }
 
-  /**
-   * This converts a PrimitiveArray to a PrimitiveVector.
-   *
-   * @param name
-   * @param pa
-   * @return the corresponding PrimitiveVector
-   * @throws Exception if trouble
-   */
-  public static PrimitiveVector getPrimitiveVector(String name, PrimitiveArray pa)
-      throws Exception {
-    PrimitiveVector pv;
-    if (pa instanceof DoubleArray || pa instanceof LongArray || pa instanceof ULongArray)
-      pv = new Float64PrimitiveVector(new DFloat64(name));
-    else if (pa instanceof FloatArray) pv = new Float32PrimitiveVector(new DFloat32(name));
-    else if (pa instanceof IntArray) pv = new Int32PrimitiveVector(new DInt32(name));
-    else if (pa instanceof UIntArray) pv = new UInt32PrimitiveVector(new DUInt32(name));
-    else if (pa instanceof ShortArray) pv = new Int16PrimitiveVector(new DInt16(name));
-    else if (pa instanceof UShortArray) pv = new UInt16PrimitiveVector(new DUInt16(name));
-    else if (pa instanceof ByteArray || pa instanceof UByteArray)
-      pv = new BytePrimitiveVector(new DByte(name));
-    else
-      throw new Exception(
-          String2.ERROR
-              + "in OpendapHelper.getPrimitiveVector: The PrimitiveArray type="
-              + pa.elementTypeString()
-              + " is not supported.");
-
-    pv.setInternalStorage(pa.toObjectArray());
-    return pv;
-  }
-
   /* This variant fo getAtomicType assumes strictDapMode=true. */
   public static String getAtomicType(PAType paType) throws RuntimeException {
     return getAtomicType(true, paType);
@@ -1263,7 +1232,7 @@ public class OpendapHelper {
       ArrayList<Dimension> dims = new ArrayList<>(); // ucar.nc2.Dimension
       int varShape[][] = new int[nVars][];
       boolean isString[] = new boolean[nVars]; // all false
-      Variable.Builder newVars[] = new Variable.Builder[nVars];
+      Variable.Builder<?> newVars[] = new Variable.Builder[nVars];
       for (int v = 0; v < nVars; v++) {
 
         BaseType baseType = dds.getVariable(varNames[v]);
@@ -1563,7 +1532,6 @@ public class OpendapHelper {
         } catch (Throwable t) {
           varNames[v] = null;
           if (verbose) String2.log("  removing variable: " + t);
-          continue;
         }
       }
 

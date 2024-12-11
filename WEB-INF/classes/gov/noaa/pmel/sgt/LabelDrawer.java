@@ -13,7 +13,6 @@
 package gov.noaa.pmel.sgt;
 
 import gov.noaa.pmel.util.Point2D;
-import gov.noaa.pmel.util.Rectangle2D;
 import java.awt.*;
 import java.io.Serializable;
 
@@ -169,13 +168,6 @@ public interface LabelDrawer extends Serializable {
    * @return the labels position.
    */
   public Point2D.Double getLocationP();
-
-  /**
-   * Get the label reference location in physcial coordinates.
-   *
-   * @return the labels position.
-   */
-  public Rectangle2D.Double getBoundsP();
 
   /**
    * Draw label at arbitrary rotation. Warning: Rotated labels are not drawn very well when using

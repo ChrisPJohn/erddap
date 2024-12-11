@@ -44,7 +44,6 @@ class RegexFilenameFilterTests {
     shouldBe =
         new String[] {
           coastwatchDir + "griddata/",
-          coastwatchDir + "griddata/SaveOpendap.class",
           coastwatchDir + "netcheck/",
           coastwatchDir + "pointdata/",
           coastwatchDir + "pointdata/ScriptRow.class",
@@ -66,7 +65,6 @@ class RegexFilenameFilterTests {
     sar = RegexFilenameFilter.recursiveFullNameList(coastwatchDir, "S.+\\.class", false);
     shouldBe =
         new String[] {
-          coastwatchDir + "griddata/SaveOpendap.class",
           coastwatchDir + "pointdata/ScriptRow.class",
           coastwatchDir + "sgt/SGTPointsVector.class",
           coastwatchDir + "sgt/SgtGraph.class",

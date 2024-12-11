@@ -11784,8 +11784,8 @@ public abstract class EDD {
   }
 
   /** This returns a new, empty, badFileMap (a thead-safe map). */
-  public ConcurrentHashMap newEmptyBadFileMap() {
-    return new ConcurrentHashMap(16, 0.75f, 4);
+  public ConcurrentHashMap<String, Object[]> newEmptyBadFileMap() {
+    return new ConcurrentHashMap<>(16, 0.75f, 4);
   }
 
   /** The name of the badFileMap file. */
@@ -11810,8 +11810,8 @@ public abstract class EDD {
    *
    * @return a thread-safe ConcurrentHashMap
    */
-  public ConcurrentHashMap readBadFileMap() {
-    ConcurrentHashMap badFilesMap = newEmptyBadFileMap();
+  public ConcurrentHashMap<String, Object[]> readBadFileMap() {
+    ConcurrentHashMap<String, Object[]> badFilesMap = newEmptyBadFileMap();
     String fileName = badFileMapFileName();
     String msg = "badFileMap has old/unsupported ";
     try {
@@ -11865,22 +11865,20 @@ public abstract class EDD {
    * @param badFilesMap
    * @throws Throwable if trouble
    */
-  public void writeBadFileMap(String randomFileName, ConcurrentHashMap badFilesMap)
-      throws Throwable {
+  public void writeBadFileMap(
+      String randomFileName, ConcurrentHashMap<String, Object[]> badFilesMap) throws Throwable {
 
     try {
       // gather the fileNames and reasons
       StringArray fileNames = new StringArray();
       LongArray lastMods = new LongArray();
       StringArray reasons = new StringArray();
-      Object keys[] = badFilesMap.keySet().toArray();
-      for (Object key : keys) {
-        Object o = badFilesMap.get(key);
+      for (Map.Entry<String, Object[]> entry : badFilesMap.entrySet()) {
+        Object[] o = entry.getValue();
         if (o != null) {
-          fileNames.add(key.toString());
-          Object oar[] = (Object[]) o;
-          lastMods.add((Long) oar[0]);
-          reasons.add(oar[1].toString());
+          fileNames.add(entry.getKey());
+          lastMods.add((Long) o[0]);
+          reasons.add(o[1].toString());
         }
       }
 
@@ -11912,7 +11910,11 @@ public abstract class EDD {
    * @param reason
    */
   public void addBadFile(
-      ConcurrentHashMap badFileMap, int dirIndex, String fileName, long lastMod, String reason) {
+      ConcurrentHashMap<String, Object[]> badFileMap,
+      int dirIndex,
+      String fileName,
+      long lastMod,
+      String reason) {
     String2.log(datasetID + " addBadFile: " + fileName + "\n  reason=" + reason);
     badFileMap.put(dirIndex + "/" + fileName, new Object[] {lastMod, reason});
   }
@@ -11931,7 +11933,7 @@ public abstract class EDD {
   public String addBadFileToTableOnDisk(
       int dirIndex, String fileName, long lastMod, String reason) {
 
-    ConcurrentHashMap badFileMap = readBadFileMap();
+    ConcurrentHashMap<String, Object[]> badFileMap = readBadFileMap();
     addBadFile(badFileMap, dirIndex, fileName, lastMod, reason);
     String badFileMapFileName = badFileMapFileName();
     int random = Math2.random(Integer.MAX_VALUE);
@@ -11955,7 +11957,8 @@ public abstract class EDD {
    * @return a string representation of the information in a badFileMap. If there are no badFiles,
    *     this returns "".
    */
-  public String badFileMapToString(ConcurrentHashMap badFileMap, StringArray dirList) {
+  public String badFileMapToString(
+      ConcurrentHashMap<String, Object[]> badFileMap, StringArray dirList) {
 
     Object keys[] = badFileMap.keySet().toArray();
     if (keys.length == 0) return "";
@@ -12045,7 +12048,10 @@ public abstract class EDD {
    * @throws Throwable if trouble
    */
   public void saveDirTableFileTableBadFiles(
-      int tStandardizeWhat, Table dirTable, Table fileTable, ConcurrentHashMap badFileMap)
+      int tStandardizeWhat,
+      Table dirTable,
+      Table fileTable,
+      ConcurrentHashMap<String, Object[]> badFileMap)
       throws Throwable {
 
     String dirTableFileName = datasetDir() + DIR_TABLE_FILENAME;
@@ -12712,7 +12718,6 @@ public abstract class EDD {
         String2.log(success + msg);
         nTableFileNames++;
         nCreated++;
-        continue;
       } catch (Throwable t) {
         String2.log(
             "> Attempt with EDDTableFromFileNames failed! Give up on this dir.\n"
@@ -12766,9 +12771,6 @@ public abstract class EDD {
     String2.log("\n*** DasDds " + tDatasetID);
     String tName;
     StringBuilder results = new StringBuilder();
-    // Math2.gcAndWait("EDD (between tests)"); Math2.gcAndWait("EDD (between tests)"); //used in
-    // development, before getMemoryInUse
-    long memory = Math2.getMemoryInUse();
 
     if (clearCache) EDD.deleteCachedDatasetInfo(tDatasetID);
 
@@ -12812,18 +12814,6 @@ public abstract class EDD {
                 + " *************************\n");
         results.append(eddGrid.findTimeGaps());
       }
-    }
-
-    // memory
-    if (false) { // enabled when testing
-      Math2.gcAndWait("EDD (between tests)");
-      Math2.gcAndWait("EDD (between tests)"); // Used in development.  Before getMemoryInUse().
-      memory = Math2.getMemoryInUse() - memory;
-      String2.log(
-          "\n*** DasDds: memoryUse="
-              + (memory / 1024)
-              + " KB\nPress CtrlBreak in console window to generate hprof heap info.");
-      String2.pressEnterToContinue();
     }
 
     return results.toString();

@@ -224,7 +224,6 @@ public class TableWriterOrderBySum extends TableWriterAll {
     cannotSumCol = new BitSet(ncols);
     // degreesCol     = new BitSet(ncols);
     // degreesTrueCol = new BitSet(ncols);
-    BitSet wasDecimalCol = new BitSet(ncols);
     for (int k = 0; k < nKeyCols; k++) {
       int col = table.findColumnNumber(orderBy[k]);
       if (col < 0)
@@ -271,9 +270,6 @@ public class TableWriterOrderBySum extends TableWriterAll {
       if (isKeyCol.get(col)) {
         dataType[col] = column.elementTypeString();
       } else {
-        if (column.isFloatingPointType()) {
-          wasDecimalCol.set(col);
-        }
         int timeCol = -1;
         if (column.isIntegerType() || column.isFloatingPointType()) {
           dataType[col] = "double";
