@@ -1,0 +1,22 @@
+{
+  "version.label": {
+    "message": "Next",
+    "description": "The label for version current"
+  },
+  "sidebar.docSidebar.category.Server Administration": {
+    "message": "Server Administration",
+    "description": "The label for category Server Administration in sidebar docSidebar"
+  },
+  "sidebar.docSidebar.category.Server Administration.link.generated-index.description": {
+    "message": "Helpful information for server administrators",
+    "description": "The generated-index page description for category Server Administration in sidebar docSidebar"
+  },
+  "sidebar.docSidebar.category.Contributing": {
+    "message": "Contributing",
+    "description": "The label for category Contributing in sidebar docSidebar"
+  },
+  "sidebar.docSidebar.category.Contributing.link.generated-index.description": {
+    "message": "Information for those contributing to ERDDAP",
+    "description": "The generated-index page description for category Contributing in sidebar docSidebar"
+  }
+}
