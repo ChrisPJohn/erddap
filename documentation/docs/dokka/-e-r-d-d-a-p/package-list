@@ -219,6 +219,16 @@ $dokka.location:com.cohort.util/ScriptMath2/trunc/#double/PointingToDeclaration/
 $dokka.location:com.cohort.util/ScriptMath2/truncToInt/#double/PointingToDeclaration/-e-r-d-d-a-p/com.cohort.util/-script-math2/trunc-to-int.md
 $dokka.location:com.cohort.util/ScriptMath2/ulongToDouble/#long/PointingToDeclaration/-e-r-d-d-a-p/com.cohort.util/-script-math2/ulong-to-double.md
 $dokka.location:com.cohort.util/ScriptMath2/unsignedByte/#int/PointingToDeclaration/-e-r-d-d-a-p/com.cohort.util/-script-math2/unsigned-byte.md
+$dokka.location:com.cohort.util/ScriptRow///PointingToDeclaration/-e-r-d-d-a-p/com.cohort.util/-script-row/index.md
+$dokka.location:com.cohort.util/ScriptRow/ScriptRow/#java.lang.String#gov.noaa.pfel.coastwatch.pointdata.Table/PointingToDeclaration/-e-r-d-d-a-p/com.cohort.util/-script-row/-script-row-constructor.md
+$dokka.location:com.cohort.util/ScriptRow/columnDouble/#java.lang.String/PointingToDeclaration/-e-r-d-d-a-p/com.cohort.util/-script-row/column-double.md
+$dokka.location:com.cohort.util/ScriptRow/columnFloat/#java.lang.String/PointingToDeclaration/-e-r-d-d-a-p/com.cohort.util/-script-row/column-float.md
+$dokka.location:com.cohort.util/ScriptRow/columnInt/#java.lang.String/PointingToDeclaration/-e-r-d-d-a-p/com.cohort.util/-script-row/column-int.md
+$dokka.location:com.cohort.util/ScriptRow/columnLong/#java.lang.String/PointingToDeclaration/-e-r-d-d-a-p/com.cohort.util/-script-row/column-long.md
+$dokka.location:com.cohort.util/ScriptRow/columnString/#java.lang.String/PointingToDeclaration/-e-r-d-d-a-p/com.cohort.util/-script-row/column-string.md
+$dokka.location:com.cohort.util/ScriptRow/fileName/#/PointingToDeclaration/-e-r-d-d-a-p/com.cohort.util/-script-row/file-name.md
+$dokka.location:com.cohort.util/ScriptRow/fullFileName/#/PointingToDeclaration/-e-r-d-d-a-p/com.cohort.util/-script-row/full-file-name.md
+$dokka.location:com.cohort.util/ScriptRow/row/#/PointingToDeclaration/-e-r-d-d-a-p/com.cohort.util/-script-row/row.md
 $dokka.location:com.cohort.util/ScriptString2///PointingToDeclaration/-e-r-d-d-a-p/com.cohort.util/-script-string2/index.md
 $dokka.location:com.cohort.util/ScriptString2/ScriptString2/#/PointingToDeclaration/-e-r-d-d-a-p/com.cohort.util/-script-string2/-script-string2-constructor.md
 $dokka.location:com.cohort.util/ScriptString2/allDigits/#java.lang.String/PointingToDeclaration/-e-r-d-d-a-p/com.cohort.util/-script-string2/all-digits.md

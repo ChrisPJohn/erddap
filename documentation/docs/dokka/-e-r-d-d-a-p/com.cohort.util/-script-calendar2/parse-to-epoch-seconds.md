@@ -18,7 +18,7 @@ JVM
 | | |
 |---|---|
 | sourceTime | a formatted time string |
-| dateTimeFormat | See https://erddap.github.io/setupDatasetsXml.html#stringTimeUnits |
+| dateTimeFormat | See https://erddap.github.io/setupDatasetsXml.html#string-time-units |
 | timeZoneString | For a list of valid timezone ID's, see the &quot;TZ database names&quot; column in the table at https://en.wikipedia.org/wiki/List_of_tz_database_time_zones . If this is null or &quot;&quot;, Zulu will be used. |
 
 [JVM]\
@@ -37,4 +37,4 @@ JVM
 | | |
 |---|---|
 | sourceTime | a formatted time string |
-| dateTimeFormat | See https://erddap.github.io/setupDatasetsXml.html#stringTimeUnits |
+| dateTimeFormat | See https://erddap.github.io/setupDatasetsXml.html#string-time-units |
