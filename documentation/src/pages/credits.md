@@ -8,7 +8,7 @@
     [.dataTable (TableWriterDataTable.java)](https://coastwatch.pfeg.noaa.gov/erddap/tabledap/documentation.html#fileType) was written and contributed by Roland Schweitzer of NOAA (license: copyrighted open source). Thank you, Roland!  
      
 *   json-ld  
-    The initial version of the [Semantic Markup of Datasets with json-ld (JSON Linked Data)](#jsonld) feature (and thus all of the hard work in designing the content) was written and contributed (license: copyrighted open source) by Adam Leadbetter and Rob Fuller of the Marine Institute in Ireland. Thank you, Adam and Rob!  
+    The initial version of the [Semantic Markup of Datasets with json-ld (JSON Linked Data)](/docs/server-admin/additional-information#json-ld) feature (and thus all of the hard work in designing the content) was written and contributed (license: copyrighted open source) by Adam Leadbetter and Rob Fuller of the Marine Institute in Ireland. Thank you, Adam and Rob!  
      
 *   orderBy  
     The code for the [orderByMean filter](https://coastwatch.pfeg.noaa.gov/erddap/tabledap/documentation.html#orderByMean) in tabledap and the extensive changes to the code to support the [_variableName/divisor:offset_ notation](https://coastwatch.pfeg.noaa.gov/erddap/tabledap/documentation.html#orderByDivisorOptions) for all orderBy filters was written and contributed (license: copyrighted open source) by Rob Fuller and Adam Leadbetter of the Marine Institute in Ireland. Thank you, Rob and Adam!  

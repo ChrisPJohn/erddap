@@ -25,8 +25,8 @@ ERDDAP™ uses Maven to load code dependencies as well as some static reference 
 
 NOTE: By default Maven will cache static reference and test data archive downloads and only extract them when a new version is downloaded. To skip downloading entirely, you may set the `skipResourceDownload` and/or `skipTestResourceDownload` properties to Maven (e.g. `mvn -DskipResourceDownload package`). To force extraction, set `-Ddownload.unpack=true` and `-Ddownload.unpackWhenChanged=false`.
 
-- ERDDAP™ and its subcomponents have very liberal, open-source [licenses](https://erddap.github.io/setup.html#license), so you can use and modify the source code for any purpose, for-profit or not-for-profit. Note that ERDDAP™ and many subcomponents have licenses that require that you acknowledge the source of the code that you are using. See [Credits](https://erddap.github.io/setup.html#credits). Whether required or not, it is just good form to acknowledge all of these contributors.
-   
+- ERDDAP™ and its subcomponents have very liberal, open-source [licenses](/license), so you can use and modify the source code for any purpose, for-profit or not-for-profit. Note that ERDDAP™ and many subcomponents have licenses that require that you acknowledge the source of the code that you are using. See [Credits](/credits). Whether required or not, it is just good form to acknowledge all of these contributors.
+  
 
 - **Use the Code for Other Projects**
 
@@ -109,7 +109,7 @@ If you want to look at the source code and try to figure out how ERDDAP™ works
 
   - You want to write another saveAs_FileType_ method. If so, we recommend that you find the closest existing saveAs_FileType_ method in EDDGrid or EDDTable and use that code as a starting point.
 
-Those situations have the advantage that the code you write is self-contained. You won't need to know all the details of ERDDAP's internals. And it will be easy for us to incorporate your code in ERDDAP. Note that if you do submit code, the license will need compatible with the ERDDAP™ [license](https://erddap.github.io/setup.html#license) (e.g., [Apache](https://www.apache.org/licenses/), [BSD](https://www.opensource.org/licenses/bsd-license.php), or [MIT-X](https://www.opensource.org/licenses/mit-license.php)). We'll list your contribution in the [credits](/credits).
+Those situations have the advantage that the code you write is self-contained. You won't need to know all the details of ERDDAP's internals. And it will be easy for us to incorporate your code in ERDDAP. Note that if you do submit code, the license will need compatible with the ERDDAP™ [license](/license) (e.g., [Apache](https://www.apache.org/licenses/), [BSD](https://www.opensource.org/licenses/bsd-license.php), or [MIT-X](https://www.opensource.org/licenses/mit-license.php)). We'll list your contribution in the [credits](/credits).
 
 - If you have a feature not covered above that you would like to add to ERDDAP, it is recommended to first create a discussion thread in the [GitHub Discussions](https://github.com/ERDDAP/erddap/discussions/categories/ideas). For significant features/changes the Technical Board will discuss them and decide on whether to approve adding it to ERDDAP™.
 

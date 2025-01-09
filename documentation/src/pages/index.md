@@ -40,7 +40,7 @@ Because the small effort to set up ERDDAP™ brings many benefits.
     *   Make graphs and maps. (Everyone likes pretty pictures.)
     *   Build other useful and interesting things on top of ERDDAP's web services -- see the [Awesome ERDDAP™](https://github.com/IrishMarineInstitute/awesome-erddap) list of awesome ERDDAP-related projects.
 
-You can [customize](#customize) your ERDDAP's appearance so ERDDAP™ reflects your organization and fits in with the rest of your website.
+You can [customize](/docs/server-admin/deploy-install#customize) your ERDDAP's appearance so ERDDAP™ reflects your organization and fits in with the rest of your website.
 
 ## Is the installation procedure hard? Can I do it?
 
