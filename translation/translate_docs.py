@@ -46,6 +46,7 @@ markdown_formatting_line_start = [
     "### ",
     "#### ",
     "##### ",
+    "###### ",
 ]
 
 markdown_formatting_preserve_preceding_whitespace = [
@@ -919,7 +920,7 @@ class ItalicMatcher:
     processed_line["translate_text"].append(chunk[self.match.end():])
     # update format {idx} -> {idx} + "*" + {length-1} + "*" + "{length-2}"
     placeholder = "{"+ str(idx) +"}"
-    processed_line["format"] = processed_line["format"].replace(placeholder, placeholder + " * " + "{" + str(len(processed_line["translate_text"]) -2) + "} * {"  + str(len(processed_line["translate_text"]) -1) + "}")
+    processed_line["format"] = processed_line["format"].replace(placeholder, placeholder + " *" + "{" + str(len(processed_line["translate_text"]) -2) + "}* {"  + str(len(processed_line["translate_text"]) -1) + "}")
     return processed_line
 
 class ParenthesisMatcher:
@@ -945,6 +946,29 @@ class ParenthesisMatcher:
     # update format {idx} -> {idx} + "*" + {length-1} + "*" + "{length-2}"
     placeholder = "{"+ str(idx) +"}"
     processed_line["format"] = processed_line["format"].replace(placeholder, placeholder + " (" + "{" + str(len(processed_line["translate_text"]) -2) + "}) {"  + str(len(processed_line["translate_text"]) -1) + "}")
+    return processed_line
+  
+class BracesMatcher:
+  def getMatch(self, chunk):
+    self.match = re.search(r"\{(.*?)\}", chunk)
+  def getStart(self):
+    if self.match:
+        return self.match.start()
+    else:
+        return -1
+  def getEnd(self):
+    if self.match:
+        return self.match.end()
+    else:
+        return -1
+  def processMatch(self, processed_line, idx, chunk):
+    # before tag text
+    processed_line["translate_text"][idx] = chunk[:self.match.start()]
+    # text after the tag
+    processed_line["translate_text"].append(chunk[self.match.end():])
+    # update format {idx} -> {idx} + "<" + match.group(0) + ">" + "{length-1}"
+    placeholder = "{"+ str(idx) +"}"
+    processed_line["format"] = processed_line["format"].replace(placeholder, placeholder + self.match.group(0) + "{" + str(len(processed_line["translate_text"]) -1) + "}")
     return processed_line
 
 markdown_matchers = [
@@ -989,6 +1013,12 @@ def preprocess_file(text):
             line_info.append(processed_line)
             continue
 
+        if processed_line["translate_text"][0].strip().startswith("title:"):
+            processed_line["format"] = processed_line["translate_text"][0]
+            processed_line["translate_text"].clear()
+            line_info.append(processed_line)
+            continue
+
         # Detect code blocks (start or stop)
         if processed_line["translate_text"][0].strip().startswith("```"):
             processed_line["format"] = processed_line["translate_text"][0]
@@ -1013,9 +1043,17 @@ def preprocess_file(text):
         
 
         for formatting in markdown_formatting_line_start:
-            if processed_line["translate_text"][0].startswith(formatting):
-                processed_line["format"] = formatting + processed_line["format"]
-                processed_line["translate_text"][0] = processed_line["translate_text"][0][len(formatting):]
+            if processed_line["translate_text"][0].strip().startswith(formatting):
+                index = processed_line["translate_text"][0].index(formatting)
+                processed_line["format"] = processed_line["translate_text"][0][:(index+len(formatting))] + processed_line["format"]
+                processed_line["translate_text"][0] = processed_line["translate_text"][0][(index+len(formatting)):]
+                # Handle explicit tags in headers
+                matcher = BracesMatcher()
+                chunk = processed_line["translate_text"][0]
+                best_match = None
+                matcher.getMatch(chunk)
+                if matcher.getStart() > -1:
+                    processed_line = matcher.processMatch(processed_line, 0, chunk)
 
         if processed_line["translate_text"][0].startswith("title: \""):
             processed_line["format"] = "title: \"{0}\"\n"
@@ -1081,7 +1119,7 @@ def postprocess_line(format, chunks):
         end_span = format.find("}", index)
         if index > -1 and end_span > -1:
             chunk_id = format[index+1:end_span]
-            if index + 5 > end_span and chunk_id.isdigit():
+            if index + 5 > end_span and chunk_id.isdigit() and int(chunk_id) < len(chunks):
                 format = format[0:index] + chunks[int(chunk_id)] + format[end_span+1:]
                 count = count + 1
             else:
