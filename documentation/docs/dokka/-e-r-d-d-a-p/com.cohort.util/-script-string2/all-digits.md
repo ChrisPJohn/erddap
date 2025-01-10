@@ -7,11 +7,11 @@ fun [allDigits](all-digits.md)(s: [String](https://docs.oracle.com/en/java/javas
 
 0..9. Non-Latin numeric characters are not included (see Java Lang Spec pg 14).
 
-#### Return
+#### Return {#return}
 
 true if c is a digit
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

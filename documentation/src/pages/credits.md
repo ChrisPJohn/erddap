@@ -1,6 +1,6 @@
 # Credits
 
-## Contributions to ERDDAP™ code
+## Contributions to ERDDAP™ code {#contributions-to-erddap-code}
 *   MergeIR
     [EDDGridFromMergeIRFiles.java](https://erddap.github.io/setupDatasetsXml.html#EDDGridFromMergeIRFiles) was written and contributed by Jonathan Lafite and Philippe Makowski of R.Tech Engineering (license: copyrighted open source). Thank you, Jonathan and Philippe!  
      

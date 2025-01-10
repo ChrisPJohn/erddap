@@ -7,11 +7,11 @@ open fun [zeroPad](zero-pad.md)(number: [String](https://docs.oracle.com/en/java
 
 This adds 0's to the left of the string until there are nDigits to the left of the decimal point (or nDigits total if there isn't a decimal point). If the number is too big, nothing is added or taken away.
 
-#### Return
+#### Return {#return}
 
 the number, left-padded with 0's so there are nDigits to the left of the decimal point
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

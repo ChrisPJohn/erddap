@@ -9,17 +9,17 @@ This class makes about half of the static methods in com.cohort.String2 accessib
 
 The underlying String2 class is Copyright (c) 2005 Robert Simons (CoHortSoftware@gmail.com). See the MIT/X-like license in com/cohort/util/LICENSE.txt.
 
-#### Author
+#### Author {#author}
 
 Bob Simons (was bob.simons@noaa.gov, now BobSimons2.00@gmail.com) 2019-11-14
 
-## Constructors
+## Constructors {#constructors}
 
 | | |
 |---|---|
 | [ScriptString2](-script-string2-constructor.md) | [JVM]<br/>constructor() |
 
-## Functions
+## Functions {#functions}
 
 | Name | Summary |
 |---|---|

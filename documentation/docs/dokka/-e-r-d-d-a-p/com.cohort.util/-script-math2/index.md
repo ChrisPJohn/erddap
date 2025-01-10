@@ -9,17 +9,17 @@ This class makes almost all of the static methods in com.cohort.Math2 accessible
 
 The underlying Math2 class is Copyright (c) 2005 Robert Simons (CoHortSoftware@gmail.com). See the MIT/X-like license in com/cohort/util/LICENSE.txt.
 
-#### Author
+#### Author {#author}
 
 Bob Simons (was bob.simons@noaa.gov, now BobSimons2.00@gmail.com) 2019-11-14
 
-## Constructors
+## Constructors {#constructors}
 
 | | |
 |---|---|
 | [ScriptMath2](-script-math2-constructor.md) | [JVM]<br/>constructor() |
 
-## Properties
+## Properties {#properties}
 
 | Name | Summary |
 |---|---|
@@ -50,7 +50,7 @@ Bob Simons (was bob.simons@noaa.gov, now BobSimons2.00@gmail.com) 2019-11-14
 | [ULONG_MAX_VALUE](-u-l-o-n-g_-m-a-x_-v-a-l-u-e.md) | [JVM]<br/>val [ULONG_MAX_VALUE](-u-l-o-n-g_-m-a-x_-v-a-l-u-e.md): [BigInteger](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/math/BigInteger.html)<br/>18446744073709551615. |
 | [USHORT_MAX_VALUE](-u-s-h-o-r-t_-m-a-x_-v-a-l-u-e.md) | [JVM]<br/>val [USHORT_MAX_VALUE](-u-s-h-o-r-t_-m-a-x_-v-a-l-u-e.md): Int = 65535<br/>65535 |
 
-## Functions
+## Functions {#functions}
 
 | Name | Summary |
 |---|---|

@@ -7,11 +7,11 @@ open fun [replaceAll](replace-all.md)(s: [String](https://docs.oracle.com/en/jav
 
 Returns a string where all occurences of oldS have been replaced with newS. If oldS occurs inside newS, it won't be replaced recursively (obviously).
 
-#### Return
+#### Return {#return}
 
 a modified version of s, with newS in place of all the olds.
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 
@@ -21,7 +21,7 @@ JVM
 | oldS | the string to be searched for |
 | newS | the string to replace oldS |
 
-#### Throws
+#### Throws {#throws}
 
 | | |
 |---|---|

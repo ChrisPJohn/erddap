@@ -7,11 +7,11 @@ open fun [epochSecondsToLimitedIsoStringT](epoch-seconds-to-limited-iso-string-t
 
 This is like safeEpochSecondsToIsoStringT3Z, but returns a limited precision string. This won't throw an exception.
 
-#### Return
+#### Return {#return}
 
 the formatted time string (or NaNString if trouble)
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

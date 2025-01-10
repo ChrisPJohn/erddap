@@ -7,11 +7,11 @@ fun [roundToULong](round-to-u-long.md)(d: Double): [BigInteger](https://docs.ora
 
 Safely rounds a double to a ulong.
 
-#### Return
+#### Return {#return}
 
 ULONG_MAX_VALUE if d is too small, too big, or NaN; otherwise d, rounded to the nearest short. Undesirable: d.5 rounds up for positive numbers, down for negative.
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

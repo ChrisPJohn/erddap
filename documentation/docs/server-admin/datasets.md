@@ -9,9 +9,9 @@ After you have followed the ERDDAP™ [installation instructions](/docs/server-a
 
 - - -
 
-## [Introduction](#introduction)
+## [Introduction](#introduction) {#introduction}
 
-### Some Assembly Required
+### Some Assembly Required {#some-assembly-required}
 Setting up a dataset in ERDDAP™ isn't just a matter of pointing to the dataset's directory or URL. You have to write a chunk of XML for datasets.xml which describes the dataset.
 
 *   For gridded datasets, in order to make the dataset conform to ERDDAP's data structure for gridded data, you have to identify a subset of the dataset's variables which share the same dimensions. ([Why?](#why-just-two-basic-data-structures) [How?](#dimensions))
@@ -30,7 +30,7 @@ If you buy into these ideas and expend the effort to create the XML for datasets
 Making the datasets.xml takes considerable effort for the first few datasets, but **it gets easier**. After the first dataset, you can often re-use a lot of your work for the next dataset. Fortunately, ERDDAP™ comes with two [Tools](#tools) to help you create the XML for each dataset in datasets.xml.  
 If you get stuck, see our [section on getting additional support](/docs/intro#support).
 
-### Data Provider Form
+### Data Provider Form {#data-provider-form}
 When a data provider comes to you hoping to add some data to your ERDDAP, it can be difficult and time consuming to collect all of the metadata (information about the dataset) needed to add the dataset into ERDDAP. Many data sources (for example, .csv files, Excel files, databases) have no internal metadata, so ERDDAP™ has a Data Provider Form which gathers metadata from the data provider and gives the data provider some other guidance, including extensive guidance for [Data In Databases](https://coastwatch.pfeg.noaa.gov/erddap/dataProviderForm1.html#databases). The information submitted is converted into the datasets.xml format and then emailed to the ERDDAP™ administrator (you) and written (appended) to *bigParentDirectory*/logs/dataProviderForm.log . Thus, the form semi-automates the process of getting a dataset into ERDDAP, but the ERDDAP™ administrator still has to complete the datasets.xml chunk and deal with getting the data file(s) from the provider or connecting to the database.
 
 The submission of actual data files from external sources is a huge security risk, so ERDDAP™ does not deal with that. You have to figure out a solution that works for you and the data provider, for example, email (for small files), pull from the cloud (for example, DropBox or Google Drive), an sftp site (with passwords), or sneakerNet (a USB thumb drive or external hard drive). You should probably only accept files from people you know. You will need to scan the files for viruses and take other security precautions.
@@ -50,10 +50,10 @@ The impetus for this was NOAA's 2014 [Public Access to Research Results (PARR) d
 
 Feedback/Suggestions? This form is new, so please email erd dot data at noaa dot gov if you have any feedback or suggestions for improving this.
 
-### Tools
+### Tools {#tools}
 ERDDAP™ comes with two command line programs which are tools to help you create the XML for each dataset that you want your ERDDAP™ to serve. Once you have set up ERDDAP™ and run it (at least one time), you can find and use these programs in the *tomcat*/webapps/erddap/WEB-INF directory. There are Linux/Unix shell scripts (with the extension .sh) and Windows scripts (with the extension .bat) for each program. \[On Linux, run these tools as the same user (tomcat?) that will run Tomcat.\] When you run each program, it will ask you questions. For each question, type a response, then press Enter. Or press ^C to exit a program at any time.
 
-#### Program won't run?
+#### Program won't run? {#program-wont-run}
 
 *   If you get an unknown program (or similar) error message, the problem is probably that the operating system couldn't find Java. You need to figure out where Java is on your computer, then edit the java reference in the .bat or .sh file that you are trying to use.
 *   If you get a jar file not found or class not found error message, then Java couldn't find one of the classes listed in the .bat or .sh file you are trying to use. The solution is to figure out where that .jar file is, and edit the java reference to it in the .bat or .sh file.
@@ -62,7 +62,7 @@ ERDDAP™ comes with two command line programs which are tools to help you creat
     *some/class/name*: Unsupported major.minor version *someNumber*  
     The solution is to update to the most recent version of Java and make sure the .sh or .bat file for the program is using it.
 
-#### The tools print various diagnostic messages:
+#### The tools print various diagnostic messages: {#the-tools-print-various-diagnostic-messages}
 
 *   The word "ERROR" is used when something went so wrong that the procedure failed to complete. Although it is annoying to get an error, the error forces you to deal with the problem.
 *   The word "WARNING" is used when something went wrong, but the procedure was able to be completed. These are pretty rare.
@@ -70,7 +70,7 @@ ERDDAP™ comes with two command line programs which are tools to help you creat
 
 The two tools are a big help, but you still must read all of these instructions on this page carefully and make important decisions yourself.
 
-### GenerateDatasetsXml
+### GenerateDatasetsXml {#generatedatasetsxml}
 *   **GenerateDatasetsXml**is a command line program that can generate a rough draft of the dataset XML for almost any type of dataset.
     
     We STRONGLY RECOMMEND that you use GenerateDatasetsXml instead of creating chunks of datasets.xml by hand because:
@@ -93,7 +93,7 @@ The two tools are a big help, but you still must read all of these instructions 
     *   GenerateDatasetsXml will then generate a rough draft of the dataset XML for that dataset.
     *   Diagnostic information and the rough draft of the dataset XML will be written to *bigParentDirectory*/logs/GenerateDatasetsXml.log .
     *   The rough draft of the dataset XML will be written to *bigParentDirectory*/logs/GenerateDatasetsXml.out .
-####  "0 files" Error Message
+####  "0 files" Error Message {#0-files-error-message}
 If you run GenerateDatasetsXml or [DasDds](#dasdds), or if you try to load an EDDGridFrom...Files or EDDTableFrom...Files dataset in ERDDAP™, and you get a "0 files" error message indicating that ERDDAP™ found 0 matching files in the directory (when you think that there are matching files in that directory):
 *   Check that you have specified the full name of the directory. And if you specified the sample filename, make sure you specified the file's full name, including the full directory name.
 *   Check that the files really are in that directory.
@@ -105,7 +105,7 @@ If you run GenerateDatasetsXml or [DasDds](#dasdds), or if you try to load an ED
 
 *   If you have problems that you can't solve, [request support](/docs/intro#support) with as much information as possible. Similarly, if it seems like the appropriate EDDType for a given dataset doesn't work with that dataset, or if there is no appropriate EDDType, please file an [issue on GitHub](https://github.com/ERDDAP/erddap/issues) with the details (and a sample file if relevant).  
          
-#### You need to edit the output from GenerateDatasetsXml to make it better.
+#### You need to edit the output from GenerateDatasetsXml to make it better. {#you-need-to-edit-the-output-from-generatedatasetsxml-to-make-it-better}
          
 *   DISCLAIMER:  
     THE CHUNK OF datasets.xml MADE BE GenerateDatasetsXml ISN'T PERFECT. YOU MUST READ AND EDIT THE XML BEFORE USING IT IN A PUBLIC ERDDAP. GenerateDatasetsXml RELIES ON A LOT OF RULES-OF-THUMB WHICH AREN'T ALWAYS CORRECT. YOU ARE RESPONSIBLE FOR ENSURING THE CORRECTNESS OF THE XML THAT YOU ADD TO ERDDAP'S datasets.xml FILE.
@@ -133,9 +133,9 @@ If you run GenerateDatasetsXml or [DasDds](#dasdds), or if you try to load an ED
 
     *   You can then use [DasDds](#dasdds) (see below) to repeatedly test the XML for that dataset to ensure that the resulting dataset appears as you want it to in ERDDAP.
     *   Feel free to make small changes to the datasets.xml chunk that was generated, for example, supply a better infoUrl, summary, or title.
-#### doNotAddStandardNames
+#### doNotAddStandardNames {#donotaddstandardnames}
 If you include \-doNotAddStandardNames as a command line parameter when you run generateDatasetsXml, generateDatasetsXml will not add standard\_name to the addAttributes for any variables other than variables named latitude, longitude, altitude, depth or time (which have obvious standard\_names). This can be useful if you are using the output from generateDatasetsXml directly in ERDDAP™ without editing the output, because generateDatasetsXml often guesses standard\_names incorrectly. (Note that we always recommend that you do edit the output before using it in ERDDAP.) Using this parameter will have other minor related effects because the guessed standard\_name is often used for other purposes, e.g., to create a new long\_name, and to create the colorBar settings.
-#### Scripting
+#### Scripting {#scripting}
 As an alternative to answering the questions interactively at the keyboard and looping to generate additional datasets, you can provide command line arguments to answer all of the questions to generate one dataset. GenerateDatasetsXml will process those parameters, write the output to the output file, and exit the program.
         
 To set this up, first use the program in interactive mode and write down your answers. Here's a partial example:  
@@ -173,7 +173,7 @@ and replaces everything in between those lines with the new content, and changes
     
 If you use "GenerateDatasetsXml -verbose", it will print more diagnostic messages than usual.
     
-#### Special/Pseudo Dataset Types
+#### Special/Pseudo Dataset Types {#specialpseudo-dataset-types}
 In general, the EDDType options in GenerateDatasetsXml match of the EDD types described in this document (see the [List of Dataset Types](#list-of-types-datasets)) and generate one datasets.xml chunk to create one dataset from one specific data source. There are a few exceptions and special cases:
     
 *   EDDGridFromErddap  
@@ -257,13 +257,13 @@ In general, the EDDType options in GenerateDatasetsXml match of the EDD types de
 *   addFillValueAttributes  
     This special EDDType option isn't a dataset type. It is a tool which can add \_FillValue attributes to some variables in some datasets. See [addFillValueAttributes](#add-_fillvalue-attributes).  
      
-##### findDuplicateTime
+##### findDuplicateTime {#findduplicatetime}
     This special EDDType option isn't a dataset type. Instead, it tells GenerateDatasetsXml to search through a collection of gridded .nc (and related) files to find and print out a list of files with duplicate time values. When it looks at the time values, it converts them from the original units to "seconds since 1970-01-01" in case different files use different units strings. You need to provide the starting directory (with or without the trailing slash), the file name regular expression (e.g., .\*\\.nc ), and the name of the time variable in the files.  
      
-##### ncdump  
+##### ncdump {#ncdump}
     This special EDDType option isn't a dataset type. Instead, it tells GenerateDatasetsXml to print an [ncdump](https://linux.die.net/man/1/ncdump)\-like printout of an .nc, .ncml, or .hdf file. It actually uses the netcdf-java's [NCdump](https://docs.unidata.ucar.edu/netcdf-java/5.4/javadoc/ucar/nc2/write/Ncdump.html), which is a more limited tool than the C version of NCdump. If you use this option, GenerateDatasetsXml will ask you to use one of the options: "-h" (header), "-c" (coordinate vars), "-vall" (default), "-v var1;var2", "-v var1(0,0:10,0:20)". This is useful because, without ncdump it is hard to know what is in an .nc, .ncml, or .hdf file and thus which EDDType you should specify for GenerateDatasetsXml. For an .ncml file, this will print the ncdump output for the result of the .ncml file changes applied to the underlying .nc or .hdf file.  
          
-### DasDds
+### DasDds {#dasdds}
 *   [**DasDds**](#dasdds) is a command line program that you can use after you have created a first attempt at the XML for a new dataset in datasets.xml. With DasDds, you can repeatedly test and refine the XML. When you use the DasDds program:
     1.  On Windows, the first time you run DasDds, you need to edit the DasDds.bat file with a text editor to change the path to the java.exe file so that Windows can find Java.
     2.  DasDds asks you for the datasetID for the dataset you are working on.
@@ -282,14 +282,14 @@ In general, the EDDType options in GenerateDatasetsXml match of the EDD types de
     5.  If DasDds can create the dataset, DasDds will then show you the [.das (Dataset Attribute Structure)](https://coastwatch.pfeg.noaa.gov/erddap/griddap/documentation.html#fileType_das), [.dds (Dataset Descriptor Structure)](https://coastwatch.pfeg.noaa.gov/erddap/griddap/documentation.html#fileType_dds), and [.timeGaps (time gaps)](https://coastwatch.pfeg.noaa.gov/erddap/griddap/documentation.html#timeGaps) information for the dataset on your screen and write them to *bigParentDirectory*/logs/DasDds.out .
     6.  Often, you will want to make some small change to the dataset's XML to clean up the dataset's metadata and rerun DasDds.
 
-### Bonus Third-Party Tool: ERDDAP-lint 
+### Bonus Third-Party Tool: ERDDAP-lint {#bonus-third-party-tool-erddap-lint}
 ERDDAP-lint is a program from Rob Fuller and Adam Leadbetter of the Irish Marine Institute that you can use to improve the metadata of your ERDDAP™ datasets. ERDDAP-lint "contains rules and a simple static web application for running some verification tests against your ERDDAP™ server. All the tests are run in the web browser." Like the [Unix/Linux lint tool](https://en.wikipedia.org/wiki/Lint_(software)), you can edit the existing rules or add new rules. See [ERDDAP-lint](https://github.com/IrishMarineInstitute/erddap-lint) for more information.
 
 This tool is especially useful for datasets that you created some time ago and now want to bring up-to-date with your current metadata preferences. For example, early versions of GenerateDatasetsXml didn't put any effort into creating global creator\_name, creator\_email, creator\_type, or creator\_url metadata. You could use ERDDAP-lint to identify the datasets that lack those metadata attributes.
 
 Thanks to Rob and Adam for creating this tool and making it available to the ERDDAP™ community.  
  
-## The Basic Structure of the datasets.xml File
+## The Basic Structure of the datasets.xml File {#the-basic-structure-of-the-datasetsxml-file}
 The required and optional tags allowed in a datasets.xml file (and the number of times they may appear) are shown below. In practice, your datasets.xml will have lots of &lt;dataset>'s tags and only use the other tags within &lt;erddapDatasets> as needed.
 
   >&nbsp;&lt;&#63;xml version="1.0" encoding="ISO-8859-1" &#63;>  
@@ -342,20 +342,20 @@ The required and optional tags allowed in a datasets.xml file (and the number of
 
 It is possible that other encodings will be allowed in the future, but for now, only ISO-8859-1 is recommended.  
  
-### XInclude
+### XInclude {#xinclude}
 New in version 2.25 is support for XInclude. This requires you are using the SAX parser &lt;useSaxParser>true&lt;/useSaxParser> in your setup.xml. This can allow you to write each dataset in its own file, then include them all in the main datasets.xml, reuse parts of dataset definitions, or both. If you want to see an example, [EDDTestDataset.java](https://github.com/ERDDAP/erddap/blob/main/src/test/java/testDataset/EDDTestDataset.java) sets up XInclude to reuse variable definitions.  
  
 
 - - -
 
-## Notes
+## Notes {#notes}
 
 Working with the datasets.xml file is a non-trivial project. Please read all of these notes carefully. After you pick a [dataset type](#list-of-types-datasets), please read the detailed description of it carefully.
      
-### Choosing the Dataset Type
+### Choosing the Dataset Type {#choosing-the-dataset-type}
 In most cases, there is just one ERDDAP™ dataset type that is appropriate for a given data source. In a few cases (e.g., .nc files), there are a few possibilities, but usually one of them is definitely best. The first and biggest decision you must make is: is it appropriate to treat the dataset as a group of multidimensional arrays (if so see the [EDDGrid dataset types](#eddgrid)) or as a database-like table of data (if so see the [EDDTable dataset types](#eddtable)).  
      
-### Serving the Data As Is
+### Serving the Data As Is {#serving-the-data-as-is}
 Usually, there is no need to modify the data source (e.g., convert the files to some other file type) so that ERDDAP™ can serve it. One of the assumptions of ERDDAP™ is that the data source will be used as is. Usually this works fine. Some exceptions are:
 *   Relational Databases and Cassandra -- ERDDAP™ can serve data directly from relational databases and Cassandra. But for security, load balancing, and performance issues, you may choose to set up another database with the same data or save the data to NetCDF v3 .nc files and have ERDDAP™ serve the data from the new data source. See [EDDTableFromDatabase](#eddtablefromdatabase) and [EDDTableFromCassandra](#eddtablefromcassandra).
 *   Not Supported Data Sources -- ERDDAP™ can support a large number of types of data sources, but the world is filled with 1000's (millions?) of different data sources (notably, data file structures). If ERDDAP™ doesn't support your data source:
@@ -365,18 +365,18 @@ Usually, there is no need to modify the data source (e.g., convert the files to 
     *   You can add support for that data source by writing the code to handle it yourself. See [the ERDDAP™ Programmer's Guide](/docs/contributing/programmer-guide)
 *   Speed -- ERDDAP™ can read data from some data sources much faster than others. For example, reading NetCDF v3 .nc files is fast and reading ASCII files is slower. And if there is a large (>1000) or huge (>10,000) number of source data files, ERDDAP™ will respond to some data requests slowly. Usually, the difference isn't noticeable to humans. However, if you think ERDDAP™ is slow for a given dataset, you may choose to solve the problem by writing the data to a more efficient setup (usually: a few, well-structured, NetCDF v3 .nc files). For tabular data, see [this advice](#millions-of-files).  
          
-### Hint
+### Hint {#hint}
 It is often easier to generate the XML for a dataset by making a copy of a working dataset description in dataset.xml and then modifying it.  
     
-### Encoding Special Characters
+### Encoding Special Characters {#encoding-special-characters}
 Since datasets.xml is an XML file, you MUST [&-encode](https://en.wikipedia.org/wiki/List_of_XML_and_HTML_character_entity_references#Predefined_entities_in_XML) "&", "&lt;", and ">" in any content as "&amp;", "&lt;", and "&gt;".  
 Wrong: &lt;title>Time & Tides&lt;/title>  
 Right:   &lt;title>Time &amp; Tides&lt;/title>  
      
-### XML doesn't tolerate syntax errors
+### XML doesn't tolerate syntax errors {#xml-doesnt-tolerate-syntax-errors}
 After you edit the dataset.xml file, it is a good idea to verify that the result is [well-formed XML](https://www.w3schools.com/xml/xml_dtd.asp) by pasting the XML text into an XML checker like [xmlvalidation](https://www.xmlvalidation.com/).  
      
-### Troubleshooting Tips
+### Troubleshooting Tips {#troubleshooting-tips}
 *   **Other Ways To Diagnose Problems With Datasets**  
     In addition to the two main [Tools](#tools),
     *   [log.txt](/docs/server-admin/additional-information#log) is a log file with all of ERDDAP's diagnostic messages.
@@ -384,7 +384,7 @@ After you edit the dataset.xml file, it is a good idea to verify that the result
     *   The [Status Page](/docs/server-admin/additional-information#status-page) is a quick way to check ERDDAP's status from any web browser. It includes a list of datasets that didn't load (although not the related exceptions) and taskThread statistics (showing the progress of [EDDGridCopy](#eddgridcopy) and [EDDTableCopy](#eddtablecopy) datasets and any [EDDGridFromFiles](#eddgridfromfiles) or [EDDTableFromFiles](#eddtablefromfiles) datasets that use [cacheFromUrl](#cachefromurl) (but not cacheSizeGB)).
     *   If you get stuck, see our [section on getting additional support](/docs/intro#support).
          
-### Special variables
+### Special variables {#special-variables}
 *   **[The longitude, latitude, altitude (or depth), and time (LLAT) variable](#destinationname) [destinationName](#destinationname)s are special.**
     *   In general:
         *   LLAT variables are made known to ERDDAP™ if the axis variable's (for EDDGrid datasets) or data variable's (for EDDTable datasets) [destinationName](#destinationname) is "longitude", "latitude", "altitude", "depth", or "time".
@@ -413,7 +413,7 @@ After you edit the dataset.xml file, it is a good idea to verify that the result
         *   ERDDAP™ has a utility to [Convert a Numeric Time to/from a String Time](https://coastwatch.pfeg.noaa.gov/erddap/convert/time.html).
         *   See [How ERDDAP Deals with Time](https://coastwatch.pfeg.noaa.gov/erddap/convert/time.html#erddap).  
             
-### Why just two basic data structures? 
+### Why just two basic data structures? {#why-just-two-basic-data-structures}
 *   Since it is difficult for human clients and computer clients to deal with a complex set of possible dataset structures, ERDDAP™ uses just two basic data structures:
     *   a [gridded data structure](https://coastwatch.pfeg.noaa.gov/erddap/griddap/documentation.html#dataModel) (for example, for satellite data and model data) and
     *   a [tabular data structure](https://coastwatch.pfeg.noaa.gov/erddap/tabledap/documentation.html#dataModel) (for example, for in-situ buoy, station, and trajectory data).
@@ -425,21 +425,21 @@ After you edit the dataset.xml file, it is a good idea to verify that the result
 *   We are very aware that if you are used to working with data in other data structures you may initially think that this approach is simplistic or insufficient. But all data structures have tradeoffs. None is perfect. Even the do-it-all structures have their downsides: working with them is complex and the files can only be written or read with special software libraries. If you accept ERDDAP's approach enough to try to work with it, you may find that it has its advantages (notably the support for multiple file types that can hold the data responses). The [ERDDAP™ slide show](https://coastwatch.pfeg.noaa.gov/erddap/images/erddapTalk/erddapTechTalk.html) (particularly the [data structures slide](https://coastwatch.pfeg.noaa.gov/erddap/images/erddapTalk/erddapTechTalk.html#dataStructures)) talks a lot about these issues.
 *   And even if this approach sounds odd to you, most ERDDAP™ clients will never notice -- they will simply see that all of the datasets have a nice simple structure and they will be thankful that they can get data from a wide variety of sources returned in a wide variety of file formats.  
          
-### Dimensions
+### Dimensions {#dimensions}
 *   **What if the grid variables in the source dataset DON'T share the same axis variables?**  
     In EDDGrid datasets, all data variables MUST use (share) all of the axis variables. So if a source dataset has some variables with one set of dimensions, and other variables with a different set of dimensions, you will have to make two datasets in ERDDAP. For example, you might make one ERDDAP™ dataset entitled "Some Title (at surface)" to hold variables that just use \[time\]\[latitude\]\[longitude\] dimensions and make another ERDDAP™ dataset entitled "Some Title (at depths)" to hold the variables that use \[time\]\[altitude\]\[latitude\]\[longitude\]. Or perhaps you can change the data source to add a dimension with a single value (for example, altitude=0) to make the variables consistent.
     
     ERDDAP™ doesn't handle more complicated datasets (for example, models that use a mesh of triangles) well. You can serve these datasets in ERDDAP™ by creating two or more datasets in ERDDAP™ (so that all data variables in each new dataset share the same set of axis variables), but that isn't what users want. For some datasets, you might consider making a regular gridded version of the dataset and offering that in addition to the original data. Some client software can only deal with a regular grid, so by doing this, you reach additional clients.  
      
     
-### Projected Gridded Data
+### Projected Gridded Data {#projected-gridded-data}
 Some gridded data has a complex structure. For example, satellite level 2 ("along track") data does not use a simple projection. Modelers (and others) often work with gridded data on various non-cylindrical projections (for example, conic, polar stereographic, tripolar) or in unstructured grids (a more complex data structure). Some end users want this data as is, so there is no loss of information. For those clients, ERDDAP™ can serve the data, as is, only if the ERDDAP™ administrator breaks the original dataset into a few datasets, with each part including variables which share the same axis variables. Yes, that seems odd to people involved and it is different from most OPeNDAP servers. But ERDDAP™ emphasizes making the data available in many formats. That is possible because ERDDAP™ uses/requires a more uniform data structure. Although it is a little awkward (i.e., different than expected), ERDDAP™ can distribute the projected data.
 
 \[Yes, ERDDAP™ could have looser requirements for the data structure, but keep the requirements for the output formats. But that would lead to confusion among many users, particularly newbies, since many seemingly valid requests for data with different structures would be invalid because the data wouldn't fit into the file type. We keep coming back to the current system's design.\]
 
 Some end users want data in a lat lon cylindrical projection like Equirectangular / plate carrée or Mercator) for ease-of-use in different situations. For these situations, we encourage the ERDDAP™ administrator to use some other software (NCO? Matlab? R? IDV? ...?) to re-project the data onto a geographic (Equirectangular projection / plate carrée) or other cylindrical projection and serve that form of the data in ERDDAP™ as a different dataset. This is similar to what people do when they convert satellite level 2 data into level 3 data. One such tool is [NCO](https://nco.sourceforge.net/nco.html#Regridding) which offers extension options for regridding data.
 
-#### GIS and Reprojecting Data
+#### GIS and Reprojecting Data {#gis-and-reprojecting-data}
 Since the GIS world is often map oriented, GIS programs usually offer support for reprojecting the data, i.e., plotting the data on a map with a different projection.
 
 Currently, ERDDAP™ does not have tools to reproject data. Instead, we recommend that you use an external tool to make a variant of the dataset, where data has been reprojected from its original form onto a rectangular (latitude longitude) array suitable for ERDDAP.
@@ -450,60 +450,60 @@ We encourage ERDDAP™ administrators to use some other software (NCO? Matlab? R
 
 We hope that ERDDAP™ will have built-in tools to offer maps with other projections in the future. We also hope to have better connections to the GIS world in the future (other than the current WMS service). It is terrible that in this "modern" world, the links between the CF/DAP world and the GIS world are still so weak. Both of those things are on the To Do list. (If you want to help, notably with connecting ERDDAP™ to MapServer, please email Chris.John at noaa.gov .)
     
-### Data Types
+### Data Types {#data-types}
 ERDDAP™ supports the following data types  
 (the names are case sensitive; 'u' prefix stands for "unsigned"; the number many of the names in other systems is the number of bits):
 
-#### byte
+#### byte {#byte}
 *   **byte** has signed integer values with a range of -128 to 127.  
     In other systems, this is sometimes called int8.  
     This is called "tinyint" by SQL and Cassandra.  
     ERDDAP™ converts [boolean](#boolean-data) from some sources (e.g., SQL and Cassandra) into bytes in ERDDAP™ with a value of 0=false, 1=true, and 127=missing\_value.
-#### ubyte
+#### ubyte {#ubyte}
 *   **ubyte** has unsigned integer values with a range of 0 to 255.  
     In other systems, this is sometimes called uint8.
-#### short
+#### short {#short}
 *   **short** has signed integer values with a range of -32768 to 32767.  
     In other systems, this is sometimes called int16.  
     This is called "smallint" by SQL and Cassandra.
-#### ushort
+#### ushort {#ushort}
 *   **ushort** has unsigned integer values with a range of 0 to 65535.  
     In other systems, this is sometimes called uint16.
-#### int
+#### int {#int}
 *   **int** has signed integer values with a range of -2147483648 to 2147483647.  
     In other systems, this is sometimes called int32.  
     This is called "integer|numeric(?)" by SQL and "int" by Cassandra.
-#### uint
+#### uint {#uint}
 *   **uint** has unsigned integer values with a range of 0 to 4294967295.  
     In other systems, this is sometimes called uint32.
-#### long
+#### long {#long}
 *   **long** has signed integer values with a range of -9223372036854775808 to 9223372036854775807.  
     In other systems, this is sometimes called int64.  
     This is called "bigint|numeric(?)" by SQL and "bigint" by Cassandra.  
     Because many file types don't support long data, their use is discouraged. When possible, use double instead (see below).
-#### ulong
+#### ulong {#ulong}
 *   **ulong** has unsigned integer values with a range of 0 to 18446744073709551615  
     In other systems, this is sometimes called uint64.  
     Because many file types don't support ulong data, their use is discouraged. When possible, use double instead (see below).
-#### float
+#### float {#float}
 *   **float** is an IEEE 754 float with a range of approximately +/- 3.402823466e+38.  
     In other systems, this is sometimes called float32.  
     This is called "real|float(?)|decimal(?)|numeric(?)" by SQL and "float" by Cassandra.  
     The special value NaN means Not-a-Number.  
     ERDDAP™ converts positive and negative infinity values to NaN.
-#### double
+#### double {#double}
 *   **double** is an IEEE 754 double with a range of approximately  
     +/- 1.7976931348623157E+308.  
     In other systems, this is sometimes called float64.  
     This is called "double precision|float(?)|decimal(?)|numeric(?)" by SQL and "double" by Cassandra.  
     The special value NaN means Not-a-Number.  
     ERDDAP™ converts positive and negative infinity values to NaN.
-#### char
+#### char {#char}
 *   **char** is a single, 2-byte (16-bit) [Unicode UCS-2 character](https://en.wikipedia.org/wiki/UTF-16) ranging from \\u0000 (#0) through \\uffff (#65535).  
     \\uffff's definition is Not-a-Character, analogous to a double value of NaN.  
     The use of char is discouraged because many file types either don't support chars or only support 1-byte chars (see below). Consider using String instead.  
     Users can use char variables to make graphs. ERDDAP™ will convert the characters to their Unicode code point number, which can be used as numeric data.
-#### String
+#### String {#string}
 *   **String** is a sequence of 0 or more, 2-byte (16-bit) [Unicode UCS-2 characters](https://en.wikipedia.org/wiki/UTF-16).  
     ERDDAP™ uses/interprets a 0-length string as a missing value. ERDDAP™ does not support a true null string.  
     The theoretical maximum string length is 2147483647 characters, but there are probably various problems in various places even with somewhat shorter Strings.  
@@ -513,7 +513,7 @@ ERDDAP™ supports the following data types
 
 Before ERDDAP™ v2.10, ERDDAP™ did not support unsigned integer types internally and offered limited support in its data readers and writers.
     
-### Data Type Limitations
+### Data Type Limitations {#data-type-limitations}
 You can think of ERDDAP™ as a system which has virtual datasets, and which works by reading data from a dataset's source into an internal data model and writing data to various services (e.g., (OPeN)DAP, WMS) and file types in response to user requests.
 
 *   Each input reader supports a subset of the data types that ERDDAP™ supports. So reading data into ERDDAP's internal data structures isn't a problem.
@@ -522,33 +522,33 @@ You can think of ERDDAP™ as a system which has virtual datasets, and which wor
 
 Below are explanations of the limitations (or none) of various output writers and how ERDDAP™ deals with the problems. Such complications are an inherent part of ERDDAP's goal of making disparate systems interoperable.
 
-#### ASCII
+#### ASCII {#ascii}
 *   ASCII (.csv, .tsv, etc.) text files -
     *   All numeric data is written via its String representation (with missing data values appearing as 0-length strings).
     *   Although ERDDAP™ writes long and ulong values correctly to ASCII text files, many readers (e.g., spreadsheet programs) can't correctly deal with long and ulong values and instead convert them to double values (with loss of precision in some cases).
     *   Char and String data are written via JSON Strings, which handle all Unicode characters (notably, the "unusual" characters beyond ASCII #127, e.g., the Euro character appears as "\\u20ac").
     
         
-#### JSON
+#### JSON {#json}
 *   JSON (.json, .jsonlCSV, etc.) text files -
     *   All numeric data is written via its String representation.
     *   Char and String data are written as JSON Strings, which handle all Unicode characters (notably, the "unusual" characters beyond ASCII #127, e.g., the Euro character appears as "\\u20ac").
     *   Missing values for all numeric data types appear as null.  
          
-#### .nc3 files
+#### .nc3 files {#nc3-files}
 *   .nc3 files don't natively support any unsigned integer data types. Before CF v1.9, CF did not support unsigned integer types. To deal with this, ERDDAP™ 2.10+ follows the NUG standard and always adds an "\_Unsigned" attribute with a value of "true" or "false" to indicate if the data is from an unsigned or signed variable. All integer attributes are written as signed attributes (e.g., byte) with signed values (e.g., a ubyte actual\_range attribute with values 0 to 255, appears as a byte attribute with values 0 to -1 (the inverse of the two's complement value of the out-of-range value). There is no easy way to know which (signed) integer attributes should be read as unsigned attributes. ERDDAP™ supports the "\_Unsigned" attribute when it reads .nc3 files.
 *   .nc3 files don't support the long or ulong data types. ERDDAP™ deals with this by temporarily converting them to be double variables. Doubles can exactly represent all values up to +/- 9,007,199,254,740,992 which is 2^53. This is an imperfect solution. Unidata refuses to make a minor upgrade to .nc3 to deal with this and related problems, citing .nc4 (a major change) as the solution.
 *   The CF specification (before v1.9) said it supports a char data type but it is unclear if char is intended only as the building blocks of char arrays, which are effectively Strings. Questions to their mailing list yielded only confusing answers. Because of these complications, it is best to avoid char variables in ERDDAP™ and use String variables whenever possible.
 *   Traditionally, .nc3 files only supported strings with ASCII-encoded (7-bit, #0 - #127) characters. NUG (and ERDDAP) extend that (starting ~2017) by including the attribute "\_Encoding" with a value of "ISO-8859-1" (an extension of ASCII which defines all 256 values of each 8-bit character) or "UTF-8" to indicate how the String data is encoded. Other encodings may be legal but are discouraged.  
          
-#### .nc4 files
+#### .nc4 files {#nc4-files}
 *   .nc4 files support all of ERDDAP's data types.  
     
-#### NCCSV files 
+#### NCCSV files {#nccsv-files}
 NCCSV 1.0 files don't support any unsigned integer data types.  
 [NCCSV 1.1+ files](/docs/user/nccsv-1.00) support all unsigned integer data types.  
      
-#### DAP
+#### DAP {#dap}
 *   (OPeN)DAP (.das, .dds, .asc ASCII files, and .dods binary files) -
     *   (OPeN)DAP handles short, ushort, int, uint, float and double values correctly.
     *   (OPeN)DAP has a "byte" data type that it defines as unsigned, whereas historically, THREDDS and ERDDAP™ have treated "byte" as signed in their (OPeN)DAP services. To deal with this better, ERDDAP™ 2.10+ follows the NUG standard and always adds an "\_Unsigned" attribute with a value of "true" or "false" to indicate if the data is what ERDDAP™ calls byte or ubyte. All byte and ubyte attributes are written as "byte" attributes with signed values (e.g., a ubyte actual\_range attribute with values 0 to 255, appears as a byte attribute with values 0 to -1 (the inverse of the two's complement value of the out-of-range value). There is no easy way to know which "byte" attributes should be read as ubyte attributes.
@@ -556,12 +556,12 @@ NCCSV 1.0 files don't support any unsigned integer data types.
     *   Because (OPeN)DAP has no separate char data type and technically only supports 1-byte ASCII characters (#0 - #127) in Strings, char data variables will appear as 1-character-long Strings in (OPeN)DAP .das, .dds, and .dods responses.
     *   Technically, the (OPeN)DAP specification only supports strings with ASCII-encoded characters (#0 - #127). NUG (and ERDDAP) extend that (starting ~2017) by including the attribute "\_Encoding" with a value of "ISO-8859-1" (an extension of ASCII which defines all 256 values of each 8-bit character) or "UTF-8" to indicate how the String data is encoded. Other encodings may be legal but are discouraged.  
          
-### Data Type Comments
+### Data Type Comments {#data-type-comments}
 *   Because of the poor support for long, ulong, and char data in many file types, we discourage the use of these data types in ERDDAP. When possible, use double instead of long and ulong, and use String instead of char.  
      
 *   Metadata - Because (OPeN)DAP's .das and .dds responses don't support long or ulong attributes or data types (and instead show them as doubles), you may instead want to use ERDDAP's tabular representation of metadata as seen in the http.../erddap/**info**/*datasetID*.html web page (for example, [https://coastwatch.pfeg.noaa.gov/erddap/info/cwwcNDBCMet/index.html](https://coastwatch.pfeg.noaa.gov/erddap/info/cwwcNDBCMet/index.html) ) (which you can also get in other file types, e.g., .csv, .htmlTable, .itx, .json, .jsonlCSV1, .jsonlCSV, .jsonlKVP, .mat, .nc, .nccsv, .tsv, .xhtml) or the .nccsvMetadata response (for example, [https://coastwatch.pfeg.noaa.gov/erddap/tabledap/cwwcNDBCMet.nccsvMetadata](https://coastwatch.pfeg.noaa.gov/erddap/tabledap/cwwcNDBCMet.nccsvMetadata) although .nccsvMetadata is only available for tabular datasets), both of which supports all data types (notably, long, ulong, and char).  
          
-### Media Files
+### Media Files {#media-files}
 Not all data are arrays of numbers or text. Some datasets consist of or include media files, such as image, audio and video files. ERDDAP™ has some special features to make it easier for users to get access to media files. It's a two step process:  
  
 
@@ -594,14 +594,14 @@ Support varies with different versions of different browsers on different operat
 
 Or, if a user clicks on the filename shown on a ERDDAP™ web page, their browser will show the image, audio or video file as a separate web page. This is mostly useful to see a very large image or video scaled to full screen, instead of in a popup.
     
-### Working with AWS S3 Files  
+### Working with AWS S3 Files {#working-with-aws-s3-files}
 [Amazon Web Service (AWS)](https://aws.amazon.com) is a seller of [cloud computing](https://en.wikipedia.org/wiki/Cloud_computing) services. [S3](https://aws.amazon.com/s3/) is an object storage system offered by AWS. Instead of the hierarchical system of directories and files of a traditional file system (like a hard drive in your PC), S3 offers just "buckets" which hold "objects" (we'll call them "files").
 
 For ASCII files (e.g., .csv), ERDDAP™ can work with the files in the buckets directly. The only thing you need to do is specify the &lt;fileDir> for the dataset using a specific format for the AWS bucket, e.g., https://*bucketName*.s3.*aws-region*.amazonaws.com/*subdirectory*/ . You should not use &lt;cacheFromUrl> . See below for details.
 
 But for binary files (e.g., .nc, .grib, .bufr, and .hdf files), you do need to use the &lt;cacheFromUrl> system described below. ERDDAP, netcdf-java (which ERDDAP™ uses to read data from these files), and other scientific data software are designed to work with files in a traditional file system which offers [block level](https://en.wikipedia.org/wiki/Block-level_storage) access to files (which permits reading chunks of a file), but S3 only offers [file level (object)](https://en.wikipedia.org/wiki/Block-level_storage) access to files (which only permits reading the entire file). AWS offers an alternative to S3, [Elastic Block Store (EBS)](https://aws.amazon.com/ebs/)), which supports block level access to files but it is more expensive than S3, so it is rarely used for bulk storage of large quantities of data files. (So when people say storing data in the cloud (S3) is cheap, it is usually an apples to oranges comparison.)
 
-#### S3 Buckets
+#### S3 Buckets {#s3-buckets}
 **The Contents of a Bucket. Keys. Objects. Delimiters.**  
 Technically, S3 buckets aren't organized in a hierarchical file structure like a file system on a computer. Instead, buckets only contain "objects" (files), each of which has a "key" (a name). An example of a key in that noaa-goes17 bucket is
 
@@ -619,14 +619,14 @@ ABI-Lib.2018.052.22.OR\_ABI-L1b-RadM2-M3C10\_G16\_s20180522247575), then ERDDAP�
 
 Private vs Public Buckets -- The administrator for the S3 bucket may make the bucket and its contents public or private. If public, any file in the bucket may be downloaded by anyone using the URL for the file. Amazon has an [Open Data](https://aws.amazon.com/opendata/) program which hosts public datasets (including data from NOAA, NASA, and USGS) for free and doesn't charge for anyone to download the files from those buckets. If a bucket is private, files in the bucket are only accessible to authorized users and AWS charges a fee (usually paid by the bucket's owner) for downloading files to a non-AWS S3 computer. ERDDAP™ can work with data in public and private buckets.
 
-#### AWS Credentials
+#### AWS Credentials {#aws-credentials}
 To make it so that ERDDAP™ can read the contents of private buckets, you need AWS credentials and you need to store a credentials file in the standard place so ERDDAP™ can find the information. See the AWS SDK for Java 2.x documentation: [Set default credentials](https://docs.aws.amazon.com/sdk-for-java/latest/developer-guide/setup.html#setup-credentials). (The option to store the values as Java command line parameters in \[tomcat\]/bin/setenv.sh may be a good option.)
-#### AWS /files/
+#### AWS /files/ {#aws-files}
 *   /files/ system -- The ERDDAP™ [/files/ system](#accessibleviafiles) allows users to download the source files for a dataset. We recommend that you turn this on for all datasets with source files because many users want to download the original source files.
     *   If the files are in a private S3 bucket, the user's request to download a file will be handled by ERDDAP™, which will read the data from the file and then transmit it to the user, thus increasing the load on your ERDDAP™, using incoming and outgoing bandwidth, and making you (the ERDDAP™ administrator) pay the data egress fee to AWS.
     *   If the files are in a public S3 bucket, the user's request to download a file will be redirected to the AWS S3 URL for that file, so the data won't flow through ERDDAP™, thus reducing the load on ERDDAP. And if the files are in an Amazon Open Data (free) public bucket, then you (the ERDDAP™ administrator) won't have to pay any data egress fee to AWS. Thus, there is a big advantage serving data from public (not private) S3 buckets, and a huge advantage to serving data from Amazon Open Data (free) buckets.
 
-#### ERDDAP™ and AWS S3 Buckets
+#### ERDDAP™ and AWS S3 Buckets {#erddap-and-aws-s3-buckets}
 [**ERDDAP™ and AWS S3 Buckets**](#erddap-and-aws-s3-buckets)  
 Fortunately, after much effort, ERDDAP™ has a number of features which allow it to deal with the inherent problems of working with S3's block level access to files in a reasonably efficient way:
 
@@ -657,10 +657,10 @@ Fortunately, after much effort, ERDDAP™ has a number of features which allow i
         
     11.  Optionally (but especially for EDDTableFromFiles datasets), you can add an [nThreads](#nthreads) tag to the dataset to tell ERDDAP to use more than 1 thread when responding to a user's request for data. This minimizes the effects of the delay that occurs when ERDDAP™ reads data files from (remote) AWS S3 buckets into the local cache and (perhaps) decompressing them.
 
-#### AWS S3 Open Data
+#### AWS S3 Open Data {#aws-s3-open-data}
 As part of NOAA's [Big Data Program](https://www.noaa.gov/nodd/about), NOAA has partnerships with five organizations, including AWS, "to explore the potential benefits of storing copies of key observations and model outputs in the Cloud to allow computing directly on the data without requiring further distribution". AWS includes the datasets it gets from NOAA as part of its program to offer public access to a large collection of [Open Data on AWS S3](https://registry.opendata.aws/) from any computer, whether it is an Amazon compute instance (a rented computer) on the AWS network or your own PC on any network. The example below assumes you are working with a publicly accessible dataset.
 
-#### Accessing Files in an AWS S3 Bucket
+#### Accessing Files in an AWS S3 Bucket {#accessing-files-in-an-aws-s3-bucket}
 For a private S3 data bucket, the bucket's owner must give you access to the bucket. (See the AWS documentation.)
 
 In all cases, you will need an AWS account because the AWS SDK for Java (which ERDDAP™ uses to retrieve information about the contents of a bucket) requires AWS account credentials. (more on this below)
@@ -676,14 +676,14 @@ where
 For example, https://noaa-goes17.s3.us-east-1.amazonaws.com/ABI-L1b-RadC/  
 This URL format is one of the AWS S3 recommendations: see [Accessing a Bucket](https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingBucket.html) and [this description of prefixes](https://docs.aws.amazon.com/AmazonS3/latest/dev/ListingKeysHierarchy.html). ERDDAP™ requires that you combine the bucket URL and the optional prefix into one URL in order to specify the &lt;cacheFromUrl> (or &lt;fileDir>) where the files are located.
 
-#### Test Public AWS S3 Buckets
+#### Test Public AWS S3 Buckets {#test-public-aws-s3-buckets}
 For public buckets, you can and should test the bucket URL of the AWS S3 directory in your browser, e.g.,  
 [https://noaa-goes17.s3.us-east-1.amazonaws.com](https://noaa-goes17.s3.us-east-1.amazonaws.com) If the bucket URL is correct and appropriate for ERDDAP, it will return an XML document which has (partial) listing of the contents of that bucket. Unfortunately, the full URL (i.e., bucket URL plus prefix) that ERDDAP™ wants for a given dataset doesn't work in a browser. AWS doesn't offer a system to browse the hierarchy of a bucket easily in your browser. (If that is incorrect, please email Chris.John at noaa.gov. Otherwise, Amazon, please add support for this!)
 
-#### Viewing the Contents of a Bucket
+#### Viewing the Contents of a Bucket {#viewing-the-contents-of-a-bucket}
 S3 buckets often contain a couple of categories of files, in a couple of pseudo subdirectories, which could become a couple of ERDDAP™ datasets. To make the ERDDAP™ datasets, you need to know the starting directory for &lt;cacheFromUrl> (or &lt;fileDir>) and the format of the file names which identify that subset of files. If you try to view the entire contents of a bucket in a browser, S3 will just show you the first 1000 files, which is insufficient. Currently, the best way for you to view all of the contents of a bucket is to make an [EDDTableFromFileNames](#eddtablefromfilenames) dataset (on your PC's ERDDAP™ and/or on your public ERDDAP), which also gives you an easy way to browse the directory structure and download files. The &lt;fileDir> for that will be the URL you made above, e.g., https://noaa-goes17.s3.us-east-1.amazonaws.com . \[Why doesn't AWS S3 offer a quick and easy way for anyone to do this without an AWS account?\] Note that when I do this on my PC on a non-Amazon network, it appears that Amazon slows down the response to a trickle (about 100(?) files per chunk) after the first few chunks (of 1000 of files per chunk) are downloaded. Since buckets may have a huge number of files (noaa-goes17 has 26 million), getting all of the contents of a bucket may take EDDTableFromFileNames several hours (e.g., 12!) to finish. \[Amazon, is that right?!\]
 
-#### Making an EDDTableFromFileNames Dataset with an AWS S3 Bucket
+#### Making an EDDTableFromFileNames Dataset with an AWS S3 Bucket {#making-an-eddtablefromfilenames-dataset-with-an-aws-s3-bucket}
 If you have a bucket name, but don't already have a list of files in the S3 bucket or the prefix that identifies location of the relevant files in the bucket, use the instructions below to make an EDDTableFromFileNames dataset so you can browse the directory hierarchy of the S3 bucket via ERDDAP's "files" system.
 
 1.  Open an AWS Account  
@@ -729,7 +729,7 @@ https://noaa-goes17.s3.us-east-1.amazonaws.com/ABI-L1b-RadC/
 as the &lt;cacheFromUrl>. Unfortunately, for this particular example, the datasets in the bucket all seem to be level 1 or level 2 datasets, which ERDDAP™ [isn't particularly good at](#dimensions), because the dataset is a more complicated collection of variables which use different dimensions.  
      
     
-### NcML files
+### NcML files {#ncml-files}
 NcML files let you specify on-the-fly changes to one or more original source NetCDF (v3 or v4) .nc, .grib, .bufr, or .hdf (v4 or v5) files, and then have ERDDAP™ treat the .ncml files as the source files. ERDDAP™ datasets will accept .ncml files whenever .nc files are expected. The NcML files MUST have the extension .ncml. See the [Unidata NcML documentation](https://docs.unidata.ucar.edu/netcdf-java/current/userguide/ncml_overview.html). NcML is useful because you can do some things with it (for example, making different changes to different files in a collection, including adding a dimension with a specific value to a file), that you can't do with ERDDAP's datasets.xml.
 
 *   Changes to an .ncml file's lastModified time will cause the file to be reloaded whenever the dataset is reloaded, but changes to the underlying .nc data files won't be directly noticed.
@@ -759,7 +759,7 @@ Sometimes the source .nc file already has a time dimension and time value, but t
       </variable>
     </netcdf>
 ```
-### NetCDF Operators (NCO)
+### NetCDF Operators (NCO) {#netcdf-operators-nco}
 "The netCDF Operators (NCO) comprise a dozen standalone, command-line programs that take netCDF \[v3 or v4\], HDF \[v4 or v5\], \[.grib, .bufr,\] and/or DAP files as input, then operate (e.g., derive new data, compute statistics, print, hyperslab, manipulate metadata) and output the results to screen or files in text, binary, or netCDF formats. NCO aids analysis of gridded scientific data. The shell-command style of NCO allows users to manipulate and analyze files interactively, or with expressive scripts that avoid some overhead of higher-level programming environments." (from the [NCO](https://nco.sourceforge.net/) homepage).
 
 An alternative to NCO is [NcML](#ncml-files). The big difference is that NcML is a system for making changes on-the-fly (so the source files aren't altered), whereas NCO can be used to make changes to (or new versions of) the files. Both NCO and NcML are very, very flexible and allow you to make almost any change you can think of to the files. For both, it can be challenging to figure out exactly how to do what you want to do -- check the web for similar examples. Both are useful tools for preparing netCDF and HDF files for use with ERDDAP, notably, to make changes beyond what ERDDAP's manipulation system can do.
@@ -776,7 +776,7 @@ EDDGridFromFiles and EDDTableFrom Files insist that the units for a given variab
 nco/ncatted -a units,time,o,c,'seconds since 1970-01-01T00:00:00Z' \*.nc  
 \[For many problems like this in EDDTableFrom...Files datasets, you can now use [standardizeWhat](#standardizewhat) to tell ERDDAP to standardize the source files as they are read into ERDDAP.\]
     
-### Limits to the Size of a Dataset
+### Limits to the Size of a Dataset {#limits-to-the-size-of-a-dataset}
 You'll see many references to "2 billion" below. More accurately, that is a reference to 2,147,483,647 (2^31-1), which is the maximum value of a 32-bit signed integer. In some computer languages, for example Java (which ERDDAP™ is written in), that is the largest data type that can be used for many data structures (for example, the size of an array).
 
 For String values (for example, for variable names, attribute names, String attribute values, and String data values), the maximum number of characters per String in ERDDAP™ is ~2 billion. But in almost all cases, there will be small or large problems if a String exceeds a reasonable size (e.g., 80 characters for variable names and attribute names, and 255 characters for most String attribute values and data values). For example, web pages which display long variable names will be awkwardly wide and long variable names will be truncated if they exceed the limit of the response file type.
@@ -807,7 +807,7 @@ For both gridded and tabular datasets, there are some internal limits on the siz
 *   The file-type-specific limits are useful in that they prevent naive requests for truly huge amounts of data (for example, "give me all of this dataset" when the dataset has 20TB of data), which would take weeks or months to download. The longer the download, the more likely it will fail for a variety of reasons.
 *   The file-type-specific limits are useful in that they force the user to deal with reasonably-sized subsets (for example, dealing with a large gridded dataset via files with data from one time point each).  
          
-### Switch to ACDD-1.3
+### Switch to ACDD-1.3 {#switch-to-acdd-13}
 We (notably [GenerateDatasetsXml](#generatedatasetsxml)) currently recommend [ACDD version 1.3](https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3), which was ratified in early 2015 and which is referred to as "ACDD-1.3" in the global Conventions attribute. Prior to ERDDAP™ version 1.62 (released in June 2015), ERDDAP™ used/recommended the original, version 1.0, of the [NetCDF Attribute Convention for Dataset Discovery](https://wiki.esipfed.org/ArchivalCopyOfVersion1) which was referred to as "Unidata Dataset Discovery v1.0" in the global Conventions and Metadata\_Conventions attributes.
 
 If your datasets use earlier versions of ACDD, we RECOMMEND that you switch to ACDD-1.3. It isn't hard. ACDD-1.3 is highly backward compatible with version 1.0. To switch, for all datasets (except EDDGridFromErddap and EDDTableFromErddap datasets):
@@ -846,7 +846,7 @@ If your datasets use earlier versions of ACDD, we RECOMMEND that you switch to A
     
 That's it. I hope that wasn't too hard.  
      
-### Zarr
+### Zarr {#zarr}
 As of version 2.25 ERDDAP™ can read local Zarr files using [EDDTableFromNcFiles](#eddtablefromncfiles) and [EDDGridFromNcFiles](#eddgridfromncfiles).
 
 (As of August 2019) We could easily be wrong, but we are not yet convinced that [Zarr](https://github.com/zarr-developers/zarr-python), or similar systems which break data files up into smaller chunks, are great solutions to the problem of ERDDAP™ reading data stored in cloud services like Amazon AWS S3. Zarr is a great technology that has shown its usefulness in a variety of situations, we're just not sure that ERDDAP+S3 will be one of those situations. Mostly we're saying: before we rush to make the effort to store all our data in Zarr, let's do some tests to see if it is actually a better solution.
@@ -862,12 +862,12 @@ It is likely that different scenarios will favor different solutions, e.g., only
 Mostly we're saying: before we rush to make the effort to store all our data in Zarr, let's do some tests to see if it is actually a better solution.
 
 - - -
-## List of Types Datasets
+## List of Types Datasets {#list-of-types-datasets}
 If you need help choosing the right dataset type, see [Choosing the Dataset Type](#choosing-the-dataset-type).
 
 The types of datasets fall into two categories. ([Why?](#why-just-two-basic-data-structures))
 
-### EDDGrid
+### EDDGrid {#eddgrid}
 *   [**EDDGrid**](#eddgrid) datasets handle gridded data.
     *   In EDDGrid datasets, data variables are multi-dimensional arrays of data.
     *   There MUST be an axis variable for each dimension. Axis variables MUST be specified in the order that the data variables use them.
@@ -898,7 +898,7 @@ The types of datasets fall into two categories. ([Why?](#why-just-two-basic-data
              
     *   All EDDGrid datasets support an nThreads setting, which tells ERDDAP™ how many threads to use when responding to a request. See the [nThreads](#nthreads) documentation for details.  
          
-### EDDTable
+### EDDTable {#eddtable}
 *   [**EDDTable**](#eddtable) datasets handle tabular data.
     *   Tabular data can be represented as a database-like table with rows and columns. Each column (a data variable) has a name, a set of attributes, and stores just one type of data. Each row has an observation (or group of related values). The data source may have the data in a different data structure, a more complicated data structure, and/or multiple data files, but ERDDAP™ needs to be able to flatten the source data into a database-like table in order to present the data as a tabular dataset to users of ERDDAP.
     *   See the more complete description of the [EDDTable data model](https://coastwatch.pfeg.noaa.gov/erddap/tabledap/documentation.html#dataModel).
@@ -937,9 +937,9 @@ The types of datasets fall into two categories. ([Why?](#why-just-two-basic-data
   
 - - -
 
-## Detailed Descriptions of Dataset Types
+## Detailed Descriptions of Dataset Types {#detailed-descriptions-of-dataset-types}
 
-### EDDGridFromDap
+### EDDGridFromDap {#eddgridfromdap}
 [**EDDGridFromDap**](#eddgridfromdap) handles grid variables from [DAP](https://www.opendap.org/) servers.
 
 *   We strongly recommend using the [GenerateDatasetsXml program](#generatedatasetsxml) to make a rough draft of the datasets.xml chunk for this dataset. You can gather the information you need to tweak that or create your own XML for an EDDGridFromDap dataset by looking at the source dataset's DDS and DAS files in your browser (by adding .das and .dds to the sourceUrl, for example, [https://thredds1.pfeg.noaa.gov/thredds/dodsC/satellite/BA/ssta/5day.dds](https://thredds1.pfeg.noaa.gov/thredds/dodsC/satellite/BA/ssta/5day.dds)).  
@@ -950,7 +950,7 @@ The types of datasets fall into two categories. ([Why?](#why-just-two-basic-data
     
     Unsorted dimension values almost always indicate a problem with the source dataset. This most commonly occurs when a misnamed or inappropriate file is included in the aggregation, which leads to an unsorted time dimension. To solve this problem, see the error message in the ERDDAP™ log.txt file to find the offending time value. Then look in the source files to find the corresponding file (or one before or one after) that doesn't belong in the aggregation.
     
-#### EDDGridFromDap skeleton XML
+#### EDDGridFromDap skeleton XML {#eddgridfromdap-skeleton-xml}
 
  >&nbsp;&nbsp;&nbsp;&nbsp;&lt;dataset type="EDDGridFromDap" [datasetID](#datasetid)\="..." [active](#active)\="..." >  
  >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&lt;sourceUrl>](#sourceurl)...&lt;/sourceUrl>  
@@ -974,7 +974,7 @@ The types of datasets fall into two categories. ([Why?](#why-just-two-basic-data
  >&nbsp;&nbsp;&nbsp;&nbsp;&lt;/dataset>  
 
      
-### EDDGridFromEDDTable
+### EDDGridFromEDDTable {#eddgridfromeddtable}
 [**EDDGridFromEDDTable**](#eddgridfromeddtable) lets you convert an EDDTable tabular dataset into an EDDGrid gridded dataset. Remember that ERDDAP™ treats datasets as either [gridded datasets (subclasses of EDDGrid) or tabular datasets (subclasses of EDDTable)](#why-just-two-basic-data-structures).
 
 *   Normally, if you have gridded data, you just set up an EDDGrid dataset directly. Sometimes this isn't possible, for example, when you have the data stored in a relational database that ERDDAP™ can only access via EDDTableFromDatabase. EDDGridFromEDDTable class lets you remedy that situation.  
@@ -1040,7 +1040,7 @@ The types of datasets fall into two categories. ([Why?](#why-just-two-basic-data
         This is not a flaw in EDDGridFromTable. EDDGridFromTable can't solve this problem. The problem is inherent in the conversion of tabular data into gridded data (unless other assumptions can be made, but they can't be made here).  
         It is up to you, the ERDDAP™ administrator, to **test your EDDGridFromEDDTable thoroughly** to ensure that the precision values are set to avoid these potential problems.
         
-#### gapThreshold
+#### gapThreshold {#gapthreshold}
 *   [gapThreshold](#gapthreshold) -- This is a very unusual type of dataset. Since the types of queries that can be made to (handled by) an EDDGrid dataset (related to the ranges and strides of the axisVariables) are very different from the types of queries that can be made to (handled by) an EDDTable dataset (just related to the ranges of some variables), the performance of EDDGridFromEDDTable datasets will vary greatly depending on the exact request which is made and the speed of the underlying EDDTable dataset. For requests that have a stride value > 1, EDDGridFromEDDTable may ask the underlying EDDTable for a relatively big chunk of data (as if stride=1) and then sift through the results, keeping the data from some rows and throwing away the data from others. If it has to sift through a lot of data to get the data it needs, the request will take longer to fill.
     
     If EDDGridFromEDDTable can tell that there will be large gaps (with rows of unwanted data) between the rows with desired data, EDDGridFromEDDTable may choose to make several subrequests to the underlying EDDTable instead of one big request, thereby skipping the unwanted rows of data in the large gaps. The sensitivity for this decision is controlled by the gapThreshold value as specified in the &lt;gapThreshold> tag (default=1000 rows of source data). Setting gapThreshold to a smaller number will lead to the dataset making (generally) more subrequests. Setting gapThreshold to a larger number will lead to the dataset making (generally) fewer subrequests.
@@ -1062,7 +1062,7 @@ The types of datasets fall into two categories. ([Why?](#why-just-two-basic-data
         If nOuterAxes>0, gapThreshold was exceeded and nOuterRequests will be made to EDDTable, corresponding to each requested combination of the leftmost nOuterAxes. For example, if the dataset has 4 axisVariables and dataVariables like eastward\[time\]\[latitude\]\[longitude\]\[depth\], the leftmost (first) axis variable is time.
     *   If &lt;logLevel> in datasets.xml is set to all, additional information is written to the log.txt file.  
          
-#### EDDGridFromEDDTable skeleton XML
+#### EDDGridFromEDDTable skeleton XML {#eddgridfromeddtable-skeleton-xml}
  >&nbsp;&lt;dataset type="EDDGridFromEDDTable" [datasetID](#datasetid)\="..." [active](#active)\="..." >  
  >&nbsp;&nbsp;&nbsp;&nbsp;[&lt;accessibleTo>](#accessibleto)...&lt;/accessibleTo> &lt;!-- 0 or 1 -->  
  >&nbsp;&nbsp;&nbsp;&nbsp;[&lt;graphsAccessibleTo>](#graphsaccessibleto)auto|public&lt;/graphsAccessibleTo> &lt;!-- 0 or 1 -->  
@@ -1083,25 +1083,25 @@ The types of datasets fall into two categories. ([Why?](#why-just-two-basic-data
  >&nbsp;&nbsp;&nbsp;&nbsp;&lt;dataset>...&lt;/dataset> &lt;!-- The underlying source EDDTable dataset. -->  
  >&nbsp;&lt;/dataset>  
 
-### EDD*FromERDDAP
+### EDD*FromERDDAP {#eddfromerddap}
 **EDDGridFromErddap** handles gridded data from a remote ERDDAP™ server.  
 **EDDTableFromErddap** handles tabular data from a remote ERDDAP™ server.
 
 *   EDDGridFromErddap and EDDTableFromErddap behave differently from all other types of datasets in ERDDAP.
     *   Like other types of datasets, these datasets get information about the dataset from the source and keep it in memory.
     *   Like other types of datasets, when ERDDAP™ searches for datasets, displays the Data Access Form (*datasetID*.html), or displays the Make A Graph form (*datasetID*.graph), ERDDAP™ uses the information about the dataset which is in memory.
-    *   Unlike other types of datasets, when ERDDAP™ receives a request for data or images from these datasets, ERDDAP [redirects](https://en.wikipedia.org/wiki/URL_redirection) the request to the remote ERDDAP™ server. The result is:
-        *   This is very efficient (CPU, memory, and bandwidth), because otherwise
-            1.  The composite ERDDAP™ has to send the request to the other ERDDAP™ (which takes time).
-            2.  The other ERDDAP™ has to get the data, reformat it, and transmit the data to the composite ERDDAP.
-            3.  The composite ERDDAP™ has to receive the data (using bandwidth), reformat it (using CPU and memory), and transmit the data to the user (using bandwidth).By redirecting the request and allowing the other ERDDAP™ to send the response directly to the user, the composite ERDDAP™ spends essentially no CPU time, memory, or bandwidth on the request.
-        *   The redirect is transparent to the user regardless of the client software (a browser or any other software or command line tool).
-    #### Redirect
-    *   [You can tell ERDDAP™](#redirect) not to redirect any user requests by setting &lt;redirect>false&lt;/redirect>, but this negates most of the advantages of the ...FromErddap dataset type (notably, dispersing the load on the front end ERDDAP™ to the remote/backend ERDDAP).  
+    *   EDDGridFromErddap and EDDTableFromErddap are the basis for [grids/clusters/federations](/docs/server-admin/scaling) of ERDDAPs, which efficiently distribute the CPU usage (mostly for making maps), memory usage, dataset storage, and bandwidth usage of a large data center.  
+#### Redirect {#redirect}
+*   Unlike other types of datasets, when ERDDAP™ receives a request for data or images from these datasets, ERDDAP [redirects](https://en.wikipedia.org/wiki/URL_redirection) the request to the remote ERDDAP™ server. The result is:
+    *   This is very efficient (CPU, memory, and bandwidth), because otherwise
+        1.  The composite ERDDAP™ has to send the request to the other ERDDAP™ (which takes time).
+        2.  The other ERDDAP™ has to get the data, reformat it, and transmit the data to the composite ERDDAP.
+        3.  The composite ERDDAP™ has to receive the data (using bandwidth), reformat it (using CPU and memory), and transmit the data to the user (using bandwidth).By redirecting the request and allowing the other ERDDAP™ to send the response directly to the user, the composite ERDDAP™ spends essentially no CPU time, memory, or bandwidth on the request.
+    *   The redirect is transparent to the user regardless of the client software (a browser or any other software or command line tool).
+*   [You can tell ERDDAP™](#redirect) not to redirect any user requests by setting &lt;redirect>false&lt;/redirect>, but this negates most of the advantages of the ...FromErddap dataset type (notably, dispersing the load on the front end ERDDAP™ to the remote/backend ERDDAP).  
          
-*   EDDGridFromErddap and EDDTableFromErddap are the basis for [grids/clusters/federations](/docs/server-admin/scaling) of ERDDAPs, which efficiently distribute the CPU usage (mostly for making maps), memory usage, dataset storage, and bandwidth usage of a large data center.  
      
-#### Subscriptions
+#### Subscriptions {#subscriptions}
 Normally, when an EDDGridFromErddap and EDDTableFromErddap are (re)loaded on your ERDDAP, they try to add a subscription to the remote dataset via the remote ERDDAP's email/URL subscription system. That way, whenever the remote dataset changes, the remote ERDDAP™ contacts the [setDatasetFlag URL](/docs/server-admin/additional-information#set-dataset-flag) on your ERDDAP™ so that the local dataset is reloaded ASAP and so that the local dataset is always perfectly up-to-date and mimics the remote dataset. So, the first time this happens, you should get an email requesting that you validate the subscription. However, if the local ERDDAP™ can't send an email or if the remote ERDDAP's email/URL subscription system isn't active, you should email the remote ERDDAP™ administrator and request that s/he manually add [&lt;onChange>](#onchange)...&lt;/onChange> tags to all of the relevant datasets to call your dataset's [setDatasetFlag URLs](/docs/server-admin/additional-information#set-dataset-flag). See your ERDDAP™ daily report for a list of setDatasetFlag URLs, but just send the ones for EDDGridFromErddap and EDDTableFromErddap datasets to the remote ERDDAP™ administrator.
     
     Is this not working? Are your local datasets not staying in sync with the remote datasets?  
@@ -1118,7 +1118,7 @@ Normally, when an EDDGridFromErddap and EDDTableFromErddap are (re)loaded on you
     9.  Your ERDDAP™ should receive a request to set that flagURL. Look in your log.txt for "setDatasetFlag.txt?" request(s) and see if there is an error message associated with the requests.
     10.  Your ERDDAP™ should then try to reload that dataset (perhaps not immediately, but ASAP).  
          
-#### Up-to-date max(time)?
+#### Up-to-date max(time)? {#up-to-date-maxtime}
 EDDGrid/TableFromErddap datasets only changes their stored information about each source dataset when the source dataset is ["reload"ed](#reloadeverynminutes) and some piece of metadata changes (e.g., the time variable's actual\_range), thereby generating a subscription notification. If the source dataset has data that changes frequently (for example, new data every second) and uses the ["update"](#updateeverynmillis) system to notice frequent changes to the underlying data, the EDDGrid/TableFromErddap won't be notified about these frequent changes until the next dataset "reload", so the EDDGrid/TableFromErddap won't be perfectly up-to-date. You can minimize this problem by changing the source dataset's &lt;reloadEveryNMinutes> to a smaller value (60? 15?) so that there are more subscription notifications to tell the EDDGrid/TableFromErddap to update its information about the source dataset.
 
 Or, if your data management system knows when the source dataset has new data (e.g., via a script that copies a data file into place), and if that isn't super frequent (e.g., every 5 minutes, or less frequent), there's a better solution:
@@ -1130,7 +1130,7 @@ Or, if your data management system knows when the source dataset has new data (e
 
 That will lead to the source dataset being perfectly up-to-date and cause it to generate a subscription notification, which will be sent to the EDDGrid/TableFromErddap dataset. That will lead the EDDGrid/TableFromErddap dataset to be perfectly up-to-date (well, within 5 seconds of new data being added). And all that will be done efficiently (without unnecessary dataset reloads).  
      
-#### No addAttributes, axisVariable, or dataVariable
+#### No addAttributes, axisVariable, or dataVariable {#no-addattributes-axisvariable-or-datavariable}
 Unlike other types of datasets, EDDTableFromErddap and EDDGridFromErddap datasets don't allow global &lt;addAttributes>, &lt;axisVariable>, or &lt;dataVariable> sections in the datasets.xml for that dataset. The problem is that allowing those would lead to inconsistencies:
     
     1.  Let's say it was allowed and you added a new global attribute.
@@ -1142,14 +1142,14 @@ Unlike other types of datasets, EDDTableFromErddap and EDDGridFromErddap dataset
     1.  Convince the admin of the source ERDDAP™ to make the changes that you want to the metadata.
     2.  Instead of EDDTableFromErddap, use [EDDTableFromDapSequence](#eddtablefromdapsequence). Or instead of EDDGridFromErddap, use [EDDGridFromDap](#eddgridfromdap). Those EDD types allow you to connect efficiently to a dataset on a remote ERDDAP™ (but without redirecting data requests) and they allow you to include global &lt;addAttributes>, &lt;axisVariable>, or &lt;dataVariable> sections in the datasets.xml. One other difference: you will need to manually subscribe to the remote dataset, so that the dataset on your ERDDAP™ will be notified (via the [flag URL](/docs/server-admin/additional-information#set-dataset-flag)) when there are changes to the remote dataset. Thus, you are creating a new dataset, instead of linking to a remote dataset.  
          
-#### Other notes
+#### Other notes {#other-notes}
 *   For security reasons, EDDGridFromErddap and EDDTableFromErddap don't support the [&lt;accessibleTo>](#accessibleto) tag and can't be used with remote datasets that require logging in (because they use [&lt;accessibleTo>](#accessibleto)).. See ERDDAP's [security system](/docs/server-admin/additional-information#security) for restricting access to some datasets to some users.  
      
 *   Starting with ERDDAP™ v2.10, EDDGridFromErddap and EDDTableFromErddap support the [&lt;accessibleViaFiles>](#accessibleviafiles) tag. Unlike other types of datasets, the default is true, but the dataset's files will be accessibleViaFiles only if the source dataset also has &lt;accessibleViaFiles> set to true.  
      
 *   You can use the [GenerateDatasetsXml program](#generatedatasetsxml) to make the datasets.xml chunk for this type of dataset. But you can do these types of datasets easily by hand.  
      
-#### EDDGridFromErddap skeleton XML 
+#### EDDGridFromErddap skeleton XML {#eddgridfromerddap-skeleton-xml}
 *   EDDGridFromErddap skeleton XML  dataset is very simple, because the intent is just to mimic the remote dataset which is already suitable for use in ERDDAP:
  >&nbsp;&nbsp;&lt;dataset type="EDDGridFromErddap" [datasetID](#datasetid)\="..." [active](#active)\="..." >  
  >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&lt;sourceUrl>](#sourceurl)...&lt;/sourceUrl>  
@@ -1170,7 +1170,7 @@ Unlike other types of datasets, EDDTableFromErddap and EDDGridFromErddap dataset
  >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&lt;redirect>](#redirect)true(default)|false&lt;/redirect> &lt;!-- 0 or 1; -->  
  >&nbsp;&nbsp;&lt;/dataset>  
 
-#### EDDTableFromErddap skeleton XML 
+#### EDDTableFromErddap skeleton XML {#eddtablefromerddap-skeleton-xml}
 *   The skeleton XML for an EDDTableFromErddap dataset is very simple, because the intent is just to mimic the remote dataset, which is already suitable for use in ERDDAP:
 >&nbsp;&nbsp;&lt;dataset type="EDDTableFromErddap" [datasetID](#datasetid)\="..." [active](#active)\="..." >  
 >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&lt;sourceUrl>](#sourceurl)...&lt;/sourceUrl>  
@@ -1186,7 +1186,7 @@ Unlike other types of datasets, EDDTableFromErddap and EDDGridFromErddap dataset
 >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&lt;redirect>](#redirect)true(default)|false&lt;/redirect> &lt;!-- 0 or 1; -->  
 >&nbsp;&nbsp;&lt;/dataset>  
 
-### EDDGridFromEtopo
+### EDDGridFromEtopo {#eddgridfrometopo}
 [**EDDGridFromEtopo**](#eddgridfrometopo) just serves the [ETOPO1 Global 1-Minute Gridded Elevation Data Set](https://www.ngdc.noaa.gov/mgg/global/global.html) (Ice Surface, grid registered, binary, 2byte int: etopo1\_ice\_g\_i2.zip) which is distributed with ERDDAP.
 
 *   Only two datasetIDs are supported for EDDGridFromEtopo, so that you can access the data with longitude values -180 to 180, or longitude values 0 to 360.
@@ -1199,7 +1199,7 @@ Unlike other types of datasets, EDDTableFromErddap and EDDGridFromErddap dataset
       <dataset type="EDDGridFromEtopo" datasetID="etopo360" /> 
 ```
 
-### EDDGridFromFiles
+### EDDGridFromFiles {#eddgridfromfiles}
 [**EDDGridFromFiles**](#eddgridfromfiles) is the superclass of all EDDGridFrom...Files classes. You can't use EDDGridFromFiles directly. Instead, use a subclass of EDDGridFromFiles to handle the specific file type:
 
 *   [EDDGridFromMergeIRFiles](#eddgridfrommergeirfiles) handles data from gridded [MergeIR .gz](https://www.cpc.ncep.noaa.gov/products/global_precip/html/README) files.
@@ -1209,10 +1209,10 @@ Unlike other types of datasets, EDDTableFromErddap and EDDGridFromErddap dataset
 
 Currently, no other file types are supported. But it is usually relatively easy to add support for other file types. Contact us if you have a request. Or, if your data is in an old file format that you would like to move away from, we recommend converting the files to be NetCDF v3 .nc files. NetCDF is a widely supported, binary format, allows fast random access to the data, and is already supported by ERDDAP.
 
-#### From Files Details
+#### From Files Details {#from-files-details}
 The following information applies to all of the subclasses of EDDGridFromFiles.
 
-##### Aggregation of an Existing Dimension
+##### Aggregation of an Existing Dimension {#aggregation-of-an-existing-dimension}
 All variations of EDDGridFromFiles can aggregate data from local files, where each file has 1 (or more) different values for the leftmost (first) dimension, usually \[time\], which will be aggregated. For example, the dimensions might be \[time\]\[altitude\]\[latitude\]\[longitude\], and the files might have the data for one (or a few) time value(s) per file. The resulting dataset appears as if all of the file's data had been combined. The big advantages of aggregation are:
 
 *   The size of the aggregated data set can be much larger than a single file can be conveniently (~2GB).
@@ -1225,7 +1225,7 @@ The requirements for aggregation are:
 *   All files MUST have exactly the same values for all of the other dimensions. The precision of the testing is determined by [matchAxisNDigits](#matchaxisndigits).
 *   All files MUST have exactly the same [units](#units) metadata for all axisVariables and dataVariables. If this is a problem, you may be able to use [NcML](#ncml-files) or [NCO](#netcdf-operators-nco) to fix the problem.  
          
-##### Aggregation via File Names or Global Metadata
+##### Aggregation via File Names or Global Metadata {#aggregation-via-file-names-or-global-metadata}
 All variations of EDDGridFromFiles can also aggregate a group of files by adding a new leftmost (first) dimension, usually time, based on a value derived from each filename or from the value of a global attribute that is in each file. For example, the filename might include the time value for the data in the file. ERDDAP™ would then create a new time dimension.
 
 Unlike the similar feature in THREDDS, ERDDAP™ always creates an axisVariable with numeric values (as required by CF), never String values (which are not allowed by CF). Also, ERDDAP™ will sort the files in the aggregation based on the numeric axisVariable value which is assigned to each file, so that the axis variable will always have sorted values as required by CF. The THREDDS approach of doing a lexicographic sort based on the file names leads to aggregations where the axis values aren't sorted (which is not allowed by CF) when the file names sort differently than the derived axisVariable values.
@@ -1304,7 +1304,7 @@ A full example of an axisVariable which makes an aggregated dataset with a new "
 ```
 Note the use of the capture group number 2 to capture the digits which occur after 'r' or 's', and before "\_global". This example also shows how to add additional attributes (e.g., ioos\_category and units) to the axis variable.  
      
-#### Externally Compressed Files
+#### Externally Compressed Files {#externally-compressed-files}
 *   Datasets that are subsets of EDDGridFromFiles and EDDTableFromFiles can serve data directly from externally compressed data files, including .tgz, .tar.gz, .tar.gzip, .gz, .gzip, .zip, .bz2, and .Z files.  
      
 *   **This works surprisingly well!**  
@@ -1368,7 +1368,7 @@ Note the use of the capture group number 2 to capture the digits which occur aft
     
     While neither approach is a winner in all situations, it is clear that ERDDAP's ability to serve data from externally compressed files makes external compression a reasonable alternative to the internal compression offered by .nc4 and .hdf5. That is significant given that internal compression is one of the main reasons people choose to use .nc4 and .hdf5.  
      
-##### Decompressed Cache
+##### Decompressed Cache {#decompressed-cache}
 ERDDAP™ makes a decompressed version of any compressed binary (e.g., .nc) data file when it needs to read the file. The decompressed files are kept in the dataset's directory within *bigParentDirectory*/decompressed/ . Decompressed files which haven't been used recently will be deleted to free up space when the cumulative file size is >10GB. You can change that by setting &lt;decompressedCacheMaxGB> (default=10) in datasetsXml.xml, e.g.,  
 ```
         <decompressedCacheMaxGB>40</decompressedCacheMaxGB>  
@@ -1381,18 +1381,18 @@ Also, decompressed files that haven't been used in the last 15 minutes will be d
      
 *   Because decompressing a file can take a significant amount of time (0.1 to 10 seconds), datasets with compressed files may benefit from setting the dataset's [&lt;nThreads>](#nthreads) setting to a higher number (2? 3? 4?). The downsides to even higher numbers (e.g., 5? 6? 7?) are diminishing returns and that one user's request can then use a high percentage of the system's resources, thus significantly slowing down the processing of other user's requests. Thus, there is no ideal nThreads setting, just different consequences in different situations with different settings.  
          
-#### Sorted Dimension Values
+#### Sorted Dimension Values {#sorted-dimension-values}
 The values for each dimension MUST be in sorted order (ascending or descending, except for the first (left-most) dimension which must be ascending). The values can be irregularly spaced. There can't be any ties. This is a requirement of the [CF metadata standard](https://cfconventions.org/Data/cf-conventions/cf-conventions-1.8/cf-conventions.html). If any dimension's values aren't in sorted order, the dataset won't be loaded and ERDDAP™ will identify the first unsorted value in the log file, *bigParentDirectory*/logs/log.txt .
     
     Unsorted dimension values almost always indicate a problem with the source dataset. This most commonly occurs when a misnamed or inappropriate file is included in the aggregation, which leads to an unsorted time dimension. To solve this problem, see the error message in the ERDDAP™ log.txt file to find the offending time value. Then look in the source files to find the corresponding file (or one before or one after) that doesn't belong in the aggregation.
     
-#### Directories
+#### Directories {#directories}
 The files MAY be in one directory, or in a directory and its subdirectories (recursively). If there are a large number of files (for example, >1,000), the operating system (and thus EDDGridFromFiles) will operate much more efficiently if you store the files in a series of subdirectories (one per year, or one per month for datasets with very frequent files), so that there are never a huge number of files in a given directory.  
      
-#### &lt;cacheFromUrl>
+#### &lt;cacheFromUrl> {#cachefromurl}
 All EDDGridFromFiles and all EDDTableFromFiles datasets support a set of tags which tell ERDDAP™ to download and maintain a copy of all of a remote dataset's files, or a cache of a few files (downloaded as needed). This can be incredibly useful. See the [cacheFromUrl documentation](#cachefromurl).  
     
-#### Remote Directories and HTTP Range Requests
+#### Remote Directories and HTTP Range Requests {#remote-directories-and-http-range-requests}
 (AKA Byte Serving, Byte Range Requests, Accept-Ranges http header)  
 EDDGridFromNcFiles, EDDTableFromMultidimNcFiles, EDDTableFromNcFiles, and EDDTableFromNcCFFiles, can *sometimes* serve data from .nc files on remote servers and accessed via HTTP if the server supports [Byte Serving](https://en.wikipedia.org/wiki/Byte_serving) via HTTP range requests (the HTTP mechanism for byte serving). This is possible because netcdf-java (which ERDDAP™ uses to read .nc files) supports reading data from remote .nc files via HTTP range requests.
 
@@ -1405,7 +1405,7 @@ Flipping this around, given that you can (in theory) think of a dataset in ERDDA
 *   Use (OPeN)DAP client software to connect to the griddap services offered by ERDDAP. That is what DAP (and thus ERDDAP) was designed for. It is very efficient.
 *   Or, download the source file(s) from the "files" system (or a subset file via a .nc?query) to your computer and use netcdf-java, Ferret, or some other NetCDF client software to read the (now) local file(s).  
          
-#### Cached File Information
+#### Cached File Information {#cached-file-information}
 When an EDDGridFromFiles dataset is first loaded, EDDGridFromFiles reads information from all of the relevant files and creates tables (one row for each file) with information about each valid file and each "bad" (different or invalid) file.
 *   The tables are also stored on disk, as NetCDF v3 .nc files in *bigParentDirectory*/dataset/*last2CharsOfDatasetID*/*datasetID*/ in files named:  
       dirTable.nc (which holds a list of unique directory names),  
@@ -1420,10 +1420,10 @@ When an EDDGridFromFiles dataset is first loaded, EDDGridFromFiles reads informa
 *   You shouldn't ever need to delete or work with these files. One exception is: if you are still making changes to a dataset's datasets.xml setup, you may want to delete these files to force ERDDAP™ to reread all of the files since the files will be read/interpreted differently. If you ever do need to delete these files, you can do it when ERDDAP™ is running. (Then set a [flag](/docs/server-admin/additional-information#set-dataset-flag) to reload the dataset ASAP.) However, ERDDAP™ usually notices that the datasets.xml information doesn't match the fileTable information and deletes the file tables automatically.
 *   If you want to encourage ERDDAP™ to update the stored dataset information (for example, if you just added, removed, or changed some files to the dataset's data directory), use the [flag system](/docs/server-admin/additional-information#flag) to force ERDDAP™ to update the cached file information.  
          
-#### Handling Requests
+#### Handling Requests {#handling-requests}
 When a client's request for data is processed, EDDGridFromFiles can quickly look in the table with the valid file information to see which files have the requested data.  
      
-#### Updating the Cached File Information
+#### Updating the Cached File Information {#updating-the-cached-file-information}
 Whenever the dataset is reloaded, the cached file information is updated.
     
 *   The dataset is reloaded periodically as determined by the &lt;reloadEveryNMinutes> in the dataset's information in datasets.xml.
@@ -1432,16 +1432,16 @@ Whenever the dataset is reloaded, the cached file information is updated.
 
 When the dataset is reloaded, ERDDAP™ compares the currently available files to the cached file information tables. New files are read and added to the valid files table. Files that no longer exist are dropped from the valid files table. Files where the file timestamp has changed are read and their information is updated. The new tables replace the old tables in memory and on disk.  
      
-#### Bad Files
+#### Bad Files {#bad-files}
 The table of bad files and the reasons the files were declared bad (corrupted file, missing variables, etc.) is emailed to the emailEverythingTo email address (probably you) every time the dataset is reloaded. You should replace or repair these files as soon as possible.  
      
-#### Missing Variables
+#### Missing Variables {#missing-variables}
 If some of the files don't have some of the dataVariables defined in the dataset's datasets.xml chunk, that's okay. When EDDGridFromFiles reads one of those files, it will act as if the file had the variable, but with all missing values.  
      
-#### FTP Trouble/Advice
+#### FTP Trouble/Advice {#ftp-troubleadvice}
 If you FTP new data files to the ERDDAP™ server while ERDDAP™ is running, there is the chance that ERDDAP™ will be reloading the dataset during the FTP process. It happens more often than you might think! If it happens, the file will appear to be valid (it has a valid name), but the file isn't yet valid. If ERDDAP™ tries to read data from that invalid file, the resulting error will cause the file to be added to the table of invalid files. This is not good. To avoid this problem, use a temporary filename when FTP'ing the file, for example, ABC2005.nc\_TEMP . Then, the fileNameRegex test (see below) will indicate that this is not a relevant file. After the FTP process is complete, rename the file to the correct name. The renaming process will cause the file to become relevant in an instant.  
      
-#### "0 files" Error Message
+#### "0 files" Error Message {#0-files-error-message-1}
 If you run [GenerateDatasetsXml](#generatedatasetsxml) or [DasDds](#dasdds), or if you try to load an EDDGridFrom...Files dataset in ERDDAP™, and you get a "0 files" error message indicating that ERDDAP™ found 0 matching files in the directory (when you think that there are matching files in that directory):
     *   Check that the files really are in that directory.
     *   Check the spelling of the directory name.
@@ -1449,7 +1449,7 @@ If you run [GenerateDatasetsXml](#generatedatasetsxml) or [DasDds](#dasdds), or 
     *   Check that the user who is running the program (e.g., user=tomcat (?) for Tomcat/ERDDAP) has 'read' permission for those files.
     *   In some operating systems (for example, SELinux) and depending on system settings, the user who ran the program must have 'read' permission for the whole chain of directories leading to the directory that has the files.  
          
-#### EDDGridFromFiles skeleton XML
+#### EDDGridFromFiles skeleton XML {#eddgridfromfiles-skeleton-xml}
 *   **The skeleton XML** for all EDDGridFromFiles subclasses is:
 
 >&nbsp;&nbsp;&lt;dataset type="EDDGridFrom...Files" [datasetID](#datasetid)\="..." [active](#active)\="..." >  
@@ -1491,7 +1491,7 @@ If you run [GenerateDatasetsXml](#generatedatasetsxml) or [DasDds](#dasdds), or 
 >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&lt;dataVariable>](#datavariable)...&lt;/dataVariable> &lt;!-- 1 or more -->  
 >&nbsp;&nbsp;&lt;/dataset>  
 
-### EDD*FromAudioFiles
+### EDD*FromAudioFiles {#eddfromaudiofiles}
 **EDDGridFromAudioFiles** and **EDDTableFromAudioFiles** aggregate data from a collection of local audio files. (These first appeared in ERDDAP™ v1.82.) The difference is that EDDGridFromAudioFiles treats the data as a multidimensional dataset (usually with 2 dimensions: \[file startTime\] and \[elapsedTime within a file\]), whereas EDDTableFromAudioFiles treats the data as tabular data (usually with columns for the file startTime, the elapsedTime with the file, and the data from the audio channels). EDDGridFromAudioFiles requires that all files have the same number of samples, so if that is not true, you must use EDDTableFromAudioFiles. Otherwise, the choice of which EDD type to use is entirely your choice. One advantage of EDDTableFromAudioFiles: you can add other variables with other information, e.g., stationID, stationType. In both cases, the lack of a unified time variable makes it more difficult to work with the data from these EDD types, but there was no good way to set up a unified time variable.
 
 See these class' superclasses, [EDDGridFromFiles](#eddgridfromfiles) and [EDDTableFromFiles](#eddtablefromfiles), for general information on how this class works and how to use it.
@@ -1533,7 +1533,7 @@ Details:
 ```
     The time format should then be specified as the units attribute: &lt;att name="units">yyyMMdd'\_'HHmmss&lt;/att>  
      
-### EDDGridFromMergeIRFiles
+### EDDGridFromMergeIRFiles {#eddgridfrommergeirfiles}
 [**EDDGridFromMergeIRFiles**](#eddgridfrommergeirfiles) aggregates data from local, [MergeIR](https://www.cpc.ncep.noaa.gov/products/global_precip/html/README) files, which are from the [Tropical Rainfall Measuring Mission (TRMM)](https://trmm.gsfc.nasa.gov), which is a joint mission between NASA and the Japan Aerospace Exploration Agency (JAXA). MergeIR files can be downloaded from [NASA](ftp://disc2.nascom.nasa.gov/data/s4pa/TRMM_ANCILLARY/MERG/).
 
 EDDGridFromMergeIRFiles.java was written and contributed to the ERDDAP™ project by Jonathan Lafite and Philippe Makowski of R.Tech Engineering (license: copyrighted open source).
@@ -1550,7 +1550,7 @@ See this class' superclass, [EDDGridFromFiles](#eddgridfromfiles), for general i
 
 We strongly recommend using the [GenerateDatasetsXml program](#generatedatasetsxml) to make a rough draft of the datasets.xml chunk for this dataset. You can then edit that to fine tune it.  
  
-### EDDGridFromNcFiles
+### EDDGridFromNcFiles {#eddgridfromncfiles}
 [**EDDGridFromNcFiles**](#eddgridfromncfiles) aggregates data from local, gridded, [GRIB .grb and .grb2](https://en.wikipedia.org/wiki/GRIB) files, [HDF (v4 or v5) .hdf](https://www.hdfgroup.org/) files, [.ncml](#ncml-files) files, [NetCDF (v3 or v4) .nc](https://www.unidata.ucar.edu/software/netcdf/) files, and [Zarr](https://github.com/zarr-developers/zarr-python) files (as of version 2.25). Zarr files have slightly different behavior and require either the fileNameRegex or the pathRegex to include "zarr".
 
 This may work with other file types (for example, BUFR), we just haven't tested it -- please send us some sample files.
@@ -1560,13 +1560,13 @@ This may work with other file types (for example, BUFR), we just haven't tested 
 *   Starting with ERDDAP™ v2.12, EDDGridFromNcFiles and EDDGridFromNcFilesUnpacked can read data from "structures" in .nc4 and .hdf4 files. To identify a variable that is from a structure, the &lt;sourceName> must use the format: *fullStructureName*|*memberName*, for example group1/myStruct|myMember .
 *   We strongly recommend using the [GenerateDatasetsXml program](#generatedatasetsxml) to make a rough draft of the datasets.xml chunk for this dataset. You can then edit that to fine tune it.
     
-#### Groups in Gridded Nc Files
+#### Groups in Gridded Nc Files {#groups-in-gridded-nc-files}
     [Netcdf4 files can contain groups.](#groups-in-gridded-nc-files) ERDDAP™ just makes a dataset from the variables in one group and all of its parent groups. You can specify a specific group name in GenerateDatasetsXml (omit the trailing slash), or use "" to have GenerateDatasetsXml search all groups for the variables that use the most dimensions, or use "\[root\]" to have GenerateDatasets just look for variables in the root group.
     
     The first thing GenerateDatasetsXml does for this type of dataset after you answer the questions is print the ncdump-like structure of the sample file. So if you enter a few goofy answers for the first loop through GenerateDatasetsXml, at least you'll be able to see if ERDDAP™ can read the file and see what dimensions and variables are in the file. Then you can give better answers for the second loop through GenerateDatasetsXml.
     
 
-### EDDGridFromNcFilesUnpacked
+### EDDGridFromNcFilesUnpacked {#eddgridfromncfilesunpacked}
 [**EDDGridFromNcFilesUnpacked**](#eddgridfromncfilesunpacked) is a variant of [EDDGridFromNcFiles](#eddgridfromncfiles) which aggregates data from local, gridded NetCDF (v3 or v4) .nc and related files. The difference is that this class unpacks each data file before EDDGridFromFiles looks at the files:
 
 *   It unpacks variables that are packed with [scale\_factor and/or add\_offset](#scale_factor).
@@ -1586,7 +1586,7 @@ The big advantage of this class is that it provides a way to deal with different
     
     The first thing GenerateDatasetsXml does for this type of dataset after you answer the questions is print the ncdump-like structure of the sample file **before** it is unpacked. So if you enter a few goofy answers for the first loop through GenerateDatasetsXml, at least you'll be able to see if ERDDAP™ can read the file and see what dimensions and variables are in the file. Then you can give better answers for the second loop through GenerateDatasetsXml.
     
-### EDDGridLonPM180
+### EDDGridLonPM180 {#eddgridlonpm180}
 [**EDDGridLonPM180**](#eddgridlonpm180) modifies the longitude values of a child (enclosed) EDDGrid dataset that has some longitude values greater than 180 (for example, 0 to 360) so that they are in the range -180 to 180 (Longitude Plus or Minus 180, hence the name).
 
 *   This provides a way to make datasets that have longitude values greater than 180 compliant in/with OGC services (for example the WMS server in ERDDAP), since all OGC services require longitude values within -180 to 180.
@@ -1630,7 +1630,7 @@ The big advantage of this class is that it provides a way to deal with different
         *   If the child dataset is not an EDDGridFromErddap dataset that is on the same ERDDAP™, the LonPM180 dataset will try to use the regular subscription system to subscribe to the underlying dataset. If you have the subscription system in your ERDDAP™ turned on, you should get emails asking you to validate the subscription. Please do so.
         *   If you have the subscription system in your ERDDAP™ turned off, the LonPM180 dataset may sometimes have outdated metadata until the LonPM180 dataset is reloaded. So if the subscription system is turned off, you should set the [&lt;reloadEveryNMinutes>](#reloadeverynminutes) setting of the LonPM180 dataset to a smaller number, so that it is more likely to catch changes to the child dataset sooner.
 
-#### EDDGridLonPM180 skeleton XML
+#### EDDGridLonPM180 skeleton XML {#eddgridlonpm180-skeleton-xml}
 
 >&nbsp;&nbsp;&lt;dataset type="EDDGridLonPM180" [datasetID](#datasetid)\="..." [active](#active)\="..." >  
 >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&lt;reloadEveryNMinutes>](#reloadeverynminutes)...&lt;/reloadEveryNMinutes> &lt;!-- 0 or 1 -->  
@@ -1650,7 +1650,7 @@ The big advantage of this class is that it provides a way to deal with different
 >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;dataset>...&lt;/dataset> &lt;!-- The child EDDGrid dataset. -->  
 >&nbsp;&nbsp;&lt;/dataset>  
 
-### EDDGridLon0360
+### EDDGridLon0360 {#eddgridlon0360}
 [**EDDGridLon0360**](#eddgridlon0360) modifies the longitude values of a child (enclosed) EDDGrid dataset that has some longitude values less than 0 (for example, -180 to 180) so that they are in the range 0 to 360 (hence the name).
 
 *   Working near a discontinuity causes problems, regardless of whether the discontinuity is at longitude 0 or at longitude 180. This dataset type lets you avoid those problems for everyone, by offering two versions of the same dataset:  
@@ -1692,7 +1692,7 @@ The big advantage of this class is that it provides a way to deal with different
         *   If the child dataset is a EDDGridFromErddap dataset that references a dataset in the same ERDDAP™, the Lon0360 dataset will try to directly subscribe to the underlying dataset so that it is always up-to-date. Direct subscriptions don't generate emails asking you to validate the subscription - validation should be done automatically.
         *   If the child dataset is not an EDDGridFromErddap dataset that is on the same ERDDAP™, the Lon0360 dataset will try to use the regular subscription system to subscribe to the underlying dataset. If you have the subscription system in your ERDDAP™ turned on, you should get emails asking you to validate the subscription. Please do so.
         *   If you have the subscription system in your ERDDAP™ turned off, the Lon0360 dataset may sometimes have outdated metadata until the Lon0360 dataset is reloaded. So if the subscription system is turned off, you should set the [&lt;reloadEveryNMinutes>](#reloadeverynminutes) setting of the Lon0360 dataset to a smaller number, so that it is more likely to catch changes to the child dataset sooner.
-#### EDDGridLon0360 skeleton XML
+#### EDDGridLon0360 skeleton XML {#eddgridlon0360-skeleton-xml}
 >&nbsp;&nbsp;&lt;dataset type="EDDGridLon0360" [datasetID](#datasetid)\="..." [active](#active)\="..." >  
 >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&lt;reloadEveryNMinutes>](#reloadeverynminutes)...&lt;/reloadEveryNMinutes> &lt;!-- 0 or 1 -->  
 >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&lt;updateEveryNMillis>](#updateeverynmillis)...&lt;/updateEveryNMillis> &lt;!-- 0 or 1. For  
@@ -1711,7 +1711,7 @@ The big advantage of this class is that it provides a way to deal with different
 >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;dataset>...&lt;/dataset> &lt;!-- The child EDDGrid dataset. -->  
 >&nbsp;&nbsp;&lt;/dataset>  
 
-### EDDGridSideBySide
+### EDDGridSideBySide {#eddgridsidebyside}
 [**EDDGridSideBySide**](#eddgridsidebyside) aggregates two or more EDDGrid datasets (the children) side by side.
 
 *   The resulting dataset has all of the variables from all of the child datasets.
@@ -1724,7 +1724,7 @@ The big advantage of this class is that it provides a way to deal with different
 *   The global metadata and settings for the parent comes from the global metadata and settings for the first child.
 *   If there is an exception while creating the first child, the parent will not be created.
 *   If there is an exception while creating other children, this sends an email to emailEverythingTo (as specified in [setup.xml](/docs/server-admin/deploy-install#setupxml)) and continues with the other children.
-#### EDDGridSideBySide skeleton XML
+#### EDDGridSideBySide skeleton XML {#eddgridsidebyside-skeleton-xml}
 >&nbsp;&nbsp;&lt;dataset type="EDDGridSideBySide" [datasetID](#datasetid)\="..." [active](#active)\="..." >  
 >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&lt;accessibleTo>](#accessibleto)...&lt;/accessibleTo> &lt;!-- 0 or 1 -->  
 >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&lt;graphsAccessibleTo>](#graphsaccessibleto)auto|public&lt;/graphsAccessibleTo> &lt;!-- 0 or 1 -->  
@@ -1740,7 +1740,7 @@ The big advantage of this class is that it provides a way to deal with different
 >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;dataset>...&lt;/dataset> &lt;!-- 2 or more -->  
 >&nbsp;&nbsp;&lt;/dataset>  
 
-### EDDGridAggregateExistingDimension
+### EDDGridAggregateExistingDimension {#eddgridaggregateexistingdimension}
 [**EDDGridAggregateExistingDimension**](#eddgridaggregateexistingdimension) aggregates two or more EDDGrid datasets each of which has a different range of values for the first dimension, but identical values for the other dimensions.
 
 *   For example, one child dataset might have 366 values (for 2004) for the time dimension and another child might have 365 values (for 2005) for the time dimension.
@@ -1761,7 +1761,7 @@ The big advantage of this class is that it provides a way to deal with different
       File name regex (for example, ".\*\\.nc")? month.\*flk\\.nc\\.gz  
       ReloadEveryNMinutes (for example, 10080)? 10080  
     You can use the resulting &lt;sourceUrl> tags or delete them and uncomment the &lt;sourceUrl> tag (so that new files are noticed each time the dataset is reloaded.
-#### EDDGridAggregateExistingDimension skeleton XML
+#### EDDGridAggregateExistingDimension skeleton XML {#eddgridaggregateexistingdimension-skeleton-xml}
 >&nbsp;&nbsp;&lt;dataset type="EDDGridAggregateExistingDimension" [datasetID](#datasetid)\="..."  
 >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[active](#active)\="..." >  
 >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;dataset>...&lt;/dataset> &lt;!-- This is a regular [EDDGridFromDap](#eddgridfromdap) dataset  
@@ -1808,7 +1808,7 @@ The big advantage of this class is that it provides a way to deal with different
 >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&lt;onChange>](#onchange)...&lt;/onChange> &lt;!-- 0 or more -->  
 >&nbsp;&nbsp;&lt;/dataset>  
 
-### EDDGridCopy
+### EDDGridCopy {#eddgridcopy}
 [**EDDGridCopy**](#eddgridcopy) makes and maintains a local copy of another EDDGrid's data and serves data from the local copy.
 
 *   EDDGridCopy (and for tabular data, [EDDTableCopy](#eddtablecopy)) is a very easy to use and a very effective  
@@ -1842,14 +1842,14 @@ The big advantage of this class is that it provides a way to deal with different
     
     WARNING: If a given value for the leftmost (first) axis variable disappears from the remote dataset, EDDGridCopy does NOT delete the local copied file. If you want to, you can delete it yourself.
     
-#### Grid Copy checkSourceData
+#### Grid Copy checkSourceData {#grid-copy-checksourcedata}
 The datasets.xml for this dataset can have an optional tag  
 ```
     <checkSourceData>true</checkSourceData>  
 ```
     The default value is true. If/when you set it to false, the dataset won't ever check the source dataset to see if there is additional data available.  
 
-#### onlySince
+#### onlySince {#onlysince}
 You can tell EDDGridCopy to make a copy of a subset of the source dataset, instead of the entire source dataset, by adding a tag in the form &lt;onlySince>*someValue*&lt;/onlySince> to the dataset's datasets.xml chunk. EDDGridCopy will only download data values related to the values of the first dimension (usually the time dimension) which are greater than *someValue*. *someValue* can be:
     *   A relative time specified via now-*nUnits*.  
         For example, &lt;onlySince>now-2years&lt;/onlySince> tells the dataset to only make local copies of the data for data where the outer dimension's values (usually time values) are within the last 2 years (which is re-evaluated each time the dataset is reloaded, which is when it looks for new data to copy). See the [now-*nUnits* syntax description](https://coastwatch.pfeg.noaa.gov/erddap/tabledap/documentation.html#now). This is useful if the first dimension has time data, which it usually does.
@@ -1862,7 +1862,7 @@ You can tell EDDGridCopy to make a copy of a subset of the source dataset, inste
     *   A floating point number.  
         For example, &lt;onlySince>946684800.0&lt;/onlySince> . The units will be the destination units of the first dimension. For example, for time dimensions, the units in ERDDAP™ are always "seconds since 1970-01-01T00:00:00Z". So 946684800.0 "seconds since 1970-01-01T00:00:00Z" is equivalent to 2000-01-01T00:00:00Z. This is always a useful option, but is especially useful when the first dimension doesn't have time data.  
 
-#### EDDGridCopy Recomended use
+#### EDDGridCopy Recomended use {#eddgridcopy-recomended-use}
 1.  Create the &lt;dataset> entry (the native type, not EDDGridCopy) for the remote data source.  
     **Get it working correctly, including all of the desired metadata.**
 2.  If it is too slow, add XML code to wrap it in an EDDGridCopy dataset.
@@ -1882,7 +1882,7 @@ You can tell EDDGridCopy to make a copy of a subset of the source dataset, inste
     2.  Delete one of the copied files.
     3.  Set a [flag](/docs/server-admin/additional-information#flag) to reload the dataset immediately. If you do use a flag and you have an email subscription to the dataset, you will get two emails: one when the dataset first reloads and starts to copy the data, and another when the dataset loads again (automatically) and detects the new local data files.
     4.  The deleted file will be regenerated with the new metadata. If the source dataset is ever unavailable, the EDDGridCopy dataset will get metadata from the regenerated file, since it is the youngest file.  
-#### EDDGridCopy skeleton XML
+#### EDDGridCopy skeleton XML {#eddgridcopy-skeleton-xml}
 >&nbsp;&nbsp;&lt;dataset type="EDDGridCopy" [datasetID](#datasetid)\="..." [active](#active)\="..." >  
 >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&lt;accessibleTo>](#accessibleto)...&lt;/accessibleTo> &lt;!-- 0 or 1 -->  
 >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&lt;graphsAccessibleTo>](#graphsaccessibleto)auto|public&lt;/graphsAccessibleTo> &lt;!-- 0 or 1 -->  
@@ -1903,17 +1903,17 @@ You can tell EDDGridCopy to make a copy of a subset of the source dataset, inste
 >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;dataset>...&lt;/dataset> &lt;!-- 1 -->  
 >&nbsp;&nbsp;&lt;/dataset>  
 
-### EDDTableFromCassandra 
+### EDDTableFromCassandra {#eddtablefromcassandra}
 [**EDDTableFromCassandra**](#eddtablefromcassandra) handles data from one [Cassandra](https://cassandra.apache.org/) table. Cassandra is a NoSQL database. 
 
 *   ERDDAP™ can work with Cassandra v2 and v3 with no changes or differences in setup. We have tested with [Cassandra v2 and v3 from Apache](https://cassandra.apache.org/download/). It is likely that ERDDAP™ can also work with Cassandra downloaded from DataStax.  
      
 *   For Aug 2019 - May 2021, we had trouble getting Cassandra to work with AdoptOpenJdk Java v8. It threw an EXCEPTION\_ACCESS\_VIOLATION). But now (May 2021), that problem is gone: we can successfully use Cassandra v2.1.22 and AdoptOpenJdk jdk8u292-b10.  
      
-#### One Table
+#### One Table {#one-table}
 Cassandra doesn't support "joins" in the way that relational databases do. One ERDDAP™ EDDTableFromCassandra dataset maps to one (perhaps a subset of one) Cassandra table.  
 
-#### Cassandra datasets.xml
+#### Cassandra datasets.xml {#cassandra-datasetsxml}
 *   ERDDAP™ comes with the Cassandra Java driver, so you don't need to install it separately.
 *   Carefully read all of this document's information about EDDTableFromCassandra. Some of the details are very important.
 *   The Cassandra Java driver is intended to work with Apache Cassandra (1.2+) and DataStax Enterprise (3.1+). If you are using Apache Cassandra 1.2.x, you must edit the cassandra.yaml file for each node to set start\_native\_transport: true, then restart each node.
@@ -1923,7 +1923,7 @@ Cassandra doesn't support "joins" in the way that relational databases do. One E
     
     1.  If you enter "!!!LIST!!!" (without the quotes) for the keyspace, the program will display a list of keyspaces
     2.  If you enter a specific keyspace and then enter "!!!LIST!!!" (without the quotes) for the tablename, the program will display a list of tables in that keyspace and their columns.
-##### Case sensitivity
+##### Case sensitivity {#case-sensitivity}
 *   Case-insensitive Keyspace and Table Names -  
     Cassandra treats keyspace and table names in a case-insensitive way. Because of this, you MUST NEVER use a reserved word (but with a different case) as a Cassandra keyspace or table name.
 *   Case-insensitive Column Names --  
@@ -1934,7 +1934,7 @@ Cassandra doesn't support "joins" in the way that relational databases do. One E
     in datasets.xml for this dataset so that Cassandra and ERDDAP™ will treat the column names in a case-sensitive way. This will likely be a massive headache for you, because it is hard to determine the case-sensitive versions of the column names -- Cassandra almost always displays the column names as all lower-case, regardless of the true case.
 *   Work closely with the Cassandra administrator, who may have relevant experience. If the dataset fails to load, read the [error message](#troubleshooting-tips) carefully to find out why.  
          
-#### Cassandra &lt;connectionProperty&gt;
+#### Cassandra &lt;connectionProperty&gt; {#cassandra-connectionproperty}
 Cassandra has connection properties which can be specified in datasets.xml. Many of these will affect the performance of the Cassandra-ERDDAP™ connection. Unfortunately, Cassandra properties must be set programmatically in Java, so ERDDAP™ must have code for each property ERDDAP™ supports. Currently, ERDDAP™ supports these properties:  
 (The defaults shown are what we see. Your system's defaults may be different.)
 
@@ -1966,14 +1966,14 @@ If you need to be able to set other connection properties, see our [section on g
 
 For a given startup of Tomcat, connectionProperties are only used the first time a dataset is created for a given Cassandra URL. All reloads of that dataset and all subsequent datasets that share the same URL will use those original connectionProperties.
     
-#### CQL
+#### CQL {#cql}
 The Cassandra Query Language (CQL) is superficially like SQL, the query language used by traditional databases. Because OPeNDAP's tabular data requests were designed to mimic SQL tabular data requests, it is possible for ERDDAP™ to convert tabular data requests into CQL Bound/PreparedStatements. ERDDAP™ logs the statement in [log.txt](/docs/server-admin/additional-information#log) as  
     statement as text: *theStatementAsText*  
     The version of the statement you see will be a text representation of the statement and will only have "?" where constraint values will be placed.  
        
     Not so simple -- Unfortunately, CQL has many restrictions on which columns can be queried with which types of constraints, for example, partition key columns can be constrained with = and IN, so ERDDAP™ sends some constraints to Cassandra and applies all constraints after the data is received from Cassandra. To help ERDDAP™ deal efficiently with Cassandra, you need to specify [&lt;partitionKeySourceNames>](#partitionkeysourcenames), [&lt;clusterColumnSourceNames>](#clustercolumnsourcenames), and [&lt;indexColumnSourceNames>](#indexcolumnsourcenames) in datasets.xml for this dataset. These are the most important ways to help ERDDAP™ work efficiently with Cassandra. If you don't tell ERDDAP™ this information, the dataset will be painfully slow in ERDDAP™ and use tons of Cassandra resources.  
      
-#### &lt;partitionKeySourceNames&gt;
+#### &lt;partitionKeySourceNames&gt; {#partitionkeysourcenames}
 Because partition keys play a central role in Cassandra tables, ERDDAP™ needs to know their sourceNames and, if relevant, other information about how to work with them.
 *   You MUST specify a comma-separated list of partition key source column names in datasets.xml via &lt;partitionKeySourceNames>.  
     Simple example,  
@@ -1996,7 +1996,7 @@ Because partition keys play a central role in Cassandra tables, ERDDAP™ needs 
 *   Dataset Default Sort Order -- The order of the partition key &lt;dataVariable>'s in datasets.xml determines the default sort order of the results from Cassandra. Of course, users can request a different sort order for a given set of results by appending &orderBy("*comma-separated list of variables*") to the end of their query.
 *   By default, Cassandra and ERDDAP™ treat column names in a case-insensitive way. But if you set [columnNameQuotes](#case-sensitivity) to ", ERDDAP™ will treat Cassandra column names a in case-sensitive way.  
          
-#### &lt;partitionKeyCSV&gt;
+#### &lt;partitionKeyCSV&gt; {#partitionkeycsv}
 If this is specified, ERDDAP™ will use it instead of asking Cassandra for the partitionKey information each time the dataset is reloaded. This provides the list of distinct partition key values, in the order they'll be used. Times must be specified as seconds since 1970-01-01T00:00:00Z. But there are also two special alternate ways to specify times (each encoded as a string):  
 
 1) time(aISO8601Time) (MAY be encoded as a string)  
@@ -2023,13 +2023,13 @@ expands into this table of partition key combinations:
     1008,1.4154048E9
     1009,1.4154912E9 
 ```
-#### &lt;clusterColumnSourceNames&gt;
+#### &lt;clusterColumnSourceNames&gt; {#clustercolumnsourcenames}
 Cassandra accepts SQL-like constraints on cluster columns, which are the columns that form the second part of the primary key (after the partition key(s)). So, it is essential that you identify these columns via &lt;clusterColumnSourceNames>. This enables ERDDAP™ to work efficiently with Cassandra. If there are cluster columns and you don't tell ERDDAP, the dataset will be painfully slow in ERDDAP™ and use tons of Cassandra resources.
     *   For example, &lt;clusterColumnSourceNames>*myClusterColumn1, myClusterColumn2*&lt;/clusterColumnSourceNames>
     *   If a Cassandra table has no cluster columns, either don't specify &lt;clusterColumnSourceNames>, or specify it with no value.
     *   By default, Cassandra and ERDDAP™ treat column names in a case-insensitive way. But if you set [columnNameQuotes](#case-sensitivity) to ", ERDDAP™ will treat Cassandra column names in a case-sensitive way.  
          
-#### &lt;indexColumnSourceNames&gt;
+#### &lt;indexColumnSourceNames&gt; {#indexcolumnsourcenames}
 Cassandra accepts '=' constraints on secondary index columns, which are the columns that you have explicitly created indexes for via  
 ```
     CREATE INDEX *indexName* ON *keyspace.tableName* (*columnName*);  
@@ -2041,7 +2041,7 @@ So, it is very useful if you identify these columns via &lt;indexColumnSourceNam
 *   WARNING: Cassandra indexes aren't like database indexes. Cassandra indexes only help with '=' constraints. And they are only [recommended](https://cassandra.apache.org/doc/latest/cql/indexes.html) for columns that have far fewer distinct values than total values.
 *   By default, Cassandra and ERDDAP™ treat column names in a case-insensitive way. But if you set [columnNameQuotes](#case-sensitivity) to ", ERDDAP™ will treat Cassandra column names in a case-sensitive way.  
          
-#### &lt;maxRequestFraction&gt;
+#### &lt;maxRequestFraction&gt; {#maxrequestfraction}
 When ERDDAP™ (re)loads a dataset, ERDDAP™ gets from Cassandra the list of distinct combinations of the partition keys. For a huge dataset, the number of combinations will be huge. If you want to prevent users requests from requesting most or all of the dataset (or even a request that asks ERDDAP™ to download most or all of the data in order to further filter it), you can tell ERDDAP™ only to allow requests that reduce the number of combinations by some amount via &lt;maxRequestFraction>, which is a floating point number between 1e-10 (which means that the request can't need more than 1 combination in a billion) and 1 (the default, which means that the request can be for the entire dataset).  
     For example, if a dataset has 10000 distinct combinations of the partition keys and maxRequestFraction is set to 0.1,  
     then requests which need data from 1001 or more combinations will generate an error message,  
@@ -2051,14 +2051,14 @@ When ERDDAP™ (re)loads a dataset, ERDDAP™ gets from Cassandra the list of di
     
     This approach is far from perfect. It will lead to some reasonable requests being rejected and some too-big requests being allowed. But it is a difficult problem and this solution is much better than nothing.
     
-#### Cassandra subsetVariables
+#### Cassandra subsetVariables {#cassandra-subsetvariables}
 As with other EDDTable datasets, you can specify a comma-separated list of &lt;dataVariable> destinationNames in a global attribute called "[subsetVariables](#subsetvariables)" to identify variables which have a limited number of values. The dataset will then have a .subset web page and show lists of distinct values for those variables in drop-down lists on many web pages.
     
     Including just partition key variables and static columns in the list is STRONGLY ENCOURAGED. Cassandra will be able to generate the list of distinct combinations very quickly and easily each time the dataset is reloaded. One exception is timestamp partition keys that are coarse versions of some other timestamp column -- it is probably best to leave these out of the list of subsetVariables since there are a large number of values and they aren't very useful to users.
     
     If you include non-partition key, non-static variables in the list, it will probably be **very** computationally expensive for Cassandra each time the dataset is reloaded, because ERDDAP™ has to look through every row of the dataset to generate the information. In fact, the query is likely to fail. So, except for very small datasets, this is STRONGLY DISCOURAGED.
     
-#### Cassandra DataTypes
+#### Cassandra DataTypes {#cassandra-datatypes}
 Because there is some ambiguity about which [Cassandra data types](https://cassandra.apache.org/doc/latest/cql/types.html) map to which ERDDAP™ data types, you need to specify a [&lt;dataType>](#datatype) tag for each [&lt;dataVariable>](#datavariable) to tell ERDDAP™ which dataType to use. The standard ERDDAP™ dataTypes (and the most common corresponding Cassandra data types) are:
     
 *   [boolean](#boolean-data) (boolean), which ERDDAP™ then stores as bytes
@@ -2080,7 +2080,7 @@ If you specify a String dataType in ERDDAP™ for a Cassandra map, set or list, 
   depth\[1\], uCurrent\[1\], vCurrent\[1\], and zCurrent\[1\] are all related, ...  
 Alternatively, if you don't want ERDDAP™ to expand a list into multiple rows in the ERDDAP™ table, specify String as the dataVariable's dataType so the entire list will be represented as one String on one row in ERDDAP.
     
-#### Cassandra TimeStamp Data
+#### Cassandra TimeStamp Data {#cassandra-timestamp-data}
 Cassandra's timestamp data is always aware of time zones. If you enter timestamp data without specifying a timezone, Cassandra assumes the timestamp uses the local time zone.
     
 ERDDAP™ supports timestamp data and always presents the data in the Zulu/GMT time zone. So if you enter timestamp data in Cassandra using a time zone other than Zulu/GMT, remember that you need to do all queries for timestamp data in ERDDAP™ using the Zulu/GMT time zone. So don't be surprised when the timestamp values that come out of ERDDAP are shifted by several hours because of the time zone switch from local to Zulu/GMT time.
@@ -2097,7 +2097,7 @@ and in &lt;addAttributes> set
 *   ERDDAP™ has a utility to [Convert a Numeric Time to/from a String Time](https://coastwatch.pfeg.noaa.gov/erddap/convert/time.html).
 *   See [How ERDDAP™ Deals with Time](https://coastwatch.pfeg.noaa.gov/erddap/convert/time.html#erddap).  
          
-#### Integer nulls
+#### Integer nulls {#integer-nulls}
 Cassandra supports nulls in Cassandra int (ERDDAP™ int) and bigint (ERDDAP™ long) columns, but ERDDAP™ doesn't support true nulls for any integer data type.  
     By default, Cassandra integer nulls will be converted in ERDDAP™ to 2147483647 for int columns, or 9223372036854775807 for long columns. These will appear as "NaN" in some types of text output files (for example, .csv), "" in other types of text output files (for example, .htmlTable), and the specific number (2147483647 for missing int values) in other types of files (for example, binary files like .nc and mat). A user can search for rows of data with this type of missing value by referring to "NaN", e.g, "&windSpeed=NaN".
     
@@ -2107,13 +2107,13 @@ Cassandra supports nulls in Cassandra int (ERDDAP™ int) and bigint (ERDDAP™ 
 
     For Cassandra floating point columns, nulls get converted to NaNs in ERDDAP. For Cassandra data types that are converted to Strings in ERDDAP™, nulls get converted to empty Strings. That shouldn't be a problem.
     
-#### "WARNING: Re-preparing already prepared query"
+#### "WARNING: Re-preparing already prepared query" {#warning-re-preparing-already-prepared-query}
 *   "WARNING: Re-preparing already prepared query" in *tomcat*/logs/catalina.out (or some other Tomcat log file)  
     Cassandra documentation says there is trouble if the same query is made into a PreparedStatement twice (or more). (See this [bug report](https://datastax-oss.atlassian.net/browse/JAVA-236).) To avoid making Cassandra mad, ERDDAP™ caches all PreparedStatements so it can reuse them. That cache is lost if/when Tomcat/ERDDAP™ is restarted, but I think that is okay because the PreparedStatements are associated with a given session (between Java and Cassandra), which is also lost. So, you may see these messages. I know of no other solution. Fortunately, it is a warning, not an error (although Cassandra threatens that it may lead to performance problems).
     
     Cassandra claims that PreparedStatements are good forever, so ERDDAP's cached PreparedStatements should never become out-of-date/invalid. If that isn't true, and you get errors about certain PreparedStatements being out-of-date/invalid, then you need to restart ERDDAP™ to clear ERDDAP's cache of PreparedStatements.
     
-#### Cassandra Security
+#### Cassandra Security {#cassandra-security}
 See [Securing Cassandra](https://cassandra.apache.org/doc/latest/operating/security.html)
 
 When working with Cassandra, you need to do things as safely and securely as possible to avoid allowing a malicious user to damage your Cassandra or gain access to data they shouldn't have access to. ERDDAP™ tries to do things in a secure way, too.
@@ -2131,7 +2131,7 @@ When working with Cassandra, you need to do things as safely and securely as pos
 *   Requests from clients are parsed and checked for validity before generating the CQL requests for Cassandra.
 *   Requests to Cassandra are made with CQL Bound/PreparedStatements, to prevent CQL injection. In any case, Cassandra is inherently less susceptible to CQL injection than traditional databases are to [SQL injection](https://en.wikipedia.org/wiki/SQL_injection).  
          
-#### Cassandra Speed
+#### Cassandra Speed {#cassandra-speed}
 Cassandra can be fast or slow. There are some things you can do to make it fast:
 *   In General -  
     The nature of CQL is that queries are [declarative](https://en.wikipedia.org/wiki/Declarative_programming). They just specify what the user wants. They don't include a specification or hints for how the query is to be handled or optimized. So there is no way for ERDDAP™ to generate the query in such a way that it helps Cassandra optimize the query (or in any way specifies how the query is to be handled). In general, it is up to the Cassandra administrator to set things up (for example, indexes) to optimize for certain types of queries.  
@@ -2147,7 +2147,7 @@ Cassandra can be fast or slow. There are some things you can do to make it fast:
     
 *   Specifying the index columns via [&lt;indexColumnSourceNames>](#indexcolumnsourcenames) is an important way to help ERDDAP™ work efficiently with Cassandra. If there are index columns and you don't tell ERDDAP, some queries for data will be needlessly, painfully slow in ERDDAP™ and use tons of Cassandra resources.  
      
-#### Cassandra Stats
+#### Cassandra Stats {#cassandra-stats}
 *   ["Cassandra stats" Diagnostic Messages](#cassandra-stats) -- For every ERDDAP™ user query to a Cassandra dataset, ERDDAP™ will print a line in the log file, *bigParentDirectory*/logs/log.txt, with some statistics related to the query, for example,  
 ```
         \* Cassandra stats: partitionKeyTable: 2/10000=2e-4 < 0.1 nCassRows=1200 nErddapRows=12000 nRowsToUser=7405  
@@ -2171,7 +2171,7 @@ The most important use of these diagnostic messages is to make sure that ERDDAP�
 *   If all else fails,  
 consider storing the data in a collection of NetCDF v3 .nc files (especially .nc files that use the [CF Discrete Sampling Geometries (DSG)](https://cfconventions.org/Data/cf-conventions/cf-conventions-1.8/cf-conventions.html#discrete-sampling-geometries) Contiguous Ragged Array data structures and so can be handled with ERDDAP's [EDDTableFromNcCFFiles](#eddtablefromnccffiles)). If they are logically organized (each with data for a chunk of space and time), ERDDAP™ can extract data from them very quickly.  
          
-#### EDDTableFromCassandra skeleton XML
+#### EDDTableFromCassandra skeleton XML {#eddtablefromcassandra-skeleton-xml}
 >&nbsp;&nbsp;&lt;dataset type="EDDTableFromCassandra" [datasetID](#datasetid)\="..." [active](#active)\="..." >  
 >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&lt;ipAddress>](#sourceurl)...&lt;/ipAddress>  
 >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;!-- The Cassandra URL without the port number, for example,  
@@ -2211,14 +2211,14 @@ consider storing the data in a collection of NetCDF v3 .nc files (especially .nc
 >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; units=seconds since 1970-01-01T00:00:00Z -->  
 >&nbsp;&nbsp;&lt;/dataset>  
 
-### EDDTableFromDapSequence
+### EDDTableFromDapSequence {#eddtablefromdapsequence}
 [**EDDTableFromDapSequence**](#eddtablefromdapsequence) handles variables within 1- and 2-level sequences from [DAP](https://www.opendap.org/) servers such as DAPPER (was at https://www.pmel.noaa.gov/epic/software/dapper/, now discontinued).
 
 *   We strongly recommend using the [GenerateDatasetsXml program](#generatedatasetsxml) to make a rough draft of the datasets.xml chunk for this dataset. You can then edit that to fine tune it. You can gather the information you need by looking at the source dataset's DDS and DAS files in your browser (by adding .das and .dds to the sourceUrl (an example was at https://dapper.pmel.noaa.gov/dapper/epic/tao\_time\_series.cdp.dds ).
     
 *   A variable is in a DAP sequence if the .dds response indicates that the data structure holding the variable is a "sequence" (case insensitive).
 *   In some cases, you will see a sequence within a sequence, a 2-level sequence -- EDDTableFromDapSequence handles these, too.
-#### EDDTableFromDapSequence skeleton XML
+#### EDDTableFromDapSequence skeleton XML {#eddtablefromdapsequence-skeleton-xml}
 >&nbsp;&nbsp;&lt;dataset type="EDDTableFromDapSequence" [datasetID](#datasetid)\="..." [active](#active)\="..." >  
 >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&lt;sourceUrl>](#sourceurl)...&lt;/sourceUrl>  
 >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&lt;accessibleTo>](#accessibleto)...&lt;/accessibleTo> &lt;!-- 0 or 1 -->  
@@ -2252,10 +2252,10 @@ consider storing the data in a collection of NetCDF v3 .nc files (especially .nc
 >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&lt;dataVariable>](#datavariable)...&lt;/dataVariable> &lt;!-- 1 or more -->  
 >&nbsp;&nbsp;&nbsp;&nbsp;&lt;/dataset>  
 
-### EDDTableFromDatabase
+### EDDTableFromDatabase {#eddtablefromdatabase}
 [**EDDTableFromDatabase**](#eddtablefromdatabase) handles data from one relational database table or [view](https://en.wikipedia.org/wiki/View_(database)).
 
-#### One Table or View
+#### One Table or View {#one-table-or-view}
 If the data you want to serve is in two or more tables (and thus needs a JOIN to extract data from both tables at once), you need to make one [denormalized](https://en.wikipedia.org/wiki/Denormalization) (already joined) table or [view](https://en.wikipedia.org/wiki/View_(SQL)) with all of the data that you want to make available as one dataset in ERDDAP.
 
 For large, complex databases, it may make sense to separate out several chunks as denormalized tables, each with a different type of data, which will become separate datasets in ERDDAP.
@@ -2320,7 +2320,7 @@ Making the denormalized table or view for ERDDAP™ is a good opportunity to mak
 If you need help making the denormalized table or view, please contact your database administrator.  
 If you want to talk about this whole approach or strategize how best to do it, please email Chris.John at noaa.gov .
     
-#### database in datasets.xml
+#### database in datasets.xml {#database-in-datasetsxml}
 It is difficult to create the correct datasets.xml information needed for ERDDAP™ to establish a connection to the database. Be patient. Be methodical.
 *   We strongly recommend using the [GenerateDatasetsXml program](#generatedatasetsxml) to make a rough draft of the datasets.xml chunk for this dataset. You can then edit that to fine tune it.
         
@@ -2333,7 +2333,7 @@ GenerateDatasetsXml has three special options for EDDTableFromDatabase:
 *   Although databases often treat column names and table names in a case-insensitive way, they are case-sensitive in ERDDAP. So if an error message from the database says that a column name is unknown (for example, "Unknown identifier='*column\_name*'") even though you know it exists, try using all capitals, for example, *COLUMN\_NAME*, which is often the true, case-sensitive version of the column name.
 *   Work closely with the database administrator, who may have relevant experience. If the dataset fails to load, read the [error message](#troubleshooting-tips) carefully to find out why.  
          
-#### JDBC Driver
+#### JDBC Driver {#jdbc-driver}
 *   [JDBC Driver and &lt;driverName>](#jdbc-driver) -- You must get the appropriate JDBC 3 or JDBC 4 driver .jar file for your database and  
     put it in *tomcat*/webapps/erddap/WEB-INF/lib after you install ERDDAP. Then, in your datasets.xml for this dataset, you must specify the &lt;driverName> for this driver, which is (unfortunately) different from the filename. Search on the web for the JDBC driver for your database and the driverName that Java needs to use it.
     
@@ -2352,10 +2352,10 @@ GenerateDatasetsXml has three special options for EDDTableFromDatabase:
     
     Unfortunately, JDBC is sometimes the source of trouble. In its role as intermediary between ERDDAP™ and the database, it sometimes makes subtle changes to the standard/generic database SQL request that ERDDAP™ creates, thereby causing problems (for example, related to [upper/lowercase identifiers](#quotes-for-names-and-case-sensitivity) and related to [date/time timezones](#database-date-time-data)). Please be patient, read the information here carefully, check your work, and see our [section on getting additional support](/docs/intro#support).
     
-#### Database &lt;connectionProperty&gt;
+#### Database &lt;connectionProperty&gt; {#database-connectionproperty}
 *   [&lt;connectionProperty>](#database-connectionproperty) -- In the datasets.xml for your dataset, you must define several connectionProperty tags to tell ERDDAP™ how to connect to your database (for example, to specify the user name, password, ssl connection, and [fetch size](#set-the-fetch-size)). These are different for every situation and are a little hard to figure out. Search the web for examples of using a JDBC driver to connect to your database. The &lt;connectionProperty> names (for example, "user", "password", and "ssl"), and some of the connectionProperty values can be found by searching the web for "JDBC connection properties *databaseType*" (for example, Oracle, MySQL, Amazon RDS, MariaDB, PostgreSQL).  
      
-#### Quotes for Names and Case Sensitivity
+#### Quotes for Names and Case Sensitivity {#quotes-for-names-and-case-sensitivity}
 *   [Quotes for Field/Column Names; Case Sensitivity](#quotes-for-names-and-case-sensitivity) - By default, EDDTableFromDatabase puts ANSI-SQL-standard double quotes around field/column names in SELECT statements in case you have used a reserved word as a field/column name, or a special character in a field/column name. The double quotes also thwart certain types of SQL injection attacks. You can tell ERDDAP™ to use ", ', or no quotes via &lt;columnNameQuotes> in datasets.xml for this dataset.
     
     For many databases, using any type of quotes causes the database to work with field/column names in a case sensitive way (instead of the default database case insensitive way). Databases often display file/column names as all upper-case, when in reality the case sensitive form is different. In ERDDAP™, please always treat database column names as case sensitive.
@@ -2370,10 +2370,10 @@ GenerateDatasetsXml has three special options for EDDTableFromDatabase:
     
     If possible, use all lower-case for database, catalog, schema, table names and field names when creating the database table (or view) and when referring to the field/column names in datasets.xml in ERDDAP. Otherwise, you may get an error message saying the database, catalog, schema, table, and/or field wasn't found. If you do get that error message, try using the case-sensitive version, the all upper-case version, and the all lower-case version of the name in ERDDAP. One of them may work. If not, you need to change the name of database, catalog, schema, and/or table to all lower-case.
     
-#### Database &lt;dataType&gt;
+#### Database &lt;dataType&gt; {#database-datatype}
 *   [Database](#database-datatype) [&lt;dataType>](#datatype) Tags -- Because there is some ambiguity about which [database data types](https://www.w3schools.com/sql/sql_datatypes_general.asp) map to which ERDDAP™ data types, you need to specify a [&lt;dataType>](#datatype) tag for each [&lt;dataVariable>](#datavariable) to tell ERDDAP™ which dataType to use. Part of the problem is that different datasets use different terms for the various data types -- so always try to match the definitions, not just the names. See the description of the [standard ERDDAP™ dataTypes](#data-types), which includes references to the corresponding SQL data types. [Date and timestamp](#database-date-time-data) are special cases: use ERDDAP's double dataType.  
      
-#### Database Date Time Data
+#### Database Date Time Data {#database-date-time-data}
 Some database date time columns have no explicit time zone. Such columns are trouble for ERDDAP. Databases support the concept of a date (with or without a time) without a time zone, as an approximate range of time. But Java (and thus ERDDAP) only deals with instantaneous date+times with a timezone. So you may know that the date time data is based on a local time zone (with or without daylight saving time) or the GMT/Zulu time zone, but Java (and ERDDAP) don't. We originally thought we could work around this problem (e.g, by specifying a time zone for the column), but the database+JDBC+Java interactions made this an unreliable solution.
 *   So, ERDDAP™ requires that you store all date and date time data in the database table with a database data type that corresponds to the JDBC type "timestamp with time zone" (ideally, that uses the GMT/Zulu time zone).
 *   In ERDDAP's datasets.xml, in the &lt;dataVariable> tag for a timestamp variable, set  
@@ -2387,7 +2387,7 @@ Some database date time columns have no explicit time zone. Such columns are tro
 *   ERDDAP™ has a utility to [Convert a Numeric Time to/from a String Time](https://coastwatch.pfeg.noaa.gov/erddap/convert/time.html).
 *   See [How ERDDAP Deals with Time](https://coastwatch.pfeg.noaa.gov/erddap/convert/time.html#erddap).  
        
-#### Integer nulls  
+#### Integer nulls {#integer-nulls-1}
 Databases support nulls in integer (int, smallint, tinyint) columns, but ERDDAP™ doesn't support true nulls.  
 Database nulls will be converted in ERDDAP™ 127 for byte columns, 255 for ubyte columns, 32767 for short columns, 65535 for ushort columns, 2147483647 for int columns, 4294967295 for uint columns, 9,223,372,036,854,775,807 for long columns, or 18446744073709551615 for ulong columns. If you use those defaults, please identify those missing\_values for the dataset's users in ERDDAP™ with  
 
@@ -2403,7 +2403,7 @@ GenerateDatasetsXml automatically adds these \_FillValue attributes when it gene
 For database floating point columns, nulls get converted to NaNs in ERDDAP.  
 For database data types that are converted to Strings in ERDDAP™, nulls get converted to empty Strings.
     
-#### Database Security
+#### Database Security {#database-security}
 *   When working with databases, you need to do things as safely and securely as possible to avoid allowing a malicious user to damage your database or gain access to data they shouldn't have access to. ERDDAP™ tries to do things in a secure way, too.
     *   Consider replicating, on a different computer, the database and database tables with the data that you want ERDDAP™ to serve. (Yes, for commercial databases like Oracle, this involves additional licensing fees. But for open source databases, like PostgreSQL, MySQL, Amazon RDS, and MariaDB, this costs nothing.) This gives you a high level of security and also prevents ERDDAP™ requests from slowing down the original database.
     *   We encourage you to set up ERDDAP™ to connect to the database as a database user that only has access to the **relevant** database(s) and only has READ privileges.
@@ -2420,7 +2420,7 @@ For database data types that are converted to Strings in ERDDAP™, nulls get co
     *   Requests to the database are made with SQL PreparedStatements, to prevent [SQL injection](https://en.wikipedia.org/wiki/SQL_injection).
     *   Requests to the database are submitted with executeQuery (not executeStatement) to limit requests to be read-only (so attempted SQL injection to alter the database will fail for this reason, too).  
          
-#### SQL
+#### SQL {#sql}
 *    Because OPeNDAP's tabular data requests were designed to mimic SQL tabular data requests, it is easy for ERDDAP™ to convert tabular data requests into simple SQL PreparedStatements. For example, the ERDDAP™ request  
 ```
     time,temperature&time>=2008-01-01T00:00:00Z&time&lt;=2008-02-01T00:00:00Z  
@@ -2437,11 +2437,11 @@ ERDDAP™ logs the PreparedStatement in [log.txt](/docs/server-admin/additional-
 ```
 This will be a text representation of the PreparedStatement, which may be slightly different from the actual PreparedStatement. For example, in the PreparedStatement, times are encoded in a special way. But in the text representation, they appear as ISO 8601 date times.  
      
-#### Database Speed
+#### Database Speed {#database-speed}
 *   Databases can be slow. There are some things you can do:
     *   In General -  
         The nature of SQL is that queries are [declarative](https://en.wikipedia.org/wiki/Declarative_programming). They just specify what the user wants. They don't include a specification or hints for how the query is to be handled or optimized. So there is no way for ERDDAP™ to generate the query in such a way that it helps the database optimize the query (or in any way specifies how the query is to be handled). In general, it is up to the database administrator to set things up (for example, indexes) to optimize for certain types of queries.
-##### Set the Fetch Size
+##### Set the Fetch Size {#set-the-fetch-size}
 Databases return the data to ERDDAP™ in chunks. By default, different databases return a different number of rows in the chunks. Often this number is very small and so very inefficient. For example, the default for Oracle is 10! Read the JDBC documentation for your database's JDBC driver to find the connection property to set in order to increase this, and add this to the dataset's description in datasets.xml. For example,  
 For MySQL and Amazon RDS, use  
 ```
@@ -2457,7 +2457,7 @@ For PostgreSQL, use
         <connectionProperty name="defaultRowFetchSize">10000</connectionProperty>  
 ```
 but feel free to change the number. Setting the number too big will cause ERDDAP™ to use lots of memory and be more likely to run out of memory.  
-#### ConnectionProperties
+#### ConnectionProperties {#connectionproperties}
 Each database has other connection properties which can be specified in datasets.xml. Many of these will affect the performance of the database to ERDDAP™ connection. Please read the documentation for your database's JDBC driver to see the options. If you find connection properties that are useful, please send an email with the details to erd dot data at noaa dot gov.
 *   Make a Table --  
     You will probably get faster responses if you periodically (everyday? whenever there is new data?) generate an actual table (similarly to how you generated the VIEW) and tell ERDDAP™ to get data from the table instead of the VIEW. Since any request to the table can then be fulfilled without JOINing another table, the response will be much faster.
@@ -2468,27 +2468,27 @@ Each database has other connection properties which can be specified in datasets
     Oracle doesn't have or need an analogous command.
 *   Make [Indexes](https://en.wikipedia.org/wiki/Database_index) for Commonly Constrained Variables --  
     You can speed up many/most queries by creating indexes in the database for the variables (which databases call "columns") that are often constrained in the user's query. In general, these are the same variables specified by [&lt;subsetVariables>](#subsetvariables) and/or the latitude, longitude, and time variables.
-    ##### Use Connection Pooling
-    Normally, ERDDAP™ makes a separate connection to the database for each request. This is the most reliable approach. The faster alternative is to use a DataSource which supports connection pooling. To set it up, specify (for example)  
-    ```
-            <dataSourceName>java:comp/env/jdbc/postgres/erddap</dataSourceName>  
-    ```
-    right next to &lt;sourceUrl>, &lt;driverName>, and &lt;connectionProperty>.  
-    And in *tomcat*/conf/context.xml, define a resource with the same information, for example,  
-    ```
-            <Resource  
-            name="jdbc/postgres/erddap" auth="Container" type="javax.sql.DataSource"  
-            driverClassName="org.postgresql.Driver"  
-            url="*jdbc:postgresql://somehost:5432/myDatabaseName*"  
-            username="*myUsername*" password="*myPassword*"  
-            initialSize="0" maxActive="8" minIdle="0" maxIdle="0" maxWait="-1"/>  
-    ```
+##### Use Connection Pooling {#use-connection-pooling}
+Normally, ERDDAP™ makes a separate connection to the database for each request. This is the most reliable approach. The faster alternative is to use a DataSource which supports connection pooling. To set it up, specify (for example)  
+```
+        <dataSourceName>java:comp/env/jdbc/postgres/erddap</dataSourceName>  
+```
+right next to &lt;sourceUrl>, &lt;driverName>, and &lt;connectionProperty>.  
+And in *tomcat*/conf/context.xml, define a resource with the same information, for example,  
+```
+        <Resource  
+        name="jdbc/postgres/erddap" auth="Container" type="javax.sql.DataSource"  
+        driverClassName="org.postgresql.Driver"  
+        url="*jdbc:postgresql://somehost:5432/myDatabaseName*"  
+        username="*myUsername*" password="*myPassword*"  
+        initialSize="0" maxActive="8" minIdle="0" maxIdle="0" maxWait="-1"/>  
+```
 General information about using a DataSource is at [https://docs.oracle.com/javase/tutorial/jdbc/basics/sqldatasources.html](https://docs.oracle.com/javase/tutorial/jdbc/basics/sqldatasources.html).  
 See [Tomcat DataSource information](https://tomcat.apache.org/tomcat-7.0-doc/jndi-resources-howto.html#JDBC_Data_Sources) and [Tomcat DataSource examples](https://tomcat.apache.org/tomcat-7.0-doc/jndi-datasource-examples-howto.html) or search the web for examples of using DataSources with other application servers. 
 *   If all else fails,  
     consider storing the data in a collection of NetCDF v3 .nc files (especially .nc files that use the [CF Discrete Sampling Geometries (DSG)](https://cfconventions.org/Data/cf-conventions/cf-conventions-1.8/cf-conventions.html#discrete-sampling-geometries) Contiguous Ragged Array data structures and so can be handled with ERDDAP's [EDDTableFromNcCFFiles](#eddtablefromnccffiles)). If they are logically organized (each with data for a chunk of space and time), ERDDAP™ can extract data from them very quickly.  
          
-#### EDDTableFromDatabase skeleton XML
+#### EDDTableFromDatabase skeleton XML {#eddtablefromdatabase-skeleton-xml}
 >&nbsp;&nbsp;&lt;dataset type="EDDTableFromDatabase" [datasetID](#datasetid)\="..." [active](#active)\="..." >  
 >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&lt;sourceUrl>](#sourceurl)...&lt;/sourceUrl>  
 >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;!-- The format varies for each type of database, but will be  
@@ -2553,7 +2553,7 @@ See [Tomcat DataSource information](https://tomcat.apache.org/tomcat-7.0-doc/jnd
 >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;units=seconds since 1970-01-01T00:00:00Z -->  
 >&nbsp;&nbsp;&lt;/dataset>  
 
-### EDDTableFromEDDGrid
+### EDDTableFromEDDGrid {#eddtablefromeddgrid}
 [**EDDTableFromEDDGrid**](#eddtablefromeddgrid) lets you create an EDDTable dataset from any EDDGrid dataset.
 
 *   Some common reasons for doing this are:
@@ -2571,7 +2571,7 @@ See [Tomcat DataSource information](https://tomcat.apache.org/tomcat-7.0-doc/jnd
     *   A new summary global attribute which is the EDDGrid's summary plus a new first paragraph describing what this dataset is.
     *   A new title global attribute which is the EDDGrid's title plus ", (As A Table)".
     *   A new maxAxis0 global attribute with a value of 10.
-#### EDDTableFromEDDGrid skeleton XML
+#### EDDTableFromEDDGrid skeleton XML {#eddtablefromeddgrid-skeleton-xml}
 >&nbsp;&nbsp;&lt;dataset type="EDDTableFromEDDGrid" [datasetID](#datasetid)\="..." [active](#active)\="..." >  
 >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&lt;accessibleTo>](#accessibleto)...&lt;/accessibleTo> &lt;!-- 0 or 1 -->  
 >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&lt;graphsAccessibleTo>](#graphsaccessibleto)auto|public&lt;/graphsAccessibleTo> &lt;!-- 0 or 1 -->  
@@ -2592,17 +2592,17 @@ See [Tomcat DataSource information](https://tomcat.apache.org/tomcat-7.0-doc/jnd
 >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this server. -->  
 >&nbsp;&nbsp;&nbsp;&nbsp;&lt;/dataset>  
 
-### EDDTableFromFileNames
+### EDDTableFromFileNames {#eddtablefromfilenames}
 [**EDDTableFromFileNames**](#eddtablefromfilenames) creates a dataset from information about a group of files in the server's file system, including a URL for each file so that users can download the files via ERDDAP's ["files" system](https://coastwatch.pfeg.noaa.gov/erddap/files/documentation.html). Unlike all of the [EDDTableFromFiles](#eddtablefromfiles) subclasses, this dataset type does not serve data from within the files.
 
 *   EDDTableFromFileNames is useful when:
     *   You have a group of files that you want to distribute as whole files because they don't contain "data" in the same way that regular data files have data. For example, image files, video files, Word documents, Excel spreadsheet files, PowerPoint presentation files, or text files with unstructured text.
     *   You have a group of files which have data in a format that ERDDAP™ can't yet read. For example, a project-specific, custom, binary format.  
          
-#### EDDTableFromFileNames Data
+#### EDDTableFromFileNames Data {#eddtablefromfilenames-data}
 *   [The data in an EDDTableFromFileNames dataset](#eddtablefromfilenames-data) is a table that ERDDAP™ creates on-the-fly with information about a group of local files. In the table, there is a row for each file. Four special attributes in the [datasets.xml for this dataset](#eddtablefromfilenames-skeleton-xml) determine which files will be included in this dataset:
     
-##### fileDir
+##### fileDir {#filedir}
     *   &lt;fileDir> -- This specifies the source directory in the server's file system with the files for this dataset. The files that are actually located in the server's file system in &lt;fileDir> will appear in the url column of this dataset within a virtual directory named https://*serverUrl*/erddap/files/*datasetID/* .  
         For example, if the datasetID is jplMURSST,  
         and the &lt;fileDir> is /home/data/mur/ ,  
@@ -2618,7 +2618,7 @@ See [Tomcat DataSource information](https://tomcat.apache.org/tomcat-7.0-doc/jnd
             [https://podaac-opendap.jpl.nasa.gov/opendap/allData/ccmp/L3.5a/monthly/flk/](https://podaac-opendap.jpl.nasa.gov/opendap/allData/ccmp/L3.5a/monthly/flk/)
         *   Most Apache-like directory listings, e.g.,  
             [https://www1.ncdc.noaa.gov/pub/data/cmb/ersst/v5/netcdf/](https://www1.ncdc.noaa.gov/pub/data/cmb/ersst/v5/netcdf/)
-##### fromOnTheFly
+##### fromOnTheFly {#fromonthefly}
 [\*\*\*fromOnTheFly](#fromonthefly) -- For some huge S3 buckets (like noaa-goes17, which has 26 million files), it may take ERDDAP™ up to 12 hours to download all the information about the contents of the bucket (and then there are other problems). To get around this, there is a special way to use &lt;fileDir> in EDDTableFromFileNames to make a dataset with the directory and file names from an AWS S3 bucket. The dataset won't have the list of all of the S3 bucket's directories and file names that a user can search via requests to the dataset. But the dataset will get the names of directories and files on-the-fly if the user traverses the directory hierarchy with the dataset's "files" option. Thus, this allows users to browse the S3 bucket's file hierarchy and files via the dataset's "files" system. To do this, instead of specifying the URL for the S3 bucket as the "Starting directory" (in GenerateDatasetsXml) or &lt;fileDir> (in datasets.xml), use:  
 ```
 \*\*\*fromOnTheFly,*theS3BucketUrl*  
@@ -2630,13 +2630,13 @@ for example:
 See the documentation for [working with S3 Buckets in ERDDAP™](#working-with-aws-s3-files), notably the description of the specific format that must be used for S3 bucket URL. And see  
 [these details and an example](#making-an-eddtablefromfilenames-dataset-with-an-aws-s3-bucket) of using \*\*\*fromOnTheFly.
         
-##### recursive
+##### recursive {#recursive}
 *   &lt;recursive> -- Files in subdirectories of &lt;fileDir> with names which match &lt;fileRegex> will appear in the same subdirectories in the "files" URL if &lt;recursive> is set to true. The default is false.
 *   [&lt;pathRegex>](#pathregex) -- If recursive=true, Only directory names which match the pathRegex (default=".\*") will be accepted. If recursive=false, this is ignored. This is rarely used, but can be very useful in unusual circumstances. (See this [regex documentation](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/regex/Pattern.html) and [regex tutorial](https://www.vogella.com/tutorials/JavaRegularExpressions/article.html).)
-##### fileRegex
+##### fileRegex {#fileregex}
 *   &lt;fileRegex> -- Only the filenames where the whole filename (not including the directory name) match the &lt;fileRegex> will be included in this dataset. For example, jplMURSST.{14}\\.png . (See this [regex documentation](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/regex/Pattern.html) and [regex tutorial](https://www.vogella.com/tutorials/JavaRegularExpressions/article.html).)  
          
-##### From File Names Data table Contents
+##### From File Names Data table Contents {#from-file-names-data-table-contents}
 In the table, there will be columns with:
 *   url -- The URL that users can use to download the file via ERDDAP's ["files" system](https://coastwatch.pfeg.noaa.gov/erddap/files/documentation.html).
 *   name -- The file's name (without a directory name).
@@ -2676,12 +2676,12 @@ In the case of the time variable, if a file has the name jplMURSST20150103000000
 
 In the case of the day variable, if a file has the name jplMURSST20150103000000.png, the extractRegex will match the filename, extract the characters which match the first capture group ("03") as [&lt;dataType>](#datatype)\=int, yielding a data value of 3.
         
-#### Other Information
+#### Other Information {#other-information}
 *   No [&lt;updateEveryNMillis>](#updateeverynmillis) -- This type of dataset doesn't need and can't use the &lt;updateEveryNMillis> tag because the information served by EDDTableFromFileNames is always perfectly up-to-date because ERDDAP™ queries the file system in order to respond to each request for data. Even if there are a huge number of files, this approach should work reasonably well. A response may be slow if there are a huge number of files and the dataset hasn't been queried for a while. But for several minutes after that, the operating system keeps the information in a cache, so responses should be very fast.  
      
 *   You can use the [GenerateDatasetsXml program](#generatedatasetsxml) to make the datasets.xml chunk for this type of dataset. You can add/define additional columns with information extracted from the filename, as shown above.  
      
-#### EDDTableFromFileNames skeleton XML
+#### EDDTableFromFileNames skeleton XML {#eddtablefromfilenames-skeleton-xml}
 >&nbsp;&nbsp;&lt;dataset type="EDDTableFromFileNames" [datasetID](#datasetid)\="..." [active](#active)\="..." >  
 >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&lt;accessibleTo>](#accessibleto)...&lt;/accessibleTo> &lt;!-- 0 or 1 -->  
 >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&lt;graphsAccessibleTo>](#graphsaccessibleto)auto|public&lt;/graphsAccessibleTo> &lt;!-- 0 or 1 -->  
@@ -2702,7 +2702,7 @@ In the case of the day variable, if a file has the name jplMURSST20150103000000.
 >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Each dataVariable MUST include [&lt;dataType>](#datatype) tag. -->  
 >&nbsp;&nbsp;&lt;/dataset>  
 
-### EDDTableFromFiles
+### EDDTableFromFiles {#eddtablefromfiles}
 [**EDDTableFromFiles**](#eddtablefromfiles) is the superclass of all EDDTableFrom...Files classes. You can't use EDDTableFromFiles directly. Instead, use a subclass of EDDTableFromFiles to handle the specific file type:
 
 *   [EDDTableFromAsciiFiles](#eddtablefromasciifiles) aggregates data from comma-, tab-, semicolon-, or space-separated tabular ASCII data files.
@@ -2722,18 +2722,18 @@ In the case of the day variable, if a file has the name jplMURSST20150103000000.
 
 Currently, no other file types are supported. But it is usually relatively easy to add support for other file types. Contact us if you have a request. Or, if your data is in an old file format that you would like to move away from, we recommend converting the files to be NetCDF v3 .nc files (and especially .nc files with the [CF Discrete Sampling Geometries (DSG)](https://cfconventions.org/Data/cf-conventions/cf-conventions-1.8/cf-conventions.html#discrete-sampling-geometries) Contiguous Ragged Array data structure -- ERDDAP™ can extract data from them very quickly). NetCDF is a widely supported, binary format, allows fast random access to the data, and is already supported by ERDDAP.
 
-#### FromFiles Details
+#### FromFiles Details {#fromfiles-details}
 The following information applies to all of the subclasses of EDDTableFromFiles.
-##### Aggregation
+##### Aggregation {#aggregation}
 This class aggregates data from local files. Each file holds a (relatively) small table of data.
     *   The resulting dataset appears as if all of the file's tables had been combined (all of the rows of data from file #1, plus all of the rows from file #2, ...).
     *   The files don't all have to have all of the specified variables. If a given file doesn't have a specified variable, ERDDAP™ will add missing values as needed.
     *   The variables in all of the files MUST have the same values for the [add\_offset](#scale_factor), [missing\_value](#missing_value), [\_FillValue](#missing_value), [scale\_factor](#scale_factor), and [units](#units) attributes (if any). ERDDAP™ checks, but it is an imperfect test -- if there are different values, ERDDAP doesn't know which is correct and therefore which files are invalid. If this is a problem, you may be able to use [NcML](#ncml-files) or [NCO](#netcdf-operators-nco) to fix the problem.  
          
-##### Compressed Files
+##### Compressed Files {#compressed-files}
 The source data files for all EDDTableFromFiles subclasses can be externally compressed (e.g., .tgz, .tar.gz, .tar.gzip, .gz, .gzip, .zip, .bz2, or .Z). See the [Externally Compressed Files documentation](#externally-compressed-files).  
      
-##### Cached File Information
+##### Cached File Information {#cached-file-information-1}
 *   When an EDDTableFromFiles dataset is first loaded, EDDTableFromFiles reads information from all of the relevant files and creates tables (one row for each file) with information about each valid file and each "bad" (different or invalid) file.
     *   The tables are also stored on disk, as NetCDF v3 .nc files in *bigParentDirectory*/dataset/*last2CharsOfDatasetID*/*datasetID*/ in files named:  
           dirTable.nc (which holds a list of unique directory names),  
@@ -2748,12 +2748,12 @@ The source data files for all EDDTableFromFiles subclasses can be externally com
     *   You shouldn't ever need to delete or work with these files. One exception is: if you are still making changes to a dataset's datasets.xml setup, you may want to delete these files to force ERDDAP™ to reread all of the files since the files will be read/interpreted differently. If you ever do need to delete these files, you can do it when ERDDAP™ is running. (Then set a [flag](/docs/server-admin/additional-information#set-dataset-flag) to reload the dataset ASAP.) However, ERDDAP™ usually notices that the datasets.xml information doesn't match the fileTable information and deletes the file tables automatically.
     *   If you want to encourage ERDDAP™ to update the stored dataset information (for example, if you just added, removed, or changed some files to the dataset's data directory), use the [flag system](/docs/server-admin/additional-information#flag) to force ERDDAP™ to update the cached file information.  
          
-##### Handling Requests
+##### Handling Requests {#handling-requests-1}
 *   ERDDAP™ tabular data requests can put constraints on any variable.
     *   When a client's request for data is processed, EDDTableFromFiles can quickly look in the table with the valid file information to see which files might have relevant data. For example, if each source file has the data for one fixed-location buoy, EDDTableFromFiles can very efficiently determine which files might have data within a given longitude range and latitude range.
     *   Because the valid file information table includes the minimum and maximum value of every variable for every valid file, EDDTableFromFiles can often handle other queries quite efficiently. For example, if some of the buoys don't have an air pressure sensor, and a client requests data for airPressure!=NaN, EDDTableFromFiles can efficiently determine which buoys have air pressure data.  
          
-##### Updating the Cached File Information
+##### Updating the Cached File Information {#updating-the-cached-file-information-1}
 Whenever the dataset is reloaded, the cached file information is updated.
     
 *   The dataset is reloaded periodically as determined by the &lt;reloadEveryNMinutes> in the dataset's information in datasets.xml.
@@ -2762,13 +2762,13 @@ Whenever the dataset is reloaded, the cached file information is updated.
 
 When the dataset is reloaded, ERDDAP™ compares the currently available files to the cached file information table. New files are read and added to the valid files table. Files that no longer exist are dropped from the valid files table. Files where the file timestamp has changed are read and their information is updated. The new tables replace the old tables in memory and on disk.  
      
-##### Bad Files
+##### Bad Files {#bad-files-1}
 The table of bad files and the reasons the files were declared bad (corrupted file, missing variables, incorrect axis values, etc.) is emailed to the emailEverythingTo email address (probably you) every time the dataset is reloaded. You should replace or repair these files as soon as possible.  
      
-##### Missing Variables
+##### Missing Variables {#missing-variables-1}
 If some of the files don't have some of the dataVariables defined in the dataset's datasets.xml chunk, that's okay. When EDDTableFromFiles reads one of those files, it will act as if the file had the variable, but with all missing values.  
      
-##### Near Real Time Data
+##### Near Real Time Data {#near-real-time-data}
 *   EDDTableFromFiles treats requests for very recent data as a special case. The problem: If the files making up the dataset are updated frequently, it is likely that the dataset won't be updated every time a file is changed. So EDDTableFromFiles won't be aware of the changed files. (You could use the [flag system](/docs/server-admin/additional-information#flag), but this might lead to ERDDAP™ reloading the dataset almost continually. So in most cases, we don't recommend it.) Instead, EDDTableFromFiles deals with this by the following system: When ERDDAP™ gets a request for data within the last 20 hours (for example, 8 hours ago until Now), ERDDAP™ will search all files which have any data in the last 20 hours. Thus, ERDDAP™ doesn't need to have perfectly up-to-date data for all of the files in order to find the latest data. You should still set [&lt;reloadEveryNMinutes>](#reloadeverynminutes) to a reasonably small value (for example, 60), but it doesn't have to be tiny (for example, 3).  
      
     *   **Not recommended** organization of near-real-time data in the files: If, for example, you have a dataset that stores data for numerous stations (or buoy, or trajectory, ...) for many years, you could arrange the files so that, for example, there is one file per station. But then, every time new data for a station arrives, you have to read a large old file and write a large new file. And when ERDDAP™ reloads the dataset, it notices that some files have been modified, so it reads those files completely. That is inefficient.  
@@ -2780,17 +2780,17 @@ If some of the files don't have some of the dataVariables defined in the dataset
         
         In both cases, when ERDDAP™ reloads the dataset, most files are unchanged; only a few, small files have changed and need to be read.  
          
-##### Directories
+##### Directories {#directories-1}
 The files can be in one directory, or in a directory and its subdirectories (recursively). If there are a large number of files (for example, >1,000), the operating system (and thus EDDTableFromFiles) will operate much more efficiently if you store the files in a series of subdirectories (one per year, or one per month for datasets with very frequent files), so that there are never a huge number of files in a given directory.  
      
-##### Remote Directories and HTTP Range Requests
+##### Remote Directories and HTTP Range Requests {#remote-directories-and-http-range-requests-1}
 *   **Remote Directories and HTTP Range Requests** (AKA Byte Serving, Byte Range Requests) --  
     EDDGridFromNcFiles, EDDTableFromMultidimNcFiles, EDDTableFromNcFiles, and EDDTableFromNcCFFiles, can sometimes serve data from .nc files on remote servers and accessed via HTTP if the server supports [Byte Serving](https://en.wikipedia.org/wiki/Byte_serving) via HTTP range requests (the HTTP mechanism for byte serving). This is possible because netcdf-java (which ERDDAP™ uses to read .nc files) supports reading data from remote .nc files via HTTP range requests.
     
     **Don't do this!**  
     Instead, use the [&lt;cacheFromUrl> system](#cachefromurl).
     
-##### CacheFromUrl
+##### CacheFromUrl {#cachefromurl}
 *   [**&lt;cacheFromUrl>**](#cachefromurl) -  
     All EDDGridFromFiles and all EDDTableFromFiles datasets support a set of tags which tell ERDDAP™ to download and maintain a copy of all of a remote dataset's files, or a cache of a few files (downloaded as needed). **This is an incredibly useful feature.**
     *   The &lt;cacheFromUrl> tag lets you specify a URL with a list of a remote dataset's files from a remote file list.
@@ -2867,7 +2867,7 @@ The files can be in one directory, or in a directory and its subdirectories (rec
             
         *   A common approach: If you want to use &lt;cachePartialPathRegex>, don't use it initially, because you want ERDDAP™ to download all of the files initially. After ERDDAP™ has downloaded all of the files, add it to the dataset's chunk of datasets.xml.  
              
-##### Thousands of Files
+##### Thousands of Files {#thousands-of-files}
 If your dataset has many thousands of files, ERDDAP™ may be slow to respond to requests for data from that dataset. There are two issues here:  
  
 
@@ -2884,7 +2884,7 @@ If your dataset has many thousands of files, ERDDAP™ may be slow to respond to
 
 N.B. Solid State Drives are great! The fastest, easiest, cheapest way to help ERDDAP™ deal with a huge number of (small) files is to use a solid state drive. See [Solid State Drives are great!](/docs/server-admin/additional-information#solid-state-drives)  
      
-##### Millions of Files
+##### Millions of Files {#millions-of-files}
 *   Some datasets have millions of source files. ERDDAP™ can handle this, but with mixed results.
     
     *   For requests that just involve variables listed in [&lt;subsetVariables>](#subsetvariables), ERDDAP™ has all of the needed information already extracted from the datafiles and stored in one file, so it can respond very, very quickly.
@@ -2903,13 +2903,13 @@ N.B. Solid State Drives are great! The fastest, easiest, cheapest way to help ER
     N.B. Solid State Drives are great! The fastest, easiest, cheapest way to help ERDDAP™ deal with a huge number of (small) files is to use a solid state drive. See [Solid State Drives are great!](/docs/server-admin/additional-information#solid-state-drives)  
      
     
-##### Huge Files
+##### Huge Files {#huge-files}
 *   A single huge data file (notably huge ASCII data files) can cause an OutOfMemoryError. If this is the problem, it should be obvious because ERDDAP™ will fail to load the dataset. The solution, if feasible, is to split the file into multiple files. Ideally, you can split the file into logical chunks. For example, if the file has 20 month's worth of data, split it into 20 files, each with 1 month's worth of data. But there are advantages even if the main file is split up arbitrarily. This approach has multiple benefits: a) This will reduce the memory needed to read the data files to 1/20th, because only one file is read at a time. b) Often, ERDDAP™ can deal with requests much faster because it only has to look in one or a few files to find the data for a given request. c) If data collection is ongoing, then the existing 20 files can remain unchanged, and you only need to modify one, small, new file to add the next month's worth of data to the dataset.  
      
-##### FTP Trouble/Advice
+##### FTP Trouble/Advice {#ftp-troubleadvice-1}
 *   If you FTP new data files to the ERDDAP™ server while ERDDAP™ is running, there is the chance that ERDDAP™ will be reloading the dataset during the FTP process. It happens more often than you might think! If it happens, the file will appear to be valid (it has a valid name), but the file isn't valid. If ERDDAP™ tries to read data from that invalid file, the resulting error will cause the file to be added to the table of invalid files. This is not good. To avoid this problem, use a temporary filename when FTP'ing the file, for example, ABC2005.nc\_TEMP . Then, the fileNameRegex test (see below) will indicate that this is not a relevant file. After the FTP process is complete, rename the file to the correct name. The renaming process will cause the file to become relevant in an instant.  
     
-##### File Name Extracts 
+##### File Name Extracts {#file-name-extracts}
 \[This feature is DEPRECATED. Please use [\*\*\*fileName pseudo sourceName](#filename-sourcenames) instead.\]  
 EDDTableFromFiles has a system for extracting a String from each filename and using that to make a pseudo data variable. Currently, there is no system to interpret these Strings as dates/times. There are several XML tags to set up this system. If you don't need part or all of this system, just don't specify these tags or use "" values.
 
@@ -2931,10 +2931,10 @@ For example, if a dataset has files with names like XYZAble.nc, XYZBaker.nc, XYZ
 
 In most cases, there are numerous values for these extract tags that will yield the same results -- regular expressions are very flexible. But in a few cases, there is just one way to get the desired results.  
      
-##### Pseudo sourceNames
+##### Pseudo sourceNames {#pseudo-sourcenames}
 Every variable in every dataset in ERDDAP™ has a [&lt;sourceName>](#sourcename) which specifies the source's name for the variable. EDDTableFromFiles supports a few pseudo sourceNames which extract a value from some other place (e.g., the file's name or the value of a global attribute) and promote that value to be a column of constant values for that chunk of data (e.g., the table of that file's data). For these variables, you must specify the variable's data type via the [&lt;dataType>](#datatype) tag. If the extracted information is a dateTime string, you specify the format of the dateTime string in the [units attribute](#string-time-units). The pseudo sourceName options are:  
  
-###### global: sourceNames
+###### global: sourceNames {#global-sourcenames}
 A global metadata attribute in each source data file can be promoted to be a column of data. If a variable's &lt;sourceName> has the format
 ```
         <sourceName>global:*attributeName*</sourceName>
@@ -2945,7 +2945,7 @@ then when ERDDAP™ is reading the data from a file, ERDDAP™ will look for a g
 ```
 When you promote an attribute to be data, ERDDAP™ removes the corresponding attribute. This is appropriate because the value is presumably different in every file; whereas in the aggregated dataset in ERDDAP™ it will have only one value. If you want, you can add a new value for the attribute for the whole dataset by adding &lt;att name="*attributeName*">*newValue*&lt;/att> to the dataset's global [&lt;addAttributes>](#addattributes). For global attributes that ERDDAP™ requires, for example, institution, you MUST add a new value for the attribute.  
      
-###### variable: sourceNames
+###### variable: sourceNames {#variable-sourcenames}
 A variable's metadata attribute in each file can be promoted to be a column of data. If a variable's &lt;[sourceName](#sourcename)\> has the format
 ```
         <sourceName>variable:*variableName*:*attributeName*<sourceName>
@@ -2958,7 +2958,7 @@ This is useful when the attribute has different values in different source files
 
 When you promote an attribute to be data, ERDDAP™ removes the corresponding attribute. This is appropriate because the value is presumably different in every file; whereas in the aggregated dataset in ERDDAP™ it will have only one value. If you want, you can add a new value for the attribute for the whole dataset by adding &lt;att name="*attributeName*">*newValue*&lt;/att> to the variable's [&lt;addAttributes>](#addattributes). For attributes that ERDDAP™ requires, for example, ioos\_category (depending on your setup), you MUST add a new value for the attribute.
         
-###### fileName sourceNames
+###### fileName sourceNames {#filename-sourcenames}
 You can extract part of a file's fileName and promote that to be a column of data. The format for this pseudo [&lt;sourceName>](#sourcename) is
 ```
         <sourceName>\*\*\*fileName,*regex*,*captureGroupNumber*</sourceName>
@@ -2969,7 +2969,7 @@ For example,
 ```
 When EDDTableFromFiles is reading the data from a file, it will make sure the fileName (for example, A201807041442.slcpV1.nc) matches the specified regular expression ("regex") and extract the specified (in this case, the first) capture group (which is a part surrounded by parentheses), for example, "201807041442". (See this [regex documentation](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/regex/Pattern.html) and [regex tutorial](https://www.vogella.com/tutorials/JavaRegularExpressions/article.html).) The regex may be specified as a string with or without surrounding quotes. If the regex is specified as a string with surrounding quotes, the string must be [JSON-style string](https://www.json.org/json-en.html) (with special characters escaped with \\ characters). The capture group number is usually 1 (the first capture group), but may be any number.  
      
-###### pathName sourceNames
+###### pathName sourceNames {#pathname-sourcenames}
 You can extract part of a file's full pathName (/directories/fileName.ext) and promote that to be a column of data. The format for this pseudo [&lt;sourceName>](#sourcename) is
 ```
         <sourceName>\*\*\*pathName,*regex*,*captureGroupNumber*<sourceName>
@@ -2980,7 +2980,7 @@ For example,
 ```
 When EDDTableFromFiles is reading the data from a file, it will make sure the full pathName (for example, /data/myDatasetID/BAY17/B201807041442.nc . For this test, the directory separators will always be '/', never '\\') matches the specified regular expression ("regex") and extract the specified (in this case, the first) capture group (which is a part surrounded by parentheses), for example, "BAY17". (See this [regex documentation](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/regex/Pattern.html) and [regex tutorial](https://www.vogella.com/tutorials/JavaRegularExpressions/article.html).) The regex may be specified as a string with or without surrounding quotes. If the regex is specified as a string with surrounding quotes, the string must be a [JSON-style string](https://www.json.org/json-en.html) (with special characters escaped with \\ characters). The capture group number is usually 1 (the first capture group), but may be any number.  
          
-##### "0 files" Error Message
+##### "0 files" Error Message {#0-files-error-message-2}
 *   If you run [GenerateDatasetsXml](#generatedatasetsxml) or [DasDds](#dasdds), or if you try to load an EDDTableFrom...Files dataset in ERDDAP™, and you get a "0 files" error message indicating that ERDDAP™ found 0 matching files in the directory (when you think that there are matching files in that directory):
     *   Check that the files really are in that directory.
     *   Check the spelling of the directory name.
@@ -2988,7 +2988,7 @@ When EDDTableFromFiles is reading the data from a file, it will make sure the fu
     *   Check that the user who is running the program (e.g., user=tomcat (?) for Tomcat/ERDDAP) has 'read' permission for those files.
     *   In some operating systems (for example, SELinux) and depending on system settings, the user who ran the program must have 'read' permission for the whole chain of directories leading to the directory that has the files.  
          
-##### standardizeWhat
+##### standardizeWhat {#standardizewhat}
 *   When any subclass of EDDTableFromFiles is aggregating a set of source files, for a given variable, all of the source files MUST have identical attribute values for several attributes: scale\_factor, add\_offset, \_Unsigned, missing\_value, \_FillValue, and units). Think about it: if one file has windSpeed units=knots and another has windSpeed units=m/s, then the data values from the two files shouldn't be included in the same aggregated dataset. So, when EDDTableFromFiles first creates the dataset, it reads the attribute values from one file, then rejects all of the files that have different values for those important attributes. For most collections of files, this is not a problem because the attributes of all the variables are consistent. However, for other collections of files, this can lead to 1%, 10%, 50%, 90%, or even 99% of the files being rejected as "bad" files. That is trouble.
     
     EDDTableFrom files has a system to deal with this problem: standardizeWhat. The standardizeWhat setting tells EDDTableFromFiles to standardize the files as soon as it reads them, before EDDTableFromFiles looks at the attributes to see if they are consistent.
@@ -3070,10 +3070,10 @@ Notes:
     
     Or, use [NCO](#netcdf-operators-nco) to actually make changes to the files so that the files are consistent.
         
-##### Separate Columns for Year, Month, Date, Hour, Minute, Second
+##### Separate Columns for Year, Month, Date, Hour, Minute, Second {#separate-columns-for-year-month-date-hour-minute-second}
 It is fairly common for tabular data files to have separate columns for year, month, date, hour, minute, second. Before ERDDAP™ v2.10, the only solution was to edit the data file to combine those columns into a unified time column. With ERDDAP™ 2.10+, you can use the  
 [&lt;sourceName>=*expression*&lt;sourceName>](#sourcename) to tell ERDDAP™ how to combine the source columns to make a unified time column, so you no longer have to edit the source file.
-##### &lt;skipHeaderToRegex&gt;
+##### &lt;skipHeaderToRegex&gt; {#skipheadertoregex}
 *   [&lt;skipHeaderToRegex>](#skipheadertoregex) --  
     OPTIONAL. (For EDDTableFromAsciiFiles and EDDTableFromColumnarAsciiFiles datasets only.)  
     When EDDTableFromAsciiFiles reads a data file, it will ignore all of the lines up to and including the line that matches this regular expression. The default is "", which doesn't use this option. An example is  
@@ -3091,7 +3091,7 @@ If you want to use generateDatasetsXml with a dataset that needs this tag:
 3.  Manually add the &lt;skipHeaderToRegex> tag to the datasets.xml chunk.
 4.  Delete the temporary, sample file.
 5.  Use the dataset in ERDDAP.
-##### &lt;skipLinesRegex&gt;
+##### &lt;skipLinesRegex&gt; {#skiplinesregex}
 OPTIONAL. (For EDDTableFromAsciiFiles and EDDTableFromColumnarAsciiFiles datasets only.)  
 When EDDTableFromAsciiFiles reads a data file, it will ignore all lines which match this regular expression. The default is "", which doesn't use this option. An example is  
 ```
@@ -3101,7 +3101,7 @@ which will ignore all lines which start with "#".
 
 When you use this tag, &lt;columnNamesRow> and &lt;firstDataRow> act as if all of the matching lines had been removed before the file is read. For example, you would use columnNamesRow=0 even if there are several lines starting with, for example, "#" at the start of the file.
     
-#### EDDTableFromFiles skeleton XML
+#### EDDTableFromFiles skeleton XML {#eddtablefromfiles-skeleton-xml}
 >&nbsp;&nbsp;&lt;dataset type="EDDTableFrom...Files" [datasetID](#datasetid)\="..." [active](#active)\="..." >  
 >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;nDimensions>...&lt;/nDimensions>  &lt;!-- This was used prior to ERDDAP™  
 >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;version 1.30, but is now ignored. -->  
@@ -3212,7 +3212,7 @@ When you use this tag, &lt;columnNamesRow> and &lt;firstDataRow> act as if all o
 >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;example, time) needn't be first or in any specific order. -->  
 >&nbsp;&nbsp;&lt;/dataset>  
 
-### EDDTableFromAsciiService
+### EDDTableFromAsciiService {#eddtablefromasciiservice}
 [**EDDTableFromAsciiService**](#eddtablefromasciiservice) is essentially a screen scraper. It is intended to deal with data sources which have a simple web service for requesting data (often an HTML form on a web page) and which can return the data in some structured ASCII format (for example, a comma-separated-value or columnar ASCII text format, often with other information before and/or after the data).
 
 EDDTableFromAsciiService is the superclass of all EDDTableFromAsciiService... classes. You can't use EDDTableFromAsciiService directly. Instead, use a subclass of EDDTableFromAsciiService to handle specific types of services:
@@ -3221,7 +3221,7 @@ EDDTableFromAsciiService is the superclass of all EDDTableFromAsciiService... cl
 
 Currently, no other service types are supported. But it is usually relatively easy to support other services if they work in a similar way. Contact us if you have a request.
 
-#### Details
+#### Details {#details}
 The following information applies to all of the subclasses of EDDTableFromAsciiService.
 
 *   Constraints -- ERDDAP™ tabular data requests can put constraints on any variable. The underlying service may or may not allow constraints on all variables. For example, many services only support constraints on station names, latitude, longitude, and time. So when a subclass of EDDTableFromAsciiService gets a request for a subset of a dataset, it passes as many constraints as possible to the source data service and then applies the remaining constraints to the data returned by the service, before handing the data to the user.
@@ -3230,7 +3230,7 @@ The following information applies to all of the subclasses of EDDTableFromAsciiS
     *   &lt;beforeData1> through &lt;beforeData10> tags -- You can specify a series of pieces of text (as many as you want, up to 10) that EDDTableFromAsciiService must look for in the header of the ASCII text returned by the service with &lt;beforeData1> through &lt;beforeData10>. For example, this is useful for verifying that the response includes the expected variables using the expected units. The last beforeData tag that you specify identifies the text that occurs right before the data starts.
     *   &lt;afterData> -- This specifies the text that EDDTableFromAsciiService will look for in the ASCII text returned by the service which signifies the end of the data.
     *   &lt;noData> -- If EDDTableFromAsciiService finds this text in the ASCII text returned by the service, it concludes that there is no data which matches the request.
-#### EDDTableFromAsciiService skeleton XML
+#### EDDTableFromAsciiService skeleton XML {#eddtablefromasciiservice-skeleton-xml}
 >&nbsp;&nbsp;&lt;dataset type="EDDTableFromAsciiService..." [datasetID](#datasetid)\="..." [active](#active)\="..." >  
 >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&lt;accessibleTo>](#accessibleto)...&lt;/accessibleTo> &lt;!-- 0 or 1 -->  
 >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&lt;graphsAccessibleTo>](#graphsaccessibleto)auto|public&lt;/graphsAccessibleTo> &lt;!-- 0 or 1 -->  
@@ -3251,7 +3251,7 @@ The following information applies to all of the subclasses of EDDTableFromAsciiS
 >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&lt;dataVariable>](#datavariable)...&lt;/dataVariable> &lt;!-- 1 or more -->  
 >&nbsp;&nbsp;&lt;/dataset>  
 
-### EDDTableFromAsciiServiceNOS
+### EDDTableFromAsciiServiceNOS {#eddtablefromasciiservicenos}
 [**EDDTableFromAsciiServiceNOS**](#eddtablefromasciiservicenos) makes EDDTable datasets from the ASCII text data services offered by NOAA's [National Ocean Service (NOS)](https://oceanservice.noaa.gov/). For information on how this class works and how to use it, see this class's superclass [EDDTableFromAsciiService](#eddtablefromasciiservice). It is unlikely that anyone other than Bob Simons will need to use this subclass.
 
 Since the data within the response from a NOS service uses a columnar ASCII text format, data variables other than latitude and longitude must have a special attribute which specifies which characters of each data line contain that variable's data, for example,  
@@ -3259,12 +3259,12 @@ Since the data within the response from a NOS service uses a columnar ASCII text
 <att name="responseSubstring">17, 25</att>  
 ```
  
-### EDDTableFromAllDatasets
+### EDDTableFromAllDatasets {#eddtablefromalldatasets}
 [**EDDTableFromAllDatasets**](#eddtablefromalldatasets) is a higher-level dataset which has information about all of the other datasets which are currently loaded in your ERDDAP. Unlike other types of datasets, there is no specification for the allDatasets dataset in datasets.xml. ERDDAP™ automatically creates one EDDTableFromAllDatasets dataset (with datasetID=allDatasets). Thus, an allDatasets dataset will be created in each ERDDAP™ installation and will work the same way in each ERDDAP™ installation.
 
 The allDatasets dataset is a tabular dataset. It has a row of information for each dataset. It has columns with information about each dataset, e.g., datasetID, accessible, institution, title, minLongitude, maxLongitude, minLatitude, maxLatitude, minTime, maxTime, etc. Because allDatasets is a tabular dataset, you can query it the same way you can query any other tabular dataset in ERDDAP™, and you can specify the file type for the response. This lets users search for datasets of interest in very powerful ways.  
  
-### EDDTableFromAsciiFiles 
+### EDDTableFromAsciiFiles {#eddtablefromasciifiles}
 [**EDDTableFromAsciiFiles**](#eddtablefromasciifiles) aggregates data from comma-, tab-, semicolon-, or space-separated tabular ASCII data files.
 
 *   Most often, the files will have column names on the first row and data starting on the second row. (Here, the first row of the file is called row number 1.) But you can use &lt;columnNamesRow> and &lt;firstDataRow> in your datasets.xml file to specify a different row number.
@@ -3274,13 +3274,13 @@ The allDatasets dataset is a tabular dataset. It has a row of information for ea
 *   We strongly recommend using the [GenerateDatasetsXml program](#generatedatasetsxml) to make a rough draft of the datasets.xml chunk for this dataset. Because of the total lack of metadata in ASCII files, you will always need to edit the results of GenerateDatasetsXml.
 *   WARNING: When ERDDAP™ reads ASCII data files, if it finds an error on a given line (e.g., incorrect number of items), it logs a warning message ("WARNING: Bad line(s) of data" ... with a list of the bad lines on subsequent lines) to the [log.txt file](/docs/server-admin/additional-information#log) and then continues to read the rest of the data file. Thus, it is your responsibility to look periodically (or write a script to do so) for that message in the log.txt so that you can fix the problems in the data files. ERDDAP™ is set up this way so that users can continue to read all of the available valid data even though some lines of the file have flaws.  
      
-### EDDTableFromAwsXmlFiles 
+### EDDTableFromAwsXmlFiles {#eddtablefromawsxmlfiles}
 [**EDDTableFromAwsXmlFiles**](#eddtablefromawsxmlfiles) aggregates data from a set of Automatic Weather Station (AWS) XML data files using the WeatherBug Rest XML API (which is no longer active).
 
 *   This type of file is a simple but inefficient way to store the data, because each file usually seems to contain the observation from just one time point. So there may be a large number of files. If you want to improve performance, consider consolidating groups of observations (a week's worth?) in NetCDF v3 .nc files (best: .nc files with the [CF Discrete Sampling Geometries (DSG) Contiguous Ragged Array format](https://cfconventions.org/Data/cf-conventions/cf-conventions-1.8/cf-conventions.html#discrete-sampling-geometries)) and using [EDDTableFromMultidimNcFiles](#eddtablefrommultidimncfiles) (or [EDDTableFromNcCFFiles](#eddtablefromnccffiles)) to serve the data. You can [use ERDDAP™ to generate the new files](#millions-of-files).
 *   See this class' superclass, [EDDTableFromFiles](#eddtablefromfiles), for information on how this class works and how to use it.  
      
-### EDDTableFromColumnarAsciiFiles
+### EDDTableFromColumnarAsciiFiles {#eddtablefromcolumnarasciifiles}
 [**EDDTableFromColumnarAsciiFiles**](#eddtablefromcolumnarasciifiles) aggregates data from tabular ASCII data files with fixed-width columns.
 
 *   Most often, the files will have column names on the first row and data starting on the second row. The first line/row in the file is called row #1. But you can use &lt;columnNamesRow> and &lt;firstDataRow> in your datasets.xml file to specify a different row number.
@@ -3314,12 +3314,12 @@ These attributes MUST be specified for all variables except [fixed-value](#fixed
 *   See this class' superclass, [EDDTableFromFiles](#eddtablefromfiles), for information on how this class works and how to use it.
 *   We strongly recommend using the [GenerateDatasetsXml program](#generatedatasetsxml) to make a rough draft of the datasets.xml chunk for this dataset. Because of the difficulty of determining the start and end positions for each data column and the total lack of metadata in ASCII files, you will always need to edit the results from GenerateDatasetsXml.  
      
-### EDDTableFromHttpGet
+### EDDTableFromHttpGet {#eddtablefromhttpget}
 EDDTableFromHttpGet is different from all other types of datasets in ERDDAP™ in that it has a system whereby specific "authors" can add data, revise data, or delete data from the dataset by regular HTTP GET or [POST](#http-post) requests from a computer program, a script or a browser. The dataset is queryable by users in the same way that all other EDDTable datasets are queryable in ERDDAP. See the description of this class's superclass, [EDDTableFromFiles](#eddtablefromfiles), to read about the features which are inherited from that superclass.
 
 The unique features of EDDTableFromHttpGet are described below. You need to read all of this initial section and understand it; otherwise, you may have unrealistic expectations or get yourself into trouble that is hard to fix.
 
-#### Intended Use
+#### Intended Use {#intended-use}
 This system is intended for:
 
 *   Tabular (in situ) data, not gridded data.
@@ -3334,10 +3334,10 @@ This system is intended for:
 
 Once data is in an EDDTableFromHttpGet dataset, any user can request data in the same way that they request data from any other EDDTable dataset.  
      
-#### Experimental: Be Careful
+#### Experimental: Be Careful {#experimental-be-careful}
 Since this system is new and since lost environmental data can't be reacquired, you should treat EDDTableFromHttpGet as experimental. If you are transitioning from another system, please run the old system and the new system in parallel until you are confident that the new system works well (weeks or months, not just hours or days). In all cases, please make sure your system separately archives the .insert and .delete URLs that are sent to the EDDTableFromHttpGet dataset (even if just in the Apache and/or Tomcat logs), at least for a while. And in all cases, make sure that the data files created by your EDDTableFromHttpGet dataset are routinely backed up to external data storage devices. (Note that [rsync](https://en.wikipedia.org/wiki/Rsync). can back up the data files created by EDDTableFromHttpGet very efficiently.)  
      
-#### .insert and .delete
+#### .insert and .delete {#insert-and-delete}
 
 For any dataset in ERDDAP™, when you send a request to ERDDAP™ for a subset of the data in a dataset, you specify the file type that you want for the response, e.g., .csv, .htmlTable, .nc, .json. EDDTableFromHttpGet extends this system to support two additional "file types" which can insert (or change) or delete data in the dataset:
 
@@ -3368,7 +3368,7 @@ For any dataset in ERDDAP™, when you send a request to ERDDAP™ for a subset 
     *   .insert and .delete accept (without an error message) floating point numbers when integers are expected. In these cases, the dataset rounds the values to integers.
     *   .insert and .delete accept (without an error message) integer and floating point numbers which are out-of-range of the variable's data type. In these cases, the dataset stores the values as ERDDAP's native missing values for that data type (MAX\_VALUE for integer types and NaN for floats and doubles).  
          
-#### Response
+#### Response {#response}
 If the .insert or .delete URL succeeds, the HTTP response code will be 200 (OK) and the response will be text with a .json object, e.g.,
 ```
     {
@@ -3382,22 +3382,22 @@ Note that the timestamps have millisecond precision.
 
 If the .insert or .delete URL fails, you will get an HTTP response code other than 200 (Okay), e.g., Error 403 Forbidden if you submit an incorrect author\_key value. ERDDAP™ sends the HTTP response code (not, eg., a .json formatted error) because that's how things are done in the internet and because errors can occur anywhere in the system (e.g., in the network, which returns an HTTP error). If the error is from ERDDAP™, the response may include some text (not .json) with a more detailed explanation of what went wrong, but the HTTP response code (200=Okay, anything else is trouble) is the proper way to check if the .insert or .delete succeeded. If checking the HTTP response code isn't possible or is inconvenient, search for "status":"success" in the response text which should be a reliable indication of success.
     
-#### Log Files
+#### Log Files {#log-files}
 When EDDTableFromHttpGet receives .insert and .delete commands, it simply appends the information to the relevant file in a set of log files, each of which is a table stored in a [JSON Lines CSV file](https://jsonlines.org/examples/). When a user makes a request for data, ERDDAP™ quickly reads the relevant log files, applies the changes to the dataset in the order they were made, and then filters the request via the user's constraints like any other ERDDAP™ data request. The partitioning of the data into various log files, the storage of various pieces of information (e.g., the timestamp of the command, and whether the command was .insert or .delete), and various aspects of the setup of the dataset, all make it possible for ERDDAP to store data to and retrieve data from this dataset very quickly and very efficiently.  
      
-#### Security and Author
+#### Security and Author {#security-and-author}
 Every .insert and .delete command must include &author=*author\_key* as the last parameter, where author\_key is composed of the author's identifier (you chose: name, initials, pseudonym, number), an underscore, and a secret key. The ERDDAP™ administrator will work with authors to generate the list of valid author\_key values, which can be changed at any time.  
 When EDDTableFromHttpGet receives an .insert or .delete command, it makes sure that the authorID\_key is the last parameter and valid. Because it is the last parameter, it indicates that the entire command line reached ERDDAP™ and wasn't truncated. The secret key ensures that only specific authors may insert or delete data in the dataset. ERDDAP™ then extracts the authorID and saves that in the author variable, so that anyone can see who was responsible for a given change to the dataset.  
 .insert and .delete commands can only be made via https: (secure) ERDDAP™ URLs. This ensures that the information being transferred is kept secret during transit.  
      
-#### timestamp
+#### timestamp {#timestamp}
 As part of the log system, EDDTableFromHttpGet adds a timestamp (the time that ERDDAP received the request) to each command that it stores in the log files. Because ERDDAP™ generates the timestamp, not the authors, it doesn't matter if different authors are making changes from computers with clocks set to slightly different times. The timestamp reliably indicates the time when the change was made to the dataset.  
      
-#### HTTP POST
+#### HTTP POST {#http-post}
 *   ["What about HTTP POST?!"](#http-post)  
     HTTP [POST](https://en.wikipedia.org/wiki/POST_(HTTP)) is the better alternative (compared to HTTP GET) for sending information from a client to an HTTP server. If you can, or if you really want to improve security, use POST instead of GET to send the information to ERDDAP. POST is more secure because: with GET and https, the URL is transmitted in a secure way, but the entire URL (including parameters, including the author\_key) will be written to the Apache, Tomcat, and ERDDAP™ log files, where someone could read them if the files are not properly secured. With POST, the parameters are transmitted in a secure way and aren't written to the log files. POST is a little harder for clients to work with and isn't supported as widely by client software, but programming languages do support it. The content that you send to the dataset via GET or POST will be the same, just formatted in a different way.  
      
-#### httpGetRequiredVariables Global Attribute
+#### httpGetRequiredVariables Global Attribute {#httpgetrequiredvariables-global-attribute}
 An essential part of what makes this whole system work is the required global attribute httpGetRequiredVariables, which is a comma-separated list of the dataVariable source names which uniquely identify a row of data. This should be as minimal as possible and will almost always include the time variable. For example, here are the recommended httpGetRequiredVariables for each of the [CF Discrete Sampling Geometries (DSG)](https://cfconventions.org/Data/cf-conventions/cf-conventions-1.8/cf-conventions.html#discrete-sampling-geometries) (Of course, the ID names may be different in your dataset.):
 
 *   For TimeSeries: stationID, time
@@ -3412,7 +3412,7 @@ Given a .insert command that includes stationID=46088 and time=2016-06-23T19:53:
 *   If there is no existing data for that station and that time, then the effect will be to add the data to the dataset.
 *   If there is existing data for that station and that time, then the effect will be to replace the existing row of data with this new data. (Of course, since ERDDAP™ keeps the log of every command it receives, the old data is still in the log. If a user requests data from a version of the dataset before this change, they will see the older data.)  
          
-#### httpGetDirectoryStructure
+#### httpGetDirectoryStructure {#httpgetdirectorystructure}
 *   [httpGetDirectoryStructure Global Attribute and Data (Log) File Names](#httpgetdirectorystructure)  
     Part of what makes this whole system work efficiently is that ERDDAP™ creates a set of data (log) files, each with a different chunk of the dataset. If these are set up well, ERDDAP™ will be able to respond quickly to most requests for data. This setup is specified by the httpGetDirectoryStructure global attribute, which is a String that looks like a relative filename, e.g., "stationID/10years", but is actually a specification for the directory structure. The parts of that indicate how directory and filenames for the data (log) files will be constructed.
     
@@ -3435,7 +3435,7 @@ Given a .insert command that includes stationID=46088 and time=2016-06-23T19:53:
 ```
 For example, if the directory structure is stationID/2months and you insert data from two stations (46088 and 46155) with time values from Dec 2015 through May 2016, EDDTableFromHttpGet will create directories named 46088 and 46155 and create files in each named 2015-11.jsonl, 2016-01.jsonl, 2016-03.jsonl, 2016-05.jsonl (each holding 2 months worth of data for the relevant station). At any time in the future, if you use .insert or .delete to change or delete the data for, for example, station 46088 at 2016-04-05T14:45:00Z, EDDTableFromHttpGet will append that command to 46088/2016-03.jsonl, the relevant data (log) file. And clearly, it is fine to add data for other stations at any time in the future, since the dataset will simply create additional directories as needed to hold the data from the new stations.
     
-#### httpGetKeys
+#### httpGetKeys {#httpgetkeys}
 Every EDDTableFromHttpGet dataset must have a global attribute httpGetKeys which specifies the list of allowed authors and their secret keys as a comma-separated list of *author\_key*, e.g., JohnSmith\_someKey1, HOBOLogger\_someKey2, QCScript59\_someKey3 .
 *   author\_key's are case-sensitive and must be entirely ASCII characters (#33 - #126, and without any comma, " or ' characters
 *   Keys are like passwords, so they MUST be >=8 characters, hard to guess, and without internal dictionary words. You should treat them as you would treat passwords -- keep them private.
@@ -3445,7 +3445,7 @@ Every EDDTableFromHttpGet dataset must have a global attribute httpGetKeys which
 *   This information will be removed from the dataset's globalAttributes before it is made public.
 *   Each request to the dataset to insert or delete data must include an &author=*author\_key* parameter. After verifying the validity of the key, ERDDAP™ only saves the author part (not the key) in the data file.
 
-#### Set Up
+#### Set Up {#set-up}
 
 Here are the recommended steps to setting up an EDDTableFromHttpGet dataset:
 
@@ -3489,7 +3489,7 @@ Here are the recommended steps to setting up an EDDTableFromHttpGet dataset:
          
 6.  Note: It is possible to use &lt;cacheFromUrl> and related settings in datasets.xml for EDDTableFromHttpGet datasets as a way to make and maintain a local copy of a remote EDDTableFromHttpGet dataset on another ERDDAP. However, in this case, this local dataset will reject any .insert and .delete requests.
 
-#### Using EDDTableFromHttpGet Datasets
+#### Using EDDTableFromHttpGet Datasets {#using-eddtablefromhttpget-datasets}
 
 *   Authors can make "requests" which [insert data to or delete data from the dataset](#insert-and-delete).  
      
@@ -3503,7 +3503,7 @@ Here are the recommended steps to setting up an EDDTableFromHttpGet dataset:
 *   In the future, we envision that tools will be built (by us? by you?) for working with these datasets. For example, there could be a script which reads the raw log files, applies a different calibration equation, and generates/updates a different dataset with that derived information. Note that the script can get the original data via a request to ERDDAP™ (which gets the data in the file format which is easiest for the script to work with) and generate/update the new dataset via .insert "requests" to ERDDAP. The script doesn't need direct access to the data files; it can be on any authorized author's computer.  
      
 
-#### Detailed Information about EDDTableFromHttpGet
+#### Detailed Information about EDDTableFromHttpGet {#detailed-information-about-eddtablefromhttpget}
 
 The topics are:
 
@@ -3520,7 +3520,7 @@ The topics are:
 
 Here is the detailed information:
 
-##### DON'T change the setup! 
+##### DON'T change the setup! {#dont-change-the-setup}
 Once the dataset has been created and you have added data to it:
 
 *   DON'T add or remove any dataVariables.
@@ -3531,7 +3531,7 @@ Once the dataset has been created and you have added data to it:
 
 If you need to change any of these things, make a new dataset and transfer all of the data to the new dataset.  
      
-##### CRUD
+##### CRUD {#crud}
 In computer science, the four fundamental commands for working with a dataset are [CREATE, READ, UPDATE, DELETE (CRUD)](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete). SQL, the language for working with relational databases, has the equivalent in INSERT, SELECT, UPDATE, and DELETE. In EDDTableFromHttpGet,
 
 *   .insert is a combination of CREATE and UPDATE.
@@ -3551,10 +3551,10 @@ Thus, EDDTableFromHttpGet supports all of the fundamental commands for working w
 ```
 The two timestamp values refer to the same millisecond, which is the millisecond that will be stored in the timestamp variable for the rows of data that were inserted or deleted. ERDDAP™ won't change the name and formatting of these key-value pairs in the future. ERDDAP™ may add additional key-value pairs to the JSON object in the future.  
      
-##### InvalidRequests
+##### InvalidRequests {#invalidrequests}
 Invalid .insert or .delete requests will return an HTTP error status code other than status=200 and no change will be made to the dataset. This includes requests with incorrect author information, incorrect variable names, different array lengths for different variables, missing required variables, missing required variable values, etc. If the request involves more than one data file, it is possible that part of the request will succeed and part will fail. However this shouldn't be a problem if the sensor sending the request treats any failure as a complete failure. For example, if you tell ERDDAP™ to insert (or delete) the same data twice in a row, the worst case is that that information is stored twice, close together in the log file. It is hard to see how that could cause trouble.  
      
-##### HttpGet Speed
+##### HttpGet Speed {#httpget-speed}
 For .insert or .delete requests (not counting http overhead), ballpark figures the speed of .insert or .delete are  
 1ms per .insert with 1 row of data  
 2ms per .insert with 10 rows of data in arrays (\[\])  
@@ -3566,17 +3566,17 @@ With very large amounts of data per request, you will hit Tomcat's limit to the 
 
 When ERDDAP™ reads the JSON Lines CSV data (log) files, there is a small time penalty compared to reading binary data files. We felt that this time penalty when reading was a reasonable price to pay for the speed and robustness of the system when writing data (which is of primary importance).
 
-##### SSD
+##### SSD {#ssd}
 [For greater speed,](#ssd) use a [Solid State Drive (SSD)](https://en.wikipedia.org/wiki/Solid-state_drive) to store the data. They have a much faster file access time (&lt;0.1ms) than hard disk drives (3 - 12 ms). They also have a faster data transfer rate (200 - 2500 MB/s) than hard disk drives (~200 MB/s). Their cost has come down considerably in recent years. Although early SSD's had problems after a large number of writes to a given block, this problem is now greatly reduced. If you just use the SSD to write the data once then read it many times, even a consumer-grade SSD (which is considerably less expensive than an enterprise-grade SSD) should last a long time.
     
-##### Robust
+##### Robust {#robust}
 We have tried to make this system as easy-to-work-with and as robust as possible.
 *   The system is designed to have multiple threads (e.g., the sensor, an automated QC script, and a human) simultaneously working on the same dataset and even the same file. Much of this is made possible by using a log file approach to storing the data and by using a very simple file type, [JSON Lines CSV files](https://jsonlines.org/examples/), to store the data.
 *   Another huge advantage to JSON Lines CSV is that if a file ever does become corrupted (e.g., invalid because of an error on a line), it is easy to open the file in a text editor and fix the problem.
 *   Another advantage is, if there is an error on a line in a file, the system can still read all the data on lines before and after the error line. And the system can still log additional .insert and .delete information.
 *   A huge advantage of using admin-accessible standard files (compared to a relational database or Cassandra or other software): There is no other software which has to be maintained and which has to be running in order to store or retrieve data. And it is easy to back up standard files at any time and in an incremental way because the data is in chunks (after a while, only the current-time file for each station will be changing). In contrast, it takes considerable effort and system down time to make external backup files from databases and from Cassandra.  
          
-##### System Reliability
+##### System Reliability {#system-reliability}
 It's reasonable to expect one server with ERDDAP™ to have 99.9% uptime -- that's about 9 hours of downtime per year (although, you can use that up in one bad night!).  
 If you are diligent and lucky, you might get 99.99% uptime (53 minutes downtime per year), since just a few restarts for updates will take that much time.  
 You would have to take extreme measures (a separate backup server, uninterruptible power supply, backup air conditioning, 24x7x365 personnel to monitor the site, etc.) to have a slim chance at 99.999% uptime (5.25 minutes downtime per year). Even then, it is extremely unlikely that you will attain 99.999% uptime (or even 99.99%) because problems are often outside of your control. For example, Amazon Web Service and Google offer astonishingly reliable web services, yet big sections of them are sometimes down for hours.
@@ -3589,7 +3589,7 @@ The solution is: build fault-tolerance into the computer software that is sendin
 
 \[Background: We didn't think this up. [This is how computer networks achieve reliability.](https://en.wikipedia.org/wiki/Reliability_(computer_networking)) Computer networks are inherently unreliable. So when you transfer a file from one computer to another, the sending software knows/expects that some packets may be lost. If it doesn't get a proper acknowledgment for a given packet from the receiver, it resends the lost packet. With this approach, relatively simple sender and receiver software can build a reliable file transfer system on top of an unreliable network.\]
     
-##### Why JSON Lines CSV files?!
+##### Why JSON Lines CSV files?! {#why-json-lines-csv-files}
 EDDTableFromHttpGet uses [JSON Lines CSV files](https://jsonlines.org/examples/). for storing the data. The reasons are:
 
 *   The main reason is: The simplicity of JSON Lines CSV files offers a fast, easy and reliable way to allow multiple threads to write to a given file (e.g., by synchronizing on the filename).
@@ -3611,7 +3611,7 @@ We initially tried to use .nc3 files with an unlimited dimension. However, there
 *   .nc3 files only support 8-bit characters with an unspecified encoding. Again, we tried to get CF and Unidata to support a system for specifying the encoding, but were unable to make any progress.
 *   .nc3 files don't support 64-bit integers (longs). Again, we tried to get CF and Unidata to support a system for longs, but were unable to make any progress.  
          
-##### Versioning
+##### Versioning {#versioning}
 Because EDDTableFromHttpGet stores a log of all of the changes to the dataset with the timestamp and the author of each change, it can quickly recreate that dataset as of any point in time. In a sense, there is a version for any point in time. If a user's request for data includes a timestamp &lt;= constraint, e.g., &timestamp&lt;=2016-06-23T16:32:22.128Z (or any time point), but no constraint of author or command, ERDDAP™ will respond to the request by first generating a version of the dataset as of that point in time. Then, ERDDAP™ applies the user's other constraints, as with any other request for data from ERDDAP. EDDTableFromHttpGet is set up so that this process is very fast and efficient, even for very large datasets.
 
 Similarly, a user can find out when the dataset was last updated by requesting ...?timestamp&timestamp=max(timestamp)&distinct()
@@ -3624,20 +3624,20 @@ Not everyone has a need for this type of fine-grained versioning, but it is exce
 
 \[History: The need for this type of versioning first came up for me (Bob) when reading about and discussing OOI in 2008. At the time, OOI had a cumbersome, slow, inefficient system for versioning based on Git. Git is great for what it was designed for, but not this. In 2008, while at an OOI discussion, I designed an extensive, efficient alternative-to-OOI system for data management, including many of the features that I have added to ERDDAP™ since then, and including this versioning system. At that time and since, OOI was committed to their versioning system and not interested in alternatives. In 2016, other aspects of this plan fell into place and I started to implement it. Because there were lots of interruptions to work on other projects, I didn't finish until 2018. Even now, I'm not aware of any other scientific data system that offers such quick and easy access to a version of the data from any point in time, for frequently changing datasets. Simple file systems don't offer this. Relational databases don't. Cassandra doesn't.\]
     
-##### HTTPS Put and Delete
+##### HTTPS Put and Delete {#https-put-and-delete}
 *   ["What about HTTPS PUT and DELETE?!"](#https-put-and-delete)  
     [Hypertext Transfer Protocol (HTTP)](https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol) is the basis of the World Wide Web and the reason that web page URLs begin with "http://" or "https://". HTTPS is HTTP with an additional security layer. Every day, browsers, scripts and computer programs make billions of HTTP(S) **GET** requests to get information from remote sources. HTTP(S) also includes other [verbs](https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol#Request_methods), notably PUT (to push data to the server) and DELETE (to DELETE data from the server). Yes, PUT and DELETE are the proper way to insert data into, and delete data from, a dataset via HTTP(S). GET is supported by every piece of software that can work with HTTP(S). GET is really easy to work with. Everyone already knows how to work with GET and many know how to use POST (which can be used in essentially the same way as GET), so we made EDDTableFromHttpGet work with GET and POST. Very few people (even few computer programmers) have ever worked with PUT and DELETE. PUT and DELETE are generally only supported by computer languages, so using them requires a skillful program. So PUT and DELETE are usually a much more cumbersome approach given the way the tools have evolved.  
      
-##### HttpGet Notes
+##### HttpGet Notes {#httpget-notes}
 *   [Notes](#httpget-notes)
     *   No dataVariable may have dataType=char. Use dataType=String instead. If you really need dataType=char, email Chris.John at noaa.gov .  
          
-##### Thanks
+##### Thanks {#thanks}
 *   [Thanks to CHORDS for the basic idea.](#thanks)  
     The basic idea for EDDTableFromHttpGet (i.e., using an HTTP GET request to add data to a dataset) is from UCAR's (NCAR's?) [Cloud-Hosted Real-time Data Services (CHORDS)](https://github.com/earthcubeprojects-chords) project. The format for the parameters in the request (repeated *name=value*, separated by &'s) is the same standard format that is used by HTML forms on web pages. It is a simple and brilliant idea and even more so because it meshes so perfectly with ERDDAP's existing system for dealing with tabular data. The idea is obvious in hindsight, but I (Bob) didn't think of it. EDDTableFromHttpGet uses that basic idea, combined with our ideas of how to implement it, to make a system in ERDDAP™ for uploading data. Other than the basic idea of using GET to push data into the system, the EDDTableFromHttpGet implementation is entirely different and entirely independent of CHORDS and has different features (e.g., log files, chunking of data, different security system, CRUD support, reproducible data). Our exposure to CHORDS was just a webinar. We did not look at their code or read about their project because we immediately knew we wanted to implement the system a different way. But we are grateful to them for the basic idea. The full reference to CHORDS is  
     Daniels, M. D., Kerkez, B., Chandrasekar, V., Graves, S., Stamps, D. S., Martin, C., Dye, M., Gooch, R., Bartos, M., Jones, J., Keiser, K. (2014). Cloud-Hosted Real-time Data Services for the Geosciences (CHORDS) software. UCAR/NCAR -- Earth Observing Laboratory. [https://doi.org/10.5065/d6v1236q](https://doi.org/10.5065/d6v1236q)  
      
-### EDDTableFromHyraxFiles
+### EDDTableFromHyraxFiles {#eddtablefromhyraxfiles}
 [**EDDTableFromHyraxFiles**](#eddtablefromhyraxfiles) (deprecated) aggregates data files with several variables, each with one or more shared dimensions (for example, time, altitude (or depth), latitude, longitude), and served by a [Hyrax OPeNDAP server](https://www.opendap.org/software/hyrax-data-server).
 
 *   This dataset type is **DEPRECATED**. The newer and more general solution is to use the [cacheFromUrl option for EDDTableFromFiles](#cachefromurl) (or a variant), which makes a local copy of the remote files and serves the data from the local files. The &lt;cacheFromUrl> option can be used with any type of tabular data file.**  
@@ -3658,7 +3658,7 @@ Not everyone has a need for this type of fine-grained versioning, but it is exce
 *   See this class' superclass, [EDDTableFromFiles](#eddtablefromfiles), for information on how this class works and how to use it.
 *   See the 1D, 2D, 3D, and 4D examples for [EDDTableFromNcFiles](#eddtablefromncfiles).  
      
-### EDDTableFromInvalidCRAFiles
+### EDDTableFromInvalidCRAFiles {#eddtablefrominvalidcrafiles}
 [**EDDTableFromInvalidCRAFiles**](#eddtablefrominvalidcrafiles) aggregates data from NetCDF (v3 or v4) .nc files which use a specific, invalid, variant of the CF DSG Contiguous Ragged Array (CRA) files. Although ERDDAP™ supports this file type, it is an invalid file type that no one should start using. Groups that currently use this file type are strongly encouraged to use ERDDAP™ to generate valid CF DSG CRA files and stop using these files.
 
 Details: These files have multiple row\_size variables, each with a sample\_dimension attribute. The files are non-CF-standard files because the multiple sample (obs) dimensions are to be decoded and related to each other with this additional rule and promise that is not part of the CF DSG specification: "you can associate a given e.g., temperature value (temp\_obs dimension) with a given depth value (z\_obs dimension, the dimension with the most values), because: the temperature row\_size (for a given cast) will be either 0 or equal to the corresponding depth row\_size (for that cast) (that's the rule). So, if the temperature row\_size isn't 0, then the n temperature values for that cast relate directly to the n depth values for that cast (that's the promise)."
@@ -3673,7 +3673,7 @@ We strongly recommend using the [GenerateDatasetsXml program](#generatedatasetsx
 
 The first thing GenerateDatasetsXml does for this type of dataset after you answer the questions is print the ncdump-like structure of the sample file. So if you enter a few goofy answers for the first loop through GenerateDatasetsXml, at least you'll be able to see if ERDDAP™ can read the file and see what dimensions and variables are in the file. Then you can give better answers for the second loop through GenerateDatasetsXml.  
  
-### EDDTableFromJsonlCSVFiles
+### EDDTableFromJsonlCSVFiles {#eddtablefromjsonlcsvfiles}
 [**EDDTableFromJsonlCSVFiles**](#eddtablefromjsonlcsvfiles) aggregates data from [JSON Lines CSV files](https://jsonlines.org/examples/). See this class' superclass, [EDDTableFromFiles](#eddtablefromfiles), for information on how this class works and how to use it.
 
 *   As jsonlines.org says, this format is "Better than CSV" (and legally, as a federal employee, I can't agree or disagree with them -- how crazy is that?). CSV has never been formally defined and is hampered by the historical baggage related to its connection to the original spreadsheet programs. JSON Lines CSV, in comparison, is fully defined and benefits from its connection to the widely used JSON standard, which in turn benefits from its connection to JavaScript and Java. Notably, there is full support for long integers and for Unicode characters in strings, and a clear way to include other special characters (notably tabs and newlines) within strings.
@@ -3688,7 +3688,7 @@ The first thing GenerateDatasetsXml does for this type of dataset after you answ
     
 *   WARNING: When ERDDAP™ reads JSON Lines CSV data files, if it finds an error on a given line (e.g., incorrect number of items), it logs a warning message ("WARNING: Bad line(s) of data" ... with a list of the bad lines on subsequent lines) to the [log.txt file](/docs/server-admin/additional-information#log) and then continues to read the rest of the data file. Thus, it is your responsibility to look periodically (or write a script to do so) for that message in the log.txt so that you can fix the problems in the data files. ERDDAP™ is set up this way so that users can continue to read all of the available valid data even though some lines of the file have flaws.  
      
-### EDDTableFromMultidimNcFiles
+### EDDTableFromMultidimNcFiles {#eddtablefrommultidimncfiles}
 [**EDDTableFromMultidimNcFiles**](#eddtablefrommultidimncfiles) aggregates data from NetCDF (v3 or v4) .nc (or [.ncml](#ncml-files)) files with several variables, each with one or more shared dimensions. The files may have character variables with or without an additional dimension (for example, STRING14). See this class' superclass, [EDDTableFromFiles](#eddtablefromfiles), for information on how this class works and how to use it.
 
 *   If the files are multidimensional CF DSG variants, use this dataset type instead of [EDDTableFromNcCFFiles](#eddtablefromncfiles).  
@@ -3712,7 +3712,7 @@ The first thing GenerateDatasetsXml does for this type of dataset after you answ
     If you just specify a dimension name that doesn't exist (e.g., NO\_MATCH), ERDDAP™ will just find all of the scalar variables.  
     The "DimensionsCSV" string becomes &lt;dimensionsCSV> in the datasets.xml info for the dataset.
     
-#### treatDimensionsAs
+#### treatDimensionsAs {#treatdimensionsas}
 There is a category of invalid .nc files (because they don't follow the CF rules) that have multiple dimensions (e.g., lat, lon, time) when they should have used just one dimension (e.g., time), for example:
 ```
     dimensions:
@@ -3743,7 +3743,7 @@ Of course, the current size of each of the dimensions in the list must be the sa
 
 Note that these files are invalid because they don't follow CF rules. So even though ERDDAP™ can read them, we strongly recommend that you don't create files like this because other CF-based software tools won't be able to read them correctly. If you already have such files, we strongly recommend replacing them with valid files as soon as possible.
     
-### EDDTableFromNcFiles
+### EDDTableFromNcFiles {#eddtablefromncfiles}
 [**EDDTableFromNcFiles**](#eddtablefromncfiles) aggregates data from NetCDF (v3 or v4) .nc (or [.ncml](#ncml-files)) files and [Zarr](https://github.com/zarr-developers/zarr-python) files (as of version 2.25) with several variables, each with one shared dimension (for example, time) or more than one shared dimensions (for example, time, altitude (or depth), latitude, longitude). The files must have the same dimension names. A given file may have multiple values for each of the dimensions and the values may be different in different source files. The files may have character variables with an additional dimension (for example, STRING14). See this class' superclass, [EDDTableFromFiles](#eddtablefromfiles), for information on how this class works and how to use it.
 
 Zarr files have slightly different behavior and require either the fileNameRegex or the pathRegex to include "zarr".
@@ -3787,7 +3787,7 @@ Zarr files have slightly different behavior and require either the fileNameRegex
     *   Each file may have 5D character variables, for example, with dimensions (time,depth,lat,lon,nCharacters).
     *   The file's name might have the buoy's name within the file's name.  
          
-### EDDTableFromNcCFFiles
+### EDDTableFromNcCFFiles {#eddtablefromnccffiles}
 [**EDDTableFromNcCFFiles**](#eddtablefromnccffiles) aggregates data aggregates data from NetCDF (v3 or v4) .nc (or [.ncml](#ncml-files)) files which use one of the file formats specified by the [CF Discrete Sampling Geometries (DSG)](https://cfconventions.org/Data/cf-conventions/cf-conventions-1.8/cf-conventions.html#discrete-sampling-geometries) conventions. See this class' superclass, [EDDTableFromFiles](#eddtablefromfiles), for information on how this class works and how to use it.
 
 For files using one of the multidimensional CF DSG variants, use [EDDTableFromMultidimNcFiles](#eddtablefrommultidimncfiles) instead.
@@ -3796,7 +3796,7 @@ The CF DSG conventions defines dozens of file formats and includes numerous mino
 
 We strongly recommend using the [GenerateDatasetsXml program](#generatedatasetsxml) to make a rough draft of the datasets.xml chunk for this dataset. You can then edit that to fine tune it.  
  
-### EDDTableFromNccsvFiles
+### EDDTableFromNccsvFiles {#eddtablefromnccsvfiles}
 [**EDDTableFromNccsvFiles**](#eddtablefromnccsvfiles) aggregates data from [NCCSV](/docs/user/nccsv-1.00) ASCII .csv files. See this class' superclass, [EDDTableFromFiles](#eddtablefromfiles), for information on how this class works and how to use it.
 
 *   We strongly recommend using the [GenerateDatasetsXml program](#generatedatasetsxml) to make a rough draft of the datasets.xml chunk for this dataset. You can then edit that to fine tune it.
@@ -3805,17 +3805,17 @@ We strongly recommend using the [GenerateDatasetsXml program](#generatedatasetsx
     
 *   WARNING: When ERDDAP™ reads NCCSV data files, if it finds an error on a given line (e.g., incorrect number of items), it logs a warning message ("WARNING: Bad line(s) of data" ... with a list of the bad lines on subsequent lines) to the [log.txt file](/docs/server-admin/additional-information#log) and then continues to read the rest of the data file. Thus, it is your responsibility to look periodically (or write a script to do so) for that message in the log.txt so that you can fix the problems in the data files. ERDDAP™ is set up this way so that users can continue to read all of the available valid data even though some lines of the file have flaws.  
      
-### EDDTableFromNOS
+### EDDTableFromNOS {#eddtablefromnos}
 [**EDDTableFromNOS**](#eddtablefromnos) (DEPRECATED) handles data from a NOAA [NOS](https://opendap.co-ops.nos.noaa.gov/axis/) source, which uses [SOAP+XML](https://www.w3schools.com/xml/xml_soap.asp) for requests and responses. It is very specific to NOAA NOS's XML. See the sample EDDTableFromNOS dataset in datasets2.xml.  
  
-### EDDTableFromOBIS
+### EDDTableFromOBIS {#eddtablefromobis}
 [**EDDTableFromOBIS**](#eddtablefromobis) handles data from an Ocean Biogeographic Information System (OBIS) server (was http://www.iobis.org ). It is possible that there are no more active servers which use this now out-of-date type of OBIS server system.
 
 *   OBIS servers expect an XML request and return an XML response.
 *   Because all OBIS servers serve the same variables the same way (was http://iobis.org/tech/provider/questions), you don't have to specify much to set up an OBIS dataset in ERDDAP.
 *   You MUST include a "creator\_email" attribute in the global addAttributes, since that information is used within the license. A suitable email address can be found by reading the XML response from the sourceURL.
 *   You may or may not be able to get the global attribute [&lt;subsetVariables>](#subsetvariables) to work with a given OBIS server. If you try, just try one variable (for example, ScientificName or Genus).
-#### EDDTableFromOBIS skeleton XML
+#### EDDTableFromOBIS skeleton XML {#eddtablefromobis-skeleton-xml}
 >&nbsp;&nbsp;&lt;dataset type="EDDTableFromOBIS" [datasetID](#datasetid)\="..." [active](#active)\="..." >  
 >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&lt;sourceUrl>](#sourceurl)...&lt;/sourceUrl>  
 >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;sourceCode>...&lt;/sourceCode>  
@@ -3847,14 +3847,14 @@ We strongly recommend using the [GenerateDatasetsXml program](#generatedatasetsx
 >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"creator\_email" -->  
 >&nbsp;&nbsp;&lt;/dataset>  
 
-### EDDTableFromParquetFiles
+### EDDTableFromParquetFiles {#eddtablefromparquetfiles}
 [**EDDTableFromParquetFiles**](#eddtablefromparquetfiles) handles data from [Parquet](https://parquet.apache.org/). See this class' superclass, [EDDTableFromFiles](#eddtablefromfiles), for information on how this class works and how to use it.
 
 *   Parquet is designed to compress very efficiently, so it may give you smaller file sizes than other formats.
 *   We strongly recommend using the [GenerateDatasetsXml program](#generatedatasetsxml) to make a rough draft of the datasets.xml chunk for this dataset. You can then edit that to fine tune it.
 *   WARNING: When ERDDAP™ reads Parquet data files, if it finds an error on a given line (e.g., incorrect number of items), it logs a warning message ("WARNING: Bad line(s) of data" ... with a list of the bad lines on subsequent lines) to the [log.txt file](/docs/server-admin/additional-information#log) and then continues to read the rest of the data file. Thus, it is your responsibility to look periodically (or write a script to do so) for that message in the log.txt so that you can fix the problems in the data files. ERDDAP™ is set up this way so that users can continue to read all of the available valid data even though some lines of the file have flaws.  
      
-### EDDTableFromSOS
+### EDDTableFromSOS {#eddtablefromsos}
 [**EDDTableFromSOS**](#eddtablefromsos) handles data from a Sensor Observation Service (SWE/[SOS](https://www.ogc.org/standards/sos)) server.
 
 *   This dataset type aggregates data from a group of stations which are all served by one SOS server.
@@ -3877,7 +3877,7 @@ We strongly recommend using the [GenerateDatasetsXml program](#generatedatasetsx
   >  <att name="[subsetVariables](#subsetvariables)">station\_id, longitude, latitude</att>  
     to the dataset's global attributes when the dataset is created.
 *   SOS servers usually express [units](#units) with the [UCUM](https://unitsofmeasure.org/ucum.html) system. Most ERDDAP™ servers express units with the [UDUNITS](https://www.unidata.ucar.edu/software/udunits/) system. If you need to convert between the two systems, you can use [ERDDAP's web service to convert UCUM units to/from UDUNITS](https://coastwatch.pfeg.noaa.gov/erddap/convert/units.html).
-#### EDDTableFromSOS skeleton XML
+#### EDDTableFromSOS skeleton XML {#eddtablefromsos-skeleton-xml}
 >&nbsp;&nbsp;&lt;dataset type="EDDTableFromSOS" [datasetID](#datasetid)\="..." [active](#active)\="..." >  
 >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&lt;sourceUrl>](#sourceurl)...&lt;/sourceUrl>  
 >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&lt;accessibleTo>](#accessibleto)...&lt;/accessibleTo> &lt;!-- 0 or 1 -->  
@@ -3932,7 +3932,7 @@ We strongly recommend using the [GenerateDatasetsXml program](#generatedatasetsx
 >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;response MUST be included in this ERDDAP™ dataset definition. -->  
 >&nbsp;&nbsp;&lt;/dataset>  
 
-### EDDTableFromThreddsFiles
+### EDDTableFromThreddsFiles {#eddtablefromthreddsfiles}
 [**EDDTableFromThreddsFiles**](#eddtablefromthreddsfiles) (deprecated) aggregates data files with several variables, each with one or more shared dimensions (for example, time, altitude (or depth), latitude, longitude), and served by a [THREDDS OPeNDAP server](https://www.unidata.ucar.edu/software/tds/).
 
 *   This dataset type is **DEPRECATED**. The newer and more general solution is to use the [cacheFromUrl option for EDDTableFromFiles](#cachefromurl) (or a variant), which makes a local copy of the remote files and serves the data from the local files. The &lt;cacheFromUrl> option can be used with any type of tabular data file from any web-based source that publishes a directory-like list of files.**  
@@ -3956,7 +3956,7 @@ We strongly recommend using the [GenerateDatasetsXml program](#generatedatasetsx
 *   See this class' superclass, [EDDTableFromFiles](#eddtablefromfiles), for information on how this class works and how to use it.
 *   See the 1D, 2D, 3D, and 4D examples for [EDDTableFromNcFiles](#eddtablefromncfiles).  
      
-### EDDTableFromWFSFiles
+### EDDTableFromWFSFiles {#eddtablefromwfsfiles}
 [**EDDTableFromWFSFiles**](#eddtablefromwfsfiles) (DEPRECATED) makes a local copy of all of the data from an ArcGIS MapServer WFS server so the data can then be re-served quickly to ERDDAP™ users.
 
 *   You need to specify a specially formatted sourceUrl global attribute to tell ERDDAP™ how to request feature information from the server. Please use this example as a template:  
@@ -3971,7 +3971,7 @@ We strongly recommend using the [GenerateDatasetsXml program](#generatedatasetsx
 *   Since this class always downloads and makes a local copy of each remote data file, you should never wrap this dataset in [EDDTableCopy](#eddtablecopy).
 *   See this class' superclass, [EDDTableFromFiles](#eddtablefromfiles), for additional information on how this class works and how to use it.  
      
-### EDDTableAggregateRows
+### EDDTableAggregateRows {#eddtableaggregaterows}
 [**EDDTableAggregateRows**](#eddtableaggregaterows) can make an EDDTable dataset from a group of "child" EDDTable datasets.
 
 *   Here are some uses for EDDTableAggregateRows:
@@ -3983,7 +3983,7 @@ We strongly recommend using the [GenerateDatasetsXml program](#generatedatasetsx
 *   Recommendation: Get each of the child datasets working as stand-alone datasets. Then try to make the EDDTableAggregateRows dataset by cutting and pasting the datasets.xml chunk for each into the new EDDTableAggregateRows dataset.
 *   Dataset Default Sort Order -- The order of the child datasets determines the overall default sort order of the results. Of course, users can request a different sort order for a given set of results by appending &orderBy("*comma-separated list of variables*") to the end of their query.
 *   The "source" [globalAttributes](#global-attributes) for the EDDTableAggregateRows is the combined globalAttributes from the first child dataset. The EDDTableAggregateRows can have a global &lt;addAttributes> to provide additional global attributes or override the source global attributes.
-#### EDDTableAggregateRows skeleton XML
+#### EDDTableAggregateRows skeleton XML {#eddtableaggregaterows-skeleton-xml}
 >&nbsp;&nbsp;&lt;dataset type="EDDTableAggregateRows" [datasetID](#datasetid)\="..." [active](#active)\="..." >  
 >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&lt;accessibleTo>](#accessibleto)...&lt;/accessibleTo> &lt;!-- 0 or 1 -->  
 >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&lt;graphsAccessibleTo>](#graphsaccessibleto)auto|public&lt;/graphsAccessibleTo> &lt;!-- 0 or 1 -->  
@@ -4000,7 +4000,7 @@ We strongly recommend using the [GenerateDatasetsXml program](#generatedatasetsx
 >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;dataset>...&lt;/dataset> &lt;!-- 1 or more -->  
 >&nbsp;&nbsp;&lt;/dataset>  
 
-### EDDTableCopy
+### EDDTableCopy {#eddtablecopy}
 [**EDDTableCopy**](#eddtablecopy) can make a local copy of many types of EDDTable datasets and then re-serve the data quickly from the local copy.
 
 *   EDDTableCopy (and for grid data, [EDDGridCopy](#eddgridcopy)) is a very easy to use and a very effective **solution to some of the biggest problems with serving data from remote data sources:**
@@ -4015,7 +4015,7 @@ We strongly recommend using the [GenerateDatasetsXml program](#generatedatasetsx
     
     There is nothing new about making a local copy of a dataset. What is new here is that this class makes it \*easy\* to create and \*maintain\* a local copy of data from a \*variety\* of types of remote data sources and \*add metadata\* while copying the data.
     
-#### EDDTableCopy vs &lt;cacheFromUrl&gt;
+#### EDDTableCopy vs &lt;cacheFromUrl&gt; {#eddtablecopy-vs-cachefromurl}
 &lt;cacheFromUrl> is an alternative to EDDTableCopy. They work differently.
 
 *   EDDTableCopy works by requesting chunks of data from a remote service and storing those chunks in local files. Thus, EDDTableCopy is useful in some cases where the data is accessible via a remote service.
@@ -4023,7 +4023,7 @@ We strongly recommend using the [GenerateDatasetsXml program](#generatedatasetsx
 
 If there are situations where EDDTableCopy or &lt;cacheFromUrl> could be used, use &lt;cacheFromUrl> because it is easier and more reliable.  
      
-#### &lt;extractDestinationNames&gt;
+#### &lt;extractDestinationNames&gt; {#extractdestinationnames}
 EDDTableCopy makes the local copy of the data by requesting chunks of data from the remote dataset. EDDTableCopy determines which chunks to request by requesting the &distinct() values for the &lt;extractDestinationNames> (specified in the datasets.xml, see below), which are the space-separated destination names of variables in the remote dataset. For example,  
 ```
     <extractDestinationNames>drifter profile</extractDestinationNames>  
@@ -4032,14 +4032,14 @@ might yield distinct values combinations of drifter=tig17,profile=1017, drifter=
 
 In situations where one column (for example, profile) may be all that is required to uniquely identify a group of rows of data, if there are a very large number of, for example, profiles, it may be useful to also specify an additional extractDestinationName (for example, drifter) which serves to subdivide the profiles. That leads to fewer data files in a given directory, which may lead to faster access.
     
-#### Local Files
+#### Local Files {#local-files}
 Each chunk of data is stored in a separate NetCDF file in a subdirectory of *bigParentDirectory*/copy/*datasetID*/ (as specified in [setup.xml](/docs/server-admin/deploy-install#setupxml)). There is one subdirectory level for all but the last extractDestinationName. For example, data for tig17+1017, would be stored in  
     *bigParentDirectory*/copy/sampleDataset/tig17/1017.nc .  
     For example, data for une12+1251, would be stored in  
     *bigParentDirectory*/copy/sampleDataset/une12/1251.nc .  
     Directory and filenames created from data values are modified to make them file-name-safe (for example, spaces are replaced by "x20") -- this doesn't affect the actual data.  
      
-#### New Data
+#### New Data {#new-data}
 Each time EDDTableCopy is reloaded, it checks the remote dataset to see what distinct chunks are available. If the file for a chunk of data doesn't already exist, a request to get the chunk is added to a queue. ERDDAP's taskThread processes all the queued requests for chunks of data, one-by-one. You can see statistics for the taskThread's activity on the [Status Page](/docs/server-admin/additional-information#status-page) and in the [Daily Report](/docs/server-admin/additional-information#daily-report). (Yes, ERDDAP™ could assign multiple tasks to this process, but that would use up lots of the remote data source's bandwidth, memory, and CPU time, and lots of the local ERDDAP's bandwidth, memory, and CPU time, neither of which is a good idea.)
     
     NOTE: The very first time an EDDTableCopy is loaded, (if all goes well) lots of requests for chunks of data will be added to the taskThread's queue, but no local data files will have been created. So the constructor will fail but taskThread will continue to work and create local files. If all goes well, the taskThread will make some local data files and the next attempt to reload the dataset (in ~15 minutes) will succeed, but initially with a very limited amount of data.
@@ -4050,14 +4050,14 @@ Each time EDDTableCopy is reloaded, it checks the remote dataset to see what dis
     
     WARNING: If a given combination of values disappears from a remote dataset, EDDTableCopy does NOT delete the local copied file. If you want to, you can delete it yourself.
     
-#### TableCopy &lt;checkSourceData&gt;
+#### TableCopy &lt;checkSourceData&gt; {#tablecopy-checksourcedata}
 The datasets.xml for this dataset can have an optional tag  
 ```
     <checkSourceData>true</checkSourceData>  
 ```
 The default value is true. If/when you set it to false, the dataset won't ever check the source dataset to see if there is additional data available.  
      
-#### Recommended Use
+#### Recommended Use {#recommended-use}
 1.  Create the &lt;dataset> entry (the native type, not EDDTableCopy) for the remote data source. **Get it working correctly, including all of the desired metadata.**
 2.  If it is too slow, add XML code to wrap it in an EDDTableCopy dataset.
     *   Use a different datasetID (perhaps by changing the datasetID of the old datasetID slightly).
@@ -4075,7 +4075,7 @@ The default value is true. If/when you set it to false, the dataset won't ever c
     4.  The deleted file will be regenerated with the new metadata. If the source dataset is ever unavailable, the EDDTableCopy dataset will get metadata from the regenerated file, since it is the youngest file.  
          
 *   [EDDGridCopy](#eddgridcopy) is very similar to EDDTableCopy, but works with gridded datasets.  
-#### EDDTableCopy skeleton XML
+#### EDDTableCopy skeleton XML {#eddtablecopy-skeleton-xml}
 >&nbsp;&nbsp;&lt;dataset type="EDDTableCopy" [datasetID](#datasetid)\="..." [active](#active)\="..." >  
 >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&lt;accessibleTo>](#accessibleto)...&lt;/accessibleTo> &lt;!-- 0 or 1 -->  
 >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&lt;graphsAccessibleTo>](#graphsaccessibleto)auto|public&lt;/graphsAccessibleTo> &lt;!-- 0 or 1 -->  
@@ -4098,16 +4098,16 @@ The default value is true. If/when you set it to false, the dataset won't ever c
 
 - - -
 
-## Details
+## Details {#details-1}
 
 Here are detailed descriptions of common tags and attributes.
 
-### &lt;angularDegreeUnits&gt;
+### &lt;angularDegreeUnits&gt; {#angulardegreeunits}
 *   [**&lt;angularDegreeUnits>**](#angulardegreeunits) is a rarely used OPTIONAL tag within an &lt;erddapDatasets> tag in datasets.xml which contains a comma-separated list of units strings that ERDDAP™ should treat as angular degrees units. If a variable has one of these units, tabledap's orderByMean filter will calculate the mean in a special way, then report the mean as a value from -180 to 180. See ERDDAP's EDStatic.java source code file for the current default list. Any changes to this tag's value will take effect the next time ERDDAP™ reads datasets.xml, including in response to a dataset [flag](/docs/server-admin/additional-information#flag).  
-### &lt;angularDegreeTrueUnits&gt;
+### &lt;angularDegreeTrueUnits&gt; {#angulardegreetrueunits}
 *   [**&lt;angularDegreeTrueUnits>**](#angulardegreetrueunits) is a rarely used OPTIONAL tag within an &lt;erddapDatasets> tag in datasets.xml which contains a comma-separated list of units strings that ERDDAP™ should treat as angular degrees true units. If a variable has one of these units, tabledap's orderByMean filter will calculate the mean in a special way, then report the mean as a value from 0 to 360. See ERDDAP's EDStatic.java source file for the current default list. Any changes to this tag's value will take effect the next time ERDDAP™ reads datasets.xml, including in response to a dataset [flag](/docs/server-admin/additional-information#flag).  
      
-### &lt;commonStandardNames&gt;
+### &lt;commonStandardNames&gt; {#commonstandardnames}
 *   [**&lt;commonStandardNames>**](#commonstandardnames) is a rarely used OPTIONAL tag within an &lt;erddapDatasets> tag in datasets.xml to specify a comma-separated list of common [CF standard names](https://cfconventions.org/Data/cf-standard-names/current/build/cf-standard-name-table.html). E.g.,  
 ```
     <commonStandardNames>air\_pressure, ..., wind\_to\_direction</commonStandardNames>  
@@ -4116,18 +4116,18 @@ This list is used in DataProviderForm3.html as a convenience to users.
 If you want to provide this information in datasets.xml, start by copying the current default list in &lt;DEFAULT\_commonStandardNames> in ERDDAP's  
 \[tomcat\]/webapps/erddap/WEB-INF/classes/gov/noaa/pfel/erddap/util/messages.xml file.  
      
-### &lt;cacheMinutes&gt;
+### &lt;cacheMinutes&gt; {#cacheminutes}
 *   [**&lt;cacheMinutes>**](#cacheminutes) is a rarely used OPTIONAL tag within an &lt;erddapDatasets> tag in datasets.xml to specify the age (in minutes) at which files in the cache should be deleted (default=60). E.g.,  
 ```
     <cacheMinutes>60</cacheMinutes>  
 ```
 In general, only image files (because the same images are often requested repeatedly) and .nc files (because they must be fully created before sending to the user) are cached. Although it might seem like a given request should always return the same response, that isn't true. For example, a tabledap request which includes time>*someTime* will change when new data arrives for the dataset. And a griddap request which includes \[last\] for the time dimension will change when new data arrives for the dataset. Any changes to this tag's value will take effect the next time ERDDAP™ reads datasets.xml, including in response to a dataset [flag](/docs/server-admin/additional-information#flag). Before ERDDAP™ v2.00, this was specified in setup.xml, which is still allowed but discouraged.  
      
-### &lt;convertInterpolateRequestCSVExample&gt;
+### &lt;convertInterpolateRequestCSVExample&gt; {#convertinterpolaterequestcsvexample}
 *   [**&lt;convertInterpolateRequestCSVExample>**](#convertinterpolaterequestcsvexample) is an OPTIONAL tag within an &lt;erddapDatasets> tag in datasets.xml \[starting with ERDDAP™ v2.10\] which contains an example which will be shown on the Interpolate converter's web page. The default value is: jplMURSST41/analysed\_sst/Bilinear/4 .
-### &lt;convertInterpolateDatasetIDVariableList&gt;
+### &lt;convertInterpolateDatasetIDVariableList&gt; {#convertinterpolatedatasetidvariablelist}
 *   [**&lt;convertInterpolateDatasetIDVariableList>**](#convertinterpolatedatasetidvariablelist) is an OPTIONAL tag within an &lt;erddapDatasets> tag in datasets.xml \[starting with ERDDAP™ v2.10\] which contains a CSV list of datasetID/variableName examples which will be used as suggestions by the Interpolate converter's web page. The default value is: jplMURSST41/analysed\_sst .
-### &lt;convertToPublicSourceUrl&gt;
+### &lt;convertToPublicSourceUrl&gt; {#converttopublicsourceurl}
 *   [**&lt;convertToPublicSourceUrl>**](#converttopublicsourceurl) is an OPTIONAL tag within an &lt;erddapDatasets> tag in datasets.xml which contains a "from" and a "to" attribute which specifies how to convert a matching local sourceUrl (usually an IP number) into a public sourceUrl (a domain name). "from" must have the form "\[something\]//\[something\]/". There can be 0 or more of these tags. For more information see [&lt;sourceUrl>](#sourceurl). For example,  
 ```
     <convertToPublicSourceUrl from="https://192.168.31.18/" to="https://oceanwatch.pfeg.noaa.gov/" />  
@@ -4140,9 +4140,9 @@ But, for security reasons and reasons related to the subscription system, **DON'
 Instead, always use the public domain name in the &lt;sourceUrl> tag and use the [/etc/hosts table](https://linux.die.net/man/5/hosts) on your server to convert local domain names to IP numbers without using a DNS server. You can test if a domain name is properly converted into an IP number by using:  
 ping *some.domain.name*  
      
-### data:image/png;base64,
+### data:image/png;base64, {#dataimagepngbase64}
 *   When a user requests an .htmlTable response from ERDDAP™, if the data in a String cell contains data:image/png;base64, followed by a base64 encoded .png image, ERDDAP™ will display an icon (so the user can see the image if they hover over it) and buttons to save the text or the image to the clipboard. This feature was added in ERDDAP™ v2.19 by Marco Alba.
-### drawLandMask
+### drawLandMask {#drawlandmask}
 *   [**drawLandMask**](#drawlandmask) specifies the default setting which controls when and how the landmask should be drawn when ERDDAP™ draws a map. It can be specified in three different places in datasets.xml (listed from lowest to highest priority):
     
     1.  If drawLandMask is specified within &lt;erddapDatasets> (not connected with any specific dataset), then it specifies the default value of drawLandMask for all variables in all datasets. For example,  
@@ -4174,54 +4174,54 @@ ping *some.domain.name*
     *   "over" -- For gridded datasets, "over" draws the landmask after it draws data on maps so that it will mask any data over land. For tabular datasets, "over" shows bathymetry of the ocean and a constant light gray where there is land, both drawn under the data.
     *   "outline" just draws the outline of the landmask, political boundaries, lakes and rivers.
     *   "off" doesn't draw anything.  
-### &lt;emailDiagnosticsToErdData&gt;
+### &lt;emailDiagnosticsToErdData&gt; {#emaildiagnosticstoerddata}
 *   [**&lt;emailDiagnosticsToErdData>**](#emaildiagnosticstoerddata) is a rarely used OPTIONAL tag within an &lt;erddapDatasets> tag in datasets.xml. The tag's value can be true (the default) or false. If true, ERDDAP™ will email the stack trace to Chris.John at noaa.gov (the ERDDAP™ development team). This should be safe and secure since no confidential information (e.g., the requestUrl) is included in the email. This should make it possible to catch any obscure, totally unexpected bugs that lead to NullPointerExceptions. Otherwise, the user sees the exceptions, but the ERDDAP™ development team doesn't (so we don't know there is a problem that needs to be fixed).  
      
-### &lt;graphBackgroundColor&gt;
+### &lt;graphBackgroundColor&gt; {#graphbackgroundcolor}
 *   [**&lt;graphBackgroundColor>**](#graphbackgroundcolor) is a rarely used OPTIONAL tag within an &lt;erddapDatasets> tag in datasets.xml to specify default background color on graphs. This affects almost all graphs. There are a few situations not affected. The color is specified as an 8 digit hexadecimal value in the form 0xAARRGGBB, where AA, RR, GG, and BB are the opacity, red, green and blue components, respectively. "0x" is case sensitive, but the hexadecimal digits are not case sensitive. For example, a fully opaque (ff) greenish-blue color with red=22, green=88, blue=ee would be 0xff2288ee. Opaque white is 0xffffffff. The default is opaque light blue (0xffccccff), which has the advantage of being different from white, which is an important color in many palettes used to draw data. For example,  
     ```
     <graphBackgroundColor>0xffffffff</graphBackgroundColor>  
     ```
     Any changes to this tag's value will take effect the next time ERDDAP™ reads datasets.xml, including in response to a dataset [flag](/docs/server-admin/additional-information#flag).  
-### &lt;ipAddressMaxRequests&gt;
+### &lt;ipAddressMaxRequests&gt; {#ipaddressmaxrequests}
 *   [**&lt;ipAddressMaxRequests>**](#ipaddressmaxrequests) is a rarely used optional tag (first supported with ERDDAP™ v2.12) within an &lt;erddapDatasets> tag in datasets.xml that is part of a system to limit the ability of overly aggressive legitimate users and malicious users to make a large number of simultaneous requests which would degrade system performance for other users. ipAddressMaxRequests specifies the maximum number of simultaneous requests that will be accepted from any specific IP address. Additional requests will receive an HTTP 429 error: Too Many Requests. The small, static files in erddap/download/ and erddap/images/ are NOT exempt from this count. The default is 15. The maximum allowed is 1000, which is crazy high -- don't do it! ERDDAP™ won't accept a number less than 6 because many legitimate users (notably web browsers and WMS clients) make up to 6 requests at a time. The ERDDAP™ Daily Report and the similar information written to the log.txt file with each Major Dataset Reload, will now include a tally of the requests by these IP addresses under the title "Requester's IP Address (Too Many Requests)".  
     Any changes to this tag's value will take effect the next time ERDDAP™ reads datasets.xml, including in response to a dataset [flag](/docs/server-admin/additional-information#flag).
     
     The "Major LoadDatasets Time Series" section of status.html includes a "tooMany" column which lists the number of requests which exceeded a user's ipAddressMaxRequests setting and thus saw a "Too Many Requests" error. This lets you easily see when there are active overly aggressive legitimate users and malicious users so you can (optionally) look in the log.txt file and decide if you want to blacklist those users.
     
     There's nothing specifically wrong with setting this to a higher number. It's up to you. But doing so allows/encourages people to set up systems that use a large number of threads to work on projects and then gives them no feedback that what they are doing isn't getting them any benefit.
-### &lt;ipAddressMaxRequestsActive&gt;
+### &lt;ipAddressMaxRequestsActive&gt; {#ipaddressmaxrequestsactive}
 *   [**&lt;ipAddressMaxRequestsActive>**](#ipaddressmaxrequestsactive) is a rarely used optional tag (first supported with ERDDAP™ v2.12) within an &lt;erddapDatasets> tag in datasets.xml that is part of a system to limit the ability of overly aggressive legitimate users and malicious users to make a large number of simultaneous requests which would degrade system performance for other users. ipAddressMaxRequestsActive specifies the maximum number of simultaneous requests that will be actively processed from any specific IP address. Additional requests will sit in a queue until the previous requests have been processed. The small, static files in erddap/download/ and erddap/images/ ARE exempt from this count and the related throttling. The default is 2. The maximum allowed is 100, which is crazy high -- don't do it! You can set this to 1 to be strict, especially if you have problems with overly aggressive or malicious users. Users will still quickly get all the data they request (up to ipAddressMaxRequests), but they won't be able to hog system resources. We don't recommend setting this to a larger number because it allows overly aggressive legitimate users and malicious users to dominate ERDDAP's processing capacity.  
     Any changes to this tag's value will take effect the next time ERDDAP™ reads datasets.xml, including in response to a dataset [flag](/docs/server-admin/additional-information#flag).  
      
-### &lt;ipAddressUnlimited&gt;
+### &lt;ipAddressUnlimited&gt; {#ipaddressunlimited}
 *   [**&lt;ipAddressUnlimited>**](#ipaddressunlimited) is a rarely used optional tag (first supported with ERDDAP™ v2.12) within an &lt;erddapDatasets> tag in datasets.xml that is part of a system to limit the ability of overly aggressive legitimate users and malicious users to make a large number of simultaneous requests which would degrade system performance for other users. ipAddressUnlimited is a comma-separated list of IP addresses that you want to allow unlimited access to your ERDDAP. Look in your log.txt file to see which format your server is using for the IP addresses. On some servers, the IP addresses will be in the format #.#.#.# (where # is an integer from 0 to 255); whereas on others it will be in the format #:#:#:#:#:#:#:# . Requesters on this list are not subject to either the ipAddressMaxRequests or the ipAddressMaxRequestsActive settings. This might be a secondary ERDDAP™ or for certain users or servers in your system. ERDDAP™ always adds "(unknownIPAddress)", which ERDDAP™ uses when the requester's IP address can't be determined, e.g., for other processes running on the same server.  
     Any changes to this tag's value will take effect the next time ERDDAP™ reads datasets.xml, including in response to a dataset [flag](/docs/server-admin/additional-information#flag).
     
     If for some reason all of a user's requests get the error message "Timeout waiting for your other requests to process.", then you can solve the problem by adding the user's IP address to the ipAddressUnlimited list, applying that change, then removing it from that list.
     
-### &lt;loadDatasetsMinMinutes&gt;
+### &lt;loadDatasetsMinMinutes&gt; {#loaddatasetsminminutes}
 *   [**&lt;loadDatasetsMinMinutes>**](#loaddatasetsminminutes) is a rarely used OPTIONAL tag within an &lt;erddapDatasets> tag in datasets.xml to specify the minimum time (in minutes) between major loadDatasets (when ERDDAP™ reprocesses datasets.xml, including checking each dataset to see if it needs to be reloaded according to its reloadEveryNMinutes setting, default=15). E.g.,  
 ```
     <loadDatasetsMinMinutes>15</loadDatasetsMinMinutes>  
 ```
 If a given run of loadDatasets takes less than this time, the loader just repeatedly looks at the flag directory and/or sleeps until the remaining time has passed. The default is 15 minutes, which should be fine for almost everyone. The only disadvantage to setting this to a smaller number is that it will increase the frequency that ERDDAP™ retries datasets that have errors that prevent them from being loaded (e.g., a remote server is down). If there are lots of such datasets and they are retested frequently, the data source might consider it pestering/aggressive behaviour. Any changes to this tag's value will take effect the next time ERDDAP™ reads datasets.xml, including in response to a dataset [flag](/docs/server-admin/additional-information#flag). Before ERDDAP™ v2.00, this was specified in setup.xml, which is still allowed but discouraged.  
      
-### &lt;loadDatasetsMaxMinutes&gt;
+### &lt;loadDatasetsMaxMinutes&gt; {#loaddatasetsmaxminutes}
 *   [**&lt;loadDatasetsMaxMinutes>**](#loaddatasetsmaxminutes) is an OPTIONAL tag within an &lt;erddapDatasets> tag in datasets.xml to specify the maximum time (in minutes) a major loadDatasets effort is allowed to take (before the loadDatasets thread treated as "stalled" and is interrupted) (default=60). E.g.,  
 ```
     <loadDatasetsMaxMinutes>60</loadDatasetsMaxMinutes>  
 ```
 In general, this should be set to at least twice as long as you reasonably think that reloading all of the datasets (cumulatively) should take (since computers and networks sometimes are slower than expected) This should always be much longer than loadDatasetsMinMinutes. The default is 60 minutes. Some people will set this to longer. Any changes to this tag's value will take effect the next time ERDDAP™ reads datasets.xml, including in response to a dataset [flag](/docs/server-admin/additional-information#flag). Before ERDDAP™ v2.00, this was specified in setup.xml, which is still allowed but discouraged.  
      
-### &lt;logLevel&gt;
+### &lt;logLevel&gt; {#loglevel}
 *   [**&lt;logLevel>**](#loglevel) is an OPTIONAL tag within an &lt;erddapDatasets> tag in datasets.xml to specify how many diagnostic messages are sent to the log.txt file. It can be set to "warning" (the fewest messages), "info" (the default), or "all" (the most messages). E.g.,  
 ```
     <logLevel>info</logLevel>  
 ```
 Any changes to this tag's value will take effect the next time ERDDAP™ reads datasets.xml, including in response to a dataset [flag](/docs/server-admin/additional-information#flag). Before ERDDAP™ v2.00, this was specified in setup.xml, which is still allowed but discouraged.  
      
-### &lt;partialRequestMaxBytes&gt; and &lt;partialRequestMaxCells&gt;
+### &lt;partialRequestMaxBytes&gt; and &lt;partialRequestMaxCells&gt; {#partialrequestmaxbytes-and-partialrequestmaxcells}
 *   [**&lt;partialRequestMaxBytes>**](#partialrequestmaxbytes-and-partialrequestmaxcells) and [**&lt;partialRequestMaxCells>**](#partialrequestmaxbytes-and-partialrequestmaxcells) are rarely used OPTIONAL tags within an &lt;erddapDatasets> tag in datasets.xml. When possible (and it isn't always possible), ERDDAP™ breaks large data requests into chunks to conserve memory.
     
 With 32 bit Java, in a simplistic sense, the maximum number of simultaneous *large* requests is roughly 3/4 of the memory available (the -Xmx value passed to Tomcat) divided by the chunk size (e.g., 1200 MB / 100 MB => 12 requests). Other things require memory, so the actual number of requests will be less. In practice, chunking isn't always possible. So one huge or a few very large simultaneous non-chunkable requests could cause problems on 32 bit Java.
@@ -4238,7 +4238,7 @@ partialRequestMaxCells is the preferred maximum number of cells (nRows \* nColum
 
 Any changes to this tag's value will take effect the next time ERDDAP™ reads datasets.xml, including in response to a dataset [flag](/docs/server-admin/additional-information#flag). Before ERDDAP™ v2.00, these were specified in setup.xml, which is still allowed but discouraged.  
      
-### &lt;requestBlacklist&gt;
+### &lt;requestBlacklist&gt; {#requestblacklist}
 *   [**&lt;requestBlacklist>**](#requestblacklist) [is an OPTIONAL tag](/docs/server-admin/additional-information#frequent-crashes-or-freezes) within an &lt;erddapDatasets> tag in datasets.xml which contains a comma-separated list of numeric IP addresses which will be blacklisted. Any changes to this tag's value will take effect the next time ERDDAP™ reads datasets.xml, including in response to a dataset [flag](/docs/server-admin/additional-information#flag).
     *   This can be used to fend off a [Denial of Service attack](https://en.wikipedia.org/wiki/Denial_of_service), an overly zealous [web robot](https://en.wikipedia.org/wiki/Internet_bot), or any other type of troublesome user.
     *   Troublesome User -- If ERDDAP™ slows to a crawl or freezes/stops, the cause is often a troublesome user who is running more than one script at once and/or making a large number of very large, extremely inefficient, or invalid requests, or simultaneous requests. Look in [log.txt](/docs/server-admin/additional-information#log) to see if this is the case and to find the numeric IP address of the troublesome user. If this is the problem, you should probably blacklist that user.
@@ -4268,7 +4268,7 @@ Any changes to this tag's value will take effect the next time ERDDAP™ reads d
     *   There may be times when it makes sense to block certain users at a higher level, for example, malicious users. For example, you can block their access to everything on your server, not just ERDDAP. On Linux, one such method is to use [iptables](https://www.linode.com/docs/guides/control-network-traffic-with-iptables/). For example, you can add a rule that will block everything coming from 198.51.100.0 with the command  
         iptables -I INPUT -s 198.51.100.0 -j DROP  
        
-### &lt;slowDownTroubleMillis&gt;
+### &lt;slowDownTroubleMillis&gt; {#slowdowntroublemillis}
 *   [**&lt;slowDownTroubleMillis>**](#slowdowntroublemillis) is a rarely used OPTIONAL tag within an &lt;erddapDatasets> tag in datasets.xml which contains an integer specifying the number of milliseconds (default=1000) to pause when responding to all failed requests, e.g., unknown dataset, request too large, user on the blacklist. E.g.,  
     ```
     <slowDownTroubleMillis>2000</slowDownTroubleMillis>
@@ -4280,14 +4280,14 @@ Any changes to this tag's value will take effect the next time ERDDAP™ reads d
     
     Any changes to this tag's value will take effect the next time ERDDAP™ reads datasets.xml, including in response to a dataset [flag](/docs/server-admin/additional-information#flag).  
      
-### &lt;subscriptionEmailBlacklist&gt;
+### &lt;subscriptionEmailBlacklist&gt; {#subscriptionemailblacklist}
 *   [**&lt;subscriptionEmailBlacklist>**](#subscriptionemailblacklist) is a rarely used OPTIONAL tag within an &lt;erddapDatasets> tag in datasets.xml which contains a comma-separated list of email addresses which are immediately blacklisted from the [subscription system](https://coastwatch.pfeg.noaa.gov/erddap/subscriptions), for example  
     ```
     <subscriptionEmailBlacklist>bob@badguy.com, john@badguy.com</subscriptionEmailBlacklist>  
     ```
     This is a case-insensitive system. If an email address is added to this list, if that email address has subscriptions, the subscriptions will be cancelled. If an email address on the list tries to subscribe, the request will be refused. Any changes to this tag's value will take effect the next time ERDDAP™ reads datasets.xml, including in response to a dataset [flag](/docs/server-admin/additional-information#flag).  
      
-### Standard Text
+### Standard Text {#standard-text}
 *   [**Standard Text**](#standard-text) -- There are several OPTIONAL tags (most are rarely used) within an &lt;erddapDatasets> tag in datasets.xml to specify text that appears in various places in ERDDAP. If you want to change the default text, copy the existing value from the tag of the same name in  
     *tomcat*/webapps/erddap/WEB-INF/classes/gov/noaa/pfel/erddap/util.messages.xml into datasets.xml, then modify the content. The advantage of having these in datasets.xml is that you can specify new values at any time, even when ERDDAP™ is running. Any changes to these tags' values will take effect the next time ERDDAP™ reads datasets.xml, including in response to a dataset [flag](/docs/server-admin/additional-information#flag). The tag names describe their purpose, but see the default content in messages.xml for a deeper understanding.
     
@@ -4306,21 +4306,21 @@ Any changes to this tag's value will take effect the next time ERDDAP™ reads d
       
     Before ERDDAP™ v2.00, these were specified in setup.xml, which is still allowed but discouraged.  
      
-### &lt;unusualActivity&gt;
+### &lt;unusualActivity&gt; {#unusualactivity}
 *   [**&lt;unusualActivity>**](#unusualactivity) is a rarely used OPTIONAL tag within an &lt;erddapDatasets> tag in datasets.xml to specify the maximum number of requests between two runs of LoadDatasets that is considered normal (default=10000). If that number is exceeded, an email is sent to emailEverythingTo (as specified in setup.xml). E.g.,  
     ```
     <unusualActivity>10000</unusualActivity>  
     ```
     Any changes to this tag's value will take effect the next time ERDDAP™ reads datasets.xml, including in response to a dataset [flag](/docs/server-admin/additional-information#flag). Before ERDDAP™ v2.00, this was specified in setup.xml, which is still allowed but discouraged.  
      
-### &lt;updateMaxEvents&gt;
+### &lt;updateMaxEvents&gt; {#updatemaxevents}
 *   [**&lt;updateMaxEvents>**](#updatemaxevents) is a rarely used OPTIONAL tag within an &lt;erddapDatasets> tag in datasets.xml to specify the maximum number of file change events (default=10) that will be handled by the [&lt;updateEveryNMillis>](#updateeverynmillis) system before switching to reloading the dataset instead. For example,  
     ```
     <updateMaxEvents>10</updateMaxEvents>  
     ```
     The updateEveryNMillis system is intended to run very quickly right before a user's request is processed. If there are a lot of file change events, then presumably it can't run quickly, so it instead calls for the dataset to be reloaded. If your ERDDAP™ deals with datasets that must be kept up-to-date even when there are changes to a large number of data files, you can set this to a larger number (100?).  
 
-### &lt;user&gt;
+### &lt;user&gt; {#user}
 *   [**&lt;user>**](#user) is an OPTIONAL tag within an &lt;erddapDatasets> tag in datasets.xml that identifies a user's username, password (if authentication=custom), and roles (a comma-separated list). The use of username and password varies slightly based on the value of [&lt;authentication>](/docs/server-admin/additional-information#authentication) in your ERDDAP's setup.xml file.
     *   This is part of ERDDAP's [security system](/docs/server-admin/additional-information#security) for restricting access to some datasets to some users.
     *   Make a separate &lt;user> tag for each user. Optionally, if authentication=oauth2, you can set up two &lt;user> tags for each user: one for when the user logs in via Google, one for when the user logs in via Orcid, presumably with the same roles.
@@ -4363,7 +4363,7 @@ Any changes to this tag's value will take effect the next time ERDDAP™ reads d
             
     *   Any changes to this tag's value will take effect the next time ERDDAP™ reads datasets.xml, including in response to a dataset [flag](/docs/server-admin/additional-information#flag).  
          
-### &lt;pathRegex&gt;
+### &lt;pathRegex&gt; {#pathregex}
 *   [**&lt;pathRegex>**](#pathregex) lets you specify a regular expression which limits which paths (which subdirectories) will be included in the dataset. The default is .\*, which matches all paths. This is a rarely used, rarely needed, OPTIONAL tag for EDDGridFromFiles datasets, EDDTableFromFiles datasets, and a few other dataset types. However, when you need it, you really need it.
     
     To make this work, you need to be really good with regular expressions. See this [regex documentation](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/regex/Pattern.html) and [regex tutorial](https://www.vogella.com/tutorials/JavaRegularExpressions/article.html). In particular, you need to know about capture groups (something inside parentheses), and the "or" symbol "|".  
@@ -4394,7 +4394,7 @@ Any changes to this tag's value will take effect the next time ERDDAP™ reads d
     
     Yes, pathRegex's can be incredibly difficult to formulate. If you get stuck, ask a computer programmer (the closest thing in the real world to a wizard spouting incantations?) or send an email to Chris.John at noaa.gov.
     
-### &lt;dataset&gt;
+### &lt;dataset&gt; {#dataset}
 *   [**&lt;dataset>**](#dataset) is an OPTIONAL (but always used) tag within an &lt;erddapDatasets> tag in datasets.xml that (if you include all of the information between &lt;dataset> and &lt;/dataset>) completely describes one dataset. For example,  
     ```
     <dataset type="EDDGridFromDap" datasetID="erdPHssta8day" active="true"> ... </dataset>  
@@ -4404,7 +4404,7 @@ Any changes to this tag's value will take effect the next time ERDDAP™ reads d
      
     *   **type="*aType*"** is a REQUIRED attribute within a &lt;dataset> tag in datasets.xml which identifies the dataset type (for example, whether it is an EDDGrid/gridded or EDDTable/tabular dataset) and the source of the data (for example, a database, files, or a remote OPeNDAP server). See the [**List of Dataset Types**](#list-of-types-datasets).  
          
-#### datasetId
+#### datasetId {#datasetid}
 *   [**datasetID="*aDatasetID*"**](#datasetid) is a REQUIRED attribute within a &lt;dataset> tag which assigns a short (usually &lt;15 characters), unique, identifying name to a dataset.
     *   The datasetIDs MUST be a letter (A-Z, a-z) followed by any number of A-Z, a-z, 0-9, and \_ (but best if &lt;32 characters total).
     *   DatasetIDs are case sensitive, but DON'T create two datasetIDs that only differ in upper/lowercase letters. It will cause problems on Windows computers (yours and/or a user's computer).
@@ -4418,7 +4418,7 @@ Any changes to this tag's value will take effect the next time ERDDAP™ reads d
 ```
 After the next major loadDatasets, You can remove that tag after the old dataset is inactive.  
                  
-#### active
+#### active {#active}
 *   [**active="*boolean*"**](#active) is an OPTIONAL attribute within a &lt;dataset> tag in datasets.xml which indicates if a dataset is active (eligible for use in ERDDAP) or not.
     *   Valid values are true (the default) and false.
     *   Since the default is true, you don't need to use this attribute until you want to temporarily or permanently remove this dataset from ERDDAP.
@@ -4430,7 +4430,7 @@ After the next major loadDatasets, You can remove that tag after the old dataset
 **Several tags can appear between the &lt;dataset> and &lt;/dataset> tags.**  
 There is some variation in which tags are allowed by which types of datasets. See the documentation for a specific [type of dataset](#list-of-types-datasets) for details.
 
-#### &lt;accessibleTo&gt;
+#### &lt;accessibleTo&gt; {#accessibleto}
 *   [**&lt;accessibleTo>**](#accessibleto) is an OPTIONAL tag within a &lt;dataset> tag that specifies a comma-separated list of [roles](#user) which are allowed to have access to this dataset. For example,  
     ```
     <accessibleTo>RASmith, NEJones</accessibleTo>  
@@ -4444,14 +4444,14 @@ There is some variation in which tags are allowed by which types of datasets. Se
     ```
     then any user that is logged in will be authorized to access that dataset, even if there is no &lt;user> tag for them in datasets.xml.  
          
-#### &lt;graphsAccessibleTo&gt;
+#### &lt;graphsAccessibleTo&gt; {#graphsaccessibleto}
 *   [**&lt;graphsAccessibleTo>**](#graphsaccessibleto) is an OPTIONAL tag within a &lt;dataset> tag in datasets.xml which determines whether graphics and metadata for the dataset are available to the public. It offers a way to partially override the dataset's [&lt;accessibleTo>](#accessibleto) setting. The allowed values are:
     *   auto -- This value (or the absence of a &lt;graphsAccessibleTo> tag for the dataset) makes access to graphs and metadata from the dataset mimic the dataset's &lt;accessibleTo> setting.  
         So if the dataset is private, its graphs and metadata will be private.  
         And if the dataset is public, its graphs and metadata will be public.
     *   public -- This setting makes the dataset's graphs and metadata accessible to anyone, even users who aren't logged in, even if the dataset is otherwise private because it has an &lt;accessibleTo> tag.  
          
-#### &lt;accessibleViaFiles&gt;
+#### &lt;accessibleViaFiles&gt; {#accessibleviafiles}
 *   [**&lt;accessibleViaFiles>**](#accessibleviafiles) is an OPTIONAL tag within a &lt;dataset> tag in datasets.xml for [EDDGridAggregateExistingDimension](#eddgridaggregateexistingdimension), [EDDGridCopy](#eddgridcopy), [EDDGridFromEDDTable](#eddgridfromeddtable), [EDDGridFromErddap](#eddfromerddap), [EDDGridFromEtopo](#eddgridfrometopo), [EDDGridFromFiles](#eddgridfromfiles) (including all subclasses), [EDDGridSideBySide](#eddgridsidebyside), [EDDTableCopy](#eddtablecopy) [EDDTableFromErddap](#eddfromerddap), [EDDTableFromEDDGrid](#eddtablefromeddgrid), and [EDDTableFromFiles](#eddtablefromfiles) (including all subclasses) datasets. It can have a value of true or false. For example,  
     ```
     <accessibleViaFiles>true</accessibleViaFiles>  
@@ -4462,7 +4462,7 @@ There is some variation in which tags are allowed by which types of datasets. Se
     
     Recommendation -- We recommend making all relevant datasets accessible via the files system by setting &lt;defaultAccessibleViaFiles> to true in setup.xml because there is a group of users for whom this is the preferred way to get the data. Among other reasons, the "files" system makes it easy for users to see which files are available and when they last changed, thus making it easy for a user to maintain their own copy of the entire dataset. If you generally don't want to make datasets accessible via the files system, set &lt;defaultAccessibleViaFiles> to false. In either case, just use &lt;accessibleViaFiles> for the few datasets which are exceptions to the general policy set by &lt;defaultAccessibleViaFiles> (for example, when the dataset uses [.ncml](#ncml-files) files, which aren't really useful to users).  
      
-#### &lt;accessibleViaWMS&gt;
+#### &lt;accessibleViaWMS&gt; {#accessibleviawms}
 *   [**&lt;accessibleViaWMS>**](#accessibleviawms) is an OPTIONAL tag within a &lt;dataset> tag in datasets.xml for all [EDDGrid](#eddgrid) subclasses. It can have a value of true (the default) or false. For example,  
     ```
     <accessibleViaWMS>true</accessibleViaWMS>  
@@ -4470,7 +4470,7 @@ There is some variation in which tags are allowed by which types of datasets. Se
     If the value is false, ERDDAP's WMS server won't be available for this dataset. This is commonly used for datasets that have some longitude values greater than 180 (which technically is invalid for WMS services), and for which you are also offering a variant of the dataset with longitude values entirely in the range -180 to 180 via [EDDGridLonPM180](#eddgridlonpm180).  
     If the value is true, ERDDAP™ will try to make the dataset available via ERDDAP's WMS server. But if the dataset is completely unsuitable for WMS (e.g., there is no longitude or latitude data), then the dataset won't be available via ERDDAP's WMS server, regardless of this setting.  
      
-#### &lt;addVariablesWhere&gt;
+#### &lt;addVariablesWhere&gt; {#addvariableswhere}
 *   [&lt;addVariablesWhere>](#addvariableswhere) is an OPTIONAL tag within the &lt;dataset> tag for all EDDTable datasets.
     
     Requests to any EDDTable dataset can include &addVariablesWhere("*attributeName*","*attributeValue*"), which tells ERDDAP™ to add all of the variables in the dataset where *attributeName=attributeValue* to the list of requested variables. For example, if a user adds &addVariablesWhere("ioos\_category","Wind") to a query, ERDDAP will add all variables in the dataset that have an ioos\_category=Wind attribute to the list of requested variables (for example, windSpeed, windDirection, windGustSpeed). *attributeName* and *attributeValue* are case-sensitive.
@@ -4485,7 +4485,7 @@ There is some variation in which tags are allowed by which types of datasets. Se
     ```
     the Data Access Form (.html web page) for the dataset will include a widget (for each attributeName in the comma-separated list) right below the list of variables which lets users specify an attribute value. If the user selects an attribute value for one or more of the attribute names, they will be added to the request via &addVariablesWhere("*attributeName*","*attributeValue*"). Thus, this tag in datasets.xml lets you specify the list of attribute names which will appear on the Data Access Form for that dataset and makes it easy for users to add &addVariablesWhere functions to the request. The *attributeNamesCSV* list is case-sensitive.
     
-#### &lt;altitudeMetersPerSourceUnit&gt;
+#### &lt;altitudeMetersPerSourceUnit&gt; {#altitudemeterspersourceunit}
 *   [**&lt;altitudeMetersPerSourceUnit>**](#altitudemeterspersourceunit) is an OPTIONAL tag within the &lt;dataset> tag in datasets.xxml for EDDTableFromSOS datasets (only!) that specifies a number which is multiplied by the source altitude or depth values to convert them into altitude values (in meters above sea level). For example,  
     ```
     <altitudeMetersPerSourceUnit>-1</altitudeMetersPerSourceUnit>  
@@ -4498,7 +4498,7 @@ There is some variation in which tags are allowed by which types of datasets. Se
     ```
     *   If the source is measured in km above sea level, use 0.001.  
          
-#### &lt;defaultDataQuery&gt;
+#### &lt;defaultDataQuery&gt; {#defaultdataquery}
 *   [**&lt;defaultDataQuery>**](#defaultdataquery) is an OPTIONAL tag within a &lt;dataset> tag in datasets.xml that tells ERDDAP™ to use the specified query (the part of the URL after the "?") if the .html fileType (the Data Access Form) is requested with no query.
     *   You will probably rarely need to use this.
     *   You need to XML-encode (not percent-encode) the default queries since they are in an XML document. For example, & becomes &amp; , &lt; becomes &lt; , > becomes &gt; .
@@ -4520,7 +4520,7 @@ There is some variation in which tags are allowed by which types of datasets. Se
     ```
         <defaultDataQuery>&amp;time&gt;=now-1day</defaultDataQuery>  
     ```
-#### &lt;defaultGraphQuery&gt;
+#### &lt;defaultGraphQuery&gt; {#defaultgraphquery}
 *   [**&lt;defaultGraphQuery>**](#defaultgraphquery) is an OPTIONAL tag within a &lt;dataset> tag in datasets.xml that tells ERDDAP™ to use the specified query (the part of the URL after the "?") if the .graph fileType (the Make A Graph Form) is requested with no query.
     *   You will probably rarely need to use this.
     *   You need to XML-encode (not percent-encode) the default queries since they are in an XML document. For example, & becomes &amp; , &lt; becomes &lt; , > becomes &gt; .
@@ -4543,7 +4543,7 @@ There is some variation in which tags are allowed by which types of datasets. Se
     ```
         <defaultGraphQuery>&amp;time&gt;=now-1day</defaultGraphQuery>  
     ```
-#### &lt;dimensionValuesInMemory&gt;
+#### &lt;dimensionValuesInMemory&gt; {#dimensionvaluesinmemory}
 *   [**&lt;dimensionValuesInMemory>**](#dimensionvaluesinmemory) (true (the default) or false) is an OPTIONAL and rarely used tag within the &lt;dataset> tag for any EDDGrid dataset that tells ERDDAP™ where to keep the source values of the dimensions (also known as the axisVariables):
     
     *   true = in memory (which is faster but uses more memory)
@@ -4555,7 +4555,7 @@ There is some variation in which tags are allowed by which types of datasets. Se
     ```
     You should only use this with the non-default value of false if your ERDDAP™ has a lot of datasets with very large dimensions (e.g., millions of values, e.g., in EDDGridFromAudioFiles datasets) and ERDDAP's In Use memory usage is always too high. See the Memory: currently using line at \[yourDomain\]/erddap/status.html to monitor ERDDAP™ memory usage.  
      
-#### &lt;fileTableInMemory&gt;
+#### &lt;fileTableInMemory&gt; {#filetableinmemory}
 *   [**&lt;fileTableInMemory>**](#filetableinmemory) (true or false (the default)) is an OPTIONAL tag within the &lt;dataset> tag for any EDDGridFromFiles and EDDTableFromFiles dataset that tells ERDDAP™ where to keep the fileTable (which has information about each source data file):
     
     *   true = in memory (which is faster but uses more memory)
@@ -4567,7 +4567,7 @@ There is some variation in which tags are allowed by which types of datasets. Se
     ```
     If you set this to true for any dataset, keep an eye on the Memory: currently using line at \[yourDomain\]/erddap/status.html to ensure that ERDDAP™ still has plenty of free memory.  
      
-#### &lt;fgdcFile&gt;
+#### &lt;fgdcFile&gt; {#fgdcfile}
 *   [**&lt;fgdcFile>**](#fgdcfile) is an OPTIONAL tag within a &lt;dataset> tag in datasets.xml that tells ERDDAP™ to use a pre-made FGDC file instead of having ERDDAP™ try to generate the file. Usage:  
 ```
     <fgdcFile>*fullFileName*</fgdcFile>  
@@ -4576,7 +4576,7 @@ There is some variation in which tags are allowed by which types of datasets. Se
     If *fullFileName*\="" or the file isn't found, the dataset will have no FGDC metadata. So this is also useful if you want to suppress the FGDC metadata for a specific dataset.  
     Or, you can put &lt;fgdcActive>false&lt;/fgdcActive> in setup.xml to tell ERDDAP™ not to offer FGDC metadata for any dataset.  
      
-#### &lt;iso19115File&gt;
+#### &lt;iso19115File&gt; {#iso19115file}
 *   [**&lt;iso19115File>**](#iso19115file) is an OPTIONAL tag within a &lt;dataset> tag in datasets.xml that tells ERDDAP™ to use a pre-made ISO 19115 file instead of having ERDDAP™ try to generate the file. Usage:  
     ```
     <iso19115File>*fullFileName*</iso19115File>  
@@ -4585,7 +4585,7 @@ There is some variation in which tags are allowed by which types of datasets. Se
     If *fullFileName*\="" or the file isn't found, the dataset will have no ISO 19115 metadata. So this is also useful if you want to suppress the ISO 19115 metadata for a specific dataset.  
     Or, you can put &lt;iso19115Active>false&lt;/iso19115Active> in setup.xml to tell ERDDAP™ not to offer ISO 19115 metadata for any dataset.  
      
-#### &lt;matchAxisNDigits&gt;
+#### &lt;matchAxisNDigits&gt; {#matchaxisndigits}
 *   [**&lt;matchAxisNDigits>**](#matchaxisndigits) is an OPTIONAL tag within an EDDGrid &lt;dataset> tag for EDDGrid datasets that are aggregations, e.g., aggregations of files. Each time the dataset is reloaded, ERDDAP™ checks that the axis values of each component of the aggregation are the same. The precision of the testing is determined by the [matchAxisNDigits](#matchaxisndigits), which specifies the total number of digits which must match when testing double precision axis values, 0 - 18 (the default). When testing float axis values, the test is done with matchAxisNDigits/2 digits. A value of 18 or above tells EDDGrid to do an exact test. A value of 0 tells EDDGrid not to do any testing, which is not recommended, except as described below.
     
     Although EDDGrid allows the components of the aggregation to have slightly different axis values, only one set of axis values is shown to the user. The set is from the same component that provides the dataset's source metadata. For example, for EDDGridFromFiles datasets, that is specified by the &lt;metadataFrom> setting (default=last).
@@ -4594,7 +4594,7 @@ There is some variation in which tags are allowed by which types of datasets. Se
     
     There is one case where using matchAxisNDigits\=0 is useful and recommended: with aggregations of remote files, e.g., data in S3 buckets. In this case, if the dataset uses cacheFromUrl, cacheSizeGB, matchAxisNDigits\=0, and the EDDGridFromFiles system for [Aggregation via File Names](#aggregation-via-file-names-or-global-metadata), then EDDGrid doesn't have to read all of the remote files to do the aggregation. This allows datasets made from data in S3 buckets to load very quickly (as opposed to absurdly slowly if EDDGrid has to download and read all of the files).
     
-#### &lt;nThreads&gt;
+#### &lt;nThreads&gt; {#nthreads}
 *   Starting with ERDDAP™ version 2.00, when any subclass of EDDTableFromFiles or EDDGrid reads data from its source, it can read one chunk of data (e.g., one source file) at a time (in one thread) (that's the default) or more than one chunk of data (e.g., 2+ source files) at a time (in 2 or more threads) while processing each request.  
      
     *   Rule of Thumb:  
@@ -4619,26 +4619,26 @@ There is some variation in which tags are allowed by which types of datasets. Se
         For the [original ERDDAP™ installation](https://coastwatch.pfeg.noaa.gov/erddap/index.html), we use  
         &lt;nTableThreads>6&lt;/nTableThreads> (It's a powerful server.) Difficult requests now take 30% of the previous time.  
          
-##### Monitor Resource Usage
+##### Monitor Resource Usage {#monitor-resource-usage}
 When you are experimenting with different nThreads settings (and perhaps making difficult sample requests to your ERDDAP), you can monitor your computer's resource usage:
 *   On Macs, use Finder : Applications : Utilities : Activity Monitor
 *   On Linux, use top
 *   On Windows 10, use *Ctrl + Shift + Esc* to open Task Manager  
              
-##### Warning: Decreased Responsiveness
+##### Warning: Decreased Responsiveness {#warning-decreased-responsiveness}
 In isolation, ERDDAP™ will fulfill a request to a dataset with a higher nThreads setting faster than if nThreads=1. But while that request is being processed, other requests from other users will be somewhat crowded out and get a slower response. Also, when ERDDAP™ responds to a given request, other computing resources (e.g., disk drive access, network bandwidth) may be limiting, especially with higher nThreads settings. Thus with higher nThreads settings, the overall system responsiveness will be worse when there are multiple requests being processed -- this can be very annoying to users! Because of this: never set nThreads to more than the number of CPU cores in the computer. nThreads=1 is the fairest setting since each request (among several simultaneous requests) will get an equal share of computing resources. But the more powerful the computer, the less this will be a problem.  
          
-##### Warning: Higher Memory Use for EDDGrid Datasets
+##### Warning: Higher Memory Use for EDDGrid Datasets {#warning-higher-memory-use-for-eddgrid-datasets}
 Memory use while processing requests is directly proportional to the nThreads setting. A reasonably safe rule of thumb is: you need to set [ERDDAP's memory settings](/docs/server-admin/deploy-install#memory) to at least 2GB + (2GB \* nThreads). Some requests to some datasets will need more memory than that. For example, setting nThreads=3 for any EDDGrid dataset means that the -Xmx setting should be at least -Xmx8000M. If that memory setting is greater than 3/4 the physical memory of the computer, decrease the nThreads setting so that you can decrease the memory setting.
 
 The memory use of threads processing requests to EDDTable datasets is almost always lower because the files are usually much smaller. However, if a given EDDTable dataset has huge (e.g., >=1 GB) data files, then the comments above will apply to those datasets as well.
 
 Whatever the nThreads setting, keep a close eye on the memory usage statistics on your [ERDDAP's status page](/docs/server-admin/additional-information#status-page). You shouldn't ever come close to maxing out the memory usage in ERDDAP; otherwise there will be serious errors and failures.
         
-##### Temporarily Set to 1
+##### Temporarily Set to 1 {#temporarily-set-to-1}
 If current memory usage is even slightly high, ERDDAP™ will set nThreads for this request to 1. Thus, ERDDAP™ conserves memory when memory is scarce.  
          
-##### Diminishing Returns  
+##### Diminishing Returns {#diminishing-returns}
 There are diminishing returns to increasing the nThreads setting: 2 threads will be way better than 1 (if we ignore dynamic overclocking). But 3 will be only a chunk better than 2. And 4 will be only marginally better than 3.
 
 In one test of a difficult query to a large EDDTable dataset, the response time using 1, 2, 3, 4, 5, 6 threads was 38, 36, 20, 18, 13, 11 seconds. (We now use nTableThreads=6 on that server.)
@@ -4647,7 +4647,7 @@ nThreads=2: Although, there is often a significant benefit to specifying nThread
 
 As discussed above, very high nThreads settings may lead to faster responses to some requests, but the risk of overall decreased ERDDAP™ responsiveness and high memory use (as noted above) while those requests are being processed means it generally isn't a good idea.
         
-##### CPU Cores
+##### CPU Cores {#cpu-cores}
 You shouldn't ever set nThreads to a number larger than the number of CPU cores in the computer's CPU. Essentially all modern CPUs have multiple cores (e.g., 2, 4, or 8). Some computers even have multiple CPUs (e.g., 2 CPUs \* 4 cores/CPU = 8 CPU cores). To find out how many CPUs and cores a computer has:
 
 *   On Macs, use *Option key* : Apple Menu : System Information
@@ -4663,18 +4663,18 @@ Yes, most processors these days say that they support 2 threads per core (via [h
 
 So it is best not to set the nThreads setting to more than the number of cores in the computer's CPU.  
          
-##### Your Mileage May Vary (YMMV)
+##### Your Mileage May Vary (YMMV) {#your-mileage-may-vary-ymmv}
 The results of different nThreads settings will vary greatly for different requests to different datasets on different systems. If you really want to know the effect of different nThreads settings, run realistic tests.  
          
-##### Why nThreads per request?
+##### Why nThreads per request? {#why-nthreads-per-request}
 I can hear some of you thinking "Why is nThreads per request? If I were coding this, I would use one permanent worker thread pool and a messaging queue for better performance." The problem with using one worker thread pool and a messaging queue is that one difficult request would flood the queue with numerous slow tasks. That would effectively block ERDDAP™ from even starting work on tasks related to other requests until the initial request was (essentially) finished. Thus, even simple subsequent requests would respond super slowly. ERDDAP's use of nThreads per request leads to a much fairer use of computing resources.  
          
-##### nThreads vs. Multiple Worker Computers
+##### nThreads vs. Multiple Worker Computers {#nthreads-vs-multiple-worker-computers}
 Unfortunately, ERDDAP's nThreads system will never be as effective as true parallelizing via multiple worker computers, with each working on a chunk of data, in the way that Hadoop or Apache Spark are usually used. When the task is truly parallelized/distributed to multiple computers, each computer can use all of its resources on its part of the task. With ERDDAP's nThreads system, each of the threads is competing for the same computer's bandwidth, disk drives, memory, etc. Unfortunately, most of us don't have the resources or funds to set up or even rent (on Amazon Web Services (AWS) or Google Cloud Platform (GCP)) massive grids of computers. Also, unlike a relational database which is allowed to return the result rows in any order, ERDDAP™ makes a promise to return the result rows in a consistent order. This constraint makes ERDDAP's nThreads implementation less efficient. But ERDDAP's nThreads is useful in many cases.
 
 However, there are ways to make ERDDAP™ scale to handle a huge number of requests quickly by setting up a [grid/cluster/federation of ERDDAPs](/docs/server-admin/scaling).  
          
-#### &lt;palettes&gt;
+#### &lt;palettes&gt; {#palettes}
 *   Starting with ERDDAP™ version 2.12, datasets.xml can include a &lt;palettes> tag (within &lt;erddapDatasets>) which overrides the &lt;palettes> tag value from messages.xml (or reverts to the messages.xml value if the tag in datasets.xml is empty). This lets you change the list of available palettes while ERDDAP™ is running. It also lets you make a change and have it persist when you install a new version of ERDDAP.  
     WARNING: The palettes listed in datasets.xml must be a superset of the palettes listed in messages.xml; otherwise ERDDAP™ will throw an exception and stop processing datasets.xml. This ensures that all ERDDAP™ installations at least support the same core palettes.  
     WARNING: ERDDAP™ checks that the palettes files specified in messages.xml actually exist, but it doesn't check the palette files listed in datasets.xml. It's your responsibility to ensure the files are present.
@@ -4683,14 +4683,13 @@ However, there are ways to make ERDDAP™ scale to handle a huge number of reque
     
     WARNING: If you add custom palettes to your ERDDAP™ and you have EDDGridFromErddap and/or EDDTableFromErddap datasets in your ERDDAP™, then users will see your custom palette options on the ERDDAP™ Make A Graph web pages, but if the user tries to use them, they'll get a graph with the default (usually Rainbow) palette. This is because the image is made by the remote ERDDAP™ which doesn't have the custom palette. The only solutions now are to email the remote ERDDAP™ administrator to add your custom palettes to his/her ERDDAP or email Chris.John at noaa.gov to ask that the palettes be added to the standard ERDDAP™ distribution.
     
-#### &lt;onChange&gt;
+#### &lt;onChange&gt; {#onchange}
 *   [**&lt;onChange>**](#onchange) is an OPTIONAL tag within a &lt;dataset> tag in datasets.xml that specifies an action which will be done when this dataset is created (when ERDDAP™ is restarted) and whenever this dataset changes in any way.
     *   Currently, for EDDGrid subclasses, any change to metadata or to an axis variable (for example, a new time point for near-real-time data) is considered a change, but a reloading of the dataset is not considered a change (by itself).
     *   Currently, for EDDTable subclasses, any reloading of the dataset is considered a change.
     *   Currently, only two types of actions are allowed:
         *   http:// or https:// -- If the action starts with "http://" or "https://", ERDDAP™ will send an HTTP GET request to the specified URL. The response will be ignored. For example, the URL might tell some other web service to do something.
-            ##### Percent Encoding
-            *   [If the URL has a query part (after the "?"),](#percent-encoding) it MUST be already [percent encoded](https://en.wikipedia.org/wiki/Percent-encoding). You need to encode special characters in the constraints (other than the initial '&' and the main '=' in constraints) into the form %HH, where HH is the 2 digit hexadecimal value of the character. Usually, you just need to convert a few of the punctuation characters: % into %25, & into %26, " into %22, &lt; into %3C, = into %3D, > into %3E, + into %2B, | into %7C, \[ into %5B, \] into %5D, space into %20, and convert all characters above #127 into their UTF-8 form and then percent encode each byte of the UTF-8 form into the %HH format (ask a programmer for help).  
+            *   If the URL has a query part (after the "?"), it MUST be already [percent encoded](https://en.wikipedia.org/wiki/Percent-encoding). You need to encode special characters in the constraints (other than the initial '&' and the main '=' in constraints) into the form %HH, where HH is the 2 digit hexadecimal value of the character. Usually, you just need to convert a few of the punctuation characters: % into %25, & into %26, " into %22, &lt; into %3C, = into %3D, > into %3E, + into %2B, | into %7C, \[ into %5B, \] into %5D, space into %20, and convert all characters above #127 into their UTF-8 form and then percent encode each byte of the UTF-8 form into the %HH format (ask a programmer for help).  
                 For example, &stationID>="41004"  
                 becomes       &stationID%3E=%2241004%22  
                 Percent encoding is generally required when you access ERDDAP via software other than a browser. Browsers usually handle percent encoding for you.  
@@ -4710,7 +4709,7 @@ However, there are ways to make ERDDAP™ scale to handle a huge number of reque
     *   This is analogous to ERDDAP's email/URL subscription system, but these actions aren't stored persistently (i.e., they are only stored in an EDD object).
     *   To remove a subscription, just remove the &lt;onChange> tag. The change will be noted the next time the dataset is reloaded.  
          
-#### &lt;reloadEveryNMinutes&gt;
+#### &lt;reloadEveryNMinutes&gt; {#reloadeverynminutes}
 *   [**&lt;reloadEveryNMinutes>**](#reloadeverynminutes) is an OPTIONAL tag within a &lt;dataset> tag in datasets.xml of almost all dataset types that specifies how often the dataset should be reloaded. For example,  
     ```
     <reloadEveryNMinutes>60</reloadEveryNMinutes>
@@ -4723,8 +4722,6 @@ However, there are ways to make ERDDAP™ scale to handle a huge number of reque
     *   No matter what this is set to, a dataset won't be loaded more frequently than &lt;loadDatasetsMinMinutes> (default = 15), as specified in [setup.xml](/docs/server-admin/deploy-install#setupxml). So if you want datasets to be reloaded very frequently, you need to set both reloadEveryNMinutes and loadDatasetsMinMinutes to small values.
     *   Don't set reloadEveryNMinutes to the same value as loadDatasetsMinMinutes, because the elapsed time is likely to be (for example) 14:58 or 15:02, so the dataset will only be reloaded in about half of the major reloads. Instead, use a smaller (for example, 10) or larger (for example, 20) reloadEveryNMinutes value.
     *   Regardless of reloadEveryNMinutes, you can manually tell ERDDAP™ to reload a specific dataset as soon as possible via a [flag file](/docs/server-admin/additional-information#flag).
-    ##### Proactive vs. Reactive
-    *   [Proactive versus Reactive](#proactive-vs-reactive) -- ERDDAP's reload system is proactive -- datasets are reloaded soon after their reloadEveryNMinutes time is up (i.e., they become "stale", but never very stale), whether the dataset is getting requests from users or not. So ERDDAP™ datasets are always up-to-date and ready for use. This is in contrast to THREDDS' reactive approach: a user's request is what tells THREDDS to check if a dataset is stale (it may be very stale). If it is stale, THREDDS makes the user wait (often for a few minutes) while the dataset is reloaded.
     *   For Curious Programmers -- In ERDDAP™, the reloading of all datasets is handled by two single purpose threads. One thread initiates a minor reload if it finds a flag file or a major reload (which checks all datasets to see if they need to be reloaded). The other thread does the actual reload of the datasets one at a time. These threads work in the background ensuring that all datasets are kept up-to-date. The thread which actually does the reloads prepares a new version of a dataset then swaps it into place (essentially replacing the old version atomically). So it is very possible that the following sequence of events occurs (it's a good thing):
         
         1.  ERDDAP™ starts reloading a dataset (making a new version) in the background.
@@ -4734,8 +4731,10 @@ However, there are ways to make ERDDAP™ scale to handle a huge number of reque
         5.  Eventually user A's and user B's requests are completed (perhaps A's finishes first, perhaps B's finishes first).
         
         I can hear someone saying, "Just two thredds! Ha! That's lame! He should set that up so that reloading of datasets uses as many threads as are needed, so it all gets done faster and with little or no lag." Yes and no. The problem is that loading more than one dataset at a time creates several hard new problems. They all need to be solved or dealt with. The current system works well and has manageable problems (for example, potential for lag before a flag is noticed). (If you need help managing them, see our [section on getting additional support](/docs/intro#support).) The related [updateEveryNMillis](#updateeverynmillis). system works within response threads, so it can and does lead to multiple datasets being updated (not the full reload) simultaneously.
+##### Proactive vs. Reactive {#proactive-vs-reactive}
+ERDDAP's reload system is proactive -- datasets are reloaded soon after their reloadEveryNMinutes time is up (i.e., they become "stale", but never very stale), whether the dataset is getting requests from users or not. So ERDDAP™ datasets are always up-to-date and ready for use. This is in contrast to THREDDS' reactive approach: a user's request is what tells THREDDS to check if a dataset is stale (it may be very stale). If it is stale, THREDDS makes the user wait (often for a few minutes) while the dataset is reloaded.
         
-#### &lt;updateEveryNMillis&gt;
+#### &lt;updateEveryNMillis&gt; {#updateeverynmillis}
 *   [**&lt;updateEveryNMillis>**](#updateeverynmillis) is an OPTIONAL tag within a &lt;dataset> tag in datasets.xml of some dataset types that helps ERDDAP™ work with datasets that change very frequently (as often as roughly every second). Unlike ERDDAP's regular, proactive, [&lt;reloadEveryNMinutes>](#reloadeverynminutes) system for completely reloading each dataset, this OPTIONAL additional system is reactive (triggered by a user request) and quicker because it is incremental (just updating the information that needs to be updated). For example, if a request to an EDDGridFromDap dataset occurs more than the specified number of milliseconds since the last update, ERDDAP™ will see if there are any new values for the leftmost (first, usually "time") dimension and, if so, just download those new values before handling the user's request. This system is very good at keeping a rapidly changing dataset up-to-date with minimal demands on the data source, but at the cost of slightly slowing down the processing of some user requests.
     *   To use this system, add (for example):  
         ```
@@ -4772,7 +4771,7 @@ However, there are ways to make ERDDAP™ scale to handle a huge number of reque
     *   You can put &lt;updateMaxEvents>10&lt;/updateMaxEvents> in datasets.xml (in with the other settings near the top) to change the maximum number of file changes (default=10) that will be processed by the updateEveryNMillis system. A larger number may be useful for dataset where it is very important that they be kept always up-to-date. See the [updateMaxEvents documentation](#updatemaxevents).
     *   For Curious Programmers -- these incremental updates, unlike ERDDAP's full [reloadEveryNMinutes](#reloadeverynminutes) system, occur within user request threads. So, any number of datasets can be updating simultaneously. There is code (and a lock) to ensure that only one thread is working on an update for any given dataset at any given moment. Allowing multiple simultaneous updates was easy; allowing multiple simultaneous full reloads would be harder.  
          
-#### &lt;sourceCanConstrainStringEQNE&gt;
+#### &lt;sourceCanConstrainStringEQNE&gt; {#sourcecanconstrainstringeqne}
 *   [**&lt;sourceCanConstrainStringEQNE>**](#sourcecanconstrainstringeqne) is an OPTIONAL tag within an EDDTable &lt;dataset> tag in datasets.xml that specifies if the source can constrain String variables with the = and != operators.
     *   For EDDTableFromDapSequence, this applies to the outer sequence String variables only. It is assumed that the source can't handle any constraints on inner sequence variables.
     *   This tag is OPTIONAL. Valid values are true (the default) and false.
@@ -4783,7 +4782,7 @@ However, there are ways to make ERDDAP™ scale to handle a huge number of reque
         <sourceCanConstrainStringEQNE>true</sourceCanConstrainStringEQNE>  
 ```
          
-#### &lt;sourceCanConstrainStringGTLT&gt;
+#### &lt;sourceCanConstrainStringGTLT&gt; {#sourcecanconstrainstringgtlt}
 *   [**&lt;sourceCanConstrainStringGTLT>**](#sourcecanconstrainstringgtlt) is an OPTIONAL tag within an EDDTable &lt;dataset> tag that specifies if the source can constrain String variables with the &lt;, &lt;=, >, and >= operators.
     *   For EDDTableFromDapSequence, this applies to the outer sequence String variables only. It is assumed that the source can't handle any constraints on inner sequence variables.
     *   Valid values are true (the default) and false.
@@ -4795,7 +4794,7 @@ However, there are ways to make ERDDAP™ scale to handle a huge number of reque
         <sourceCanConstrainStringGTLT>true</sourceCanConstrainStringGTLT>  
 ```
          
-#### &lt;sourceCanConstrainStringRegex&gt;
+#### &lt;sourceCanConstrainStringRegex&gt; {#sourcecanconstrainstringregex}
 *   [**&lt;sourceCanConstrainStringRegex>**](#sourcecanconstrainstringregex) is an OPTIONAL tag within an EDDTable &lt;dataset> tag that specifies if the source can constrain String variables by regular expressions, and if so, what the operator is.
     *   Valid values are "=~" (the DAP standard), "~=" (mistakenly supported by many DAP servers), or "" (indicating that the source doesn't support regular expressions).
     *   This tag is OPTIONAL. The default is "".
@@ -4805,7 +4804,7 @@ However, there are ways to make ERDDAP™ scale to handle a huge number of reque
 ```
         <sourceCanConstrainStringRegex>=~</sourceCanConstrainStringRegex>  
 ```
-#### &lt;sourceCanDoDistinct&gt;
+#### &lt;sourceCanDoDistinct&gt; {#sourcecandodistinct}
 *   [**&lt;sourceCanDoDistinct>**](#sourcecandodistinct) is an OPTIONAL tag within an EDDTableFromDatabase &lt;dataset> tag that specifies if the source database should handle &distinct() constraints in user queries.
     *   This tag is OPTIONAL. Valid values are no (ERDDAP™ handles distinct; the default), partial (the source handles distinct and ERDDAP™ handles it again), and yes (the source handles distinct).
     *   If you are using no and ERDDAP™ is running out of memory when handling distinct, use yes.
@@ -4821,7 +4820,7 @@ However, there are ways to make ERDDAP™ scale to handle a huge number of reque
         <sourceCanDoDistinct>yes</sourceCanDoDistinct>  
 ```
          
-#### &lt;sourceCanOrderBy&gt;
+#### &lt;sourceCanOrderBy&gt; {#sourcecanorderby}
 *   [**&lt;sourceCanOrderBy>**](#sourcecanorderby) is an OPTIONAL tag within an EDDTableFromDatabase &lt;dataset> tag that specifies if the source database should handle &orderBy(...) constraints in user queries.
     *   This tag is OPTIONAL. Valid values are no (ERDDAP™ handles orderBy(...); the default), partial (the source handles orderBy and ERDDAP™ handles it again), and yes (the source handles orderBy(...)).
     *   If you are using no and ERDDAP™ is running out of memory when handling orderBy(...), use yes.
@@ -4836,7 +4835,7 @@ However, there are ways to make ERDDAP™ scale to handle a huge number of reque
         <sourceCanOrderBy>yes</sourceCanOrderBy>  
 ```
          
-#### &lt;sourceNeedsExpandedFP\_EQ&gt;
+#### &lt;sourceNeedsExpandedFP\_EQ&gt; {#sourceneedsexpandedfp_eq}
 *   [**&lt;sourceNeedsExpandedFP\_EQ>**](#sourceneedsexpandedfp_eq) is an OPTIONAL tag within an EDDTable &lt;dataset> tag that specifies (true (the default) or false) if the source needs help with queries with &lt;numericVariable>=&lt;floatingPointValue> (and !=, >=, &lt;=). For example,  
     ```
     <sourceNeedsExpandedFP\_EQ>false</sourceNeedsExpandedFP\_EQ>
@@ -4845,7 +4844,7 @@ However, there are ways to make ERDDAP™ scale to handle a huge number of reque
     *   This problem arises because floating point numbers are [not represented exactly within computers](https://randomascii.wordpress.com/2012/02/25/comparing-floating-point-numbers-2012-edition/).
     *   If sourceNeedsExpandedFP\_EQ is set to true (the default), ERDDAP™ modifies the queries sent to the data source to avoid this problem. It is always safe and fine to leave this set to true.  
          
-#### &lt;sourceUrl&gt;
+#### &lt;sourceUrl&gt; {#sourceurl}
 *   [**&lt;sourceUrl>**](#sourceurl) is a common tag within a dataset's global &lt;addAttributes> tag that specifies the URL that is the source of the data.
     *   An example is:  
     ```
@@ -4867,7 +4866,7 @@ However, there are ways to make ERDDAP™ scale to handle a huge number of reque
         In other cases, the domain name on the certificate may be for a group of names. If this occurs or the problem is otherwise unsolvable, please email Chris.John at noaa.gov to report the problem.  
          
 
-#### &lt;addAttributes&gt;
+#### &lt;addAttributes&gt; {#addattributes}
 *   [**&lt;addAttributes>**](#addattributes) is an OPTIONAL tag for each dataset and for each variable which lets ERDDAP administrators control the metadata attributes associated with a dataset and its variables.
     *   ERDDAP™ combines the attributes from the dataset's source ("sourceAttributes") and the "addAttributes" which you define in datasets.xml (which have priority) to make the "combinedAttributes", which are what ERDDAP™ users see. Thus, you can use addAttributes to redefine the values of sourceAttributes, add new attributes, or remove attributes.
     *   The &lt;addAttributes> tag encloses 0 or more **&lt;att>** subtags, which are used to specify individual attributes.
@@ -4884,31 +4883,31 @@ However, there are ways to make ERDDAP™ scale to handle a huge number of reque
         *   If an &lt;att> subtag has no value or a value of null, that attribute will be removed from the combined attributes.  
             For example, &lt;att name="rows" /> will remove rows from the combined attributes.  
             For example, &lt;att name="coordinates">null&lt;/att> will remove coordinates from the combined attributes.
-        ##### attributeType
-        *   [The OPTIONAL type value for &lt;att> subtags](#attributetype) indicates the data type for the values. The default type is String. An example of a String attribute is:  
-            ```
-            <att name="creator\_name">NASA/GSFC OBPG</att>
-            ```
-            *   Valid types for single values are byte (8-bit integer), short (16-bit signed integer), int (32-bit signed integer), long (64-bit signed integer), float (32-bit floating point), double (64-bit floating point), char, and String. For example,  
-                ```
-                <att name="scale\_factor" type="float">0.1</att>
-                ```
-                See these notes about the [char data type](#char).  
-                See these notes about the [long data type](#long).
-                
-            *   Valid types for space-separated lists of values (or single values) are byteList, shortList, unsignedShortList, charList, intList, longList, floatList, doubleList. For example,  
-                ```
-                <att name="actual\_range" type="doubleList">10.34 23.91</att>  
-                ```
-                An unsignedShortList lets you specify a list of unsigned shorts, but they will be converted into a list of the corresponding Unicode characters (e.g., "65 67 69" will be converted into "A C E".  
-                If you specify a charList, encode any special characters (e.g., space, double quotes, backslash, &lt;#32, or >#127) as you would encode them in the data section of an NCCSV file (e.g., " ", "\\"" or """", "\\\\", "\\n", "\\u20ac").  
-                There is no stringList. Store the String values as a multi-line String. For example,  
-                ```
-                <att name="history">2011-08-05T08:55:02Z ATAM - made CF-1.6 compliant.  
-                2012-04-08T08:34:58Z ATAM - Changed 'height' from double to float.</att>  
+##### attributeType {#attributetype}
+*   [The OPTIONAL type value for &lt;att> subtags](#attributetype) indicates the data type for the values. The default type is String. An example of a String attribute is:  
+    ```
+    <att name="creator\_name">NASA/GSFC OBPG</att>
+    ```
+    *   Valid types for single values are byte (8-bit integer), short (16-bit signed integer), int (32-bit signed integer), long (64-bit signed integer), float (32-bit floating point), double (64-bit floating point), char, and String. For example,  
+        ```
+        <att name="scale\_factor" type="float">0.1</att>
+        ```
+        See these notes about the [char data type](#char).  
+        See these notes about the [long data type](#long).
+        
+    *   Valid types for space-separated lists of values (or single values) are byteList, shortList, unsignedShortList, charList, intList, longList, floatList, doubleList. For example,  
+        ```
+        <att name="actual\_range" type="doubleList">10.34 23.91</att>  
+        ```
+        An unsignedShortList lets you specify a list of unsigned shorts, but they will be converted into a list of the corresponding Unicode characters (e.g., "65 67 69" will be converted into "A C E".  
+        If you specify a charList, encode any special characters (e.g., space, double quotes, backslash, &lt;#32, or >#127) as you would encode them in the data section of an NCCSV file (e.g., " ", "\\"" or """", "\\\\", "\\n", "\\u20ac").  
+        There is no stringList. Store the String values as a multi-line String. For example,  
+        ```
+        <att name="history">2011-08-05T08:55:02Z ATAM - made CF-1.6 compliant.  
+        2012-04-08T08:34:58Z ATAM - Changed 'height' from double to float.</att>  
                 ```
                  
-#### Global Attributes
+#### Global Attributes {#global-attributes}
 *   [**Global Attributes / Global &lt;addAttributes>**](#global-attributes) --  
     &lt;addAttributes> is an OPTIONAL tag within the &lt;dataset> tag which is used to change attributes that apply to the entire dataset.
     
@@ -4932,352 +4931,352 @@ However, there are ways to make ERDDAP™ scale to handle a huge number of reque
         Good metadata makes a dataset usable.  
         Insufficient metadata makes a dataset useless.  
         Please take the time to do a good job with metadata attributes.
-    ##### Special global attributes in ERDDAP™
-    ###### acknowledgement    
-    *   [**acknowledgement**](#acknowledgement) and **acknowledgment** (from the [ACDD](https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3) metadata standard) is a RECOMMENDED way to acknowledge the group or groups that provided support (notably, financial) for the project that created this data. For example,  
-        ```
-        <att name="acknowledgment">AVISO</att>
-        ```    
-        Note that ACDD 1.0 and 1.1 used the spelling "acknowledgment" (which is the usual spelling in the U.S.), but ACDD 1.3 changed this to "acknowledgement" (which is the usual spelling in the U.K.). My understanding is that the change was essentially an accident and that they certainly didn't recognize the ramifications of the change. What a mess! Now there are millions of data files around the world that have "acknowledgment" and millions that have "acknowledgement". This highlights the folly of "simple" changes to a standard, and emphasizes the need for stability in standards. Because ACDD 1.3 (which is the version of ACDD that ERDDAP™ supports) says "acknowledgement", that is what ERDDAP™ (notably GenerateDatasetsXml) encourages.  
-         
-    ###### cdm\_altitude\_proxy
-    *   [**cdm\_altitude\_proxy**](#cdm_altitude_proxy) is just for EDDTable datasets that don't have an altitude or depth variable but do have a variable that is a proxy for altitude or depth (for example, pressure, sigma, bottleNumber), you may use this attribute to identify that variable. For example,  
-        ```
-        <att name="cdm\_altitude\_proxy">pressure</att>  
-        ```
-        If the [cdm\_data\_type](#cdm_data_type) is Profile or TrajectoryProfile and there is no altitude or depth variable, cdm\_altitude\_proxy MUST be defined. If cdm\_altitude\_proxy is defined, ERDDAP™ will add the following metadata to the variable: \_CoordinateAxisType=Height and axis=Z.  
-         
-    ###### cdm\_data\_type
-    *   [**cdm\_data\_type**](#cdm_data_type) (from the [ACDD](https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3) metadata standard) is a global attribute that indicates the Unidata [Common Data Model](https://www.unidata.ucar.edu/software/netcdf-java/v4.6/CDM/index.html) data type for the dataset. For example,  
-        ```
-        <att name="cdm\_data\_type">Point</att>  
-        ```
-        The CDM is still evolving and may change again. ERDDAP™ complies with the related and more detailed [Discrete Sampling Geometries (DSG)](https://cfconventions.org/Data/cf-conventions/cf-conventions-1.8/cf-conventions.html#discrete-sampling-geometries) chapter of the [CF 1.6](https://cfconventions.org/Data/cf-conventions/cf-conventions-1.8/cf-conventions.html) metadata conventions (previously called the CF Point Observation Conventions).
-        *   Either the dataset's global [sourceAttributes](#global-attributes) or its global &lt;addAttributes> MUST include the cdm\_data\_type attribute. A few dataset types (like EDDTableFromObis) will set this automatically.
-        *   For EDDGrid datasets, the cdm\_data\_type options are Grid (the default and by far the most common type for EDDGrid datasets), MovingGrid, Other, Point, Profile, RadialSweep, TimeSeries, TimeSeriesProfile, Swath, Trajectory, and TrajectoryProfile. Currently, EDDGrid does not require that any related metadata be specified, nor does it check that the data matches the cdm\_data\_type. That will probably change in the near future.
-        *   EDDTable uses cdm\_data\_type in a rigorous way, following CF's DSG specification rather than CDM, which for some reason hasn't been updated to be consistent with DSG. If a dataset's metadata doesn't comply with the ERDDAP's cdm\_data\_type's requirements (see below), the dataset will fail to load and will generate an [error message](#troubleshooting-tips). (That's a good thing, in the sense that the error message will tell you what is wrong so that you can fix it.) And if the dataset's data doesn't match the dataset's metadata setup (e.g., if there is more than one latitude value for a given station in a timeseries dataset), some requests for data will return incorrect data in the response. So make sure you get all of this right.
-            
-            For all of these datasets, in the Conventions and Metadata\_Conventions global attributes, please refer to CF-1.6 (not CF-1.0, 1.1, 1.2, 1.3, 1.4, or 1.5), since CF-1.6 is the first version to include the changes related to Discrete Sampling Geometry (DSG) conventions.
-            ###### ERDDAP™ has a not-simple relationship to CF DSG
-            *   ERDDAP™ can make a valid DSG dataset out of a source dataset that is already a valid DSG file(s), or out of a source dataset that isn't set up for DSG but can be made so via changes to metadata (some of which are ERDDAP-specific in order to provide a more general approach to specifying the DSG setup).
-            *   ERDDAP™ does a lot of validity tests when it loads a dataset. If the dataset that has a cdm\_data\_type (or featureType) attribute successfully loads in ERDDAP™, then ERDDAP™ is saying the dataset meets the DSG requirements (otherwise, ERDDAP™ will throw an exception explaining the first problem that it found).  
-                WARNING: A successfully-loaded dataset appears to meet the DSG requirements (it has the right combination of attributes), but still may be incorrectly set up, leading to incorrect results in .ncCF and .ncCFMA response files. (Software is smart in some ways and clueless in others.)
-            *   When you look at the dataset's metadata in ERDDAP™, the DSG dataset appears to be in ERDDAP's internal format (a giant, database-like table). It isn't in one of the DSG formats (e.g., the dimensions and metadata aren't right), but the information needed to treat the dataset as a DSG dataset is in the metadata (for example, cdm\_data\_type=TimeSeries and cdm\_timeseries\_variables=*aCsvListOfStationRelatedVarables* in the global metadata and cf\_role=timeseries\_id for some variable).
-            *   If a user requests a subset of the dataset in a .ncCF (an .nc file in DSG's Contiguous Ragged Array file format) or .ncCFMA file (a .nc file in DSG's Multidimensional Array file format), that file will be a valid CF DSG file.  
-                WARNING: However, if the dataset was set up incorrectly (so that the promises made by the metadata aren't true), then the response file will be technically valid but will be incorrect in some way.  
-                 
-        ###### EDDTable cdm_data_types    
-        *   For EDDTable datasets, the cdm\_data\_type options (and related requirements in ERDDAP) are
-            ###### Point
-            *   [Point](#point) -- is for a set of measurements taken at unrelated times and locations.
-                *   As with all cdm\_data\_types other than Other, Point datasets MUST have longitude, latitude, and time variables.  
-            ###### Profile 
-            *   [Profile](#profile) -- is a set of measurements all taken at one time, at one latitude longitude location, but at more than one depth (or altitude). The dataset may be a collection of these Profiles, for example, 7 profiles from different locations. This cdm\_data\_type doesn't imply any logical connection between any of the profiles.
-                
-                *   One of the variables (for example, profile\_number) MUST have the variable attribute cf\_role=profile\_id to identify the variable that uniquely identifies the profiles.  
-                    ```
-                    <att name="cf\_role">profile\_id</att>  
-                    ```
-                    If no other variable is suitable, consider using the time variable.
-                ###### cdm\_profile\_variables
-                *   The dataset MUST include the globalAttribute [cdm\_profile\_variables](#cdm_profile_variables), where the value is a comma-separated list of the variables which have the information about each profile. For a given profile, the values of these variables MUST be constant. For example,
-                    ```
-                    <att name="cdm\_profile\_variables">profile\_number,time,latitude,longitude</att>
-                    ```
-                    The list MUST include the cf\_role=profile\_id variable and all other variables with information about the profile, and time, latitude and longitude.  
-                    The list will never include altitude, depth, or any observation variables.  
-                     
-                
-                \[Opinion: cdm\_data\_type=Profile should rarely be used. In practice, a given dataset is usually actually either a TimeSeriesProfile (profiles at a fixed position) or a TrajectoryProfile (profiles along a trajectory), and so should be properly identified as such.\]  
-            ###### TimeSeries
-            *   [TimeSeries](#timeseries) -- is a sequence of measurements (e.g., sea water temperature) taken at one, fixed, latitude, longitude, depth (or altitude) location. (Think of it as "station".) The dataset may be a collection of these TimeSeries, for example, a sequence from each of 3 different locations.
-                *   One of the variables (for example, station\_id) MUST have the variable attribute cf\_role=timeseries\_id to identify the variable that uniquely identifies the stations.  
-                    ```
-                    <att name="cf\_role">timeseries\_id</att>
-                    ```
-                ###### cdm\_timeseries\_variables
-                *   The dataset MUST include the globalAttribute [cdm\_timeseries\_variables](#cdm_timeseries_variables), where the value is a comma-separated list of the variables which have the information about each station. For a given station, the values of these variables MUST be constant. For example,
-                    ```
-                    <att name="cdm\_timeseries\_variables">station\_id,station\_type,latitude,longitude</att>
-                    ```
-                    The list MUST include the cf\_role=timeseries\_id variable and all other variables with information about the station, which almost always includes latitude and longitude (and altitude or depth, if present).  
-                    The list will never include time or any observation variables.
-                *   For some moored buoys, a dataset may have two sets of latitude and longitude variables:
-                    1.  One pair of latitude and longitude values that are constant (i.e., the fixed location of the mooring). In ERDDAP™, give these variables the destinationNames of latitude and longitude, and include these variables in the list of cdm\_timeseries\_variables.
-                    2.  Precise latitude and longitude values associated with each observation. In ERDDAP™, give these variables different destinationNames (e.g., preciseLat and preciseLon) and don't include these variables in the list of cdm\_timeseries\_variables.  
-                         The reasoning for this is: from a theoretical perspective, for a DSG TimeSeries dataset, the latitude and longitude (and altitude or depth, if present) location of the station MUST be constant.
-            ###### TimeSeriesProfile
-            *   [TimeSeriesProfile](#timeseriesprofile) -- is for a sequence of profiles taken at one, fixed, latitude longitude location. Each profile is a set of measurements taken at multiple altitudes or depths. The dataset may be a collection of these TimeSeriesProfiles, for example, a sequence of profiles taken at each of 12 different locations.
-                *   One of the variables (for example, station\_id) MUST have the variable attribute cf\_role=timeseries\_id to identify the variable that uniquely identifies the stations.  
-                ```
-                    <att name="cf\_role">timeseries\_id</att>
-                ```
-                *   One of the variables (for example, profile\_number) MUST have the variable attribute cf\_role=profile\_id to identify the variable that uniquely identifies the profiles.  
-                    ```
-                    <att name="cf\_role">profile\_id</att>  
-                    ```
-                    (A given profile\_id only has to be unique for a given timeseries\_id.) If no other variable is suitable, consider using the time variable.
-                *   The dataset MUST include the globalAttribute cdm\_timeseries\_variables, where the value is a comma-separated list of the variables which have the information about each station. For a given station, the values of these variables MUST be constant. For example,
-                    ```
-                    <att name="cdm\_timeseries\_variables">station\_id,station\_type,latitude,longitude</att>
-                    ```
-                    The list MUST include the cf\_role=timeseries\_id variable and all other variables with information about the station, which almost always includes latitude and longitude.  
-                    The list will never include time, altitude, depth, or any observation variables.
-                *   The dataset MUST include the globalAttribute cdm\_profile\_variables, where the value is a comma-separated list of the variables which have the information about each profile. For a given profile, the values of these variables MUST be constant. For example,
-                    ```
-                    <att name="cdm\_profile\_variables">profile\_number,time</att>
-                    ```
-                    The list MUST include the cf\_role=profile\_id variable and all other variables with information about the profile, which almost always includes time.  
-                    The list will never include latitude, longitude, altitude, depth, or any observation variables.  
-            ###### Trajectory 
-            *   [Trajectory](#trajectory) -- is a sequence of measurements taken along a trajectory (a path through space and time) (e.g., sea\_water\_temperature taken by a ship as it moves through the water). The dataset may be a collection of these Trajectories, for example, a sequence from each of 4 different ships.
-                *   One of the variables (for example, ship\_id) MUST have the attribute cf\_role=trajectory\_id to identify the variable that uniquely identifies the trajectories.
-                    ```  
-                    <att name="cf\_role">trajectory\_id</att>
-                    ```
-                ###### cdm\_trajectory\_variables
-                *   The dataset MUST include the globalAttribute [cdm\_trajectory\_variables](#cdm_trajectory_variables), where the value is a comma-separated list of the variables which have the information about each trajectory. For a given trajectory, the values of these variables MUST be constant. For example,
-                    ```
-                    <att name="cdm\_trajectory\_variables">ship\_id,ship\_type,ship\_owner</att>
-                    ```
-                    The list MUST include the cf\_role=trajectory\_id variable and all other variables with information about the trajectory.  
-                    The list will never include time, latitude, longitude, or any observation variables.  
-            ###### TrajectoryProfile
-            *   [TrajectoryProfile](#trajectoryprofile) -- is a sequence of profiles taken along a trajectory. The dataset may be a collection of these TrajectoryProfiles, for example, a sequence of profiles taken by 14 different ships.
-                *   One of the variables (for example, ship\_id) MUST have the variable attribute cf\_role=trajectory\_id to identify the variable that uniquely identifies the trajectories. 
-                    ``` 
-                    <att name="cf\_role">trajectory\_id</att>
-                    ```
-                *   One of the variables (for example, profile\_number) MUST have the variable attribute cf\_role=profile\_id to identify the variable that uniquely identifies the profiles.  
-                    ```
-                    <att name="cf\_role">profile\_id</att>  
-                    ```
-                    (A given profile\_id only has to be unique for a given trajectory\_id.) If no other variable is suitable, consider using the time variable.
-                *   The dataset MUST include the globalAttribute cdm\_trajectory\_variables, where the value is a comma-separated list of the variables which have the information about each trajectory. For a given trajectory, the values of these variables MUST be constant. For example,
-                    ```
-                    <att name="cdm\_trajectory\_variables">ship\_id,ship\_type,ship\_owner</att>
-                    ```
-                    The list MUST include the cf\_role=trajectory\_id variable and all other variables with information about the trajectory.  
-                    The list will never include profile-related variables, time, latitude, longitude, or any observation variables.
-                *   The dataset MUST include the globalAttribute cdm\_profile\_variables, where the value is a comma-separated list of the variables which have the information about each profile. For a given profile, the values of these variables MUST be constant. For example,
-                    ```
-                    <att name="cdm\_profile\_variables">profile\_number,time,latitude,longitude</att>
-                    ```
-                    The list MUST include the cf\_role=profile\_id variable and all other variables with information about the profile, which almost always includes time, latitude and longitude.  
-                    The list will never include altitude, depth, or any observation variables.  
-            ###### Other 
-            *   [Other](#other) -- has no requirements. Use it if the dataset doesn't fit one of the other options, notably, if the dataset doesn't include latitude, longitude and time variables.  
-                 
-            ###### Related Notes
-            *   All EDDTable datasets with a cdm\_data\_type other than "Other" MUST have longitude, latitude, and time variables.
-            *   Datasets with profiles MUST have an altitude variable, a depth variable, or an [cdm\_altitude\_proxy](#cdm_altitude_proxy) variable.
-            *   If you can't make a dataset comply with all of the requirements for the ideal cdm\_data\_type, use "Point" (which has few requirements) or "Other" (which has no requirements) instead.
-            *   This information is used by ERDDAP™ in various ways, for example, but mostly for making .ncCF files (.nc files which comply with the Contiguous Ragged Array Representations associated with the dataset's cdm\_data\_type) and .ncCFMA files (.nc files which comply with the Multidimensional Array Representations associated with the dataset's cdm\_data\_type) as defined in [Discrete Sampling Geometries (DSG)](https://cfconventions.org/Data/cf-conventions/cf-conventions-1.8/cf-conventions.html#discrete-sampling-geometries) chapter of the [CF](https://cfconventions.org/Data/cf-conventions/cf-conventions-1.8/cf-conventions.html) metadata conventions, which were previously named "CF Point Observation Conventions".
-            *   Hint: For these datasets, the correct setting for [subsetVariables](#subsetvariables) is usually the combination of all the variables listed in the cdm\_...\_variables attributes. For example, for TimeSeriesProfile, use the cdm\_timeseries\_variables plus the cdm\_profile\_variables.  
-    ###### contributor\_name
-    *   [**contributor\_name**](#contributor_name) (from the [ACDD](https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3) metadata standard) is the RECOMMENDED way to identify a person, organization, or project which contributed to this dataset (for example, the original creator of the data, before it was reprocessed by the creator of this dataset). For example,  
-        ```
-            <att name="contributor\_name">NOAA OceanWatch - Central Pacific</att>  
-        ```
-        If "contributor" doesn't really apply to a dataset, omit this attribute. Compared to [creator\_name](#creator_name), this is sometimes more focused on the funding source.  
-    ###### contributor\_role
-    *   [**contributor\_role**](#contributor_role) (from the [ACDD](https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3) metadata standard) is the RECOMMENDED way to identify the role of [contributor\_name](#creator_name). For example,  
-        ```
-            <att name="contributor\_role">Source of Level 2b data</att>  
-        ```
-        If "contributor" doesn't really apply to a dataset, omit this attribute.  
-    ###### Conventions 
-    *   [**Conventions**](#conventions) (from the [CF](https://cfconventions.org/Data/cf-conventions/cf-conventions-1.8/cf-conventions.html) metadata standard) is STRONGLY RECOMMENDED. (It may be REQUIRED in the future.) The value is a comma-separated list of metadata standards that this dataset follows. For example:  
-        ```
-        <att name="Conventions">COARDS, CF-1.6, ACDD-1.3</att>  
-        ```
-        The common metadata conventions used in ERDDAP™ are:
+##### Special global attributes in ERDDAP™
+###### acknowledgement {#acknowledgement}
+*   [**acknowledgement**](#acknowledgement) and **acknowledgment** (from the [ACDD](https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3) metadata standard) is a RECOMMENDED way to acknowledge the group or groups that provided support (notably, financial) for the project that created this data. For example,  
+    ```
+    <att name="acknowledgment">AVISO</att>
+    ```    
+    Note that ACDD 1.0 and 1.1 used the spelling "acknowledgment" (which is the usual spelling in the U.S.), but ACDD 1.3 changed this to "acknowledgement" (which is the usual spelling in the U.K.). My understanding is that the change was essentially an accident and that they certainly didn't recognize the ramifications of the change. What a mess! Now there are millions of data files around the world that have "acknowledgment" and millions that have "acknowledgement". This highlights the folly of "simple" changes to a standard, and emphasizes the need for stability in standards. Because ACDD 1.3 (which is the version of ACDD that ERDDAP™ supports) says "acknowledgement", that is what ERDDAP™ (notably GenerateDatasetsXml) encourages.  
+     
+###### cdm\_altitude\_proxy {#cdm_altitude_proxy}
+*   [**cdm\_altitude\_proxy**](#cdm_altitude_proxy) is just for EDDTable datasets that don't have an altitude or depth variable but do have a variable that is a proxy for altitude or depth (for example, pressure, sigma, bottleNumber), you may use this attribute to identify that variable. For example,  
+    ```
+    <att name="cdm\_altitude\_proxy">pressure</att>  
+    ```
+    If the [cdm\_data\_type](#cdm_data_type) is Profile or TrajectoryProfile and there is no altitude or depth variable, cdm\_altitude\_proxy MUST be defined. If cdm\_altitude\_proxy is defined, ERDDAP™ will add the following metadata to the variable: \_CoordinateAxisType=Height and axis=Z.  
+     
+###### cdm\_data\_type {#cdm_data_type}
+*   [**cdm\_data\_type**](#cdm_data_type) (from the [ACDD](https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3) metadata standard) is a global attribute that indicates the Unidata [Common Data Model](https://www.unidata.ucar.edu/software/netcdf-java/v4.6/CDM/index.html) data type for the dataset. For example,  
+    ```
+    <att name="cdm\_data\_type">Point</att>  
+    ```
+    The CDM is still evolving and may change again. ERDDAP™ complies with the related and more detailed [Discrete Sampling Geometries (DSG)](https://cfconventions.org/Data/cf-conventions/cf-conventions-1.8/cf-conventions.html#discrete-sampling-geometries) chapter of the [CF 1.6](https://cfconventions.org/Data/cf-conventions/cf-conventions-1.8/cf-conventions.html) metadata conventions (previously called the CF Point Observation Conventions).
+    *   Either the dataset's global [sourceAttributes](#global-attributes) or its global &lt;addAttributes> MUST include the cdm\_data\_type attribute. A few dataset types (like EDDTableFromObis) will set this automatically.
+    *   For EDDGrid datasets, the cdm\_data\_type options are Grid (the default and by far the most common type for EDDGrid datasets), MovingGrid, Other, Point, Profile, RadialSweep, TimeSeries, TimeSeriesProfile, Swath, Trajectory, and TrajectoryProfile. Currently, EDDGrid does not require that any related metadata be specified, nor does it check that the data matches the cdm\_data\_type. That will probably change in the near future.
+    *   EDDTable uses cdm\_data\_type in a rigorous way, following CF's DSG specification rather than CDM, which for some reason hasn't been updated to be consistent with DSG. If a dataset's metadata doesn't comply with the ERDDAP's cdm\_data\_type's requirements (see below), the dataset will fail to load and will generate an [error message](#troubleshooting-tips). (That's a good thing, in the sense that the error message will tell you what is wrong so that you can fix it.) And if the dataset's data doesn't match the dataset's metadata setup (e.g., if there is more than one latitude value for a given station in a timeseries dataset), some requests for data will return incorrect data in the response. So make sure you get all of this right.
         
-        *   [COARDS Conventions](https://ferret.pmel.noaa.gov/noaa_coop/coop_cdf_profile.html) is the precursor to CF.
-        *   [Climate and Forecast (CF) Conventions](https://cfconventions.org/Data/cf-conventions/cf-conventions-1.8/cf-conventions.html) is the source of many of the recommended and required attributes in ERDDAP. The current version of CF is identified as "CF-1.6".
-        *   The NetCDF Attribute Convention for Dataset Discovery (ACDD) is the source of many of the recommended and required attributes in ERDDAP. The original 1.0 version of ACDD (a brilliant piece of work by Ethan Davis), was identified as [Unidata Dataset Discovery v1.0](https://wiki.esipfed.org/ArchivalCopyOfVersion1) The current (starting in 2015) 1.3 version of ACDD is identified as [ACDD-1.3](https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3). If your datasets have been using Unidata Dataset Discovery v1.0, we encourage you to [switch your datasets to use ACDD-1.3](#switch-to-acdd-13).
-        
-        If your dataset follows some additional metadata standard, please add the name to the CSV list in the Conventions attribute.  
-    ###### coverage\_content\_type
-    *   [**coverage\_content\_type**](#coverage_content_type) (from the [ISO 19115](https://en.wikipedia.org/wiki/Geospatial_metadata) metadata standard) is the RECOMMENDED way to identify the type of gridded data (in EDDGrid datasets). For example,  
-        ```
-        <att name="coverage\_content\_type">modelResult</att>  
-        ```
-        The only allowed values are auxiliaryInformation, image, modelResult, physicalMeasurement (the default when ISO 19115 metadata is generated), qualityInformation, referenceInformation, and thematicClassification. (Don't use this tag for EDDTable datasets.)  
-    ###### creator\_name
-    *   [**creator\_name**](#creator_name) (from the [ACDD](https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3) metadata standard) is the RECOMMENDED way to identify the person, organization, or project (if not a specific person or organization), most responsible for the creation (or most recent reprocessing) of this data. For example,  
-        ```
-        <att name="creator\_name">NOAA NMFS SWFSC ERD</att>  
-        ```
-        If the data was extensively reprocessed (for example, satellite data from level 2 to level 3 or 4), then usually the reprocessor is listed as the creator and the original creator is listed via [contributor\_name](#contributor_name). Compared to [project](#project), this is more flexible, since it may identify a person, an organization, or a project.  
-    ###### creator\_email
-    *   [**creator\_email**](#creator_email) (from the [ACDD](https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3) metadata standard) is the RECOMMENDED way to identify an email address (correctly formatted) that provides a way to contact the creator. For example,  
-        ```
-        <att name="creator\_email">erd.data@noaa.gov</att>  
-        ```
-    ###### creator\_url
-    *   [**creator\_url**](#creator_url) (from the [ACDD](https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3) metadata standard) is the RECOMMENDED way to identify a URL for organization that created the dataset, or a URL with the creator's information about this dataset (but that is more the purpose of [infoUrl](#infourl)). For example,  
-        ```
-        <att name="creator\_url">https://www.pfeg.noaa.gov</att>  
-        ```
-    ###### date\_created
-    *   [**date\_created**](#date_created) (from the [ACDD](https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3) metadata standard) is the RECOMMENDED way to identify the date on which the data was first created (for example, processed into this form), in ISO 8601 format. For example,  
-        ```
-        <att name="date\_created">2010-01-30</att>  
-        ```
-        If data is periodically added to the dataset, this is the first date that the original data was made available.  
-    ###### date\_modified
-    *   [**date\_modified**](#date_modified) (from the [ACDD](https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3) metadata standard) is the RECOMMENDED way to identify the date on which the data was last modified (for example, when an error was fixed or when the latest data was added), in ISO 8601 format. For example,  
-        ```
-        <att name="date\_modified">2012-03-15</att>  
-        ```
-    ###### date\_issued
-    *   [**date\_issued**](#date_issued) (from the [ACDD](https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3) metadata standard) is the RECOMMENDED way to identify the date on which the data was first made available to others, in ISO 8601 format, for example, 2012-03-15. For example,  
-        ```
-        <att name="date\_issued">2010-07-30</att>  
-        ```
-        For example, the dataset may have a [date\_created](#date_created) of 2010-01-30, but was only made publicly available 2010-07-30. date\_issued is less commonly used than date\_created and date\_modified. If date\_issued is omitted, it is assumed to be the same as the date\_created.  
-    ###### global drawLandMask
-    *   [**drawLandMask**](#global-drawlandmask) -- This is an OPTIONAL global attribute used by ERDDAP™ (and no metadata standards) which specifies the default value for the "Draw Land Mask" option on the dataset's Make A Graph form (*datasetID*.graph) and for the &.land parameter in a URL requesting a map of the data. For example, 
-        ```
-        <att name="drawLandMask">over</att>  
-        ```
-        See the [drawLandMask overview](#drawlandmask).  
-    ###### featureType
-    *   [**featureType**](#featuretype) (from the [CF](https://cfconventions.org/Data/cf-conventions/cf-conventions-1.8/cf-conventions.html) metadata standard) is IGNORED and/or REPLACED. If the dataset's [cdm\_data\_type](#cdm_data_type) is appropriate, ERDDAP™ will automatically use it to create a featureType attribute. So there is no need for you to add it.
-        
-        However, if you are using [EDDTableFromNcCFFiles](#eddtablefromnccffiles) to create a dataset from files that follow the [CF Discrete Sampling Geometries (DSG) standard](https://cfconventions.org/Data/cf-conventions/cf-conventions-1.8/cf-conventions.html#discrete-sampling-geometries), the files themselves must have featureType correctly defined, so that ERDDAP™ can read the files correctly. That is part of the CF DSG requirements for that type of file.  
-         
-    ###### history
-    *   [**history**](#history) (from the [CF](https://cfconventions.org/Data/cf-conventions/cf-conventions-1.8/cf-conventions.html) and [ACDD](https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3) metadata standards) is a RECOMMENDED multi-line String global attribute with a line for every processing step that the data has undergone. For example,  
-        ```
-        <att name="history">2011-08-05T08:55:02Z CMOR: Rewrote data to comply with CF standards.  
-        2012-04-08T08:34:58Z CMOR: Converted 'height' type from 'd' to 'f'.</att>
-        ```
-        *   Ideally, each line has an ISO 8601:2004(E) formatted date+timeZ (for example, 2011-08-05T08:55:02Z) followed by a description of the processing step.
-        *   ERDDAP™ creates this if it doesn't already exist.
-        *   If it already exists, ERDDAP™ will append new information to the existing information.
-        *   history is important because it allows clients to backtrack to the original source of the data.  
-    ###### infoUrl 
-    *   [**infoUrl**](#infourl) is a REQUIRED global attribute with the URL of a web page with more information about this dataset (usually at the source institution's website). For example,  
-        ```
-        <att name="infoUrl">http://www.globec.org/</att>
-        ```
-        *   Either the dataset's global [sourceAttributes](#global-attributes) or its global &lt;addAttributes> MUST include this attribute.
-        *   infoUrl is important because it allows clients to find out more about the data from the original source.
-        *   ERDDAP™ displays a link to the infoUrl on the dataset's Data Access Form (*datasetID*.html), Make A Graph web page (*datasetID*.graph), and other web pages.
-        *   If the URL has a query part (after the "?"), it MUST be already [percent encoded](https://en.wikipedia.org/wiki/Percent-encoding). You need to encode special characters in the constraints (other than the initial '&' and the main '=', if any) into the form %HH, where HH is the 2 digit hexadecimal value of the character. Usually, you just need to convert a few of the punctuation characters: % into %25, & into %26, " into %22, &lt; into %3C, = into %3D, > into %3E, + into %2B, | into %7C, \[ into %5B, \] into %5D, space into %20, and convert all characters above #127 into their UTF-8 form and then percent encode each byte of the UTF-8 form into the %HH format (ask a programmer for help).  
-            For example, &stationID>="41004"  
-            becomes       &stationID%3E=%2241004%22  
-            Percent encoding is generally required when you access ERDDAP via software other than a browser. Browsers usually handle percent encoding for you.  
-            In some situations, you need to percent encode all characters other than A-Za-z0-9\_-!.~'()\*, but still don't encode the initial '&' or the main '='.  
-            Programming languages have tools to do this (for example, see Java's [java.net.URLEncoder](https://docs.oracle.com/javase/8/docs/api/java/net/URLEncoder.html)  
-            and JavaScript's [encodeURIComponent()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent)) and there are  
-            [websites that percent encode/decode for you](https://www.url-encode-decode.com/).
-        *   Since datasets.xml is an XML file, you MUST also &-encode ALL '&', '&lt;', and '>' in the URL as '&amp;', '&lt;', and '&gt;' after percent encoding.
-        *   infoUrl is unique to ERDDAP. It is not from any metadata standard.  
-    ###### institution
-    *   [**institution**](#institution) (from the [CF](https://cfconventions.org/Data/cf-conventions/cf-conventions-1.8/cf-conventions.html) and [ACDD](https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3) metadata standards) is a REQUIRED global attribute with the short version of the name of the institution which is the source of this data (usually an acronym, usually &lt;20 characters). For example,  
-        ```
-        <att name="institution">NASA GSFC</att>
-        ```
-        *   Either the dataset's global [sourceAttributes](#global-attributes) or its global &lt;addAttributes> MUST include this attribute.
-        *   ERDDAP™ displays the institution whenever it displays a list of datasets. If an institution's name here is longer than 20 characters, only the first 20 characters will be visible in the list of datasets (but the whole institution can be seen by putting the mouse cursor over the adjacent "?" icon).
-        *   If you add institution to the list of &lt;categoryAttributes> in ERDDAP's [setup.xml](/docs/server-admin/deploy-install#setupxml) file, users can easily find datasets from the same institution via ERDDAP's "Search for Datasets by Category" on the home page.  
-    ###### keywords
-    *   [**keywords**](#keywords) (from the [ACDD](https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3) metadata standard) is a RECOMMENDED comma-separated list of words and short phrases (for example, [GCMD Science Keywords](https://wiki.earthdata.nasa.gov/display/CMR/GCMD+Keyword+Access)) that describe the dataset in a general way, and not assuming any other knowledge of the dataset (for example, for oceanographic data, include ocean). For example,  
-        ```
-        <att name="keywords">ano, circulation, coastwatch, currents, derived, Earth Science &gt; Oceans &gt; Ocean Circulation &gt; Ocean Currents, eastward, eastward\_sea\_water\_velocity, experimental, hf radio, meridional, noaa, northward, northward\_sea\_water\_velocity, nuevo, ocean, oceans, radio, radio-derived, scan, sea, seawater, velocity, water, zonal</att>  
-        ```
-        Since datasets.xml is an XML document, the characters &, &lt;, and > in an attribute like keywords (e.g., the > characters in GCMD science keywords) must be encoded as &amp;, &lt;, and &gt;, respectively.  
-        When a dataset is loaded in ERDDAP,
-        
-        *   "Earth Science > " is added to the start of any GCMD keyword that lacks it.
-        *   GCMD keywords are converted to Title Case (i.e., the first letters are capitalized).
-        *   The keywords are rearranged into sorted order and any newline characters are removed.
-         
-    ###### keywords\_vocabulary
-    *   [**keywords\_vocabulary**](#keywords_vocabulary) (from the [ACDD](https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3) metadata standard) is a RECOMMENDED attribute: if you are following a guideline for the words/phrases in your keywords attribute (for example, GCMD Science Keywords), put the name of that guideline here. For example,  
-        ```
-        <att name="keywords\_vocabulary">GCMD Science Keywords</att>  
-        ```
-    ###### license 
-    *   [**license**](#license) (from the [ACDD](https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3) metadata standard) is a STRONGLY RECOMMENDED global attribute with the license and/or usage restrictions. For example,  
-        ```
-        <att name="license">\[standard\]</att>
-        ```
-        *   If "\[standard\]" occurs in the attribute value, it will be replaced by the standard ERDDAP™ license from the &lt;standardLicense> tag in ERDDAP's  
-            \[tomcat\]/webapps/erddap/WEB-INF/classes/gov/noaa/pfel/erddap/util/messages.xml file.  
+        For all of these datasets, in the Conventions and Metadata\_Conventions global attributes, please refer to CF-1.6 (not CF-1.0, 1.1, 1.2, 1.3, 1.4, or 1.5), since CF-1.6 is the first version to include the changes related to Discrete Sampling Geometry (DSG) conventions.
+        *  **ERDDAP™ has a not-simple relationship to CF DSG**
+        *   ERDDAP™ can make a valid DSG dataset out of a source dataset that is already a valid DSG file(s), or out of a source dataset that isn't set up for DSG but can be made so via changes to metadata (some of which are ERDDAP-specific in order to provide a more general approach to specifying the DSG setup).
+        *   ERDDAP™ does a lot of validity tests when it loads a dataset. If the dataset that has a cdm\_data\_type (or featureType) attribute successfully loads in ERDDAP™, then ERDDAP™ is saying the dataset meets the DSG requirements (otherwise, ERDDAP™ will throw an exception explaining the first problem that it found).  
+            WARNING: A successfully-loaded dataset appears to meet the DSG requirements (it has the right combination of attributes), but still may be incorrectly set up, leading to incorrect results in .ncCF and .ncCFMA response files. (Software is smart in some ways and clueless in others.)
+        *   When you look at the dataset's metadata in ERDDAP™, the DSG dataset appears to be in ERDDAP's internal format (a giant, database-like table). It isn't in one of the DSG formats (e.g., the dimensions and metadata aren't right), but the information needed to treat the dataset as a DSG dataset is in the metadata (for example, cdm\_data\_type=TimeSeries and cdm\_timeseries\_variables=*aCsvListOfStationRelatedVarables* in the global metadata and cf\_role=timeseries\_id for some variable).
+        *   If a user requests a subset of the dataset in a .ncCF (an .nc file in DSG's Contiguous Ragged Array file format) or .ncCFMA file (a .nc file in DSG's Multidimensional Array file format), that file will be a valid CF DSG file.  
+            WARNING: However, if the dataset was set up incorrectly (so that the promises made by the metadata aren't true), then the response file will be technically valid but will be incorrect in some way.  
              
-    ###### Metadata\_Conventions
-    *   [**Metadata\_Conventions**](#metadata_conventions) is from the outdated [ACDD 1.0](https://wiki.esipfed.org/ArchivalCopyOfVersion1) (which was identified in Metadata\_Conventions as "Unidata Dataset Discovery v1.0") metadata standard. The attribute value was a comma-separated list of metadata conventions used by this dataset.  
-        If a dataset uses ACDD 1.0, this attribute is STRONGLY RECOMMENDED, for example,  
+###### EDDTable cdm_data_types    
+*   For EDDTable datasets, the cdm\_data\_type options (and related requirements in ERDDAP) are
+###### Point {#point}
+*   [Point](#point) -- is for a set of measurements taken at unrelated times and locations.
+    *   As with all cdm\_data\_types other than Other, Point datasets MUST have longitude, latitude, and time variables.  
+###### Profile {#profile}
+*   [Profile](#profile) -- is a set of measurements all taken at one time, at one latitude longitude location, but at more than one depth (or altitude). The dataset may be a collection of these Profiles, for example, 7 profiles from different locations. This cdm\_data\_type doesn't imply any logical connection between any of the profiles.
+    
+*   One of the variables (for example, profile\_number) MUST have the variable attribute cf\_role=profile\_id to identify the variable that uniquely identifies the profiles.  
+    ```
+    <att name="cf\_role">profile\_id</att>  
+    ```
+    If no other variable is suitable, consider using the time variable.
+###### cdm\_profile\_variables {#cdm_profile_variables}
+*   The dataset MUST include the globalAttribute [cdm\_profile\_variables](#cdm_profile_variables), where the value is a comma-separated list of the variables which have the information about each profile. For a given profile, the values of these variables MUST be constant. For example,
+    ```
+    <att name="cdm\_profile\_variables">profile\_number,time,latitude,longitude</att>
+    ```
+    The list MUST include the cf\_role=profile\_id variable and all other variables with information about the profile, and time, latitude and longitude.  
+    The list will never include altitude, depth, or any observation variables.  
+     
+
+\[Opinion: cdm\_data\_type=Profile should rarely be used. In practice, a given dataset is usually actually either a TimeSeriesProfile (profiles at a fixed position) or a TrajectoryProfile (profiles along a trajectory), and so should be properly identified as such.\]  
+###### TimeSeries {#timeseries}
+*   [TimeSeries](#timeseries) -- is a sequence of measurements (e.g., sea water temperature) taken at one, fixed, latitude, longitude, depth (or altitude) location. (Think of it as "station".) The dataset may be a collection of these TimeSeries, for example, a sequence from each of 3 different locations.
+    *   One of the variables (for example, station\_id) MUST have the variable attribute cf\_role=timeseries\_id to identify the variable that uniquely identifies the stations.  
         ```
-        <att name="Metadata\_Conventions">COARDS, CF-1.6, Unidata Dataset Discovery v1.0</att>  
+        <att name="cf\_role">timeseries\_id</att>
         ```
-        But ERDDAP™ now recommends ACDD-1.3. If you have [switched your datasets to use ACDD-1.3](#switch-to-acdd-13), use of Metadata\_Conventions is STRONGLY DISCOURAGED: just use [&lt;Conventions>](#conventions) instead.  
-    ###### processing\_level
-    *   [**processing\_level**](#processing_level) (from the [ACDD](https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3) metadata standard) is a RECOMMENDED textual description of the processing (for example, [NASA satellite data processing levels](https://en.wikipedia.org/wiki/Remote_sensing#Data_processing_levels), for example, Level 3) or quality control level (for example, Science Quality) of the data. For example,  
+###### cdm\_timeseries\_variables {#cdm_timeseries_variables}
+*   The dataset MUST include the globalAttribute [cdm\_timeseries\_variables](#cdm_timeseries_variables), where the value is a comma-separated list of the variables which have the information about each station. For a given station, the values of these variables MUST be constant. For example,
+    ```
+    <att name="cdm\_timeseries\_variables">station\_id,station\_type,latitude,longitude</att>
+    ```
+    The list MUST include the cf\_role=timeseries\_id variable and all other variables with information about the station, which almost always includes latitude and longitude (and altitude or depth, if present).  
+    The list will never include time or any observation variables.
+*   For some moored buoys, a dataset may have two sets of latitude and longitude variables:
+    1.  One pair of latitude and longitude values that are constant (i.e., the fixed location of the mooring). In ERDDAP™, give these variables the destinationNames of latitude and longitude, and include these variables in the list of cdm\_timeseries\_variables.
+    2.  Precise latitude and longitude values associated with each observation. In ERDDAP™, give these variables different destinationNames (e.g., preciseLat and preciseLon) and don't include these variables in the list of cdm\_timeseries\_variables.  
+         The reasoning for this is: from a theoretical perspective, for a DSG TimeSeries dataset, the latitude and longitude (and altitude or depth, if present) location of the station MUST be constant.
+###### TimeSeriesProfile {#timeseriesprofile}
+*   [TimeSeriesProfile](#timeseriesprofile) -- is for a sequence of profiles taken at one, fixed, latitude longitude location. Each profile is a set of measurements taken at multiple altitudes or depths. The dataset may be a collection of these TimeSeriesProfiles, for example, a sequence of profiles taken at each of 12 different locations.
+    *   One of the variables (for example, station\_id) MUST have the variable attribute cf\_role=timeseries\_id to identify the variable that uniquely identifies the stations.  
+    ```
+        <att name="cf\_role">timeseries\_id</att>
+    ```
+    *   One of the variables (for example, profile\_number) MUST have the variable attribute cf\_role=profile\_id to identify the variable that uniquely identifies the profiles.  
         ```
-        <att name="processing\_level">3</att>  
+        <att name="cf\_role">profile\_id</att>  
         ```
-    ###### project 
-    *   [**project**](#project) (from the [ACDD](https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3) metadata standard) is an OPTIONAL attribute to identify the project that the dataset is part of. For example,  
+        (A given profile\_id only has to be unique for a given timeseries\_id.) If no other variable is suitable, consider using the time variable.
+    *   The dataset MUST include the globalAttribute cdm\_timeseries\_variables, where the value is a comma-separated list of the variables which have the information about each station. For a given station, the values of these variables MUST be constant. For example,
         ```
-        <att name="project">GTSPP</att>  
+        <att name="cdm\_timeseries\_variables">station\_id,station\_type,latitude,longitude</att>
         ```
-        If the dataset isn't part of a project, don't use this attribute. Compared to [creator\_name](#creator_name), this is focused on the project (not a person or an organization, which may be involved in multiple projects).  
-    ###### publisher\_name 
-    *   [**publisher\_name**](#publisher_name) (from the [ACDD](https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3) metadata standard) is the RECOMMENDED way to identify the person, organization, or project which is publishing this dataset. For example,  
+        The list MUST include the cf\_role=timeseries\_id variable and all other variables with information about the station, which almost always includes latitude and longitude.  
+        The list will never include time, altitude, depth, or any observation variables.
+    *   The dataset MUST include the globalAttribute cdm\_profile\_variables, where the value is a comma-separated list of the variables which have the information about each profile. For a given profile, the values of these variables MUST be constant. For example,
         ```
-        <att name="publisher\_name">JPL</att>  
+        <att name="cdm\_profile\_variables">profile\_number,time</att>
         ```
-        For example, you are the publisher if another person or group [created](#creator_name) the dataset and you are just re-serving it via ERDDAP. If "publisher" doesn't really apply to a dataset, omit this attribute. Compared to [creator\_name](#creator_name), the publisher probably didn't significantly modify or reprocess the data; the publisher is just making the data available in a new venue.  
-    ###### publisher\_email
-    *   [**publisher\_email**](#publisher_email) (from the [ACDD](https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3) metadata standard) is the RECOMMENDED way to identify an email address (correctly formatted, for example, john\_smith@great.org) that provides a way to contact the publisher. For example,  
+        The list MUST include the cf\_role=profile\_id variable and all other variables with information about the profile, which almost always includes time.  
+        The list will never include latitude, longitude, altitude, depth, or any observation variables.  
+###### Trajectory {#trajectory}
+*   [Trajectory](#trajectory) -- is a sequence of measurements taken along a trajectory (a path through space and time) (e.g., sea\_water\_temperature taken by a ship as it moves through the water). The dataset may be a collection of these Trajectories, for example, a sequence from each of 4 different ships.
+    *   One of the variables (for example, ship\_id) MUST have the attribute cf\_role=trajectory\_id to identify the variable that uniquely identifies the trajectories.
+        ```  
+        <att name="cf\_role">trajectory\_id</att>
         ```
-        <att name="publisher\_email">john\_smith@great.org</att>  
+###### cdm\_trajectory\_variables {#cdm_trajectory_variables}
+*   The dataset MUST include the globalAttribute [cdm\_trajectory\_variables](#cdm_trajectory_variables), where the value is a comma-separated list of the variables which have the information about each trajectory. For a given trajectory, the values of these variables MUST be constant. For example,
+    ```
+    <att name="cdm\_trajectory\_variables">ship\_id,ship\_type,ship\_owner</att>
+    ```
+    The list MUST include the cf\_role=trajectory\_id variable and all other variables with information about the trajectory.  
+    The list will never include time, latitude, longitude, or any observation variables.  
+###### TrajectoryProfile {#trajectoryprofile}
+*   [TrajectoryProfile](#trajectoryprofile) -- is a sequence of profiles taken along a trajectory. The dataset may be a collection of these TrajectoryProfiles, for example, a sequence of profiles taken by 14 different ships.
+    *   One of the variables (for example, ship\_id) MUST have the variable attribute cf\_role=trajectory\_id to identify the variable that uniquely identifies the trajectories. 
+        ``` 
+        <att name="cf\_role">trajectory\_id</att>
         ```
-        If "publisher" doesn't really apply to a dataset, omit this attribute.  
-    ###### publisher\_url 
-    *   [**publisher\_url**](#publisher_url) (from the [ACDD](https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3) metadata standard) is the RECOMMENDED way to identify a URL for the organization that published the dataset, or a URL with the publisher's information about this dataset (but that is more the purpose of [infoUrl](#infourl)). For example,  
+    *   One of the variables (for example, profile\_number) MUST have the variable attribute cf\_role=profile\_id to identify the variable that uniquely identifies the profiles.  
         ```
-        <att name="publisher\_url">https://podaac.jpl.nasa.gov</att>  
+        <att name="cf\_role">profile\_id</att>  
         ```
-        If "publisher" doesn't really apply to a dataset, omit this attribute.  
-    ###### real\_time 
-    *   [**real\_time**](#real_time) is a global String attribute (not from any standard) indicating if this is a real time dataset. For example,  
+        (A given profile\_id only has to be unique for a given trajectory\_id.) If no other variable is suitable, consider using the time variable.
+    *   The dataset MUST include the globalAttribute cdm\_trajectory\_variables, where the value is a comma-separated list of the variables which have the information about each trajectory. For a given trajectory, the values of these variables MUST be constant. For example,
         ```
-        <att name="real\_time">true</att>  
+        <att name="cdm\_trajectory\_variables">ship\_id,ship\_type,ship\_owner</att>
         ```
-        If this is false (the default), ERDDAP™ will cache responses to requests for file types where the entire file must be created before ERDDAP™ can begin to send the response to the user and reuse them for up to about 15 minutes (e.g., .nc, .png).  
-        If this is set to true, ERDDAP™ will never cache the response files and will always return newly created files.  
-    ###### sourceUrl attribute
-    *   [**sourceUrl**](#sourceurl-attribute) is a global attribute with the URL of the source of the data. For example,  
+        The list MUST include the cf\_role=trajectory\_id variable and all other variables with information about the trajectory.  
+        The list will never include profile-related variables, time, latitude, longitude, or any observation variables.
+    *   The dataset MUST include the globalAttribute cdm\_profile\_variables, where the value is a comma-separated list of the variables which have the information about each profile. For a given profile, the values of these variables MUST be constant. For example,
         ```
-        <att name="sourceUrl">https://opendap.co-ops.nos.noaa.gov/ioos-dif-sos/SOS</att>  
+        <att name="cdm\_profile\_variables">profile\_number,time,latitude,longitude</att>
         ```
-        (but put it all on one line)
-        *   ERDDAP™ usually creates this global attribute automatically. Two exceptions are EDDTableFromHyraxFiles and EDDTableFromThreddsFiles.
-        *   If the source is local files and the files were created by your organization, use  
-        ```
-            <att name="sourceUrl">(local files)</att>
-        ```
-        *   If the source is local database and the data was created by your organization, use  
-        ```
-            <att name="sourceUrl">(local database)</att>
-        ```
-        *   sourceUrl is important because it allows clients to backtrack to the original source of the data.
-        *   sourceUrl is unique to ERDDAP. It is not from any metadata standard.  
-           
-    ###### standard\_name\_vocabulary 
-    *   [**standard\_name\_vocabulary**](#standard_name_vocabulary) (from the [ACDD](https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3) metadata standard) is a RECOMMENDED attribute to identify the name of the controlled vocabulary from which variable [standard\_name](#standard_name)s are taken. For example,  
-        ```
-        <att name="standard\_name\_vocabulary">CF Standard Name Table v77</att>  
-        ```
-        for version 77 of the [CF standard name table](https://cfconventions.org/Data/cf-standard-names/current/build/cf-standard-name-table.html).  
+        The list MUST include the cf\_role=profile\_id variable and all other variables with information about the profile, which almost always includes time, latitude and longitude.  
+        The list will never include altitude, depth, or any observation variables.  
+###### Other {#other}
+*   [Other](#other) -- has no requirements. Use it if the dataset doesn't fit one of the other options, notably, if the dataset doesn't include latitude, longitude and time variables.  
+     
+###### Related Notes {#related-notes}
+*   All EDDTable datasets with a cdm\_data\_type other than "Other" MUST have longitude, latitude, and time variables.
+*   Datasets with profiles MUST have an altitude variable, a depth variable, or an [cdm\_altitude\_proxy](#cdm_altitude_proxy) variable.
+*   If you can't make a dataset comply with all of the requirements for the ideal cdm\_data\_type, use "Point" (which has few requirements) or "Other" (which has no requirements) instead.
+*   This information is used by ERDDAP™ in various ways, for example, but mostly for making .ncCF files (.nc files which comply with the Contiguous Ragged Array Representations associated with the dataset's cdm\_data\_type) and .ncCFMA files (.nc files which comply with the Multidimensional Array Representations associated with the dataset's cdm\_data\_type) as defined in [Discrete Sampling Geometries (DSG)](https://cfconventions.org/Data/cf-conventions/cf-conventions-1.8/cf-conventions.html#discrete-sampling-geometries) chapter of the [CF](https://cfconventions.org/Data/cf-conventions/cf-conventions-1.8/cf-conventions.html) metadata conventions, which were previously named "CF Point Observation Conventions".
+*   Hint: For these datasets, the correct setting for [subsetVariables](#subsetvariables) is usually the combination of all the variables listed in the cdm\_...\_variables attributes. For example, for TimeSeriesProfile, use the cdm\_timeseries\_variables plus the cdm\_profile\_variables.  
+###### contributor\_name {#contributor_name}
+*   [**contributor\_name**](#contributor_name) (from the [ACDD](https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3) metadata standard) is the RECOMMENDED way to identify a person, organization, or project which contributed to this dataset (for example, the original creator of the data, before it was reprocessed by the creator of this dataset). For example,  
+    ```
+        <att name="contributor\_name">NOAA OceanWatch - Central Pacific</att>  
+    ```
+    If "contributor" doesn't really apply to a dataset, omit this attribute. Compared to [creator\_name](#creator_name), this is sometimes more focused on the funding source.  
+###### contributor\_role {#contributor_role}
+*   [**contributor\_role**](#contributor_role) (from the [ACDD](https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3) metadata standard) is the RECOMMENDED way to identify the role of [contributor\_name](#creator_name). For example,  
+    ```
+        <att name="contributor\_role">Source of Level 2b data</att>  
+    ```
+    If "contributor" doesn't really apply to a dataset, omit this attribute.  
+###### Conventions {#conventions}
+*   [**Conventions**](#conventions) (from the [CF](https://cfconventions.org/Data/cf-conventions/cf-conventions-1.8/cf-conventions.html) metadata standard) is STRONGLY RECOMMENDED. (It may be REQUIRED in the future.) The value is a comma-separated list of metadata standards that this dataset follows. For example:  
+    ```
+    <att name="Conventions">COARDS, CF-1.6, ACDD-1.3</att>  
+    ```
+    The common metadata conventions used in ERDDAP™ are:
+    
+    *   [COARDS Conventions](https://ferret.pmel.noaa.gov/noaa_coop/coop_cdf_profile.html) is the precursor to CF.
+    *   [Climate and Forecast (CF) Conventions](https://cfconventions.org/Data/cf-conventions/cf-conventions-1.8/cf-conventions.html) is the source of many of the recommended and required attributes in ERDDAP. The current version of CF is identified as "CF-1.6".
+    *   The NetCDF Attribute Convention for Dataset Discovery (ACDD) is the source of many of the recommended and required attributes in ERDDAP. The original 1.0 version of ACDD (a brilliant piece of work by Ethan Davis), was identified as [Unidata Dataset Discovery v1.0](https://wiki.esipfed.org/ArchivalCopyOfVersion1) The current (starting in 2015) 1.3 version of ACDD is identified as [ACDD-1.3](https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3). If your datasets have been using Unidata Dataset Discovery v1.0, we encourage you to [switch your datasets to use ACDD-1.3](#switch-to-acdd-13).
+    
+    If your dataset follows some additional metadata standard, please add the name to the CSV list in the Conventions attribute.  
+###### coverage\_content\_type {#coverage_content_type}
+*   [**coverage\_content\_type**](#coverage_content_type) (from the [ISO 19115](https://en.wikipedia.org/wiki/Geospatial_metadata) metadata standard) is the RECOMMENDED way to identify the type of gridded data (in EDDGrid datasets). For example,  
+    ```
+    <att name="coverage\_content\_type">modelResult</att>  
+    ```
+    The only allowed values are auxiliaryInformation, image, modelResult, physicalMeasurement (the default when ISO 19115 metadata is generated), qualityInformation, referenceInformation, and thematicClassification. (Don't use this tag for EDDTable datasets.)  
+###### creator\_name {#creator_name}
+*   [**creator\_name**](#creator_name) (from the [ACDD](https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3) metadata standard) is the RECOMMENDED way to identify the person, organization, or project (if not a specific person or organization), most responsible for the creation (or most recent reprocessing) of this data. For example,  
+    ```
+    <att name="creator\_name">NOAA NMFS SWFSC ERD</att>  
+    ```
+    If the data was extensively reprocessed (for example, satellite data from level 2 to level 3 or 4), then usually the reprocessor is listed as the creator and the original creator is listed via [contributor\_name](#contributor_name). Compared to [project](#project), this is more flexible, since it may identify a person, an organization, or a project.  
+###### creator\_email {#creator_email}
+*   [**creator\_email**](#creator_email) (from the [ACDD](https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3) metadata standard) is the RECOMMENDED way to identify an email address (correctly formatted) that provides a way to contact the creator. For example,  
+    ```
+    <att name="creator\_email">erd.data@noaa.gov</att>  
+    ```
+###### creator\_url {#creator_url}
+*   [**creator\_url**](#creator_url) (from the [ACDD](https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3) metadata standard) is the RECOMMENDED way to identify a URL for organization that created the dataset, or a URL with the creator's information about this dataset (but that is more the purpose of [infoUrl](#infourl)). For example,  
+    ```
+    <att name="creator\_url">https://www.pfeg.noaa.gov</att>  
+    ```
+###### date\_created {#date_created}
+*   [**date\_created**](#date_created) (from the [ACDD](https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3) metadata standard) is the RECOMMENDED way to identify the date on which the data was first created (for example, processed into this form), in ISO 8601 format. For example,  
+    ```
+    <att name="date\_created">2010-01-30</att>  
+    ```
+    If data is periodically added to the dataset, this is the first date that the original data was made available.  
+###### date\_modified {#date_modified}
+*   [**date\_modified**](#date_modified) (from the [ACDD](https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3) metadata standard) is the RECOMMENDED way to identify the date on which the data was last modified (for example, when an error was fixed or when the latest data was added), in ISO 8601 format. For example,  
+    ```
+    <att name="date\_modified">2012-03-15</att>  
+    ```
+###### date\_issued {#date_issued}
+*   [**date\_issued**](#date_issued) (from the [ACDD](https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3) metadata standard) is the RECOMMENDED way to identify the date on which the data was first made available to others, in ISO 8601 format, for example, 2012-03-15. For example,  
+    ```
+    <att name="date\_issued">2010-07-30</att>  
+    ```
+    For example, the dataset may have a [date\_created](#date_created) of 2010-01-30, but was only made publicly available 2010-07-30. date\_issued is less commonly used than date\_created and date\_modified. If date\_issued is omitted, it is assumed to be the same as the date\_created.  
+###### global drawLandMask {#global-drawlandmask}
+*   [**drawLandMask**](#global-drawlandmask) -- This is an OPTIONAL global attribute used by ERDDAP™ (and no metadata standards) which specifies the default value for the "Draw Land Mask" option on the dataset's Make A Graph form (*datasetID*.graph) and for the &.land parameter in a URL requesting a map of the data. For example, 
+    ```
+    <att name="drawLandMask">over</att>  
+    ```
+    See the [drawLandMask overview](#drawlandmask).  
+###### featureType {#featuretype}
+*   [**featureType**](#featuretype) (from the [CF](https://cfconventions.org/Data/cf-conventions/cf-conventions-1.8/cf-conventions.html) metadata standard) is IGNORED and/or REPLACED. If the dataset's [cdm\_data\_type](#cdm_data_type) is appropriate, ERDDAP™ will automatically use it to create a featureType attribute. So there is no need for you to add it.
+    
+    However, if you are using [EDDTableFromNcCFFiles](#eddtablefromnccffiles) to create a dataset from files that follow the [CF Discrete Sampling Geometries (DSG) standard](https://cfconventions.org/Data/cf-conventions/cf-conventions-1.8/cf-conventions.html#discrete-sampling-geometries), the files themselves must have featureType correctly defined, so that ERDDAP™ can read the files correctly. That is part of the CF DSG requirements for that type of file.  
+     
+###### history {#history}
+*   [**history**](#history) (from the [CF](https://cfconventions.org/Data/cf-conventions/cf-conventions-1.8/cf-conventions.html) and [ACDD](https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3) metadata standards) is a RECOMMENDED multi-line String global attribute with a line for every processing step that the data has undergone. For example,  
+    ```
+    <att name="history">2011-08-05T08:55:02Z CMOR: Rewrote data to comply with CF standards.  
+    2012-04-08T08:34:58Z CMOR: Converted 'height' type from 'd' to 'f'.</att>
+    ```
+    *   Ideally, each line has an ISO 8601:2004(E) formatted date+timeZ (for example, 2011-08-05T08:55:02Z) followed by a description of the processing step.
+    *   ERDDAP™ creates this if it doesn't already exist.
+    *   If it already exists, ERDDAP™ will append new information to the existing information.
+    *   history is important because it allows clients to backtrack to the original source of the data.  
+###### infoUrl {#infourl}
+*   [**infoUrl**](#infourl) is a REQUIRED global attribute with the URL of a web page with more information about this dataset (usually at the source institution's website). For example,  
+    ```
+    <att name="infoUrl">http://www.globec.org/</att>
+    ```
+    *   Either the dataset's global [sourceAttributes](#global-attributes) or its global &lt;addAttributes> MUST include this attribute.
+    *   infoUrl is important because it allows clients to find out more about the data from the original source.
+    *   ERDDAP™ displays a link to the infoUrl on the dataset's Data Access Form (*datasetID*.html), Make A Graph web page (*datasetID*.graph), and other web pages.
+    *   If the URL has a query part (after the "?"), it MUST be already [percent encoded](https://en.wikipedia.org/wiki/Percent-encoding). You need to encode special characters in the constraints (other than the initial '&' and the main '=', if any) into the form %HH, where HH is the 2 digit hexadecimal value of the character. Usually, you just need to convert a few of the punctuation characters: % into %25, & into %26, " into %22, &lt; into %3C, = into %3D, > into %3E, + into %2B, | into %7C, \[ into %5B, \] into %5D, space into %20, and convert all characters above #127 into their UTF-8 form and then percent encode each byte of the UTF-8 form into the %HH format (ask a programmer for help).  
+        For example, &stationID>="41004"  
+        becomes       &stationID%3E=%2241004%22  
+        Percent encoding is generally required when you access ERDDAP via software other than a browser. Browsers usually handle percent encoding for you.  
+        In some situations, you need to percent encode all characters other than A-Za-z0-9\_-!.~'()\*, but still don't encode the initial '&' or the main '='.  
+        Programming languages have tools to do this (for example, see Java's [java.net.URLEncoder](https://docs.oracle.com/javase/8/docs/api/java/net/URLEncoder.html)  
+        and JavaScript's [encodeURIComponent()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent)) and there are  
+        [websites that percent encode/decode for you](https://www.url-encode-decode.com/).
+    *   Since datasets.xml is an XML file, you MUST also &-encode ALL '&', '&lt;', and '>' in the URL as '&amp;', '&lt;', and '&gt;' after percent encoding.
+    *   infoUrl is unique to ERDDAP. It is not from any metadata standard.  
+###### institution {#institution}
+*   [**institution**](#institution) (from the [CF](https://cfconventions.org/Data/cf-conventions/cf-conventions-1.8/cf-conventions.html) and [ACDD](https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3) metadata standards) is a REQUIRED global attribute with the short version of the name of the institution which is the source of this data (usually an acronym, usually &lt;20 characters). For example,  
+    ```
+    <att name="institution">NASA GSFC</att>
+    ```
+    *   Either the dataset's global [sourceAttributes](#global-attributes) or its global &lt;addAttributes> MUST include this attribute.
+    *   ERDDAP™ displays the institution whenever it displays a list of datasets. If an institution's name here is longer than 20 characters, only the first 20 characters will be visible in the list of datasets (but the whole institution can be seen by putting the mouse cursor over the adjacent "?" icon).
+    *   If you add institution to the list of &lt;categoryAttributes> in ERDDAP's [setup.xml](/docs/server-admin/deploy-install#setupxml) file, users can easily find datasets from the same institution via ERDDAP's "Search for Datasets by Category" on the home page.  
+###### keywords {#keywords}
+*   [**keywords**](#keywords) (from the [ACDD](https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3) metadata standard) is a RECOMMENDED comma-separated list of words and short phrases (for example, [GCMD Science Keywords](https://wiki.earthdata.nasa.gov/display/CMR/GCMD+Keyword+Access)) that describe the dataset in a general way, and not assuming any other knowledge of the dataset (for example, for oceanographic data, include ocean). For example,  
+    ```
+    <att name="keywords">ano, circulation, coastwatch, currents, derived, Earth Science &gt; Oceans &gt; Ocean Circulation &gt; Ocean Currents, eastward, eastward\_sea\_water\_velocity, experimental, hf radio, meridional, noaa, northward, northward\_sea\_water\_velocity, nuevo, ocean, oceans, radio, radio-derived, scan, sea, seawater, velocity, water, zonal</att>  
+    ```
+    Since datasets.xml is an XML document, the characters &, &lt;, and > in an attribute like keywords (e.g., the > characters in GCMD science keywords) must be encoded as &amp;, &lt;, and &gt;, respectively.  
+    When a dataset is loaded in ERDDAP,
+    
+    *   "Earth Science > " is added to the start of any GCMD keyword that lacks it.
+    *   GCMD keywords are converted to Title Case (i.e., the first letters are capitalized).
+    *   The keywords are rearranged into sorted order and any newline characters are removed.
+     
+###### keywords\_vocabulary {#keywords_vocabulary}
+*   [**keywords\_vocabulary**](#keywords_vocabulary) (from the [ACDD](https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3) metadata standard) is a RECOMMENDED attribute: if you are following a guideline for the words/phrases in your keywords attribute (for example, GCMD Science Keywords), put the name of that guideline here. For example,  
+    ```
+    <att name="keywords\_vocabulary">GCMD Science Keywords</att>  
+    ```
+###### license {#license}
+*   [**license**](#license) (from the [ACDD](https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3) metadata standard) is a STRONGLY RECOMMENDED global attribute with the license and/or usage restrictions. For example,  
+    ```
+    <att name="license">\[standard\]</att>
+    ```
+    *   If "\[standard\]" occurs in the attribute value, it will be replaced by the standard ERDDAP™ license from the &lt;standardLicense> tag in ERDDAP's  
+        \[tomcat\]/webapps/erddap/WEB-INF/classes/gov/noaa/pfel/erddap/util/messages.xml file.  
          
-##### subsetVariables
+###### Metadata\_Conventions {#metadata_conventions}
+*   [**Metadata\_Conventions**](#metadata_conventions) is from the outdated [ACDD 1.0](https://wiki.esipfed.org/ArchivalCopyOfVersion1) (which was identified in Metadata\_Conventions as "Unidata Dataset Discovery v1.0") metadata standard. The attribute value was a comma-separated list of metadata conventions used by this dataset.  
+    If a dataset uses ACDD 1.0, this attribute is STRONGLY RECOMMENDED, for example,  
+    ```
+    <att name="Metadata\_Conventions">COARDS, CF-1.6, Unidata Dataset Discovery v1.0</att>  
+    ```
+    But ERDDAP™ now recommends ACDD-1.3. If you have [switched your datasets to use ACDD-1.3](#switch-to-acdd-13), use of Metadata\_Conventions is STRONGLY DISCOURAGED: just use [&lt;Conventions>](#conventions) instead.  
+###### processing\_level {#processing_level}
+*   [**processing\_level**](#processing_level) (from the [ACDD](https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3) metadata standard) is a RECOMMENDED textual description of the processing (for example, [NASA satellite data processing levels](https://en.wikipedia.org/wiki/Remote_sensing#Data_processing_levels), for example, Level 3) or quality control level (for example, Science Quality) of the data. For example,  
+    ```
+    <att name="processing\_level">3</att>  
+    ```
+###### project {#project}
+*   [**project**](#project) (from the [ACDD](https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3) metadata standard) is an OPTIONAL attribute to identify the project that the dataset is part of. For example,  
+    ```
+    <att name="project">GTSPP</att>  
+    ```
+    If the dataset isn't part of a project, don't use this attribute. Compared to [creator\_name](#creator_name), this is focused on the project (not a person or an organization, which may be involved in multiple projects).  
+###### publisher\_name {#publisher_name}
+*   [**publisher\_name**](#publisher_name) (from the [ACDD](https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3) metadata standard) is the RECOMMENDED way to identify the person, organization, or project which is publishing this dataset. For example,  
+    ```
+    <att name="publisher\_name">JPL</att>  
+    ```
+    For example, you are the publisher if another person or group [created](#creator_name) the dataset and you are just re-serving it via ERDDAP. If "publisher" doesn't really apply to a dataset, omit this attribute. Compared to [creator\_name](#creator_name), the publisher probably didn't significantly modify or reprocess the data; the publisher is just making the data available in a new venue.  
+###### publisher\_email {#publisher_email}
+*   [**publisher\_email**](#publisher_email) (from the [ACDD](https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3) metadata standard) is the RECOMMENDED way to identify an email address (correctly formatted, for example, john\_smith@great.org) that provides a way to contact the publisher. For example,  
+    ```
+    <att name="publisher\_email">john\_smith@great.org</att>  
+    ```
+    If "publisher" doesn't really apply to a dataset, omit this attribute.  
+###### publisher\_url {#publisher_url}
+*   [**publisher\_url**](#publisher_url) (from the [ACDD](https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3) metadata standard) is the RECOMMENDED way to identify a URL for the organization that published the dataset, or a URL with the publisher's information about this dataset (but that is more the purpose of [infoUrl](#infourl)). For example,  
+    ```
+    <att name="publisher\_url">https://podaac.jpl.nasa.gov</att>  
+    ```
+    If "publisher" doesn't really apply to a dataset, omit this attribute.  
+###### real\_time {#real_time}
+*   [**real\_time**](#real_time) is a global String attribute (not from any standard) indicating if this is a real time dataset. For example,  
+    ```
+    <att name="real\_time">true</att>  
+    ```
+    If this is false (the default), ERDDAP™ will cache responses to requests for file types where the entire file must be created before ERDDAP™ can begin to send the response to the user and reuse them for up to about 15 minutes (e.g., .nc, .png).  
+    If this is set to true, ERDDAP™ will never cache the response files and will always return newly created files.  
+###### sourceUrl attribute {#sourceurl-attribute}
+*   [**sourceUrl**](#sourceurl-attribute) is a global attribute with the URL of the source of the data. For example,  
+    ```
+    <att name="sourceUrl">https://opendap.co-ops.nos.noaa.gov/ioos-dif-sos/SOS</att>  
+    ```
+    (but put it all on one line)
+    *   ERDDAP™ usually creates this global attribute automatically. Two exceptions are EDDTableFromHyraxFiles and EDDTableFromThreddsFiles.
+    *   If the source is local files and the files were created by your organization, use  
+    ```
+        <att name="sourceUrl">(local files)</att>
+    ```
+    *   If the source is local database and the data was created by your organization, use  
+    ```
+        <att name="sourceUrl">(local database)</att>
+    ```
+    *   sourceUrl is important because it allows clients to backtrack to the original source of the data.
+    *   sourceUrl is unique to ERDDAP. It is not from any metadata standard.  
+        
+###### standard\_name\_vocabulary {#standard_name_vocabulary}
+*   [**standard\_name\_vocabulary**](#standard_name_vocabulary) (from the [ACDD](https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3) metadata standard) is a RECOMMENDED attribute to identify the name of the controlled vocabulary from which variable [standard\_name](#standard_name)s are taken. For example,  
+    ```
+    <att name="standard\_name\_vocabulary">CF Standard Name Table v77</att>  
+    ```
+    for version 77 of the [CF standard name table](https://cfconventions.org/Data/cf-standard-names/current/build/cf-standard-name-table.html).  
+         
+##### subsetVariables {#subsetvariables}
 *   **subsetVariables** (for EDDTable datasets only) is a RECOMMENDED global attribute that lets you specify a comma-separated list of [&lt;dataVariable>](#datavariable) [destinationName](#destinationname)s to identify variables which have a limited number of values (stated another way: variables for which each of the values has many duplicates). For example,  
     ```
         <att name="subsetVariables">station\_id, longitude, latitude</att>  
@@ -5311,52 +5310,51 @@ However, there are ways to make ERDDAP™ scale to handle a huge number of reque
         ```
             when the dataset is created.
         *   Possible warning: if a user using the *datasetID*.subset web page selects a value which has a carriageReturn or newline character, *datasetID*.subset will fail. ERDDAP™ can't work around this issue because of some HTML details. In any case, it is almost always a good idea to remove the carriageReturn and newline characters from the data. To help you fix the problem, if the EDDTable.subsetVariablesDataTable method in ERDDAP detects data values that will cause trouble, it will email a warning with a list of offending values to the emailEverythingTo email addresses specified in setup.xml. That way, you know what needs to be fixed.
-        ###### Pre-generated subset tables
-        *   [Pre-generated subset tables.](#pre-generated-subset-tables) Normally, when ERDDAP™ loads a dataset, it requests the distinct() subset variables data table from the data source, just via a normal data request. In some cases, this data is not available from the data source or retrieving from the data source may be hard on the data source server. If so, you can supply a table with the information in a .json or .csv file with the name *tomcat*/content/erddap/subset/*datasetID*.json (or .csv). If present, ERDDAP™ will read it once when the dataset is loaded and use it as the source of the subset data.
+        *   **Pre-generated subset tables.** Normally, when ERDDAP™ loads a dataset, it requests the distinct() subset variables data table from the data source, just via a normal data request. In some cases, this data is not available from the data source or retrieving from the data source may be hard on the data source server. If so, you can supply a table with the information in a .json or .csv file with the name *tomcat*/content/erddap/subset/*datasetID*.json (or .csv). If present, ERDDAP™ will read it once when the dataset is loaded and use it as the source of the subset data.
             *   If there is an error while reading it, the dataset will fail to load.
             *   It MUST have exact same column names (for example, same case) as &lt;subsetVariables>, but the columns MAY be in any order.
             *   It MAY have extra columns (they'll be removed and newly redundant rows will be removed).
-            ###### Time Units
-            *   [Time and timestamp](#time-units) columns should have ISO 8601:2004(E) formatted date+timeZ strings (for example, 1985-01-31T15:31:00Z).
             *   Missing values should be missing values (not fake numbers like -99).
             *   .json files may be a little harder to create but deal with Unicode characters well. .json files are easy to create if you create them with ERDDAP.
             *   .csv files are easy to work with, but suitable for ISO 8859-1 characters only. .csv files MUST have column names on the first row and data on subsequent rows.
         *   For huge datasets or when &lt;subsetVariables> is misconfigured, the table of combinations of values can be large enough to cause Too Much Data or OutOfMemory errors. The solution is to remove variables from the list of &lt;subsetVariables> for which there are a large number of values, or remove variables as needed until the size of that table is reasonable. Regardless of the error, the parts of ERDDAP™ that use the subsetVariables system don't work well (e.g., web pages load very slowly) when there are too many rows (e.g., more than a million) in that table.
         *   subsetVariables has nothing to do with specifying which variables users can use in constraints, i.e., how users can request subsets of the dataset. ERDDAP™ always allows constraints to refer to any of the variables.  
+###### Time Units {#time-units}
+[Time and timestamp](#time-units) columns should have ISO 8601:2004(E) formatted date+timeZ strings (for example, 1985-01-31T15:31:00Z).
              
-    ###### summary
-    *   [**summary**](#summary) (from the [CF](https://cfconventions.org/Data/cf-conventions/cf-conventions-1.8/cf-conventions.html) and [ACDD](https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3) metadata standards) is a REQUIRED global attribute with a long description of the dataset (usually &lt;500 characters). For example,  
-        ```
-        <att name="summary">VIIRSN Level-3 Standard Mapped Image, Global, 4km, Chlorophyll a, Daily. The Visible and Infrared Imager/Radiometer Suite (VIIRS) is a multi-disciplinary instrument that flies on the National Polar-orbiting Operational Environmental Satellite System (NPOESS) series of spacecraft, including the NPOESS Preparatory Project (NPP).</att>
-        ```
-        *   Either the dataset's global [sourceAttributes](#global-attributes) or its global &lt;addAttributes> MUST include this attribute.
-        *   summary is very important because it allows clients to read a description of the dataset that has more information than the title and thus quickly understand what the dataset is.
-        *   Advice: please write the summary so it would work to describe the dataset to some random person you meet on the street or to a colleague. Remember to include the [Five W's and one H](https://en.wikipedia.org/wiki/Five_Ws): Who created the dataset? What information was collected? When was the data collected? Where was it collected? Why was it collected? How was it collected?
-        *   ERDDAP™ displays the summary on the dataset's Data Access Form (*datasetID*.html), Make A Graph web page (*datasetID*.graph), and other web pages. ERDDAP™ uses the summary when creating FGDC and ISO 19115 documents.  
-    ###### testOutOfDate
-    *   [**testOutOfDate**](#testoutofdate) (an optional ERDDAP-specific global metadata attribute, not from any standard) specifies, in a simplistic way, when the data for a near-real-time dataset is considered out-of-date, specified as now-*nUnits*, for example, now-2days for data that usually appears 24-48 hours after the time value. For forecast data, use now**+***nUnits*, for example, now+6days for forecast data that is, at most, 8 days in the future. (See the [now-*nUnits* syntax description](https://coastwatch.pfeg.noaa.gov/erddap/tabledap/documentation.html#now).) If the maximum time value for the dataset is more recent than the specified time, the dataset is considered up-to-date. If the maximum time value is older than the specified time, the dataset is considered up-to-date. For out-of-date datasets, there is presumably a problem with the data source, so ERDDAP™ is unable to access data from more recent time points.
-        
-        The testOutOfDate value is displayed as a column in the [allDatasets dataset](#eddtablefromalldatasets) in your ERDDAP. It is also used to calculate the outOfDate index, which is another column in the allDatasets dataset.  
-        If the index is &lt;1, the dataset is considered up-to-date.  
-        If the index is &lt;=1, the dataset is considered out-of-date.  
-        If the index is &lt;=2, the dataset is considered very out-of-date.
-        
-        The testOutOfDate value is also used by ERDDAP™ to generate the https://*yourDomain*/erddap/outOfDateDatasets.html web page ([example](https://coastwatch.pfeg.noaa.gov/erddap/outOfDateDatasets.html)) which shows the datasets which have &lt;testOutOfDate> tags, with the datasets ranked by how out-of-date they are. If you change the file type (from .html to .csv, .jsonlCSV, .nc, .tsv, ...), you can get that information in different file formats.
-        
-        When possible, [GenerateDatasetsXml](#generatedatasetsxml) adds a testOutOfDate attribute to the global addAttributes of a dataset. This value is a suggestion based on the information available to GenerateDatasetsXml. If the value isn't appropriate, change it.
-        
-        "Out-of-date" here is very different from [&lt;reloadEveryNMinutes>](#reloadeverynminutes), which deals with how up-to-date ERDDAP's knowledge of the dataset is. The &lt;testOutOfDate> system assumes that ERDDAP's knowledge of the dataset is up-to-date. The question &lt;testOutOfDate> deals with is: does there appear to be something wrong with the source of the data, causing more recent data to be not accessible by ERDDAP?
-        
-    ###### title
-    *   [**title**](#title) (from the [CF](https://cfconventions.org/Data/cf-conventions/cf-conventions-1.8/cf-conventions.html) and [ACDD](https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3) metadata standards) is a REQUIRED global attribute with the short description of the dataset (usually &lt;=95 characters). For example,  
-        ```
-        <att name="title">VIIRSN Level-3 Mapped, Global, 4km, Chlorophyll a, Daily</att>
-        ```
-        *   Either the dataset's global [sourceAttributes](#global-attributes) or its global &lt;addAttributes> MUST include this attribute.
-        *   title is important because every list of datasets presented by ERDDAP (other than search results) lists the datasets in alphabetical order, by title. So if you want to specify the order of datasets, or have some datasets grouped together, you have to create titles with that in mind. Many lists of datasets (for example, in response to a category search), show a subset of the full list and in a different order. So the title for each dataset should stand on its own.
-        *   If the title contains the word "DEPRECATED" (all capital letters), then the dataset will get a lower ranking in searches.  
+###### summary {#summary}
+*   [**summary**](#summary) (from the [CF](https://cfconventions.org/Data/cf-conventions/cf-conventions-1.8/cf-conventions.html) and [ACDD](https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3) metadata standards) is a REQUIRED global attribute with a long description of the dataset (usually &lt;500 characters). For example,  
+    ```
+    <att name="summary">VIIRSN Level-3 Standard Mapped Image, Global, 4km, Chlorophyll a, Daily. The Visible and Infrared Imager/Radiometer Suite (VIIRS) is a multi-disciplinary instrument that flies on the National Polar-orbiting Operational Environmental Satellite System (NPOESS) series of spacecraft, including the NPOESS Preparatory Project (NPP).</att>
+    ```
+    *   Either the dataset's global [sourceAttributes](#global-attributes) or its global &lt;addAttributes> MUST include this attribute.
+    *   summary is very important because it allows clients to read a description of the dataset that has more information than the title and thus quickly understand what the dataset is.
+    *   Advice: please write the summary so it would work to describe the dataset to some random person you meet on the street or to a colleague. Remember to include the [Five W's and one H](https://en.wikipedia.org/wiki/Five_Ws): Who created the dataset? What information was collected? When was the data collected? Where was it collected? Why was it collected? How was it collected?
+    *   ERDDAP™ displays the summary on the dataset's Data Access Form (*datasetID*.html), Make A Graph web page (*datasetID*.graph), and other web pages. ERDDAP™ uses the summary when creating FGDC and ISO 19115 documents.  
+###### testOutOfDate {#testoutofdate}
+*   [**testOutOfDate**](#testoutofdate) (an optional ERDDAP-specific global metadata attribute, not from any standard) specifies, in a simplistic way, when the data for a near-real-time dataset is considered out-of-date, specified as now-*nUnits*, for example, now-2days for data that usually appears 24-48 hours after the time value. For forecast data, use now**+***nUnits*, for example, now+6days for forecast data that is, at most, 8 days in the future. (See the [now-*nUnits* syntax description](https://coastwatch.pfeg.noaa.gov/erddap/tabledap/documentation.html#now).) If the maximum time value for the dataset is more recent than the specified time, the dataset is considered up-to-date. If the maximum time value is older than the specified time, the dataset is considered up-to-date. For out-of-date datasets, there is presumably a problem with the data source, so ERDDAP™ is unable to access data from more recent time points.
+    
+    The testOutOfDate value is displayed as a column in the [allDatasets dataset](#eddtablefromalldatasets) in your ERDDAP. It is also used to calculate the outOfDate index, which is another column in the allDatasets dataset.  
+    If the index is &lt;1, the dataset is considered up-to-date.  
+    If the index is &lt;=1, the dataset is considered out-of-date.  
+    If the index is &lt;=2, the dataset is considered very out-of-date.
+    
+    The testOutOfDate value is also used by ERDDAP™ to generate the https://*yourDomain*/erddap/outOfDateDatasets.html web page ([example](https://coastwatch.pfeg.noaa.gov/erddap/outOfDateDatasets.html)) which shows the datasets which have &lt;testOutOfDate> tags, with the datasets ranked by how out-of-date they are. If you change the file type (from .html to .csv, .jsonlCSV, .nc, .tsv, ...), you can get that information in different file formats.
+    
+    When possible, [GenerateDatasetsXml](#generatedatasetsxml) adds a testOutOfDate attribute to the global addAttributes of a dataset. This value is a suggestion based on the information available to GenerateDatasetsXml. If the value isn't appropriate, change it.
+    
+    "Out-of-date" here is very different from [&lt;reloadEveryNMinutes>](#reloadeverynminutes), which deals with how up-to-date ERDDAP's knowledge of the dataset is. The &lt;testOutOfDate> system assumes that ERDDAP's knowledge of the dataset is up-to-date. The question &lt;testOutOfDate> deals with is: does there appear to be something wrong with the source of the data, causing more recent data to be not accessible by ERDDAP?
+    
+###### title {#title}
+*   [**title**](#title) (from the [CF](https://cfconventions.org/Data/cf-conventions/cf-conventions-1.8/cf-conventions.html) and [ACDD](https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3) metadata standards) is a REQUIRED global attribute with the short description of the dataset (usually &lt;=95 characters). For example,  
+    ```
+    <att name="title">VIIRSN Level-3 Mapped, Global, 4km, Chlorophyll a, Daily</att>
+    ```
+    *   Either the dataset's global [sourceAttributes](#global-attributes) or its global &lt;addAttributes> MUST include this attribute.
+    *   title is important because every list of datasets presented by ERDDAP (other than search results) lists the datasets in alphabetical order, by title. So if you want to specify the order of datasets, or have some datasets grouped together, you have to create titles with that in mind. Many lists of datasets (for example, in response to a category search), show a subset of the full list and in a different order. So the title for each dataset should stand on its own.
+    *   If the title contains the word "DEPRECATED" (all capital letters), then the dataset will get a lower ranking in searches.  
              
-##### &lt;axisVariable&gt;
+##### &lt;axisVariable&gt; {#axisvariable}
 *   [**&lt;axisVariable>**](#axisvariable) is used to describe a dimension (also called "axis").  
     For EDDGrid datasets, one or more axisVariable tags is REQUIRED, and all [dataVariables](#datavariable) always share/use all axis variables. ([Why?](#why-just-two-basic-data-structures) [What if they don't?](#dimensions))  
     There MUST be an axis variable for each dimension of the data variables.  
@@ -5373,9 +5371,9 @@ However, there are ways to make ERDDAP™ scale to handle a huge number of reque
 >&nbsp;&nbsp;&lt;/axisVariable>  
 
 &lt;axisVariable> supports the following subtags:
-###### &lt;sourceName\&gt;
+###### &lt;sourceName\&gt; {#sourcename}
 *   [&lt;sourceName\>](#sourcename) -- the data source's name for the variable. This is the name that ERDDAP™ will use when requesting data from the data source. This is the name that ERDDAP™ will look for when data is returned from the data source. This is case sensitive. This is REQUIRED.
-###### &lt;destinationName\&gt;
+###### &lt;destinationName\&gt; {#destinationname}
 *   [&lt;destinationName\>](#destinationname) is the name for the variable that will be shown to and used by ERDDAP™ users.
     *   This is OPTIONAL. If absent, the sourceName is used.
     *   This is useful because it allows you to change a cryptic or odd sourceName.
@@ -5383,12 +5381,12 @@ However, there are ways to make ERDDAP™ scale to handle a huge number of reque
     *   destinationNames MUST start with a letter (A-Z, a-z) and MUST be followed by 0 or more characters (A-Z, a-z, 0-9, and \_). ('-' was allowed before ERDDAP™ version 1.10.) This restriction allows axis variable names to be the same in ERDDAP™, in the response files, and in all the software where those files will be used, including programming languages (like Python, Matlab, and JavaScript) where there are similar restrictions on variable names.
     *   In EDDGrid datasets, the [longitude, latitude, altitude, depth, and time](#destinationname) axis variables are special.  
          
-###### axisVariable &lt;addAttributes&gt;
+###### axisVariable &lt;addAttributes&gt; {#axisvariable-addattributes}
 *   [&lt;addAttributes>](#variable-addattributes) defines an OPTIONAL set of attributes (*name* = *value*) which are added to the source's attributes for a variable, to make the combined attributes for a variable.  
     If the variable's [sourceAttributes](#variable-addattributes) or &lt;addAttributes> include [scale\_factor and/or add\_offset](#scale_factor) attributes, their values will be used to unpack the data from the source before distribution to the client  
     (resultValue = sourceValue \* scale\_factor + add\_offset) . The unpacked variable will be of the same data type (for example, float) as the scale\_factor and add\_offset values.  
          
-##### &lt;dataVariable&gt;
+##### &lt;dataVariable&gt; {#datavariable}
 *   [**&lt;dataVariable>**](#datavariable) is a REQUIRED (for almost all datasets) tag within the &lt;dataset> tag which is used to describe a data variable. There MUST be 1 or more instances of this tag. A fleshed out example is:
 
 >&nbsp;&nbsp;&lt;dataVariable>  
@@ -5404,197 +5402,197 @@ However, there are ways to make ERDDAP™ scale to handle a huge number of reque
 >&nbsp;&nbsp;&lt;/dataVariable>  
 
 &lt;dataVariable> supports the following subtags:
-###### &lt;sourceName&gt;
+###### &lt;sourceName&gt; {#sourcename-1}
 *   [&lt;sourceName>](#sourcename) -- the data source's name for the variable. This is the name that ERDDAP™ will use when requesting data from the data source. This is the name that ERDDAP™ will look for when data is returned from the data source. This is case sensitive. This is REQUIRED.
-    ###### Groups
-    CF added support for groups with CF v1.8. Starting in ~2020, NetCDF tools support putting variables into groups in a .nc file. In practice, this just means that the variables have a long name which identifies the group(s) and the variable name, for example, group1a/group2c/varName ). ERDDAP™ supports groups by converting the "/"'s in the variable's &lt;sourceName> into "\_"'s in the variable's &lt;destinationName>, for example, group1a\_group2c\_varName . (When you see that, you should realize that groups are not much more than a syntax convention.) When the variables are listed in ERDDAP™, all the variables in a group will appear together, mimicking the underlying group. \[If ERDDAP™, notably GenerateDatasetsXml, doesn't perform as well as it could with source files that have groups, please email a sample file to Chris.John at noaa.gov .\]
-    
-    EDDTableFromFiles datasets can use some specially-encoded, pseudo sourceNames to define new data variables, e.g., to promote a global attribute to be a data variable. See [this documentation](#pseudo-sourcenames).
-    ###### HDF Structures
-    Starting with ERDDAP™ v2.12, EDDGridFromNcFiles and EDDGridFromNcFilesUnpacked can read data from "structures" in .nc4 and .hdf4 files. To identify a variable that is from a structure, the &lt;sourceName> must use the format: *fullStructureName*|*memberName*, for example group1/myStruct|myMember .
-    
-    ###### Fixed Value SourceNames
-    In an EDDTable dataset, if you want to create a variable (with a single, fixed value) that isn't in the source dataset, use:  
-    ```
-        <sourceName>=*fixedValue*</sourceName>  
-    ```
-    The initial equals sign tells ERDDAP™ that a fixedValue will follow.
-    
-    *   For numeric variables, the fixed value must be a single finite value or NaN (case insensitive, e.g., \=NaN ).
-    *   For String variables, the fixed value must be single, [JSON-style string](https://www.json.org/json-en.html) (with special characters escaped with \\ characters), e.g., \="My \\"Special\\" String" .
-    *   For a timestamp variable, specify the fixed value as a number in "seconds since 1970-01-01T00:00:00Z" and use  
-        units=seconds since 1970-01-01T00:00:00Z .
-        
-    The other tags for the &lt;dataVariable> work as if this were a regular variable.  
-    For example, to create a variable called altitude with a fixed value of 0.0 (float), use:  
+###### Groups {#groups}
+CF added support for groups with CF v1.8. Starting in ~2020, NetCDF tools support putting variables into groups in a .nc file. In practice, this just means that the variables have a long name which identifies the group(s) and the variable name, for example, group1a/group2c/varName ). ERDDAP™ supports groups by converting the "/"'s in the variable's &lt;sourceName> into "\_"'s in the variable's &lt;destinationName>, for example, group1a\_group2c\_varName . (When you see that, you should realize that groups are not much more than a syntax convention.) When the variables are listed in ERDDAP™, all the variables in a group will appear together, mimicking the underlying group. \[If ERDDAP™, notably GenerateDatasetsXml, doesn't perform as well as it could with source files that have groups, please email a sample file to Chris.John at noaa.gov .\]
 
-    >        &lt;sourceName>=0&lt;/sourceName>  
-    >        [&lt;destinationName\>](#destinationname)altitude&lt;/destinationName>  
-    >        [&lt;dataType>float&lt;/dataType>](#datatype)  
+EDDTableFromFiles datasets can use some specially-encoded, pseudo sourceNames to define new data variables, e.g., to promote a global attribute to be a data variable. See [this documentation](#pseudo-sourcenames).
+###### HDF Structures {#hdf-structures}
+Starting with ERDDAP™ v2.12, EDDGridFromNcFiles and EDDGridFromNcFilesUnpacked can read data from "structures" in .nc4 and .hdf4 files. To identify a variable that is from a structure, the &lt;sourceName> must use the format: *fullStructureName*|*memberName*, for example group1/myStruct|myMember .
 
-    For unusual situations, you can even specify an actual\_range addAttribute, which will override the expected values of destinationMin and destinationMax (which would otherwise equal the fixedValue).  
-     
-    ###### Script SourceNames/Derived Variables
-    Starting with ERDDAP™ v2.10, in an [EDDTableFromFiles](#eddtablefromfiles), [EDDTableFromDatabase](#eddtablefromdatabase), or [EDDTableFromFileNames](#eddtablefromfilenames) dataset, the &lt;sourceName> can be  
-    an expression (an equation that evaluates to a single value), using the format  
-        ```
-            <sourceName>=*expression*</sourceName>  
-        ```
-        or a script (a series of statements that returns a single value), using the format  
-        ```
-            <sourceName>=*script*</sourceName>  
-        ```
-        ERDDAP™ relies on the [Apache project's](https://www.apache.org/) [Java Expression Language (JEXL)](https://commons.apache.org/proper/commons-jexl/) (license: [Apache](https://www.apache.org/licenses/LICENSE-2.0)) to evaluate the expressions and run the scripts.  
-        The calculation for a given new variable is done within one row of the results, repeatedly for all rows.  
-        The expressions and scripts use a Java- and JavaScript-like syntax and can use any of the  
-        [operators and methods which are built into JEXL](https://commons.apache.org/proper/commons-jexl/reference/syntax.html).  
-        The scripts can also use methods (functions) from these classes:
-        *   [Calendar2](/docs/dokka/-e-r-d-d-a-p/com.cohort.util/-script-calendar2), which is a wrapper for some of the static, time- and calendar-related methods in com.cohort.util.Calendar2 ([license](/acknowledgements#cohort-software)). For example,  
-            Calendar2.parseToEpochSeconds(*sourceTime, dateTimeFormat*) will parse the sourceTime string via the dateTimeFormat string and return a "seconds since 1970-01-01T00:00:00Z" (epochSeconds) double value.
-        *   [Math](/docs/dokka/-e-r-d-d-a-p/com.cohort.util/-script-math), which is a wrapper for almost all of the static, math-related methods in [java.lang.Math](https://docs.oracle.com/javase/8/docs/api/java/lang/Math.html). For example, Math.atan2(*y, x*) takes in rectangular coordinates (y, x) and returns polar coordinates (an array of doubles with \[r, theta\]).
-        *   [Math2](/docs/dokka/-e-r-d-d-a-p/com.cohort.util/-script-math2), which is a wrapper for almost all of the static, math-related methods in com.cohort.util.Math2 ([license](/acknowledgements#cohort-software)). For example,  
-            Math2.roundTo(*d, nPlaces*) will round d to the specified number of digits to the right of the decimal point.
-        *   String, which gives you access to all of the static, String-related methods in [java.lang.String](https://docs.oracle.com/javase/8/docs/api/java/lang/String). String objects in ERDDAP™ expressions and scripts can use any of their associated Java methods, as described in the java.lang.String documentation. For example, String.valueOf(d) will convert the double value d into a String (although you can also use ""+d).
-        *   [String2](/docs/dokka/-e-r-d-d-a-p/com.cohort.util/-script-string2), which is a wrapper for most of the static, String- and array-related methods in com.cohort.util.String2 ([license](/acknowledgements#cohort-software)). For example, String2.zeroPad(*number, nDigits*) will add 0's to the left of the number String so that the total number of digits is nDigits (e.g., String2.zeroPad("6", 2) will return "06").
-        *   [row](/docs/dokka/-e-r-d-d-a-p/com.cohort.util/-script-row), which has non-static methods for accessing the data from the various columns in the current row of the source data table. For example, row.columnString("year") reads the value from the "year" column as a String, whereas, row.columnInt("year") reads the value from the "year" column as an integer.
+###### Fixed Value SourceNames {#fixed-value-sourcenames}
+In an EDDTable dataset, if you want to create a variable (with a single, fixed value) that isn't in the source dataset, use:  
+```
+    <sourceName>=*fixedValue*</sourceName>  
+```
+The initial equals sign tells ERDDAP™ that a fixedValue will follow.
 
-    For security reasons, expressions and scripts can't use other classes other than those 6. ERDDAP™ enforces this limitation by creating a default blacklist (which blacklists all classes) and then a whitelist (which specifically allows the 6 classes described above). If you need other methods and/or other classes to do your work, please email your requests to Chris.John at noaa.gov .
+*   For numeric variables, the fixed value must be a single finite value or NaN (case insensitive, e.g., \=NaN ).
+*   For String variables, the fixed value must be single, [JSON-style string](https://www.json.org/json-en.html) (with special characters escaped with \\ characters), e.g., \="My \\"Special\\" String" .
+*   For a timestamp variable, specify the fixed value as a number in "seconds since 1970-01-01T00:00:00Z" and use  
+    units=seconds since 1970-01-01T00:00:00Z .
+    
+The other tags for the &lt;dataVariable> work as if this were a regular variable.  
+For example, to create a variable called altitude with a fixed value of 0.0 (float), use:  
+
+>        &lt;sourceName>=0&lt;/sourceName>  
+>        [&lt;destinationName\>](#destinationname)altitude&lt;/destinationName>  
+>        [&lt;dataType>float&lt;/dataType>](#datatype)  
+
+For unusual situations, you can even specify an actual\_range addAttribute, which will override the expected values of destinationMin and destinationMax (which would otherwise equal the fixedValue).  
+ 
+###### Script SourceNames/Derived Variables {#script-sourcenamesderived-variables}
+Starting with ERDDAP™ v2.10, in an [EDDTableFromFiles](#eddtablefromfiles), [EDDTableFromDatabase](#eddtablefromdatabase), or [EDDTableFromFileNames](#eddtablefromfilenames) dataset, the &lt;sourceName> can be  
+an expression (an equation that evaluates to a single value), using the format  
+```
+    <sourceName>=*expression*</sourceName>  
+```
+or a script (a series of statements that returns a single value), using the format  
+```
+    <sourceName>=*script*</sourceName>  
+```
+ERDDAP™ relies on the [Apache project's](https://www.apache.org/) [Java Expression Language (JEXL)](https://commons.apache.org/proper/commons-jexl/) (license: [Apache](https://www.apache.org/licenses/LICENSE-2.0)) to evaluate the expressions and run the scripts.  
+The calculation for a given new variable is done within one row of the results, repeatedly for all rows.  
+The expressions and scripts use a Java- and JavaScript-like syntax and can use any of the  
+[operators and methods which are built into JEXL](https://commons.apache.org/proper/commons-jexl/reference/syntax.html).  
+The scripts can also use methods (functions) from these classes:
+*   [Calendar2](/docs/dokka/-e-r-d-d-a-p/com.cohort.util/-script-calendar2), which is a wrapper for some of the static, time- and calendar-related methods in com.cohort.util.Calendar2 ([license](/acknowledgements#cohort-software)). For example,  
+    Calendar2.parseToEpochSeconds(*sourceTime, dateTimeFormat*) will parse the sourceTime string via the dateTimeFormat string and return a "seconds since 1970-01-01T00:00:00Z" (epochSeconds) double value.
+*   [Math](/docs/dokka/-e-r-d-d-a-p/com.cohort.util/-script-math), which is a wrapper for almost all of the static, math-related methods in [java.lang.Math](https://docs.oracle.com/javase/8/docs/api/java/lang/Math.html). For example, Math.atan2(*y, x*) takes in rectangular coordinates (y, x) and returns polar coordinates (an array of doubles with \[r, theta\]).
+*   [Math2](/docs/dokka/-e-r-d-d-a-p/com.cohort.util/-script-math2), which is a wrapper for almost all of the static, math-related methods in com.cohort.util.Math2 ([license](/acknowledgements#cohort-software)). For example,  
+    Math2.roundTo(*d, nPlaces*) will round d to the specified number of digits to the right of the decimal point.
+*   String, which gives you access to all of the static, String-related methods in [java.lang.String](https://docs.oracle.com/javase/8/docs/api/java/lang/String). String objects in ERDDAP™ expressions and scripts can use any of their associated Java methods, as described in the java.lang.String documentation. For example, String.valueOf(d) will convert the double value d into a String (although you can also use ""+d).
+*   [String2](/docs/dokka/-e-r-d-d-a-p/com.cohort.util/-script-string2), which is a wrapper for most of the static, String- and array-related methods in com.cohort.util.String2 ([license](/acknowledgements#cohort-software)). For example, String2.zeroPad(*number, nDigits*) will add 0's to the left of the number String so that the total number of digits is nDigits (e.g., String2.zeroPad("6", 2) will return "06").
+*   [row](/docs/dokka/-e-r-d-d-a-p/com.cohort.util/-script-row), which has non-static methods for accessing the data from the various columns in the current row of the source data table. For example, row.columnString("year") reads the value from the "year" column as a String, whereas, row.columnInt("year") reads the value from the "year" column as an integer.
+
+For security reasons, expressions and scripts can't use other classes other than those 6. ERDDAP™ enforces this limitation by creating a default blacklist (which blacklists all classes) and then a whitelist (which specifically allows the 6 classes described above). If you need other methods and/or other classes to do your work, please email your requests to Chris.John at noaa.gov .
+    
+###### Efficiency  
+For EDDTableFromFiles datasets, there is only a very, very minimal (probably not noticeable) slowdown for requests for data from these variables. For EDDTableFromDatabase, there is huge speed penalty for requests that include constraints on these variables (e.g., (&longitude0360>30&longitude0360&lt;40) because the constraints can't be passed through to the database, so the database has to return much much more data to ERDDAP™ (which is very time consuming) so that ERDDAP™ can create the new variable and apply the constraint. To avoid the worst case (where there are no constraints being passed to the database), ERDDAP™ throws an error message so that the database doesn't have to return the entire contents of the table. (If you want to bypass this, add a constraint to a non-script column which will always be true, e.g., &time&lt;3000-01-01.) For this reason, with EDDTableFromDatabase, it is probably always better to create a derived column in the database rather than use sourceName=script in ERDDAP.
+
+###### Overview Of How An Expression (Or Script) Is Used:  
+In response to a user's request for tabular data, ERDDAP™ gets data from a series of source files. Each source file will generate a table of raw (straight from the source) data. ERDDAP™ will then go through the table of raw data, row by row, and evaluate the expression or script once for every row, in order to create a new column which has that expression or script as a sourceName.
+    
+###### GenerateDatasetsXml  
+Note that GenerateDatasetsXml is completely unaware when there is a need to create a variable with &lt;sourceName>=*expression*&lt;/sourceName>. You have to create the variable in datasets.xml by hand.
+
+###### Expression Examples:  
+Here are some complete examples of data variables which use an expression to create a new column of data. We expect that these examples (and variants of them) will cover about 95% of the usage of all expression-derived sourceNames.
+
+###### Combining separate "date" and "time" columns into a unified time column:
+```
+    <dataVariable>
+        <sourceName>=Calendar2.parseToEpochSeconds(row.columnString("date") + "T" + 
+            row.columnString("time") + "Z", "yyyy-MM-dd'T'HH:mm:ss'Z'")</sourceName> 
+        <destinationName>time</destinationName>
+        <dataType>double</dataType>
+        <addAttributes>
+            <att name="units">seconds since 1970-01-01</att>
+        </addAttributes>
+    </dataVariable>
+```
+That sourceName expression makes a new "time" column by concatenating the String values from the "date" (yyyy-MM-dd) and "time" (HH:mm:ss) columns on each row of the source file, and by converting that string into a "seconds since 1970-01-01" (epochSeconds) double value.
+
+Or course, you'll have to customize the time format string to deal with the specific format in each dataset's source date and time columns, see the  
+[time units documentation](#string-time-units).
+
+Technically, you don't have to use Calendar2.parseToEpochSeconds() to convert the combined date+time into epochSeconds. You could just pass the date+time String to ERDDAP™ and specify the format (e.g.,  
+yyyy-MM-dd'T'HH:mm:ss'Z') via the units attribute. But there are significant advantages to converting to epochSeconds -- notably, EDDTableFromFiles can then easily keep track of the range of time values in each file and so quickly decide whether to look in a given file when responding to a request which has time constraints.
+
+A related problem is the need to create a unified date+time column from a source with separate year, month, date, hour, minute, second. The solution is very similar, but you will often need to zero-pad many of the fields, so that, for example, month (1 - 12) and date (1 - 31) always have 2 digits. Here's an example with year, month, date:
+```
+    <sourceName>=Calendar2.parseToEpochSeconds(row.columnString("year") + 
+        String2.zeroPad(row.columnString("month"), 2) + 
+        String2.zeroPad(row.columnString("date"), 2), "yyyyMMdd")</sourceName>
+```
+    A related problem is the need to create a unified latitude or longitude column by combining the data in the source table's separate degrees, minutes, and seconds columns, each stored as integers. For example,
+```
+    <sourceName>=row.columnInt("deg") + row.columnInt("min")/60.0 + 
+        row.columnInt("sec")/3660.0</sourceName>
+```
+###### Converting a column named "lon" with longitude values from 0 - 360° into a column named "longitude" with values from -180 - 180°
+```
+    <dataVariable>
+        <sourceName>=Math2.anglePM180(row.columnDouble("lon"))</sourceName> 
+        <destinationName>longitude</destinationName>
+        <dataType>double</dataType>
+        <addAttributes>
+            <att name="units">degrees\_east</att>
+        </addAttributes>
+    </dataVariable>
+```
+That sourceName expression makes a new "longitude" column by converting the double value from the "lon" column on each row of the source file (presumably with 0 - 360 values), and by converting that into a -180 to 180 double value.
+
+If you instead want to convert source longitude values of -180 - 180° into 0 - 360°, use
+```
+    <sourceName>=Math2.angle0360(row.columnDouble("lon"))</sourceName>
+```
+Naming the Two Longitude Variables:  
+If the dataset will have 2 longitude variables, we recommend using destinationName=longitude for the -180 - 180° variable and destinationName=longitude0360 (and longName=\\"Longitude 0-360°") for the 0 - 360° variable. This is important because users sometimes use Advanced Search to search for data within a specific longitude range. That search will work better if longitude consistently has -180 - 180° values for all datasets. Also, the dataset's geospatial\_lon\_min, geospatial\_lon\_max, Westernmost\_Easting and Easternmost\_Eastings global attributes will then be set in a consistent way (with longitude values -180 to 180°);
+    
+###### Converting a column named "tempF" with temperature values in degree\_F into a column named "tempC" with temperatures in degree\_C:
+```
+    <dataVariable>
+        <sourceName>=(row.columnFloat("tempF")-32)\*5/9</sourceName> 
+        <destinationName>tempC</destinationName>
+        <dataType>float</dataType>
+        <addAttributes>
+            <att name="units">degrees\_C</att>
+        </addAttributes>
+    </dataVariable>
+```
+That sourceName expression makes a new "tempC" column by converting the float degree\_F value from the "tempF" column on each row of the source file into a float degree\_C value.
+
+Note that your dataset can have both the original tempF variable and the new tempC variable by having another variable with  
+```
+    <sourceName>tempF</sourceName>
+```
+###### Converting wind "speed" and "direction" columns into two columns with the u,v components
+*   To make a u variable, use
+```
+    <sourceName>=row.columnFloat("speed") \* Math.cos(row.columnFloat("direction"))</sourceName>
+```
+*   To make a v variable, use
+```
+    <sourceName>=row.columnFloat("speed") \* Math.sin(row.columnFloat("direction"))</sourceName>
+```
+Or, given u,v:
+*   To make a speed variable, use
+```
+    <sourceName>=Math.atan2(row.columnDouble("v"), row.columnDouble("u"))\[0\]</sourceName>
+```
+*   To make a direction variable, use
+```
+    <sourceName>=Math.toDegrees(Math.atan2(row.columnDouble("v"), row.columnDouble("u"))\[1\])</sourceName>
+```
+    
+###### Script Example:
+Here is an example of using a script, not just an expression, as a sourceName. We expect that scripts, as opposed to expressions, won't be needed often. In this case the goal is to return a non-NaN missing value (-99) for temperature values outside a specific range. Note that the script is the part after the "=".
+```
+    <dataVariable>
+        <sourceName>=var tc=row.columnFloat("tempC"); return tc&gt;35 || tc&lt;-5? -99.0f : tc\*9/5+32;</sourceName> 
+        <destinationName>tempF</destinationName>
+        <dataType>float</dataType>
+        <addAttributes>
+            <att name="units">degrees\_F</att>
+        </addAttributes>
+    </dataVariable>
+```
+###### Hard Flag  
+If you change the expression or script defined in a sourceName, you must set a [hard flag](/docs/server-admin/additional-information#hard-flag) for the dataset so the ERDDAP™ deletes all of the cached information for the dataset and re-reads every data file (using the new expression or script) the next time it loads the dataset. Alternatively, you can use [DasDds](#dasdds) which does the equivalent of setting a hard flag.
+
+###### Percent Encode
+This is only rarely relevant: Because the expressions and scripts are written in datasets.xml, which is an XML document, you must percent encode any &lt;, \>, and & characters in the expressions and scripts as &lt;, &gt;, and &amp; .
+
+###### Common Problems
+A common problem is that you create a variable with sourceName=*expression* but the resulting column of data just has missing values. Alternatively, some rows of the new column have missing values and you think they shouldn't. The underlying problem is that something is wrong with the expression and ERDDAP is converting that error into a missing value. To solve the problem,
+
+*   Look at the expression to see what the problem might be.
+*   Look in [log.txt](/docs/server-admin/additional-information#log), which will show the first error message generated during the creation of each new column.
+
+Common causes are:
+
+*   You used the wrong case. Expressions and scripts are case sensitive.
+*   You omitted the name of the class. For example, you must use Math.abs(), not just abs().
+*   You didn't do type conversions. For example, if a parameter value's data type is String and you have a double value, you need to convert a double into a String via ""+d.
+*   The column name in the expression doesn't exactly match the column name in the file (or the name might be different in some files).
+*   There is a syntax error in the expression (e.g., a missing or extra ')').
+
+If you get stuck or need help,  
+please include the details and see our [section on getting additional support](/docs/intro#support).
         
-    ###### Efficiency  
-    For EDDTableFromFiles datasets, there is only a very, very minimal (probably not noticeable) slowdown for requests for data from these variables. For EDDTableFromDatabase, there is huge speed penalty for requests that include constraints on these variables (e.g., (&longitude0360>30&longitude0360&lt;40) because the constraints can't be passed through to the database, so the database has to return much much more data to ERDDAP™ (which is very time consuming) so that ERDDAP™ can create the new variable and apply the constraint. To avoid the worst case (where there are no constraints being passed to the database), ERDDAP™ throws an error message so that the database doesn't have to return the entire contents of the table. (If you want to bypass this, add a constraint to a non-script column which will always be true, e.g., &time&lt;3000-01-01.) For this reason, with EDDTableFromDatabase, it is probably always better to create a derived column in the database rather than use sourceName=script in ERDDAP.
-    
-    ###### Overview Of How An Expression (Or Script) Is Used:  
-    In response to a user's request for tabular data, ERDDAP™ gets data from a series of source files. Each source file will generate a table of raw (straight from the source) data. ERDDAP™ will then go through the table of raw data, row by row, and evaluate the expression or script once for every row, in order to create a new column which has that expression or script as a sourceName.
-        
-    ###### GenerateDatasetsXml  
-    Note that GenerateDatasetsXml is completely unaware when there is a need to create a variable with &lt;sourceName>=*expression*&lt;/sourceName>. You have to create the variable in datasets.xml by hand.
-    
-    ###### Expression Examples:  
-    Here are some complete examples of data variables which use an expression to create a new column of data. We expect that these examples (and variants of them) will cover about 95% of the usage of all expression-derived sourceNames.
-    
-    ###### Combining separate "date" and "time" columns into a unified time column:
-    ```
-        <dataVariable>
-            <sourceName>=Calendar2.parseToEpochSeconds(row.columnString("date") + "T" + 
-                row.columnString("time") + "Z", "yyyy-MM-dd'T'HH:mm:ss'Z'")</sourceName> 
-            <destinationName>time</destinationName>
-            <dataType>double</dataType>
-            <addAttributes>
-                <att name="units">seconds since 1970-01-01</att>
-            </addAttributes>
-        </dataVariable>
-    ```
-    That sourceName expression makes a new "time" column by concatenating the String values from the "date" (yyyy-MM-dd) and "time" (HH:mm:ss) columns on each row of the source file, and by converting that string into a "seconds since 1970-01-01" (epochSeconds) double value.
-    
-    Or course, you'll have to customize the time format string to deal with the specific format in each dataset's source date and time columns, see the  
-    [time units documentation](#string-time-units).
-    
-    Technically, you don't have to use Calendar2.parseToEpochSeconds() to convert the combined date+time into epochSeconds. You could just pass the date+time String to ERDDAP™ and specify the format (e.g.,  
-    yyyy-MM-dd'T'HH:mm:ss'Z') via the units attribute. But there are significant advantages to converting to epochSeconds -- notably, EDDTableFromFiles can then easily keep track of the range of time values in each file and so quickly decide whether to look in a given file when responding to a request which has time constraints.
-    
-    A related problem is the need to create a unified date+time column from a source with separate year, month, date, hour, minute, second. The solution is very similar, but you will often need to zero-pad many of the fields, so that, for example, month (1 - 12) and date (1 - 31) always have 2 digits. Here's an example with year, month, date:
-    ```
-        <sourceName>=Calendar2.parseToEpochSeconds(row.columnString("year") + 
-            String2.zeroPad(row.columnString("month"), 2) + 
-            String2.zeroPad(row.columnString("date"), 2), "yyyyMMdd")</sourceName>
-    ```
-        A related problem is the need to create a unified latitude or longitude column by combining the data in the source table's separate degrees, minutes, and seconds columns, each stored as integers. For example,
-    ```
-        <sourceName>=row.columnInt("deg") + row.columnInt("min")/60.0 + 
-            row.columnInt("sec")/3660.0</sourceName>
-    ```
-    ###### Converting a column named "lon" with longitude values from 0 - 360° into a column named "longitude" with values from -180 - 180°
-    ```
-        <dataVariable>
-            <sourceName>=Math2.anglePM180(row.columnDouble("lon"))</sourceName> 
-            <destinationName>longitude</destinationName>
-            <dataType>double</dataType>
-            <addAttributes>
-                <att name="units">degrees\_east</att>
-            </addAttributes>
-        </dataVariable>
-    ```
-    That sourceName expression makes a new "longitude" column by converting the double value from the "lon" column on each row of the source file (presumably with 0 - 360 values), and by converting that into a -180 to 180 double value.
-    
-    If you instead want to convert source longitude values of -180 - 180° into 0 - 360°, use
-    ```
-        <sourceName>=Math2.angle0360(row.columnDouble("lon"))</sourceName>
-    ```
-    Naming the Two Longitude Variables:  
-    If the dataset will have 2 longitude variables, we recommend using destinationName=longitude for the -180 - 180° variable and destinationName=longitude0360 (and longName=\\"Longitude 0-360°") for the 0 - 360° variable. This is important because users sometimes use Advanced Search to search for data within a specific longitude range. That search will work better if longitude consistently has -180 - 180° values for all datasets. Also, the dataset's geospatial\_lon\_min, geospatial\_lon\_max, Westernmost\_Easting and Easternmost\_Eastings global attributes will then be set in a consistent way (with longitude values -180 to 180°);
-        
-    ###### Converting a column named "tempF" with temperature values in degree\_F into a column named "tempC" with temperatures in degree\_C:
-    ```
-        <dataVariable>
-            <sourceName>=(row.columnFloat("tempF")-32)\*5/9</sourceName> 
-            <destinationName>tempC</destinationName>
-            <dataType>float</dataType>
-            <addAttributes>
-                <att name="units">degrees\_C</att>
-            </addAttributes>
-        </dataVariable>
-    ```
-    That sourceName expression makes a new "tempC" column by converting the float degree\_F value from the "tempF" column on each row of the source file into a float degree\_C value.
-    
-    Note that your dataset can have both the original tempF variable and the new tempC variable by having another variable with  
-    ```
-        <sourceName>tempF</sourceName>
-    ```
-    ###### Converting wind "speed" and "direction" columns into two columns with the u,v components
-    *   To make a u variable, use
-    ```
-        <sourceName>=row.columnFloat("speed") \* Math.cos(row.columnFloat("direction"))</sourceName>
-    ```
-    *   To make a v variable, use
-    ```
-        <sourceName>=row.columnFloat("speed") \* Math.sin(row.columnFloat("direction"))</sourceName>
-    ```
-    Or, given u,v:
-    *   To make a speed variable, use
-    ```
-        <sourceName>=Math.atan2(row.columnDouble("v"), row.columnDouble("u"))\[0\]</sourceName>
-    ```
-    *   To make a direction variable, use
-    ```
-        <sourceName>=Math.toDegrees(Math.atan2(row.columnDouble("v"), row.columnDouble("u"))\[1\])</sourceName>
-    ```
-        
-    ###### Script Example:
-    Here is an example of using a script, not just an expression, as a sourceName. We expect that scripts, as opposed to expressions, won't be needed often. In this case the goal is to return a non-NaN missing value (-99) for temperature values outside a specific range. Note that the script is the part after the "=".
-    ```
-        <dataVariable>
-            <sourceName>=var tc=row.columnFloat("tempC"); return tc&gt;35 || tc&lt;-5? -99.0f : tc\*9/5+32;</sourceName> 
-            <destinationName>tempF</destinationName>
-            <dataType>float</dataType>
-            <addAttributes>
-                <att name="units">degrees\_F</att>
-            </addAttributes>
-        </dataVariable>
-    ```
-    ###### Hard Flag  
-    If you change the expression or script defined in a sourceName, you must set a [hard flag](/docs/server-admin/additional-information#hard-flag) for the dataset so the ERDDAP™ deletes all of the cached information for the dataset and re-reads every data file (using the new expression or script) the next time it loads the dataset. Alternatively, you can use [DasDds](#dasdds) which does the equivalent of setting a hard flag.
-    
-    ###### Percent Encode
-    This is only rarely relevant: Because the expressions and scripts are written in datasets.xml, which is an XML document, you must percent encode any &lt;, \>, and & characters in the expressions and scripts as &lt;, &gt;, and &amp; .
-    
-    ###### Common Problems
-    A common problem is that you create a variable with sourceName=*expression* but the resulting column of data just has missing values. Alternatively, some rows of the new column have missing values and you think they shouldn't. The underlying problem is that something is wrong with the expression and ERDDAP is converting that error into a missing value. To solve the problem,
-    
-    *   Look at the expression to see what the problem might be.
-    *   Look in [log.txt](/docs/server-admin/additional-information#log), which will show the first error message generated during the creation of each new column.
-    
-    Common causes are:
-    
-    *   You used the wrong case. Expressions and scripts are case sensitive.
-    *   You omitted the name of the class. For example, you must use Math.abs(), not just abs().
-    *   You didn't do type conversions. For example, if a parameter value's data type is String and you have a double value, you need to convert a double into a String via ""+d.
-    *   The column name in the expression doesn't exactly match the column name in the file (or the name might be different in some files).
-    *   There is a syntax error in the expression (e.g., a missing or extra ')').
-    
-    If you get stuck or need help,  
-    please include the details and see our [section on getting additional support](/docs/intro#support).
-        
-###### &lt;destinationName&gt;
+###### &lt;destinationName&gt; {#destinationname-1}
 *   [&lt;destinationName>](#destinationname) -- the name for the variable that will be shown to and used by ERDDAP™ users.
     *   This is OPTIONAL. If absent, the [sourceName](#sourcename) is used.
     *   This is useful because it allows you to change a cryptic or odd sourceName.
@@ -5602,30 +5600,30 @@ However, there are ways to make ERDDAP™ scale to handle a huge number of reque
     *   destinationNames MUST start with a letter (A-Z, a-z) and MUST be followed by 0 or more characters (A-Z, a-z, 0-9, and \_). ('-' was allowed before ERDDAP™ version 1.10.) This restriction allows data variable names to be the same in ERDDAP™, in the response files, and in all the software where those files will be used, including programming languages (like Python, Matlab, and JavaScript) where there are similar restrictions on variable names.
     *   In EDDTable datasets, [longitude, latitude, altitude (or depth), and time](#destinationname) data variables are special.  
              
-###### &lt;dataType&gt;
+###### &lt;dataType&gt; {#datatype}
 *   [&lt;dataType>](#datatype) -- specifies the data type coming from the source. (In some cases, for example, when reading data from ASCII files, it specifies how the data coming from the source should be stored.)
     *   This is REQUIRED by some dataset types and IGNORED by others. Dataset types that require this for their dataVariables are: EDDGridFromXxxFiles, EDDTableFromXxxFiles, EDDTableFromMWFS, EDDTableFromNOS, EDDTableFromSOS. Other dataset types ignore this tag because they get the information from the source.  
          
     *   Valid values are any of the standard [ERDDAP™ data types](#data-types) plus boolean (see below). The dataType names are case-sensitive.  
          
-    ###### boolean data
-    *   ["boolean"](#boolean-data) is a special case.
-        *   Internally, ERDDAP™ doesn't support a boolean type because booleans can't store missing values and most file types don't support booleans. Also, DAP doesn't support booleans, so there would be no standard way to query boolean variables.
-        *   Specifying "boolean" for the dataType in datasets.xml will cause boolean values to be stored and represented as bytes: 0=false, 1=true, 127=missing\_value.
-        *   Users can specify constraints by using the numeric values (for example, "isAlive=1").
-        *   ERDDAP™ administrators sometimes need to use the "boolean" dataType in datasets.xml to tell ERDDAP™ how to interact with the data source (e.g., to read boolean values from a relational database and convert them to 0, 1, or 127).  
-             
-    *   If you want to change a data variable from the dataType in the source files (for example, short) into some other dataType in the dataset (for example, int), don't use &lt;dataType> to specify what you want. (It works for some types of datasets, but not others.) Instead:
-        *   Use &lt;dataType> to specify what is in the files (for example, short).
-        *   In the &lt;addAttributes> for the variable, add a [scale\_factor](#scale_factor) attribute with the new dataType (for example, int) and a value of 1, for example,  
-    ```
-                <att name="scale\_factor" type="int">1</att>  
-    ```
-    ###### dataVariable &lt;addAttributes&gt;
-    *   [&lt;addAttributes>](#variable-addattributes) -- defines a set of attributes (*name* = *value*) which are added to the source's attributes for a variable, to make the combined attributes for a variable. This is OPTIONAL.  
-        If the variable's [sourceAttributes](#variable-addattributes) or &lt;addAttributes> include [scale\_factor and/or add\_offset](#scale_factor) attributes, their values will be used to unpack the data from the source before distribution to the client. The unpacked variable will be of the same data type (for example, float) as the scale\_factor and add\_offset values.  
+###### boolean data {#boolean-data}
+*   ["boolean"](#boolean-data) is a special case.
+    *   Internally, ERDDAP™ doesn't support a boolean type because booleans can't store missing values and most file types don't support booleans. Also, DAP doesn't support booleans, so there would be no standard way to query boolean variables.
+    *   Specifying "boolean" for the dataType in datasets.xml will cause boolean values to be stored and represented as bytes: 0=false, 1=true, 127=missing\_value.
+    *   Users can specify constraints by using the numeric values (for example, "isAlive=1").
+    *   ERDDAP™ administrators sometimes need to use the "boolean" dataType in datasets.xml to tell ERDDAP™ how to interact with the data source (e.g., to read boolean values from a relational database and convert them to 0, 1, or 127).  
+         
+*   If you want to change a data variable from the dataType in the source files (for example, short) into some other dataType in the dataset (for example, int), don't use &lt;dataType> to specify what you want. (It works for some types of datasets, but not others.) Instead:
+    *   Use &lt;dataType> to specify what is in the files (for example, short).
+    *   In the &lt;addAttributes> for the variable, add a [scale\_factor](#scale_factor) attribute with the new dataType (for example, int) and a value of 1, for example,  
+```
+            <att name="scale\_factor" type="int">1</att>  
+```
+###### dataVariable &lt;addAttributes&gt; {#datavariable-addattributes}
+*   [&lt;addAttributes>](#variable-addattributes) -- defines a set of attributes (*name* = *value*) which are added to the source's attributes for a variable, to make the combined attributes for a variable. This is OPTIONAL.  
+    If the variable's [sourceAttributes](#variable-addattributes) or &lt;addAttributes> include [scale\_factor and/or add\_offset](#scale_factor) attributes, their values will be used to unpack the data from the source before distribution to the client. The unpacked variable will be of the same data type (for example, float) as the scale\_factor and add\_offset values.  
         
-###### Variable &lt;addAttributes&gt;
+###### Variable &lt;addAttributes&gt; {#variable-addattributes}
 *   [**Variable Attributes / Variable &lt;addAttributes>**](#variable-addattributes) -- &lt;addAttributes> is an OPTIONAL tag within an &lt;axisVariable> or &lt;dataVariable> tag which is used to change the variable's attributes.
     
     *   **Use a variable's &lt;addAttributes> to change the variable's attributes.** ERDDAP™ combines a variable's attributes from the dataset's source (**sourceAttributes**) and the variable's **addAttributes** which you define in datasets.xml (which have priority) to make the variable's "**combinedAttributes**", which are what ERDDAP™ users see. Thus, you can use addAttributes to redefine the values of sourceAttributes, add new attributes, or remove attributes.
@@ -5650,382 +5648,383 @@ However, there are ways to make ERDDAP™ scale to handle a huge number of reque
         Insufficient metadata makes a dataset useless.  
         Please take the time to do a good job with metadata attributes.
     
-    ###### Comments about variable attributes that are special in ERDDAP:
+###### Comments about variable attributes that are special in ERDDAP:
+
+###### actual\_range {#actual_range}
+*   [**actual\_range**](#actual_range) is a RECOMMENDED variable attribute. For example,  
+
+>    &lt;att name="actual\_range" [type="floatList"](#attributetype)\>0.17 23.58&lt;/att>
+
+*   This attribute is from the [CDC COARDS](https://ferret.pmel.noaa.gov/noaa_coop/coop_cdf_profile.html) and [CF 1.7+](https://cfconventions.org/Data/cf-conventions/cf-conventions-1.8/cf-conventions.html) metadata standards.
+*   If present, it MUST be an array of two values of the same data type as the destination data type of the variable, specifying the actual (not the theoretical or the allowed) minimum and maximum values of the data for that variable.
+*   If the data is packed with [scale\_factor and/or add\_offset](#scale_factor), actual\_range must have unpacked values and be of the same data type as the unpacked values.
+*   For some data sources (for example, all EDDTableFrom...Files datasets), ERDDAP™ determines the actual\_range of each variable and sets the actual\_range attribute. With other data sources (for example, relational databases, Cassandra, DAPPER, Hyrax), it might be troublesome or burdensome for the source to calculate the range, so ERDDAP™ doesn't request it. In this case, it is best if you can set actual\_range (especially for the longitude, latitude, altitude, depth, and time variables) by adding an actual\_range attribute to each variable's [&lt;addAttributes>](#addattributes) for this dataset in datasets.xml, for example,  
+
+>    &lt;att name="actual\_range" [type="doubleList"](#attributetype)\>-180 180&lt;/att>
+
+*   For numeric [time and timestamp variables](#time-units), the values specified should be the relevant source (not destination) numeric values. For example, if the source time values are stored as "days since 1985-01-01", then the actual\_range should be specified in "days since 1985-01-01". And if you want to refer to NOW as the second value for near-real-time data that is periodically updated, you should use NaN . For example, to specify a data range of 1985-01-17 until NOW, use  
+
+>    &lt;att name="actual\_range" [type="doubleList"](#attributetype)\>16 NaN&lt;/att>
+
+*   If actual\_range is known (either by ERDDAP™ calculating it or by you adding it via &lt;addAttributes>), ERDDAP™ will display it to the user on the Data Access Form (*datasetID*.html) and Make A Graph web pages (*datasetID*.graph) for that dataset and use it when generating the FGDC and ISO 19115 metadata. Also, the last 7 days of time's actual\_range are used as the default time subset.
+*   If actual\_range is known, users can use the [min() and max() functions](https://coastwatch.pfeg.noaa.gov/erddap/tabledap/documentation.html#min) in requests, which is often very useful.
+*   For all EDDTable... datasets, if actual\_range is known (either by you specifying it or by ERDDAP™ calculating it), ERDDAP™ will be able to quickly reject any requests for data outside that range. For example, if the dataset's lowest time value corresponds to 1985-01-17, then a request for all data from 1985-01-01 through 1985-01-16 will be immediately rejected with the error message "Your query produced no matching results." This makes actual\_range a very important piece of metadata, as it can save ERDDAP™ a lot of effort and save the user a lot of time. And this highlights that the actual\_range values must not be narrower than the data's actual range; otherwise, ERDDAP™ may erroneously say "There is no matching data" when in fact there is relevant data.
+*   When a user selects a subset of data and requests a file type that includes metadata (for example, .nc), ERDDAP™ modifies actual\_range in the response file to reflect the subset's range.
+*   See also [data\_min and data\_max](#data_min-and-data_max), which are an alternative way to specify the actual\_range. However, these are deprecated now that actual\_range is defined by CF 1.7+.  
+         
+###### Color Bar Attributes {#color-bar-attributes}
+There are several OPTIONAL variable attributes which specify the suggested default attributes for a color bar (used to convert data values into colors on images) for this variable.
+*   If present, this information is used as default information by griddap and tabledap whenever you request an image that uses a color bar.
+*   For example, when latitude-longitude gridded data is plotted as a coverage on a map, the color bar specifies how the data values are converted to colors.
+*   Having these values allows ERDDAP™ to create images which use a consistent color bar across different requests, even when the time or other dimension values vary.
+*   These attribute names were created for use in ERDDAP. They are not from a metadata standard.
+*   WMS -- The main requirements for a variable to be accessible via ERDDAP's WMS server are:
+    *   The dataset must be an EDDGrid... dataset.
+    *   The data variable MUST be a gridded variable.
+    *   The data variable MUST have longitude and latitude axis variables. (Other axis variables are OPTIONAL.)
+    *   There MUST be some longitude values between -180 and 180.
+    *   The colorBarMinimum and colorBarMaximum attributes MUST be specified. (Other color bar attributes are OPTIONAL.)
+*   The attributes related to the color bar are:
+    *   **colorBarMinimum** specifies the minimum value on the colorBar. For example,  
+
+    >    &lt;att name="colorBarMinimum" [type="double"](#attributetype)\>-5&lt;/att>  
+
+    *   If the data is packed with [scale\_factor and/or add\_offset](#scale_factor), specify the colorBarMinimum as an unpacked value.
+    *   Data values lower than colorBarMinimum are represented by the same color as colorBarMinimum values.
+    *   The attribute should be of [type="double"](#attributetype), regardless of the data variable's type.
+    *   The value is usually a nice round number.
+    *   Best practices: We recommend a value slightly higher than the minimum data value.
+    *   There is no default value.
+*   **colorBarMaximum** specifies the maximum value on the colorBar. For example,  
+
+    >    &lt;att name="colorBarMaximum" [type="double"](#attributetype)\>5&lt;/att>  
+
+    *   If the data is packed with [scale\_factor and/or add\_offset](#scale_factor), specify the colorBarMinimum as an unpacked value.
+    *   Data values higher than colorBarMaximum are represented by the same color as colorBarMaximum values.
+    *   The attribute should be of [type="double"](#attributetype), regardless of the data variable's type.
+    *   The value is usually a nice round number.
+    *   Best practices: We recommend a value slightly lower than the maximum data value.
+    *   There is no default value.
+*   **colorBarPalette** specifies the palette for the colorBar. For example,  
+    ```
+            <att name="colorBarPalette">WhiteRedBlack</att>
+    ```
+    *   All ERDDAP™ installations support these standard palettes: BlackBlueWhite, BlackRedWhite, BlackWhite, BlueWhiteRed, LightRainbow, Ocean, OceanDepth, Rainbow, RedWhiteBlue, ReverseRainbow, Topography, TopographyDepth \[added in v1.74\], WhiteBlack, WhiteBlueBlack, and WhiteRedBlack.
+    *   If you have installed [additional palettes](/docs/server-admin/additional-information#palettes), you can refer to one of them.
+    *   If this attribute isn't present, the default is BlueWhiteRed if \-1\*colorBarMinimum = colorBarMaximum; otherwise the default is Rainbow.
+*   **colorBarScale** specifies the scale for the colorBar. For example, 
+    ``` 
+            <att name="colorBarScale">Log</att>
+    ```
+    *   Valid values are Linear and Log.
+    *   If the value is Log, colorBarMinimum must be greater than 0.
+    *   If this attribute isn't present, the default is Linear.
+*   **colorBarContinuous** specifies whether the colorBar has a continuous palette of colors, or whether the colorBar has a few discrete colors. For example,  
+    ```
+            <att name="colorBarContinuous">false</att>
+    ```
+    *   Valid values are the strings true and false.
+    *   If this attribute isn't present, the default is true.
+*   **colorBarNSections** specifies the default number of sections on the colorBar. For example,  
+    ```
+            <att name="colorBarNSections" type="int">6</att>
+    ```
+    *   Valid values are positive integers.
+    *   If this attribute isn't present, the default is \-1, which tells ERDDAP™ to pick the number of sections based on the range of the colorBar.  
+                 
+###### data\_min and data\_max {#data_min-and-data_max}
+*   [**data\_min** and **data\_max**](#data_min-and-data_max) -- These are deprecated variable attributes defined in the World Ocean Circulation Experiment (WOCE) metadata description. For example,  
+
+    >    &lt;att name="data\_min" [type="float"](#attributetype)\>0.17&lt;/att>  
+    >    &lt;att name="data\_max" [type="float"](#attributetype)\>23.58&lt;/att>
+
+    *   We recommend that you use [actual\_range](#actual_range), instead of data\_min and data\_max, because actual\_range is now defined by the CF specification.
+    *   If present, they must be of the same data type as the destination data type of the variable, and specify the actual (not the theoretical or the allowed) minimum and maximum values of the data for that variable.
+    *   If the data is packed with [scale\_factor and/or add\_offset](#scale_factor), data\_min and data\_max must be unpacked values using the unpacked data type.  
+         
+###### variable drawLandMask {#variable-drawlandmask}
+*   [**drawLandMask**](#variable-drawlandmask) -- This is an OPTIONAL variable attribute used by ERDDAP™ (and no metadata standards) which specifies the default value for the "Draw Land Mask" option on the dataset's Make A Graph form (*datasetID*.graph) and for the &.land parameter in a URL requesting a map of the data. For example,  
+    ```
+        <att name="drawLandMask">under</att>  
+    ```
+    See the [drawLandMask overview](#drawlandmask).
+###### Encoding {#encoding}
+*   [**\_Encoding**](#encoding)
+    *   This attribute may only be used with String variables .
+    *   This attribute is strongly recommended.
+    *   This attribute is from the [NetCDF User's Guide (NUG)](https://docs.unidata.ucar.edu/netcdf-java/current/userguide/index.html).
+    *   Internally in ERDDAP™, Strings are a sequence of 2-byte characters that use the [Unicode UCS-2 character set](https://en.wikipedia.org/wiki/UTF-16).
+    *   Many file types only support 1-byte characters in Strings and thus need this attribute to identify an associated  
+        [charset (AKA code page)](https://en.wikipedia.org/wiki/Code_page) which defines how to map the 256 possible values to a set of 256 characters drawn from the UCS-2 character set and/or the encoding system, e.g., [UTF-8](https://en.wikipedia.org/wiki/UTF-8) (which requires between 1 and 4 bytes per character).
+    *   Values for \_Encoding are case-insensitive.
+    *   In theory, ERDDAP™ could support \_Encoding identifiers from [this IANA list](https://www.iana.org/assignments/character-sets/character-sets.xhtml), but in practice, ERDDAP™ currently just supports
+        *   ISO-8859-1 (note that it has dashes, not underscores), which has the advantage that it is identical to the first 256 characters of Unicode, and
+        *   UTF-8.
+    *   When reading source files, the default value is ISO-8859-1, except for netcdf-4 files, where the default is UTF-8.
+    *   This is an ongoing troublesome issue because many source files use charsets or encodings that are different from ISO-8859-1, but don't identify the charset or encoding. For example, many source data files have some metadata copied and pasted from Microsoft Word on Windows and thus have fancy hyphens and apostrophes from a Windows-specific charset instead of ASCII hyphens and apostrophes. These characters then show up as odd characters or '?' in ERDDAP.  
+         
+###### fileAccessBaseUrl {#fileaccessbaseurl}
+*   **[fileAccessBaseUrl](#fileaccessbaseurl) and fileAccessSuffix** are very rarely used attributes that are not from any standard. If an EDDTable column has filenames of web accessible files (e.g., image, video, or audio files), you can add  
+```
+    <att name="fileAccessBaseUrl">*someBaseURL*</a>  
+```
+to specify the base URL (ending with / ) needed to make the filenames into complete URLs. In unusual cases, such as when a column has references to .png files but the values lack ".png", you can add  
+```
+    <att name="fileAccessSuffix">*someSuffix*</a>  
+```
+(for example, &lt;att name="fileAccessSuffix">.png&lt;/a>)  
+to specify a suffix to be added to make the filenames into complete URLs. Then for .htmlTable responses, ERDDAP™ will show the filename as a link to the full URL (the baseUrl plus the filename plus the suffix).
+
+If you want ERDDAP™ to serve the related files, make a separate [EDDTableFromFileNames](#eddtablefromfilenames) dataset for those files (it may be a private dataset).
     
-    ###### actual\_range
-    *   [**actual\_range**](#actual_range) is a RECOMMENDED variable attribute. For example,  
-
-    >    &lt;att name="actual\_range" [type="floatList"](#attributetype)\>0.17 23.58&lt;/att>
-
-    *   This attribute is from the [CDC COARDS](https://ferret.pmel.noaa.gov/noaa_coop/coop_cdf_profile.html) and [CF 1.7+](https://cfconventions.org/Data/cf-conventions/cf-conventions-1.8/cf-conventions.html) metadata standards.
-    *   If present, it MUST be an array of two values of the same data type as the destination data type of the variable, specifying the actual (not the theoretical or the allowed) minimum and maximum values of the data for that variable.
-    *   If the data is packed with [scale\_factor and/or add\_offset](#scale_factor), actual\_range must have unpacked values and be of the same data type as the unpacked values.
-    *   For some data sources (for example, all EDDTableFrom...Files datasets), ERDDAP™ determines the actual\_range of each variable and sets the actual\_range attribute. With other data sources (for example, relational databases, Cassandra, DAPPER, Hyrax), it might be troublesome or burdensome for the source to calculate the range, so ERDDAP™ doesn't request it. In this case, it is best if you can set actual\_range (especially for the longitude, latitude, altitude, depth, and time variables) by adding an actual\_range attribute to each variable's [&lt;addAttributes>](#addattributes) for this dataset in datasets.xml, for example,  
-
-    >    &lt;att name="actual\_range" [type="doubleList"](#attributetype)\>-180 180&lt;/att>
-
-    *   For numeric [time and timestamp variables](#time-units), the values specified should be the relevant source (not destination) numeric values. For example, if the source time values are stored as "days since 1985-01-01", then the actual\_range should be specified in "days since 1985-01-01". And if you want to refer to NOW as the second value for near-real-time data that is periodically updated, you should use NaN . For example, to specify a data range of 1985-01-17 until NOW, use  
-
-    >    &lt;att name="actual\_range" [type="doubleList"](#attributetype)\>16 NaN&lt;/att>
-
-    *   If actual\_range is known (either by ERDDAP™ calculating it or by you adding it via &lt;addAttributes>), ERDDAP™ will display it to the user on the Data Access Form (*datasetID*.html) and Make A Graph web pages (*datasetID*.graph) for that dataset and use it when generating the FGDC and ISO 19115 metadata. Also, the last 7 days of time's actual\_range are used as the default time subset.
-    *   If actual\_range is known, users can use the [min() and max() functions](https://coastwatch.pfeg.noaa.gov/erddap/tabledap/documentation.html#min) in requests, which is often very useful.
-    *   For all EDDTable... datasets, if actual\_range is known (either by you specifying it or by ERDDAP™ calculating it), ERDDAP™ will be able to quickly reject any requests for data outside that range. For example, if the dataset's lowest time value corresponds to 1985-01-17, then a request for all data from 1985-01-01 through 1985-01-16 will be immediately rejected with the error message "Your query produced no matching results." This makes actual\_range a very important piece of metadata, as it can save ERDDAP™ a lot of effort and save the user a lot of time. And this highlights that the actual\_range values must not be narrower than the data's actual range; otherwise, ERDDAP™ may erroneously say "There is no matching data" when in fact there is relevant data.
-    *   When a user selects a subset of data and requests a file type that includes metadata (for example, .nc), ERDDAP™ modifies actual\_range in the response file to reflect the subset's range.
-    *   See also [data\_min and data\_max](#data_min-and-data_max), which are an alternative way to specify the actual\_range. However, these are deprecated now that actual\_range is defined by CF 1.7+.  
-             
-    ###### Color Bar Attributes
-    There are several OPTIONAL variable attributes which specify the suggested default attributes for a color bar (used to convert data values into colors on images) for this variable.
-    *   If present, this information is used as default information by griddap and tabledap whenever you request an image that uses a color bar.
-    *   For example, when latitude-longitude gridded data is plotted as a coverage on a map, the color bar specifies how the data values are converted to colors.
-    *   Having these values allows ERDDAP™ to create images which use a consistent color bar across different requests, even when the time or other dimension values vary.
-    *   These attribute names were created for use in ERDDAP. They are not from a metadata standard.
-    *   WMS -- The main requirements for a variable to be accessible via ERDDAP's WMS server are:
-        *   The dataset must be an EDDGrid... dataset.
-        *   The data variable MUST be a gridded variable.
-        *   The data variable MUST have longitude and latitude axis variables. (Other axis variables are OPTIONAL.)
-        *   There MUST be some longitude values between -180 and 180.
-        *   The colorBarMinimum and colorBarMaximum attributes MUST be specified. (Other color bar attributes are OPTIONAL.)
-    *   The attributes related to the color bar are:
-        *   **colorBarMinimum** specifies the minimum value on the colorBar. For example,  
-
-        >    &lt;att name="colorBarMinimum" [type="double"](#attributetype)\>-5&lt;/att>  
-
-        *   If the data is packed with [scale\_factor and/or add\_offset](#scale_factor), specify the colorBarMinimum as an unpacked value.
-        *   Data values lower than colorBarMinimum are represented by the same color as colorBarMinimum values.
-        *   The attribute should be of [type="double"](#attributetype), regardless of the data variable's type.
-        *   The value is usually a nice round number.
-        *   Best practices: We recommend a value slightly higher than the minimum data value.
-        *   There is no default value.
-    *   **colorBarMaximum** specifies the maximum value on the colorBar. For example,  
-
-        >    &lt;att name="colorBarMaximum" [type="double"](#attributetype)\>5&lt;/att>  
-
-        *   If the data is packed with [scale\_factor and/or add\_offset](#scale_factor), specify the colorBarMinimum as an unpacked value.
-        *   Data values higher than colorBarMaximum are represented by the same color as colorBarMaximum values.
-        *   The attribute should be of [type="double"](#attributetype), regardless of the data variable's type.
-        *   The value is usually a nice round number.
-        *   Best practices: We recommend a value slightly lower than the maximum data value.
-        *   There is no default value.
-    *   **colorBarPalette** specifies the palette for the colorBar. For example,  
-        ```
-                <att name="colorBarPalette">WhiteRedBlack</att>
-        ```
-        *   All ERDDAP™ installations support these standard palettes: BlackBlueWhite, BlackRedWhite, BlackWhite, BlueWhiteRed, LightRainbow, Ocean, OceanDepth, Rainbow, RedWhiteBlue, ReverseRainbow, Topography, TopographyDepth \[added in v1.74\], WhiteBlack, WhiteBlueBlack, and WhiteRedBlack.
-        *   If you have installed [additional palettes](/docs/server-admin/additional-information#palettes), you can refer to one of them.
-        *   If this attribute isn't present, the default is BlueWhiteRed if \-1\*colorBarMinimum = colorBarMaximum; otherwise the default is Rainbow.
-    *   **colorBarScale** specifies the scale for the colorBar. For example, 
-        ``` 
-                <att name="colorBarScale">Log</att>
-        ```
-        *   Valid values are Linear and Log.
-        *   If the value is Log, colorBarMinimum must be greater than 0.
-        *   If this attribute isn't present, the default is Linear.
-    *   **colorBarContinuous** specifies whether the colorBar has a continuous palette of colors, or whether the colorBar has a few discrete colors. For example,  
-        ```
-                <att name="colorBarContinuous">false</att>
-        ```
-        *   Valid values are the strings true and false.
-        *   If this attribute isn't present, the default is true.
-    *   **colorBarNSections** specifies the default number of sections on the colorBar. For example,  
-        ```
-                <att name="colorBarNSections" type="int">6</att>
-        ```
-        *   Valid values are positive integers.
-        *   If this attribute isn't present, the default is \-1, which tells ERDDAP™ to pick the number of sections based on the range of the colorBar.  
-                     
-    ###### data\_min and data\_max
-    *   [**data\_min** and **data\_max**](#data_min-and-data_max) -- These are deprecated variable attributes defined in the World Ocean Circulation Experiment (WOCE) metadata description. For example,  
-
-        >    &lt;att name="data\_min" [type="float"](#attributetype)\>0.17&lt;/att>  
-        >    &lt;att name="data\_max" [type="float"](#attributetype)\>23.58&lt;/att>
-
-        *   We recommend that you use [actual\_range](#actual_range), instead of data\_min and data\_max, because actual\_range is now defined by the CF specification.
-        *   If present, they must be of the same data type as the destination data type of the variable, and specify the actual (not the theoretical or the allowed) minimum and maximum values of the data for that variable.
-        *   If the data is packed with [scale\_factor and/or add\_offset](#scale_factor), data\_min and data\_max must be unpacked values using the unpacked data type.  
-             
-    ###### variable drawLandMask
-    *   [**drawLandMask**](#variable-drawlandmask) -- This is an OPTIONAL variable attribute used by ERDDAP™ (and no metadata standards) which specifies the default value for the "Draw Land Mask" option on the dataset's Make A Graph form (*datasetID*.graph) and for the &.land parameter in a URL requesting a map of the data. For example,  
-        ```
-            <att name="drawLandMask">under</att>  
-        ```
-        See the [drawLandMask overview](#drawlandmask).
-    ###### Encoding
-    *   [**\_Encoding**](#encoding)
-        *   This attribute may only be used with String variables .
-        *   This attribute is strongly recommended.
-        *   This attribute is from the [NetCDF User's Guide (NUG)](https://docs.unidata.ucar.edu/netcdf-java/current/userguide/index.html).
-        *   Internally in ERDDAP™, Strings are a sequence of 2-byte characters that use the [Unicode UCS-2 character set](https://en.wikipedia.org/wiki/UTF-16).
-        *   Many file types only support 1-byte characters in Strings and thus need this attribute to identify an associated  
-            [charset (AKA code page)](https://en.wikipedia.org/wiki/Code_page) which defines how to map the 256 possible values to a set of 256 characters drawn from the UCS-2 character set and/or the encoding system, e.g., [UTF-8](https://en.wikipedia.org/wiki/UTF-8) (which requires between 1 and 4 bytes per character).
-        *   Values for \_Encoding are case-insensitive.
-        *   In theory, ERDDAP™ could support \_Encoding identifiers from [this IANA list](https://www.iana.org/assignments/character-sets/character-sets.xhtml), but in practice, ERDDAP™ currently just supports
-            *   ISO-8859-1 (note that it has dashes, not underscores), which has the advantage that it is identical to the first 256 characters of Unicode, and
-            *   UTF-8.
-        *   When reading source files, the default value is ISO-8859-1, except for netcdf-4 files, where the default is UTF-8.
-        *   This is an ongoing troublesome issue because many source files use charsets or encodings that are different from ISO-8859-1, but don't identify the charset or encoding. For example, many source data files have some metadata copied and pasted from Microsoft Word on Windows and thus have fancy hyphens and apostrophes from a Windows-specific charset instead of ASCII hyphens and apostrophes. These characters then show up as odd characters or '?' in ERDDAP.  
-             
-    ###### fileAccessBaseUrl
-    *   **[fileAccessBaseUrl](#fileaccessbaseurl) and fileAccessSuffix** are very rarely used attributes that are not from any standard. If an EDDTable column has filenames of web accessible files (e.g., image, video, or audio files), you can add  
-    ```
-        <att name="fileAccessBaseUrl">*someBaseURL*</a>  
-    ```
-    to specify the base URL (ending with / ) needed to make the filenames into complete URLs. In unusual cases, such as when a column has references to .png files but the values lack ".png", you can add  
-    ```
-        <att name="fileAccessSuffix">*someSuffix*</a>  
-    ```
-    (for example, &lt;att name="fileAccessSuffix">.png&lt;/a>)  
-    to specify a suffix to be added to make the filenames into complete URLs. Then for .htmlTable responses, ERDDAP™ will show the filename as a link to the full URL (the baseUrl plus the filename plus the suffix).
+###### fileAccessArchiveUrl {#fileaccessarchiveurl}
+*   [**fileAccessArchiveUrl**](#fileaccessarchiveurl) is a very rarely used attribute that is not from any standard. If an EDDTable column has filenames of web accessible files (e.g., image, video, or audio files) which are accessible via an archive (e.g., .zip file) accessible via a URL, use &lt;att name="fileAccessArchiveUrl">*theURL*&lt;/att> to specify the URL for the archive.
     
-    If you want ERDDAP™ to serve the related files, make a separate [EDDTableFromFileNames](#eddtablefromfilenames) dataset for those files (it may be a private dataset).
-        
-    ###### fileAccessArchiveUrl
-    *   [**fileAccessArchiveUrl**](#fileaccessarchiveurl) is a very rarely used attribute that is not from any standard. If an EDDTable column has filenames of web accessible files (e.g., image, video, or audio files) which are accessible via an archive (e.g., .zip file) accessible via a URL, use &lt;att name="fileAccessArchiveUrl">*theURL*&lt;/att> to specify the URL for the archive.
-        
-        If you want ERDDAP™ to serve the archive file, make a separate [EDDTableFromFileNames](#eddtablefromfilenames) dataset for that file (it may be a private dataset).
-        
-    ###### ioos\_category
-    *   [**ioos\_category**](#ioos_category) -- This is a REQUIRED variable attribute if &lt;variablesMustHaveIoosCategory> is set to true (the default) in [setup.xml](/docs/server-admin/deploy-install#setupxml); otherwise, it is OPTIONAL.  
-        For example, &lt;att name="ioos\_category">Salinity&lt;/att>  
-        The categories are from [NOAA's Integrated Ocean Observing System (IOOS)](https://ioos.noaa.gov/).
-        
-        *   (As of writing this) we aren't aware of formal definitions of these names.
-        *   The core names are from Zdenka Willis' .ppt "Integrated Ocean Observing System (IOOS) NOAA's Approach to Building an Initial Operating Capability" and from the [US IOOS Blueprint](https://www.iooc.us/wp-content/uploads/2010/11/US-IOOS-Blueprint-for-Full-Capability-Version-1.0.pdf) (page 1-5).
-        *   It is likely that this list will be revised in the future. If you have requests, please email Chris.John at noaa.gov.
-        *   ERDDAP™ supports a larger list of categories than IOOS does because Bob Simons added additional names (mostly based on the names of scientific fields, for example, Biology, Ecology, Meteorology, Statistics, Taxonomy) for other types of data.
-        *   The current valid values in ERDDAP™ are Bathymetry, Biology, Bottom Character, CO2, Colored Dissolved Organic Matter, Contaminants, Currents, Dissolved Nutrients, Dissolved O2, Ecology, Fish Abundance, Fish Species, Heat Flux, Hydrology, Ice Distribution, Identifier, Location, Meteorology, Ocean Color, Optical Properties, Other, Pathogens, Phytoplankton Species, Pressure, Productivity, Quality, Salinity, Sea Level, Statistics, Stream Flow, Surface Waves, Taxonomy, Temperature, Time, Total Suspended Matter, Unknown, Wind, Zooplankton Species, and Zooplankton Abundance.
-        *   There is some overlap and ambiguity between different terms -- do your best.
-        *   If you add ioos\_category to the list of &lt;categoryAttributes> in ERDDAP's [setup.xml](/docs/server-admin/deploy-install#setupxml) file, users can easily find datasets with similar data via ERDDAP's "Search for Datasets by Category" on the home page.  
-            [Try using ioos\_category to search for datasets of interest.](https://coastwatch.pfeg.noaa.gov/erddap/categorize/ioos_category/index.html?page=1&itemsPerPage=1000)
-        *   There was [a discussion about ERDDAP™ and ioos\_category in the ERDDAP™ Google Group.](https://groups.google.com/forum/#!topic/erddap/TnwbgzpSS0w)
-        
-        You may be tempted to set &lt;variablesMustHaveIoosCategory> to false so that this attribute isn't required. ("Pfft! What's it to me?") Some reasons to leave it set to true (the default) and use ioos\_category are:
-        
-        *   If setup.xml's &lt;variablesMustHaveIoosCategory> is set to true, [GenerateDatasetsXml](#generatedatasetsxml) always creates/suggests an ioos\_category attribute for each variable in each new dataset. So why not just leave it in?
-        *   ERDDAP™ lets users search for datasets of interest by category. ioos\_category is a very useful search category because the ioos\_categories (for example, Temperature) are quite broad. This makes ioos\_category much better for this purpose than, for example, the much finer-grained CF standard\_names (which aren't so good for this purpose because of all the synonyms and slight variations, for example, sea\_surface\_temperature versus sea\_water\_temperature).  
-            (Using ioos\_category for this purpose is controlled by &lt;categoryAttributes> in your setup.xml file.)  
-            [Try using ioos\_category to search for datasets of interest.](https://coastwatch.pfeg.noaa.gov/erddap/categorize/ioos_category/index.html?page=1&itemsPerPage=1000)
-        *   These categories are from [NOAA's Integrated Ocean Observing System (IOOS)](https://ioos.noaa.gov/). These categories are fundamental to IOOS's description of IOOS's mission. If you are in NOAA, supporting ioos\_category is a good One-NOAA thing to do. (Watch this [One NOAA video](https://www.youtube.com/watch?v=nBnCsMYm2yQ) and be inspired!) If you are in some other U.S. or international agency, or work with governmental agencies, or work with some other Ocean Observing System, isn't it a good idea to cooperate with the U.S. IOOS office?
-        *   Sooner or later, you may want some other ERDDAP™ to link to your datasets via [EDDGridFromErddap](#eddfromerddap) and [EDDTableFromErddap](#eddfromerddap). If the other ERDDAP™ requires ioos\_category, your datasets must have ioos\_category in order for EDDGridFromErddap and EDDTableFromErddap to work.
-        *   It is psychologically much easier to include ioos\_category when you create the dataset (it's just another thing that ERDDAP™ requires to add the dataset to ERDDAP), than to add it after the fact (if you decided to use it in the future).  
+    If you want ERDDAP™ to serve the archive file, make a separate [EDDTableFromFileNames](#eddtablefromfilenames) dataset for that file (it may be a private dataset).
+    
+###### ioos\_category {#ioos_category}
+*   [**ioos\_category**](#ioos_category) -- This is a REQUIRED variable attribute if &lt;variablesMustHaveIoosCategory> is set to true (the default) in [setup.xml](/docs/server-admin/deploy-install#setupxml); otherwise, it is OPTIONAL.  
+    For example, &lt;att name="ioos\_category">Salinity&lt;/att>  
+    The categories are from [NOAA's Integrated Ocean Observing System (IOOS)](https://ioos.noaa.gov/).
+    
+    *   (As of writing this) we aren't aware of formal definitions of these names.
+    *   The core names are from Zdenka Willis' .ppt "Integrated Ocean Observing System (IOOS) NOAA's Approach to Building an Initial Operating Capability" and from the [US IOOS Blueprint](https://www.iooc.us/wp-content/uploads/2010/11/US-IOOS-Blueprint-for-Full-Capability-Version-1.0.pdf) (page 1-5).
+    *   It is likely that this list will be revised in the future. If you have requests, please email Chris.John at noaa.gov.
+    *   ERDDAP™ supports a larger list of categories than IOOS does because Bob Simons added additional names (mostly based on the names of scientific fields, for example, Biology, Ecology, Meteorology, Statistics, Taxonomy) for other types of data.
+    *   The current valid values in ERDDAP™ are Bathymetry, Biology, Bottom Character, CO2, Colored Dissolved Organic Matter, Contaminants, Currents, Dissolved Nutrients, Dissolved O2, Ecology, Fish Abundance, Fish Species, Heat Flux, Hydrology, Ice Distribution, Identifier, Location, Meteorology, Ocean Color, Optical Properties, Other, Pathogens, Phytoplankton Species, Pressure, Productivity, Quality, Salinity, Sea Level, Statistics, Stream Flow, Surface Waves, Taxonomy, Temperature, Time, Total Suspended Matter, Unknown, Wind, Zooplankton Species, and Zooplankton Abundance.
+    *   There is some overlap and ambiguity between different terms -- do your best.
+    *   If you add ioos\_category to the list of &lt;categoryAttributes> in ERDDAP's [setup.xml](/docs/server-admin/deploy-install#setupxml) file, users can easily find datasets with similar data via ERDDAP's "Search for Datasets by Category" on the home page.  
+        [Try using ioos\_category to search for datasets of interest.](https://coastwatch.pfeg.noaa.gov/erddap/categorize/ioos_category/index.html?page=1&itemsPerPage=1000)
+    *   There was [a discussion about ERDDAP™ and ioos\_category in the ERDDAP™ Google Group.](https://groups.google.com/forum/#!topic/erddap/TnwbgzpSS0w)
+    
+    You may be tempted to set &lt;variablesMustHaveIoosCategory> to false so that this attribute isn't required. ("Pfft! What's it to me?") Some reasons to leave it set to true (the default) and use ioos\_category are:
+    
+    *   If setup.xml's &lt;variablesMustHaveIoosCategory> is set to true, [GenerateDatasetsXml](#generatedatasetsxml) always creates/suggests an ioos\_category attribute for each variable in each new dataset. So why not just leave it in?
+    *   ERDDAP™ lets users search for datasets of interest by category. ioos\_category is a very useful search category because the ioos\_categories (for example, Temperature) are quite broad. This makes ioos\_category much better for this purpose than, for example, the much finer-grained CF standard\_names (which aren't so good for this purpose because of all the synonyms and slight variations, for example, sea\_surface\_temperature versus sea\_water\_temperature).  
+        (Using ioos\_category for this purpose is controlled by &lt;categoryAttributes> in your setup.xml file.)  
+        [Try using ioos\_category to search for datasets of interest.](https://coastwatch.pfeg.noaa.gov/erddap/categorize/ioos_category/index.html?page=1&itemsPerPage=1000)
+    *   These categories are from [NOAA's Integrated Ocean Observing System (IOOS)](https://ioos.noaa.gov/). These categories are fundamental to IOOS's description of IOOS's mission. If you are in NOAA, supporting ioos\_category is a good One-NOAA thing to do. (Watch this [One NOAA video](https://www.youtube.com/watch?v=nBnCsMYm2yQ) and be inspired!) If you are in some other U.S. or international agency, or work with governmental agencies, or work with some other Ocean Observing System, isn't it a good idea to cooperate with the U.S. IOOS office?
+    *   Sooner or later, you may want some other ERDDAP™ to link to your datasets via [EDDGridFromErddap](#eddfromerddap) and [EDDTableFromErddap](#eddfromerddap). If the other ERDDAP™ requires ioos\_category, your datasets must have ioos\_category in order for EDDGridFromErddap and EDDTableFromErddap to work.
+    *   It is psychologically much easier to include ioos\_category when you create the dataset (it's just another thing that ERDDAP™ requires to add the dataset to ERDDAP), than to add it after the fact (if you decided to use it in the future).  
+         
+###### long\_name {#long_name}
+*   [**long\_name**](#long_name) ([COARDS](https://ferret.pmel.noaa.gov/noaa_coop/coop_cdf_profile.html), [CF](https://cfconventions.org/Data/cf-conventions/cf-conventions-1.8/cf-conventions.html) and [ACDD](https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3) metadata standards) is a RECOMMENDED variable attribute in ERDDAP. For example,  
+    ```
+        <att name="long\_name">Eastward Sea Water Velocity</att>
+    ```
+    *   ERDDAP™ uses the long\_name for labeling axes on graphs.
+    *   Best practices: Capitalize the words in the long\_name as if it were a title (capitalize the first word and all non-article words). Don't include the units in the long\_name. The long name shouldn't be very long (usually &lt;20 characters), but should be more descriptive than the [destinationName](#destinationname), which is often very concise.
+    *   If "long\_name" isn't defined in the variable's [sourceAttributes](#variable-addattributes) or &lt;addAttributes>, ERDDAP™ will generate it by cleaning up the [standard\_name](#standard_name) (if present) or the destinationName.  
+         
+###### missing\_value {#missing_value}
+*   [**missing\_value**](#missing_value) and **\_FillValue** ([COARDS](https://ferret.pmel.noaa.gov/noaa_coop/coop_cdf_profile.html) and [CF](https://cfconventions.org/Data/cf-conventions/cf-conventions-1.8/cf-conventions.html)) are variable attributes which describe a number (for example, -9999) which is used to represent a missing value. For example,  
+
+>  &lt;att name="missing\_value" [type="double"](#attributetype)\>-9999&lt;/att>  
+
+For String variables, the default for both is "" (the empty string).  
+For numeric variables, the default for both is NaN.
+*   ERDDAP™ supports both missing\_value and \_FillValue, since some data sources assign slightly different meanings to them.
+*   If present, they should be of the same data type as the variable.
+*   If the data is packed with [scale\_factor and/or add\_offset](#scale_factor), the missing\_value and \_FillValue values should be likewise packed. Similarly, for a column with String date/time values that use a local [time\_zone](#time_zone), the missing\_value and \_FillValue values should use the local time zone.
+*   If a variable uses these special values, the missing\_value and/or \_FillValue attributes are REQUIRED.
+*   For [time and timestamp variables](#time-units) (whether the source is strings or numeric), missing\_values and \_FillValues appear as "" (the empty string) when the time is written as a String and as NaN when the time is written as a double. The source values for missing\_value and \_FillValue will not appear in the variable's metadata.
+*   For String variables, ERDDAP™ always converts any missing\_values or \_FillValue data values into "" (the empty string). The source values for missing\_value and \_FillValue will not appear in the variable's metadata.
+*   For numeric variables:  
+    The missing\_value and \_FillValue will appear in the variable's metadata.  
+    For some output data formats, ERDDAP™ will leave these special numbers intact, e.g., you will see -9999.  
+    For other output data formats (notably text-like formats like .csv and .htmlTable), ERDDAP™ will replace these special numbers with NaN or "".
+*   Some data types have inherent missing value markers that don't need to be explicitly identified with missing\_value or \_FillValue attributes: float and double variables have NaN (Not a Number), String values use the empty string, and char values have character \\uffff (character #65535, which is Unicode's value for Not a Character). Integer data types do not have inherent missing value markers.
+*   If an integer variable has a missing value (for example, an empty position in a .csv file), ERDDAP™ will interpret the value as the defined missing\_value or \_FillValue for that variable. If none is defined, ERDDAP™ will interpret the value as the default missing value for that data type, which is always the maximum value which can be held by that data type:  
+    127 for byte variables, 32767 for short, 2147483647 for int, 9223372036854775807 for long,  
+    255 for ubyte, 65535 for ushort, 4294967295 for uint, and 18446744073709551615 for ulong.
+###### ADD \_FillValue ATTRIBUTES? {#add-_fillvalue-attributes}
+*   [ADD \_FillValue ATTRIBUTES?](#add-_fillvalue-attributes)  
+    Each time ERDDAP™ loads a dataset, it checks if the variables with integer source data types have a defined missing\_value or \_FillValue attribute. If a variable doesn't, then ERDDAP™ prints a message to the log file (starting with "Add \_FillValue Attribute?") recommending that the ERDDAP™ administrator add a \_FillValue attribute for this variable in datasets.xml. It is very useful for every variable to have a \_FillValue or missing\_value because missing values are always possible, e.g., if a given file in a dataset doesn't have a given variable, ERDDAP™ needs to be able to present that variable as having all missing values for that variable. If you decide a variable should not have a \_FillValue attribute, you can add  
+    &lt;att names="\_FillValue">null&lt;/att> instead, which will suppress the message for that datasetID+variable combination in the future.
+    
+    Each time ERDDAP™ starts up, it collects all of those recommendations into a message which is written to the log file (starting with "ADD \_FillValue ATTRIBUTES?"), emailed to the ERDDAP™ administrator, and written to a CSV data file in the \[bigParentDirectory\]/logs/ directory. If you wish to, you can use the GenerateDatasetsXml program (and the AddFillValueAttributes option) to apply all the suggestions in the CSV file to the datasets.xml file. For any of the datasetID/variable combinations in that file, if you decide there is no need to add the attributed, you can change the attribute to &lt;att names="\_FillValue">null&lt;/att> to suppress the recommendation for that datasetID+variable combination in the future.
+    
+    This is important!  
+    As Bob has often said: it would be bad (and embarrassing) if some of the evidence of global warming was caused by unidentified missing values in the data (e.g., temperatures values of 99 or 127 degree\_C that should have been marked as missing values and thus skewed the mean and/or median statistics higher).
+
+*   The \_FillValue and missing\_value values for a given variable in different source files must be consistent; otherwise, ERDDAP™ will accept files with one set of values and reject all of the other files as "Bad Files". To solve the problem,
+    *   If the files are gridded .nc files, you can use [EDDGridFromNcFilesUnpacked](#eddgridfromncfilesunpacked).
+    *   If the files are tabular data files, you can use EDDTableFrom...Files' [standardizeWhat](#standardizewhat) to tell ERDDAP to standardize the source files as they are read into ERDDAP.
+    *   For harder problems, you can use [NcML](#ncml-files) or [NCO](#netcdf-operators-nco) to solve the problem.  
              
-    ###### long\_name
-    *   [**long\_name**](#long_name) ([COARDS](https://ferret.pmel.noaa.gov/noaa_coop/coop_cdf_profile.html), [CF](https://cfconventions.org/Data/cf-conventions/cf-conventions-1.8/cf-conventions.html) and [ACDD](https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3) metadata standards) is a RECOMMENDED variable attribute in ERDDAP. For example,  
-        ```
-            <att name="long\_name">Eastward Sea Water Velocity</att>
-        ```
-        *   ERDDAP™ uses the long\_name for labeling axes on graphs.
-        *   Best practices: Capitalize the words in the long\_name as if it were a title (capitalize the first word and all non-article words). Don't include the units in the long\_name. The long name shouldn't be very long (usually &lt;20 characters), but should be more descriptive than the [destinationName](#destinationname), which is often very concise.
-        *   If "long\_name" isn't defined in the variable's [sourceAttributes](#variable-addattributes) or &lt;addAttributes>, ERDDAP™ will generate it by cleaning up the [standard\_name](#standard_name) (if present) or the destinationName.  
-             
-    ###### missing\_value
-    *   [**missing\_value**](#missing_value) and **\_FillValue** ([COARDS](https://ferret.pmel.noaa.gov/noaa_coop/coop_cdf_profile.html) and [CF](https://cfconventions.org/Data/cf-conventions/cf-conventions-1.8/cf-conventions.html)) are variable attributes which describe a number (for example, -9999) which is used to represent a missing value. For example,  
+###### scale\_factor {#scale_factor}
+*   [**scale\_factor**](#scale_factor) (default = 1) and **add\_offset** (default = 0) ([COARDS](https://ferret.pmel.noaa.gov/noaa_coop/coop_cdf_profile.html) and [CF](https://cfconventions.org/Data/cf-conventions/cf-conventions-1.8/cf-conventions.html)) are OPTIONAL variable attributes which describe data which is packed in a simpler data type via a simple transformation.
+    *   If present, their data type is different from the source data type and describes the data type of the destination values.  
+        For example, a data source might have stored float data values with one decimal digit packed as short ints (int16), using scale\_factor = 0.1 and add\_offset = 0. For example,  
 
-    >  &lt;att name="missing\_value" [type="double"](#attributetype)\>-9999&lt;/att>  
+    >    &lt;att name="scale\_factor" [type="float"](#attributetype)\>0.1&lt;/att>  
+    >    &lt;att name="add\_offset" [type="float"](#attributetype)\>0&lt;/att>  
 
-    For String variables, the default for both is "" (the empty string).  
-    For numeric variables, the default for both is NaN.
-    *   ERDDAP™ supports both missing\_value and \_FillValue, since some data sources assign slightly different meanings to them.
-    *   If present, they should be of the same data type as the variable.
-    *   If the data is packed with [scale\_factor and/or add\_offset](#scale_factor), the missing\_value and \_FillValue values should be likewise packed. Similarly, for a column with String date/time values that use a local [time\_zone](#time_zone), the missing\_value and \_FillValue values should use the local time zone.
-    *   If a variable uses these special values, the missing\_value and/or \_FillValue attributes are REQUIRED.
-    *   For [time and timestamp variables](#time-units) (whether the source is strings or numeric), missing\_values and \_FillValues appear as "" (the empty string) when the time is written as a String and as NaN when the time is written as a double. The source values for missing\_value and \_FillValue will not appear in the variable's metadata.
-    *   For String variables, ERDDAP™ always converts any missing\_values or \_FillValue data values into "" (the empty string). The source values for missing\_value and \_FillValue will not appear in the variable's metadata.
-    *   For numeric variables:  
-        The missing\_value and \_FillValue will appear in the variable's metadata.  
-        For some output data formats, ERDDAP™ will leave these special numbers intact, e.g., you will see -9999.  
-        For other output data formats (notably text-like formats like .csv and .htmlTable), ERDDAP™ will replace these special numbers with NaN or "".
-    *   Some data types have inherent missing value markers that don't need to be explicitly identified with missing\_value or \_FillValue attributes: float and double variables have NaN (Not a Number), String values use the empty string, and char values have character \\uffff (character #65535, which is Unicode's value for Not a Character). Integer data types do not have inherent missing value markers.
-    *   If an integer variable has a missing value (for example, an empty position in a .csv file), ERDDAP™ will interpret the value as the defined missing\_value or \_FillValue for that variable. If none is defined, ERDDAP™ will interpret the value as the default missing value for that data type, which is always the maximum value which can be held by that data type:  
-        127 for byte variables, 32767 for short, 2147483647 for int, 9223372036854775807 for long,  
-        255 for ubyte, 65535 for ushort, 4294967295 for uint, and 18446744073709551615 for ulong.
-    ###### ADD \_FillValue ATTRIBUTES?
-    *   [ADD \_FillValue ATTRIBUTES?](#add-_fillvalue-attributes)  
-        Each time ERDDAP™ loads a dataset, it checks if the variables with integer source data types have a defined missing\_value or \_FillValue attribute. If a variable doesn't, then ERDDAP™ prints a message to the log file (starting with "Add \_FillValue Attribute?") recommending that the ERDDAP™ administrator add a \_FillValue attribute for this variable in datasets.xml. It is very useful for every variable to have a \_FillValue or missing\_value because missing values are always possible, e.g., if a given file in a dataset doesn't have a given variable, ERDDAP™ needs to be able to present that variable as having all missing values for that variable. If you decide a variable should not have a \_FillValue attribute, you can add  
-        &lt;att names="\_FillValue">null&lt;/att> instead, which will suppress the message for that datasetID+variable combination in the future.
-        
-        Each time ERDDAP™ starts up, it collects all of those recommendations into a message which is written to the log file (starting with "ADD \_FillValue ATTRIBUTES?"), emailed to the ERDDAP™ administrator, and written to a CSV data file in the \[bigParentDirectory\]/logs/ directory. If you wish to, you can use the GenerateDatasetsXml program (and the AddFillValueAttributes option) to apply all the suggestions in the CSV file to the datasets.xml file. For any of the datasetID/variable combinations in that file, if you decide there is no need to add the attributed, you can change the attribute to &lt;att names="\_FillValue">null&lt;/att> to suppress the recommendation for that datasetID+variable combination in the future.
-        
-        This is important!  
-        As Bob has often said: it would be bad (and embarrassing) if some of the evidence of global warming was caused by unidentified missing values in the data (e.g., temperatures values of 99 or 127 degree\_C that should have been marked as missing values and thus skewed the mean and/or median statistics higher).
-
-    *   The \_FillValue and missing\_value values for a given variable in different source files must be consistent; otherwise, ERDDAP™ will accept files with one set of values and reject all of the other files as "Bad Files". To solve the problem,
+        In this example, ERDDAP™ would unpack the data and present it to the user as float data values.
+    *   If present, ERDDAP™ will extract the values from these attributes, remove the attributes, and automatically unpack the data for the user:  
+        destinationValue = sourceValue \* scale\_factor + add\_offset  
+        Or, stated another way:  
+        unpackedValue = packedValue \* scale\_factor + add\_offset
+    *   The scale\_factor and add\_offset values for a given variable in different source files must be consistent; otherwise, ERDDAP™ will accept files with one set of values and reject all of the other files as "Bad Files". To solve the problem,
         *   If the files are gridded .nc files, you can use [EDDGridFromNcFilesUnpacked](#eddgridfromncfilesunpacked).
         *   If the files are tabular data files, you can use EDDTableFrom...Files' [standardizeWhat](#standardizewhat) to tell ERDDAP to standardize the source files as they are read into ERDDAP.
         *   For harder problems, you can use [NcML](#ncml-files) or [NCO](#netcdf-operators-nco) to solve the problem.  
-                 
-    ###### scale\_factor
-    *   [**scale\_factor**](#scale_factor) (default = 1) and **add\_offset** (default = 0) ([COARDS](https://ferret.pmel.noaa.gov/noaa_coop/coop_cdf_profile.html) and [CF](https://cfconventions.org/Data/cf-conventions/cf-conventions-1.8/cf-conventions.html)) are OPTIONAL variable attributes which describe data which is packed in a simpler data type via a simple transformation.
-        *   If present, their data type is different from the source data type and describes the data type of the destination values.  
-            For example, a data source might have stored float data values with one decimal digit packed as short ints (int16), using scale\_factor = 0.1 and add\_offset = 0. For example,  
-
-        >    &lt;att name="scale\_factor" [type="float"](#attributetype)\>0.1&lt;/att>  
-        >    &lt;att name="add\_offset" [type="float"](#attributetype)\>0&lt;/att>  
-
-            In this example, ERDDAP™ would unpack the data and present it to the user as float data values.
-        *   If present, ERDDAP™ will extract the values from these attributes, remove the attributes, and automatically unpack the data for the user:  
-            destinationValue = sourceValue \* scale\_factor + add\_offset  
-            Or, stated another way:  
-            unpackedValue = packedValue \* scale\_factor + add\_offset
-        *   The scale\_factor and add\_offset values for a given variable in different source files must be consistent; otherwise, ERDDAP™ will accept files with one set of values and reject all of the other files as "Bad Files". To solve the problem,
-            *   If the files are gridded .nc files, you can use [EDDGridFromNcFilesUnpacked](#eddgridfromncfilesunpacked).
-            *   If the files are tabular data files, you can use EDDTableFrom...Files' [standardizeWhat](#standardizewhat) to tell ERDDAP to standardize the source files as they are read into ERDDAP.
-            *   For harder problems, you can use [NcML](#ncml-files) or [NCO](#netcdf-operators-nco) to solve the problem.  
-                 
-    ###### standard\_name
-    *   [**standard\_name**](#standard_name) (from the [CF](https://cfconventions.org/Data/cf-conventions/cf-conventions-1.8/cf-conventions.html) metadata standard) is a RECOMMENDED variable attribute in ERDDAP. CF maintains the list of allowed [CF standard names](https://cfconventions.org/Data/cf-standard-names/current/build/cf-standard-name-table.html). For example,  
-        ```
-            <att name="standard\_name">eastward\_sea\_water\_velocity</att>
-        ```
-        *   If you add standard\_name to variables' attributes and add standard\_name to the list of &lt;categoryAttributes> in ERDDAP's [setup.xml](/docs/server-admin/deploy-install#setupxml) file, users can easily find datasets with similar data via ERDDAP's "Search for Datasets by Category" on the home page.
-        *   If you specify a CF standard\_name for a variable, the units attribute for the variable doesn't have to be identical to the Canonical Units specified for the standard name in the CF Standard Name table, but the units MUST be convertible to the Canonical Units. For example, all temperature-related CF standard\_names have "K" (Kelvin) as the Canonical Units. So a variable with a temperature-related standard\_name MUST have units of K, degree\_C, degree\_F, or some UDUnits variant of those names, since they are all inter-convertible.
-        *   Best practices: Part of the power of [controlled vocabularies](https://en.wikipedia.org/wiki/Controlled_vocabulary) comes from using only the terms in the list. So we recommend sticking to the terms defined in the controlled vocabulary, and we recommend against making up a term if there isn't an appropriate one in the list. If you need additional terms, see if the standards committee will add them to the controlled vocabulary.
-        *   standard\_name values are the only CF attribute values which are case sensitive. They are always all lowercase. Starting in ERDDAP™ v1.82, GenerateDatasets will convert uppercase letters to lowercase letters. And when a dataset is loaded in ERDDAP, uppercase letters are silently changed to lowercase letters.  
              
-    ###### time\_precision
-    *   time\_precision is an OPTIONAL attribute used by ERDDAP™ (and no metadata standards) for [time and timestamp variables](#time-units), which may be in gridded datasets or tabular datasets, and in axisVariables or dataVariables. For example,  
-        ```
-            <att name="time\_precision">1970-01-01</att>  
-        ```
-        time\_precision specifies the precision to be used whenever ERDDAP™ formats the time values from that variable as strings on web pages, including .htmlTable responses. In file formats where ERDDAP™ formats times as strings (for example, .csv and .json), ERDDAP™ only uses the time\_precision-specified format if it includes fractional seconds; otherwise, ERDDAP™ uses the 1970-01-01T00:00:00Z format.
-    *   Valid values are 1970-01, 1970-01-01, 1970-01-01T00Z, 1970-01-01T00:00Z, 1970-01-01T00:00:00Z (the default), 1970-01-01T00:00:00.0Z, 1970-01-01T00:00:00.00Z, 1970-01-01T00:00:00.000Z. \[1970 is not an option because it is a single number, so ERDDAP™ can't know if it is a formatted time string (a year) or if it is some number of seconds since 1970-01-01T00:00:00Z.\]
-    *   If time\_precision isn't specified or the value isn't matched, the default value will be used.
-    *   Here, as in other parts of ERDDAP™, any fields of the formatted time that are not displayed are assumed to have the minimum value. For example, 1985-07, 1985-07-01, 1985-07-01T00Z, 1985-07-01T00:00Z, and 1985-07-01T00:00:00Z are all considered equivalent, although with different levels of precision implied. This matches the [ISO 8601:2004 "extended" Time Format Specification](https://www.iso.org/iso/date_and_time_format).
-    *   **WARNING:** You should only use a limited time\_precision if **all** of the data values for the variable have only the minimum value for all of the fields that are hidden.
-        *   For example, you can use a time\_precision of 1970-01-01 if all of the data values have hour=0, minute=0, and second=0 (for example 2005-03-04T00:00:00Z and 2005-03-05T00:00:00Z).
-        *   For example, don't use a time\_precision of 1970-01-01 if there are non-0 hour, minute, or seconds values, (for example 2005-03-05T12:00:00Z) because the non-default hour value wouldn't be displayed. Otherwise, if a user asks for all data with time=2005-03-05, the request will fail unexpectedly.  
-                 
-    ###### time\_zone
-    *   [**time\_zone**](#time_zone)
-        *   time\_zone is an OPTIONAL attribute used by ERDDAP™ (and no metadata standards) for [time and timestamp variables](#time-units), which may be in gridded datasets or tabular datasets.
-        *   The default is "Zulu" (which is the modern time zone version of GMT).
-        *   Background information: "time offsets" (e.g., Pacific Standard Time, -08:00, GMT-8) are fixed, specific, offsets relative to Zulu (GMT). In contrast, "time zones" are the much more complex things that are affected by Daylight Saving (e.g., "US/Pacific"), which have had different rules in different places at different times. The time zones always have names since they can't be summarized by a simple offset value (see the "TZ database names" column in the table at [https://en.wikipedia.org/wiki/List\_of\_tz\_database\_time\_zones](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)). ERDDAP's time\_zone attribute helps you deal with local time data from some time zone (e.g., 1987-03-25T17:32:05 Pacific Time). If you have string or numeric time data with a (fixed) time offset, you should simply adjust the data to Zulu (which is what ERDDAP™ wants) by specifying a different base time in the units attribute (e.g., "hours since 1970-01-01T08:00:00Z", note the T08 to specify the time offset), and always check the results to ensure you get the results you want.
-        *   For timestamp variables with source data from Strings, this attribute lets you specify a time zone which leads ERDDAP™ to convert the local-time-zone source times (some in Standard time, some in Daylight Saving time) into Zulu times (which are always in Standard time). The list of valid time zone names is probably identical to the list in the TZ column at [https://en.wikipedia.org/wiki/List\_of\_tz\_database\_time\_zones](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones). Common US time zones are: US/Hawaii, US/Alaska, US/Pacific, US/Mountain, US/Arizona, US/Central, US/Eastern.
-        *   For timestamp variables with numeric source data, you can specify the "time\_zone" attribute, but the value must be "Zulu" or "UTC". If you need support for other time zones, please email Chris.John at noaa.gov .  
+###### standard\_name {#standard_name}
+*   [**standard\_name**](#standard_name) (from the [CF](https://cfconventions.org/Data/cf-conventions/cf-conventions-1.8/cf-conventions.html) metadata standard) is a RECOMMENDED variable attribute in ERDDAP. CF maintains the list of allowed [CF standard names](https://cfconventions.org/Data/cf-standard-names/current/build/cf-standard-name-table.html). For example,  
+    ```
+        <att name="standard\_name">eastward\_sea\_water\_velocity</att>
+    ```
+    *   If you add standard\_name to variables' attributes and add standard\_name to the list of &lt;categoryAttributes> in ERDDAP's [setup.xml](/docs/server-admin/deploy-install#setupxml) file, users can easily find datasets with similar data via ERDDAP's "Search for Datasets by Category" on the home page.
+    *   If you specify a CF standard\_name for a variable, the units attribute for the variable doesn't have to be identical to the Canonical Units specified for the standard name in the CF Standard Name table, but the units MUST be convertible to the Canonical Units. For example, all temperature-related CF standard\_names have "K" (Kelvin) as the Canonical Units. So a variable with a temperature-related standard\_name MUST have units of K, degree\_C, degree\_F, or some UDUnits variant of those names, since they are all inter-convertible.
+    *   Best practices: Part of the power of [controlled vocabularies](https://en.wikipedia.org/wiki/Controlled_vocabulary) comes from using only the terms in the list. So we recommend sticking to the terms defined in the controlled vocabulary, and we recommend against making up a term if there isn't an appropriate one in the list. If you need additional terms, see if the standards committee will add them to the controlled vocabulary.
+    *   standard\_name values are the only CF attribute values which are case sensitive. They are always all lowercase. Starting in ERDDAP™ v1.82, GenerateDatasets will convert uppercase letters to lowercase letters. And when a dataset is loaded in ERDDAP, uppercase letters are silently changed to lowercase letters.  
+         
+###### time\_precision {#time_precision}
+*   time\_precision is an OPTIONAL attribute used by ERDDAP™ (and no metadata standards) for [time and timestamp variables](#time-units), which may be in gridded datasets or tabular datasets, and in axisVariables or dataVariables. For example,  
+    ```
+        <att name="time\_precision">1970-01-01</att>  
+    ```
+    time\_precision specifies the precision to be used whenever ERDDAP™ formats the time values from that variable as strings on web pages, including .htmlTable responses. In file formats where ERDDAP™ formats times as strings (for example, .csv and .json), ERDDAP™ only uses the time\_precision-specified format if it includes fractional seconds; otherwise, ERDDAP™ uses the 1970-01-01T00:00:00Z format.
+*   Valid values are 1970-01, 1970-01-01, 1970-01-01T00Z, 1970-01-01T00:00Z, 1970-01-01T00:00:00Z (the default), 1970-01-01T00:00:00.0Z, 1970-01-01T00:00:00.00Z, 1970-01-01T00:00:00.000Z. \[1970 is not an option because it is a single number, so ERDDAP™ can't know if it is a formatted time string (a year) or if it is some number of seconds since 1970-01-01T00:00:00Z.\]
+*   If time\_precision isn't specified or the value isn't matched, the default value will be used.
+*   Here, as in other parts of ERDDAP™, any fields of the formatted time that are not displayed are assumed to have the minimum value. For example, 1985-07, 1985-07-01, 1985-07-01T00Z, 1985-07-01T00:00Z, and 1985-07-01T00:00:00Z are all considered equivalent, although with different levels of precision implied. This matches the [ISO 8601:2004 "extended" Time Format Specification](https://www.iso.org/iso/date_and_time_format).
+*   **WARNING:** You should only use a limited time\_precision if **all** of the data values for the variable have only the minimum value for all of the fields that are hidden.
+    *   For example, you can use a time\_precision of 1970-01-01 if all of the data values have hour=0, minute=0, and second=0 (for example 2005-03-04T00:00:00Z and 2005-03-05T00:00:00Z).
+    *   For example, don't use a time\_precision of 1970-01-01 if there are non-0 hour, minute, or seconds values, (for example 2005-03-05T12:00:00Z) because the non-default hour value wouldn't be displayed. Otherwise, if a user asks for all data with time=2005-03-05, the request will fail unexpectedly.  
              
-    ###### units
-    *   [**units**](#units) ([COARDS](https://ferret.pmel.noaa.gov/noaa_coop/coop_cdf_profile.html), [CF](https://cfconventions.org/Data/cf-conventions/cf-conventions-1.8/cf-conventions.html) and [ACDD](https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3) metadata standard) defines the units of the data values. For example,  
+###### time\_zone {#time_zone}
+*   [**time\_zone**](#time_zone)
+    *   time\_zone is an OPTIONAL attribute used by ERDDAP™ (and no metadata standards) for [time and timestamp variables](#time-units), which may be in gridded datasets or tabular datasets.
+    *   The default is "Zulu" (which is the modern time zone version of GMT).
+    *   Background information: "time offsets" (e.g., Pacific Standard Time, -08:00, GMT-8) are fixed, specific, offsets relative to Zulu (GMT). In contrast, "time zones" are the much more complex things that are affected by Daylight Saving (e.g., "US/Pacific"), which have had different rules in different places at different times. The time zones always have names since they can't be summarized by a simple offset value (see the "TZ database names" column in the table at [https://en.wikipedia.org/wiki/List\_of\_tz\_database\_time\_zones](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)). ERDDAP's time\_zone attribute helps you deal with local time data from some time zone (e.g., 1987-03-25T17:32:05 Pacific Time). If you have string or numeric time data with a (fixed) time offset, you should simply adjust the data to Zulu (which is what ERDDAP™ wants) by specifying a different base time in the units attribute (e.g., "hours since 1970-01-01T08:00:00Z", note the T08 to specify the time offset), and always check the results to ensure you get the results you want.
+    *   For timestamp variables with source data from Strings, this attribute lets you specify a time zone which leads ERDDAP™ to convert the local-time-zone source times (some in Standard time, some in Daylight Saving time) into Zulu times (which are always in Standard time). The list of valid time zone names is probably identical to the list in the TZ column at [https://en.wikipedia.org/wiki/List\_of\_tz\_database\_time\_zones](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones). Common US time zones are: US/Hawaii, US/Alaska, US/Pacific, US/Mountain, US/Arizona, US/Central, US/Eastern.
+    *   For timestamp variables with numeric source data, you can specify the "time\_zone" attribute, but the value must be "Zulu" or "UTC". If you need support for other time zones, please email Chris.John at noaa.gov .  
+         
+###### units {#units}
+*   [**units**](#units) ([COARDS](https://ferret.pmel.noaa.gov/noaa_coop/coop_cdf_profile.html), [CF](https://cfconventions.org/Data/cf-conventions/cf-conventions-1.8/cf-conventions.html) and [ACDD](https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3) metadata standard) defines the units of the data values. For example,  
+    ```
+        <att name="units">degree\_C</att>
+    ```
+    *   "units" is REQUIRED as either a sourceAttribute or an addAttribute for "time" variables and is STRONGLY RECOMMENDED for other variables whenever appropriate (which is almost always).
+    *   In general, we recommend [UDUnits](https://www.unidata.ucar.edu/software/udunits/)\-compatible units which is required by the [COARDS](https://ferret.pmel.noaa.gov/noaa_coop/coop_cdf_profile.html) and [CF](https://cfconventions.org/Data/cf-conventions/cf-conventions-1.8/cf-conventions.html) standards.
+    *   Another common standard is [UCUM](https://unitsofmeasure.org/ucum.html) -- the Unified Code for Units of Measure. [OGC](https://www.ogc.org/) services such as [SOS](https://www.ogc.org/standards/sos), [WCS](https://www.ogc.org/standards/wcs), and [WMS](https://www.ogc.org/standards/wms) require UCUM and often refer to UCUM as UOM (Units Of Measure).
+    *   We recommend that you use one units standard for all datasets in your ERDDAP. You should tell ERDDAP™ which standard you are using with &lt;units\_standard>, in your [setup.xml](/docs/server-admin/deploy-install#setupxml) file.
+    *   The units for a given variable in different source files must be consistent. If you have a collection of data files where one subset of the files uses different units values than one or more other subsets of the files (for example,  
+        "days since 1985-01-01" versus "days since 2000-01-01",  
+        "degree\_Celsius" versus "deg\_C", or  
+        "knots" versus "m/s") you need to find a way to standardize the units values, otherwise, ERDDAP™ will only load one subset of the files. Think about it: if one file has windSpeed units=knots and another has windSpeed units=m/s, then the values from the two files shouldn't be included in the same aggregated dataset.
+        *   If the files are gridded .nc files, in many situations you can use [EDDGridFromNcFilesUnpacked](#eddgridfromncfilesunpacked).
+        *   If the files are tabular data files, in many situations you can use EDDTableFrom...Files' [standardizeWhat](#standardizewhat) to tell ERDDAP to standardize the source files as they are read into ERDDAP.
+        *   For harder problems, you can use [NcML](#ncml-files) or [NCO](#netcdf-operators-nco) to solve the problem.
+    *   The CF standard section 8.1 says that if a variable's data is packed via [scale\_factor and/or add\_offset](#scale_factor), "The units of a variable should be representative of the unpacked data."
+    *   [For time and timestamp variables,](#time-units) either the variable's [sourceAttributes](#variable-addattributes) or &lt;addAttributes> (which takes precedence) MUST have [units](#units) which is either
+        
+        *   For time axis variables or time data variables with numeric data: [UDUnits](https://www.unidata.ucar.edu/software/udunits/)\-compatible string (with the format *units* since *baseTime*) describing how to interpret source time values (for example, seconds since 1970-01-01T00:00:00Z).
+            
+        *units* can be any one of:  
         ```
-            <att name="units">degree\_C</att>
+            ms, msec, msecs, millis, millisec, millisecs, millisecond, milliseconds,  
+            s, sec, secs, second, seconds, m, min, mins, minute, minutes, h, hr, hrs, hour, hours,  
+            d, day, days, week, weeks, mon, mons, month, months, yr, yrs, year, or years.  
         ```
-        *   "units" is REQUIRED as either a sourceAttribute or an addAttribute for "time" variables and is STRONGLY RECOMMENDED for other variables whenever appropriate (which is almost always).
-        *   In general, we recommend [UDUnits](https://www.unidata.ucar.edu/software/udunits/)\-compatible units which is required by the [COARDS](https://ferret.pmel.noaa.gov/noaa_coop/coop_cdf_profile.html) and [CF](https://cfconventions.org/Data/cf-conventions/cf-conventions-1.8/cf-conventions.html) standards.
-        *   Another common standard is [UCUM](https://unitsofmeasure.org/ucum.html) -- the Unified Code for Units of Measure. [OGC](https://www.ogc.org/) services such as [SOS](https://www.ogc.org/standards/sos), [WCS](https://www.ogc.org/standards/wcs), and [WMS](https://www.ogc.org/standards/wms) require UCUM and often refer to UCUM as UOM (Units Of Measure).
-        *   We recommend that you use one units standard for all datasets in your ERDDAP. You should tell ERDDAP™ which standard you are using with &lt;units\_standard>, in your [setup.xml](/docs/server-admin/deploy-install#setupxml) file.
-        *   The units for a given variable in different source files must be consistent. If you have a collection of data files where one subset of the files uses different units values than one or more other subsets of the files (for example,  
-            "days since 1985-01-01" versus "days since 2000-01-01",  
-            "degree\_Celsius" versus "deg\_C", or  
-            "knots" versus "m/s") you need to find a way to standardize the units values, otherwise, ERDDAP™ will only load one subset of the files. Think about it: if one file has windSpeed units=knots and another has windSpeed units=m/s, then the values from the two files shouldn't be included in the same aggregated dataset.
-            *   If the files are gridded .nc files, in many situations you can use [EDDGridFromNcFilesUnpacked](#eddgridfromncfilesunpacked).
-            *   If the files are tabular data files, in many situations you can use EDDTableFrom...Files' [standardizeWhat](#standardizewhat) to tell ERDDAP to standardize the source files as they are read into ERDDAP.
-            *   For harder problems, you can use [NcML](#ncml-files) or [NCO](#netcdf-operators-nco) to solve the problem.
-        *   The CF standard section 8.1 says that if a variable's data is packed via [scale\_factor and/or add\_offset](#scale_factor), "The units of a variable should be representative of the unpacked data."
-        *   [For time and timestamp variables,](#time-units) either the variable's [sourceAttributes](#variable-addattributes) or &lt;addAttributes> (which takes precedence) MUST have [units](#units) which is either
+        Technically, ERDDAP™ does NOT follow the UDUNITS standard when converting "years since" and "months since" time values to "seconds since". The UDUNITS standard defines a year as a fixed, single value: 3.15569259747e7 seconds. And UDUNITS defines a month as year/12. Unfortunately, most/all datasets that we have seen that use "years since" or "months since" clearly intend the values to be calendar years or calendar months. For example, 3 "months since 1970-01-01" is usually intended to mean 1970-04-01. So, ERDDAP™ interprets "years since" and "months since" as calendar years and months, and does not strictly follow the UDUNITS standard.
             
-            *   For time axis variables or time data variables with numeric data: [UDUnits](https://www.unidata.ucar.edu/software/udunits/)\-compatible string (with the format *units* since *baseTime*) describing how to interpret source time values (for example, seconds since 1970-01-01T00:00:00Z).
-                
-            *units* can be any one of:  
-            ```
-                ms, msec, msecs, millis, millisec, millisecs, millisecond, milliseconds,  
-                s, sec, secs, second, seconds, m, min, mins, minute, minutes, h, hr, hrs, hour, hours,  
-                d, day, days, week, weeks, mon, mons, month, months, yr, yrs, year, or years.  
-            ```
-            Technically, ERDDAP™ does NOT follow the UDUNITS standard when converting "years since" and "months since" time values to "seconds since". The UDUNITS standard defines a year as a fixed, single value: 3.15569259747e7 seconds. And UDUNITS defines a month as year/12. Unfortunately, most/all datasets that we have seen that use "years since" or "months since" clearly intend the values to be calendar years or calendar months. For example, 3 "months since 1970-01-01" is usually intended to mean 1970-04-01. So, ERDDAP™ interprets "years since" and "months since" as calendar years and months, and does not strictly follow the UDUNITS standard.
-                
-            The *baseTime* must be an ISO 8601:2004(E) formatted date time string (yyyy-MM-dd'T'HH:mm:ssZ, for example, 1970-01-01T00:00:00Z), or some variation of that (for example, with parts missing at the end). ERDDAP™ tries to work with a wide range of variations of that ideal format, for example, "1970-1-1 0:0:0" is supported. If the time zone information is missing, it is assumed to be the Zulu time zone (AKA GMT). Even if another time offset is specified, ERDDAP™ never uses Daylight Saving Time. If the baseTime uses some other format, you must use &lt;addAttributes> to specify a new units string which use a variation of the ISO 8601:2004(E) format (e.g., change days since Jan 1, 1985 into days since 1985-01-01.
-            
-            You can test ERDDAP's ability to deal with a specific *units* since *baseTime* with ERDDAP's [Time Converter](https://coastwatch.pfeg.noaa.gov/erddap/convert/time.html). Hopefully, you can plug in a number (the first time value from the data source?) and a units string, click on Convert, and ERDDAP™ will be able to convert it into an ISO 8601:2004(E) formatted date time string. The converter will return an error message if the units string isn't recognizable.
-            ###### String Time Units
-            *   [For the units attribute for time or timestamp data variables with String data,](#string-time-units) you must specify a [java.time.DateTimeFormatter](https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html) pattern (which is mostly compatible with java.text.SimpleDateFormat) which describes how to interpret the string times.
-                
-                For the commonly used time formats that are variations of the ISO 8601:2004(E) standard format (for example, 2018-01-02T00:00:00Z), you can specify variations of yyyy-MM-dd'T'HH:mm:ssZ, for example, use yyyy-MM-dd if the string time only has a date. For any format that starts with yyyy-M, ERDDAP uses a special parser that is very forgiving of minor variations in the format. The parser can handle time zones in the format 'Z', "UTC", "GMT", ±XX:XX, ±XXXX, and ±XX formats. If parts of the date time are not specified (for example, minutes and seconds), ERDDAP™ assumes the lowest value for that field (e.g., if seconds aren't specified, seconds=0 is assumed).
-                
-                For all other string time formats, you need to precisely specify a DateTimeFormatter-compatible time format string. Like yyyy-MM-dd'T'HH:mm:ssZ, these format strings are built from characters which identify a specific type of information from the time string, e.g., m means minute-of-hour. If you repeat the format character some number of times, it further refines the meaning, e.g., m means that the value may be specified by any number of digits, mm means that the value must be specified by 2 digits. The Java documentation for DateTimeFormatter is a crude overview and does not make these details clear. So here is a list of format character variations and their meaning within ERDDAP™ (which is sometimes slightly different from Java's DateTimeFormatter):
-                
-                | Characters | Examples | Meaning |
-                | --- | --- | --- |
-                | u, y, Y | \-4712, 0, 1, 10, 100, 2018 | a year number, any number of digits. ERDDAP™ treats y (year-of-era) and Y (week-based-year, because this is often mistakenly used instead of y) as u, the [astronomical year number](https://en.wikipedia.org/wiki/Astronomical_year_numbering). Astronomical years are positive or negative integers that don't use the BCE (BC) or CE (AD) era designators: 2018=2018CE, ..., 2=2CE, 1=1CE, 0=1BCE, -1=2BCE, -2=3BCE, ... |
-                | uuuu, yyyy, YYYY | \-4712, 0000, 0001, 0010, 0100, 2018 | a 4 digit astronomical year number (ignoring any preceding '-') |
-                | M   | 1, 01, 12 | a month number, any number of digits (1=January) |
-                | MM  | 01, 12 | a 2 digit (zero padded) month number |
-                | MMM | Jan, jan, JAN | a 3 letter English month name, case insensitive |
-                | MMMM | Jan, jan, JAN, January, january, JANUARY | a 3 letter or full English month name, case insensitive |
-                | d   | 1, 01, 31 | a day-of-month number, any number of digits |
-                | dd  | 01, 31 | a 2 digit (zero padded) day-of-month. The first 'digit' may be a space. |
-                | D   | 1, 001, 366 | day-of-year, any number of digits, 001=Jan 1 |
-                | DDD | 001, 366 | day-of-year, 3 digits, 001=Jan 1 |
-                | EEE | thu, THU, Thu | a 3 letter day-of-week, value is ignored when parsing |
-                | EEEE | thu, THU, Thu, thursday, THURSDAY, Thursday | a 3 letter or full English day-of-week, case insensitive, value is ignored when parsing |
-                | H   | 0, 00, 23 | H hour-of-day (0-23), any number of digits |
-                | HH  | 00, 23 | HH hour-of-day (00-23), 2 digits. The first 'digit' may be a space. |
-                | a   | am, AM, pm, PM | AM or PM, case-insensitive |
-                | h   | 12, 1, 01, 11 | clock-hour-of-am-pm (12, 1, 2, ... 11), any number of digits |
-                | hh  | 12, 01, 11 | clock-hour-of-am-pm (12, 1, 2, ... 11), 2 digits. The first 'digit' may be a space. |
-                | K   | 0, 1, 11 | hour-of-am-pm (0, 1, ...11), any number of digits |
-                | KK  | 00, 01, 11 | hour-of-am-pm, 2 digits |
-                | m   | 0, 00, 59 | minute-of-hour, any number of digits |
-                | mm  | 00, 59 | minute-of-hour, 2 digits |
-                | s   | 0, 00, 59 | second-of-minute, any number of digits |
-                | ss  | 00, 59 | second-of-minute, 2 digits |
-                | S   | 0, 000, 9, 999 | fraction-of-second, as if following a decimal point, any number of digits |
-                | SS  | 00, 99 | hundredths of a second, 2 digits |
-                | SSS | 000, 999 | thousands of a second, 3 digits |
-                | A   | 0, 0000, 86399999 | millisecond-of-day, any number of digits |
-                | AAAAAAAA | 00000000, 86399999 | millisecond-of-day, 8 digits |
-                | N   | 0, 00000000000000, 86399999999999 | nanosecond-of-day, any number of digits. In ERDDAP™, this is truncated to nMillis. |
-                | NNNNNNNNNNNNNN | 00000000000000, 86399999999999 | nanosecond-of-day, 14 digits. In ERDDAP™ this is truncated to nMillis. |
-                | n   | 0, 00000000000, 59999999999 | nanosecond-of-second, any number of digits. In ERDDAP™ this is truncated to nMillis. |
-                | nnnnnnnnnnn | 00000000000, 59999999999 | nanosecond-of-second, 11 digits. In ERDDAP™ this is truncated to nMillis. |
-                | XXX, ZZZ | Z, -08:00, +01:00 | a time zone with the format 'Z' or ±(2 digit hour offset):(2 digit minute offset). This treats *space* as + (non-standard). ZZZ supporting 'Z' is non-standard but deals with a common user error. |
-                | XX, ZZ | Z -0800, +0100 | a time zone with the format 'Z' or ±(2 digit hour offset):(2 digit minute offset). This treats *space* as + (non-standard). ZZ supporting 'Z' is non-standard but deals with a common user error. |
-                | X, Z | Z, -08, +01 | a time zone with the format 'Z' or ±(2 digit hour offset):(2 digit minute offset). This treats *space* as + (non-standard). Z supporting 'Z' is non-standard but deals with a common user error. |
-                | xxx | \-08:00, +01:00 | a time zone with the format ±(2 digit hour offset):(2 digit minute offset). This treats *space* as + (non-standard). |
-                | xx  | \-0800, +0100 | a time zone with the format ±(2 digit hour offset)(2 digit minute offset). This treats *space* as + (non-standard). |
-                | x   | \-08, +01 | a time zone with the format ±(2 digit hour offset). This treats *space* as + (non-standard). |
-                | '   | 'T', 'Z', 'GMT' | start and end of a series of literal characters |
-                | '' (two single quotes) | ''  | two single quotes denotes a literal single quote |
-                | \[\] | \[ \] | the start ("\[") and end ("\]") of an optional section. This notation is only supported for literal characters and at the end of the format string. |
-                | #, &#123;, &#125; | #, &#123;, &#125; | reserved for future use |
-                | G,L,Q,e,c,V,z,O,p |     | These formatting characters are supported by Java's DateTimeFormatter, but currently not supported by ERDDAP. If you need support for them, email Chris.John at noaa.gov . |
-                
-                Notes:
-                
-                *   In a date time with punctuation, numeric values may have a variable number of digits (e.g., in the US slash date format "1/2/1985", the month and the date may be 1 or 2 digits) so the format must use 1-letter tokens, e.g., M/d/yyyy, which accept any number of digits for month and date.
-                *   If the number of digits for an item is constant, e.g., 01/02/1985, then specify the number of digits in the format, e.g., MM/dd/yyyy for 2-digit month, 2-digit date, and 4 digit year.
-                *   These formats are tricky to work with. A given format may work for most, but not all, time strings for a given variable. Always check that the format you specify is working as expected in ERDDAP for all of a variable's time strings.
-                *   When possible, GenerateDatasetXml will suggest time format strings.
-                *   If you need help generating a format string, please email Chris.John at noaa.gov .
-            
-            The main time data variable (for tabular datasets) and the main time axis variable (for gridded datasets) are recognized by the [destinationName](#destinationname) time. Their units metadata must be a UDUnits-compatible units string for numeric time values, e.g., "days since 1970-01-01" (for tabular or gridded datasets), or [units suitable for string times](#string-time-units), e.g., "M/d/yyyy" (for tabular datasets).
-            
-            Different Time Units in Different Gridded .nc Files - If you have a collection of gridded .nc files where, for the time variable, one subset of the files uses different time units than one or more other subsets of the files, you can use [EDDGridFromNcFilesUnpacked](#eddgridfromncfilesunpacked). It converts time values to "seconds since 1970-01-01T00:00:00Z" at a lower level, thereby hiding the differences, so that you can make one dataset from the collection of heterogeneous files.
-            
-            ###### TimeStamp Variables
-            [TimeStamp Variables](#timestamp-variables) -- Any other variable (axisVariable or dataVariable, in an EDDGrid or EDDTable dataset) can be a timeStamp variable. Timestamp variables are variables that have time-related units and time data, but have a &lt;destinationName> other than time. TimeStamp variables behave like the main time variable in that they convert the source's time format into "seconds since 1970-01-01T00:00:00Z" and/or ISO 8601:2004(E) format). ERDDAP™ recognizes timeStamp variables by their time-related "[units](#units)" metadata, which must match this regular expression "\[a-zA-Z\]+ +since +\[0-9\].+" (for numeric dateTimes, for example, "seconds since 1970-01-01T00:00:00Z") or be a dateTime format string containing "uuuu", "yyyy" or "YYYY" (for example, "yyyy-MM-dd'T'HH:mm:ssZ"). But please still use the destinationName "time" for the main dateTime variable.
-            
-            **Always check your work to be sure that the time data that shows up in ERDDAP™ is the correct time data.** Working with time data is always tricky and error prone.
-            
-            See [more information about time variables](#destinationname).  
-            ERDDAP™ has a utility to [Convert a Numeric Time to/from a String Time](https://coastwatch.pfeg.noaa.gov/erddap/convert/time.html).  
-            See [How ERDDAP™ Deals with Time](https://coastwatch.pfeg.noaa.gov/erddap/convert/time.html#erddap).  
-             
-            
-    ###### valid\_range
-    *   [**valid\_range**, or **valid\_min** and **valid\_max**](#valid_range) -- These are OPTIONAL variable attributes defined in the [CF](https://cfconventions.org/Data/cf-conventions/cf-conventions-1.8/cf-conventions.html) metadata conventions. For example,  
+        The *baseTime* must be an ISO 8601:2004(E) formatted date time string (yyyy-MM-dd'T'HH:mm:ssZ, for example, 1970-01-01T00:00:00Z), or some variation of that (for example, with parts missing at the end). ERDDAP™ tries to work with a wide range of variations of that ideal format, for example, "1970-1-1 0:0:0" is supported. If the time zone information is missing, it is assumed to be the Zulu time zone (AKA GMT). Even if another time offset is specified, ERDDAP™ never uses Daylight Saving Time. If the baseTime uses some other format, you must use &lt;addAttributes> to specify a new units string which use a variation of the ISO 8601:2004(E) format (e.g., change days since Jan 1, 1985 into days since 1985-01-01.
+        
+        You can test ERDDAP's ability to deal with a specific *units* since *baseTime* with ERDDAP's [Time Converter](https://coastwatch.pfeg.noaa.gov/erddap/convert/time.html). Hopefully, you can plug in a number (the first time value from the data source?) and a units string, click on Convert, and ERDDAP™ will be able to convert it into an ISO 8601:2004(E) formatted date time string. The converter will return an error message if the units string isn't recognizable.
 
-        >    &lt;att name="valid\_range" [type="floatList"](#attributetype)\>0.0 40.0&lt;/att>  
+###### String Time Units {#string-time-units}
+*   [For the units attribute for time or timestamp data variables with String data,](#string-time-units) you must specify a [java.time.DateTimeFormatter](https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html) pattern (which is mostly compatible with java.text.SimpleDateFormat) which describes how to interpret the string times.
+    
+    For the commonly used time formats that are variations of the ISO 8601:2004(E) standard format (for example, 2018-01-02T00:00:00Z), you can specify variations of yyyy-MM-dd'T'HH:mm:ssZ, for example, use yyyy-MM-dd if the string time only has a date. For any format that starts with yyyy-M, ERDDAP uses a special parser that is very forgiving of minor variations in the format. The parser can handle time zones in the format 'Z', "UTC", "GMT", ±XX:XX, ±XXXX, and ±XX formats. If parts of the date time are not specified (for example, minutes and seconds), ERDDAP™ assumes the lowest value for that field (e.g., if seconds aren't specified, seconds=0 is assumed).
+    
+    For all other string time formats, you need to precisely specify a DateTimeFormatter-compatible time format string. Like yyyy-MM-dd'T'HH:mm:ssZ, these format strings are built from characters which identify a specific type of information from the time string, e.g., m means minute-of-hour. If you repeat the format character some number of times, it further refines the meaning, e.g., m means that the value may be specified by any number of digits, mm means that the value must be specified by 2 digits. The Java documentation for DateTimeFormatter is a crude overview and does not make these details clear. So here is a list of format character variations and their meaning within ERDDAP™ (which is sometimes slightly different from Java's DateTimeFormatter):
+    
+    | Characters | Examples | Meaning |
+    | --- | --- | --- |
+    | u, y, Y | \-4712, 0, 1, 10, 100, 2018 | a year number, any number of digits. ERDDAP™ treats y (year-of-era) and Y (week-based-year, because this is often mistakenly used instead of y) as u, the [astronomical year number](https://en.wikipedia.org/wiki/Astronomical_year_numbering). Astronomical years are positive or negative integers that don't use the BCE (BC) or CE (AD) era designators: 2018=2018CE, ..., 2=2CE, 1=1CE, 0=1BCE, -1=2BCE, -2=3BCE, ... |
+    | uuuu, yyyy, YYYY | \-4712, 0000, 0001, 0010, 0100, 2018 | a 4 digit astronomical year number (ignoring any preceding '-') |
+    | M   | 1, 01, 12 | a month number, any number of digits (1=January) |
+    | MM  | 01, 12 | a 2 digit (zero padded) month number |
+    | MMM | Jan, jan, JAN | a 3 letter English month name, case insensitive |
+    | MMMM | Jan, jan, JAN, January, january, JANUARY | a 3 letter or full English month name, case insensitive |
+    | d   | 1, 01, 31 | a day-of-month number, any number of digits |
+    | dd  | 01, 31 | a 2 digit (zero padded) day-of-month. The first 'digit' may be a space. |
+    | D   | 1, 001, 366 | day-of-year, any number of digits, 001=Jan 1 |
+    | DDD | 001, 366 | day-of-year, 3 digits, 001=Jan 1 |
+    | EEE | thu, THU, Thu | a 3 letter day-of-week, value is ignored when parsing |
+    | EEEE | thu, THU, Thu, thursday, THURSDAY, Thursday | a 3 letter or full English day-of-week, case insensitive, value is ignored when parsing |
+    | H   | 0, 00, 23 | H hour-of-day (0-23), any number of digits |
+    | HH  | 00, 23 | HH hour-of-day (00-23), 2 digits. The first 'digit' may be a space. |
+    | a   | am, AM, pm, PM | AM or PM, case-insensitive |
+    | h   | 12, 1, 01, 11 | clock-hour-of-am-pm (12, 1, 2, ... 11), any number of digits |
+    | hh  | 12, 01, 11 | clock-hour-of-am-pm (12, 1, 2, ... 11), 2 digits. The first 'digit' may be a space. |
+    | K   | 0, 1, 11 | hour-of-am-pm (0, 1, ...11), any number of digits |
+    | KK  | 00, 01, 11 | hour-of-am-pm, 2 digits |
+    | m   | 0, 00, 59 | minute-of-hour, any number of digits |
+    | mm  | 00, 59 | minute-of-hour, 2 digits |
+    | s   | 0, 00, 59 | second-of-minute, any number of digits |
+    | ss  | 00, 59 | second-of-minute, 2 digits |
+    | S   | 0, 000, 9, 999 | fraction-of-second, as if following a decimal point, any number of digits |
+    | SS  | 00, 99 | hundredths of a second, 2 digits |
+    | SSS | 000, 999 | thousands of a second, 3 digits |
+    | A   | 0, 0000, 86399999 | millisecond-of-day, any number of digits |
+    | AAAAAAAA | 00000000, 86399999 | millisecond-of-day, 8 digits |
+    | N   | 0, 00000000000000, 86399999999999 | nanosecond-of-day, any number of digits. In ERDDAP™, this is truncated to nMillis. |
+    | NNNNNNNNNNNNNN | 00000000000000, 86399999999999 | nanosecond-of-day, 14 digits. In ERDDAP™ this is truncated to nMillis. |
+    | n   | 0, 00000000000, 59999999999 | nanosecond-of-second, any number of digits. In ERDDAP™ this is truncated to nMillis. |
+    | nnnnnnnnnnn | 00000000000, 59999999999 | nanosecond-of-second, 11 digits. In ERDDAP™ this is truncated to nMillis. |
+    | XXX, ZZZ | Z, -08:00, +01:00 | a time zone with the format 'Z' or ±(2 digit hour offset):(2 digit minute offset). This treats *space* as + (non-standard). ZZZ supporting 'Z' is non-standard but deals with a common user error. |
+    | XX, ZZ | Z -0800, +0100 | a time zone with the format 'Z' or ±(2 digit hour offset):(2 digit minute offset). This treats *space* as + (non-standard). ZZ supporting 'Z' is non-standard but deals with a common user error. |
+    | X, Z | Z, -08, +01 | a time zone with the format 'Z' or ±(2 digit hour offset):(2 digit minute offset). This treats *space* as + (non-standard). Z supporting 'Z' is non-standard but deals with a common user error. |
+    | xxx | \-08:00, +01:00 | a time zone with the format ±(2 digit hour offset):(2 digit minute offset). This treats *space* as + (non-standard). |
+    | xx  | \-0800, +0100 | a time zone with the format ±(2 digit hour offset)(2 digit minute offset). This treats *space* as + (non-standard). |
+    | x   | \-08, +01 | a time zone with the format ±(2 digit hour offset). This treats *space* as + (non-standard). |
+    | '   | 'T', 'Z', 'GMT' | start and end of a series of literal characters |
+    | '' (two single quotes) | ''  | two single quotes denotes a literal single quote |
+    | \[\] | \[ \] | the start ("\[") and end ("\]") of an optional section. This notation is only supported for literal characters and at the end of the format string. |
+    | #, &#123;, &#125; | #, &#123;, &#125; | reserved for future use |
+    | G,L,Q,e,c,V,z,O,p |     | These formatting characters are supported by Java's DateTimeFormatter, but currently not supported by ERDDAP. If you need support for them, email Chris.John at noaa.gov . |
+    
+    Notes:
+    
+    *   In a date time with punctuation, numeric values may have a variable number of digits (e.g., in the US slash date format "1/2/1985", the month and the date may be 1 or 2 digits) so the format must use 1-letter tokens, e.g., M/d/yyyy, which accept any number of digits for month and date.
+    *   If the number of digits for an item is constant, e.g., 01/02/1985, then specify the number of digits in the format, e.g., MM/dd/yyyy for 2-digit month, 2-digit date, and 4 digit year.
+    *   These formats are tricky to work with. A given format may work for most, but not all, time strings for a given variable. Always check that the format you specify is working as expected in ERDDAP for all of a variable's time strings.
+    *   When possible, GenerateDatasetXml will suggest time format strings.
+    *   If you need help generating a format string, please email Chris.John at noaa.gov .
 
-        or  
+The main time data variable (for tabular datasets) and the main time axis variable (for gridded datasets) are recognized by the [destinationName](#destinationname) time. Their units metadata must be a UDUnits-compatible units string for numeric time values, e.g., "days since 1970-01-01" (for tabular or gridded datasets), or [units suitable for string times](#string-time-units), e.g., "M/d/yyyy" (for tabular datasets).
 
-        >    &lt;att name="valid\_min" [type="float"](#attributetype)\>0.0&lt;/att>  
-        >    &lt;att name="valid\_max" [type="float"](#attributetype)\>40.0&lt;/att>  
+Different Time Units in Different Gridded .nc Files - If you have a collection of gridded .nc files where, for the time variable, one subset of the files uses different time units than one or more other subsets of the files, you can use [EDDGridFromNcFilesUnpacked](#eddgridfromncfilesunpacked). It converts time values to "seconds since 1970-01-01T00:00:00Z" at a lower level, thereby hiding the differences, so that you can make one dataset from the collection of heterogeneous files.
 
-        *   If present, they should be of the same data type as the variable, and specify the valid minimum and maximum values of the data for that variable. Users should consider values outside this range to be invalid.
-        *   ERDDAP™ does not apply the valid\_range. Said another way: ERDDAP™ does not convert data values outside the valid\_range to the \_FillValue or missing\_value. ERDDAP™ just passes on this metadata and leaves the application up to you.  
-            Why? That's what this metadata is for. If the data provider had wanted to, the data provider could have converted the data values outside of the valid\_range to be \_FillValues. ERDDAP™ doesn't second guess the data provider. This approach is safer: if it is later shown that the valid\_range was too narrow or otherwise incorrect, ERDDAP™ won't have obliterated the data.
-        *   If the data is packed with [scale\_factor and/or add\_offset](#scale_factor), valid\_range, valid\_min and valid\_max should be the packed data type and values. Since ERDDAP™ applies scale\_factor and add\_offset when it loads the dataset, ERDDAP™ will unpack the valid\_range, valid\_min and valid\_max values so that the destination metadata (shown to users) will indicate the unpacked data type and range.  
-            Or, if an unpacked\_valid\_range attribute is present, it will be renamed valid\_range when ERDDAP™ loads the dataset.
-##### &lt;removeMVRows&gt;
+###### TimeStamp Variables {#timestamp-variables}
+[TimeStamp Variables](#timestamp-variables) -- Any other variable (axisVariable or dataVariable, in an EDDGrid or EDDTable dataset) can be a timeStamp variable. Timestamp variables are variables that have time-related units and time data, but have a &lt;destinationName> other than time. TimeStamp variables behave like the main time variable in that they convert the source's time format into "seconds since 1970-01-01T00:00:00Z" and/or ISO 8601:2004(E) format). ERDDAP™ recognizes timeStamp variables by their time-related "[units](#units)" metadata, which must match this regular expression "\[a-zA-Z\]+ +since +\[0-9\].+" (for numeric dateTimes, for example, "seconds since 1970-01-01T00:00:00Z") or be a dateTime format string containing "uuuu", "yyyy" or "YYYY" (for example, "yyyy-MM-dd'T'HH:mm:ssZ"). But please still use the destinationName "time" for the main dateTime variable.
+
+**Always check your work to be sure that the time data that shows up in ERDDAP™ is the correct time data.** Working with time data is always tricky and error prone.
+
+See [more information about time variables](#destinationname).  
+ERDDAP™ has a utility to [Convert a Numeric Time to/from a String Time](https://coastwatch.pfeg.noaa.gov/erddap/convert/time.html).  
+See [How ERDDAP™ Deals with Time](https://coastwatch.pfeg.noaa.gov/erddap/convert/time.html#erddap).  
+         
+        
+###### valid\_range {#valid_range}
+*   [**valid\_range**, or **valid\_min** and **valid\_max**](#valid_range) -- These are OPTIONAL variable attributes defined in the [CF](https://cfconventions.org/Data/cf-conventions/cf-conventions-1.8/cf-conventions.html) metadata conventions. For example,  
+
+    >    &lt;att name="valid\_range" [type="floatList"](#attributetype)\>0.0 40.0&lt;/att>  
+
+    or  
+
+    >    &lt;att name="valid\_min" [type="float"](#attributetype)\>0.0&lt;/att>  
+    >    &lt;att name="valid\_max" [type="float"](#attributetype)\>40.0&lt;/att>  
+
+    *   If present, they should be of the same data type as the variable, and specify the valid minimum and maximum values of the data for that variable. Users should consider values outside this range to be invalid.
+    *   ERDDAP™ does not apply the valid\_range. Said another way: ERDDAP™ does not convert data values outside the valid\_range to the \_FillValue or missing\_value. ERDDAP™ just passes on this metadata and leaves the application up to you.  
+        Why? That's what this metadata is for. If the data provider had wanted to, the data provider could have converted the data values outside of the valid\_range to be \_FillValues. ERDDAP™ doesn't second guess the data provider. This approach is safer: if it is later shown that the valid\_range was too narrow or otherwise incorrect, ERDDAP™ won't have obliterated the data.
+    *   If the data is packed with [scale\_factor and/or add\_offset](#scale_factor), valid\_range, valid\_min and valid\_max should be the packed data type and values. Since ERDDAP™ applies scale\_factor and add\_offset when it loads the dataset, ERDDAP™ will unpack the valid\_range, valid\_min and valid\_max values so that the destination metadata (shown to users) will indicate the unpacked data type and range.  
+        Or, if an unpacked\_valid\_range attribute is present, it will be renamed valid\_range when ERDDAP™ loads the dataset.
+##### &lt;removeMVRows&gt; {#removemvrows}
 *   [**&lt;removeMVRows>**](#removemvrows) is an OPTIONAL tag within a tag in datasets.xml for EDDTableFromFiles (including all subclasses) datasets, though it is only used for EDDTableFromMultidimNcFiles. It can have a value of true or false. For example, true  
     This removes any block of rows at the end of a group where all the values are missing\_value, \_FillValue, or the CoHort ...Array native missing value (or char=#32 for CharArrays). This is for the CF DSG Multidimensional Array file type and similar files. If true, this does the proper test and so always loads all the max dim variables, so it may take extra time.  
     The default value of is false.  

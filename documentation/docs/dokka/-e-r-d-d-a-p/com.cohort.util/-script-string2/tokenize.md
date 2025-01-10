@@ -7,11 +7,11 @@ open fun [tokenize](tokenize.md)(s: [String](https://docs.oracle.com/en/java/jav
 
 This converts a multiple-space-separated string into a String[] of separate tokens. Double quoted tokens may have internal spaces.
 
-#### Return
+#### Return {#return}
 
 String[] of tokens (or null if s is null)
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

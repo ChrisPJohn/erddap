@@ -7,11 +7,11 @@ open fun [justFiniteValues](just-finite-values.md)(iar: Array&lt;Int&gt;): Array
 
 This returns an int[] with just the non-Integer.MAX_VALUE values from the original array.
 
-#### Return
+#### Return {#return}
 
 a new int[] with just the non-Integer.MAX_VALUE values. iar=null returns null.
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 
@@ -24,11 +24,11 @@ open fun [justFiniteValues](just-finite-values.md)(dar: Array&lt;Double&gt;): Ar
 
 This returns a double[] with just the finite values from the original array.
 
-#### Return
+#### Return {#return-1}
 
 a new double[] with just finite values. dar=null returns null.
 
-#### Parameters
+#### Parameters {#parameters-1}
 
 JVM
 

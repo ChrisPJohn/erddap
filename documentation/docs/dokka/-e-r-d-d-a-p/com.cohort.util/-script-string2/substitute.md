@@ -7,11 +7,11 @@ open fun [substitute](substitute.md)(msg: [String](https://docs.oracle.com/en/ja
 
 This replaces &quot;&#123;0&#125;&quot;, &quot;&#123;1&#125;&quot;, and &quot;&#123;2&#125;&quot; in msg with s0, s1, s2.
 
-#### Return
+#### Return {#return}
 
 the modified msg
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

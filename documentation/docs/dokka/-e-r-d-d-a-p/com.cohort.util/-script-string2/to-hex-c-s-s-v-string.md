@@ -9,11 +9,11 @@ This generates a hexadecimal Comma-Space-Separated-Value (CSSV) String from the 
 
 CHANGED: before 2011-09-04, this was called toHexCSVString.
 
-#### Return
+#### Return {#return}
 
 a CSSV String (or null if ar is null)
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 
@@ -28,11 +28,11 @@ This generates a hexadecimal Comma-Space-Separated-Value (CSSV) String from the 
 
 CHANGED: before 2011-09-04, this was called toHexCSVString.
 
-#### Return
+#### Return {#return-1}
 
 a CSSV String (or null if ar is null)
 
-#### Parameters
+#### Parameters {#parameters-1}
 
 JVM
 
@@ -47,11 +47,11 @@ This generates a hexadecimal Comma-Space-Separated-Value (CSSV) String from the 
 
 CHANGED: before 2011-09-04, this was called toHexCSVString.
 
-#### Return
+#### Return {#return-2}
 
 a CSSV String (or null if ar is null)
 
-#### Parameters
+#### Parameters {#parameters-2}
 
 JVM
 

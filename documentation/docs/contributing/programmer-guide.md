@@ -6,13 +6,13 @@ sidebar_position: 2
 
 These are things that only a programmer who intends to work with ERDDAP's Java classes needs to know.
 
-### **Getting the Source Code**
+### **Getting the Source Code** {#getting-the-source-code}
    
 
   - Via Source Code on GitHub
     The source code for recent public versions and in-development versions is also available via [GitHub](https://github.com/ERDDAP). Please read the [Wiki](https://github.com/ERDDAP/erddap/wiki) for that project. If you want to modify the source code (and possibly have the changes incorporated into the standard ERDDAP™ distribution), this is the recommended approach.
 
-### **ERDDAP™ dependencies**
+### **ERDDAP™ dependencies** {#erddap-dependencies}
 ERDDAP™ uses Maven to load code dependencies as well as some static reference files (WEB-INF/ref). This is done to avoid storing many large files in the repository.
   You can use `mvn compile` and that will fetch the dependencies and ref files. You can also use `mvn package` to generate a war file.
   You can manually download the ref files:
@@ -41,7 +41,7 @@ NOTE: By default Maven will cache static reference and test data archive downloa
   `makeNewFileForDapQuery(String userDapQuery, String dir, String fileName, String fileTypeName)
   `to tell the instance to make a data file, of a specific fileType, with the results from a user query. Thus, this is a simple way to use ERDDAP's methods to request data and get a file in response, just as a client would use the ERDDAP™ web application. But this approach works within your Java program and bypasses the need for an application server like Tomcat. We use this approach for many of the unit tests of EDDTable and EDDGrid subclasses, so you can see examples of this in the source code for all of those classes.
 
-### **Development Environment**
+### **Development Environment** {#development-environment}
 
   - There are configurations for [Jetty ](https://github.com/ERDDAP/erddap/blob/main/development/jetty)and [Docker ](https://github.com/ERDDAP/erddap/blob/main/development/docker)in GitHub, though releases are expected to run in Tomcat.
 
@@ -75,7 +75,7 @@ NOTE: By default Maven will cache static reference and test data archive downloa
 NOTE: Maven caches downloads but will unzip the downloaded archives on each execution, which takes time. To skip downloading
 and unzipping test data archives, you may specify the `skipTestResourceDownload` property to Maven (e.g. `mvn -DskipTestResourceDownload package`).
 
-###  **Important Classes**
+###  **Important Classes** {#important-classes}
 
 If you want to look at the source code and try to figure out how ERDDAP™ works, please do.
 
@@ -98,7 +98,7 @@ If you want to look at the source code and try to figure out how ERDDAP™ works
   - Other classes (e.g., low level classes) are also important, but it is less likely that you will be working to change them.
      
 
-### **Code Contributions**
+### **Code Contributions** {#code-contributions}
 
 - GitHub Issues
   If you would like to contribute but don't have a project, see the list of [GitHub Issues](https://github.com/ERDDAP/erddap/issues), many of which are projects you could take on. If you would like to work on an issue, please assign it to yourself to indicate to others you are working on it. The GitHub issue is the best place to discuss any questions for how to proceed with work on that issue.
@@ -113,7 +113,7 @@ Those situations have the advantage that the code you write is self-contained. Y
 
 - If you have a feature not covered above that you would like to add to ERDDAP, it is recommended to first create a discussion thread in the [GitHub Discussions](https://github.com/ERDDAP/erddap/discussions/categories/ideas). For significant features/changes the Technical Board will discuss them and decide on whether to approve adding it to ERDDAP™.
 
-### **Judging Your Code Contributions**
+### **Judging Your Code Contributions** {#judging-your-code-contributions}
 If you want to submit code or other changes to be included in ERDDAP, that is great. Your contribution needs to meet certain criteria in order to be accepted. If you follow the guidelines below, you greatly increase the chances of your contribution being accepted.
    
 

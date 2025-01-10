@@ -1,8 +1,8 @@
 ERDDAP™ - Set Up Your Own ERDDAP™    
 
-## Things You Need To Know
+## Things You Need To Know {#things-you-need-to-know}
      
-###   **[Proxy Errors](#proxy-errors)**  
+###   **[Proxy Errors](#proxy-errors)** {#proxy-errors}
 Sometimes, a request to ERDDAP™ will return a Proxy Error, an HTTP 502 Bad Gateway Error, or some similar error. These errors are being thrown by Apache or Tomcat, not ERDDAP™ itself.
 *   If every request generates these errors, especially when you are first setting up your ERDDAP™, then it probably is a proxy or bad gateway error, and the solution is probably to fix [ERDDAP's proxy settings](/docs/server-admin/deploy-install#proxypass). This may also be the problem when an established ERDDAP™ suddenly starts throwing these errors for every request.
 *   Otherwise, "proxy" errors are usually actually time out errors thrown by Apache or Tomcat. Even when they happen relatively quickly, it is some sort of response from Apache or Tomcat that occurs when ERDDAP™ is very busy, memory-limited, or limited by some other resource. In these cases, see the advice below to deal with [ERDDAP™ responding slowly](#responding-slowly).
@@ -11,7 +11,7 @@ Requests for a long time range (>30 time points) from a gridded dataset are pron
 The solution is to make several requests, each with a smaller time range. How small of a time range? I suggest starting really small (~30 time points?), then (approximately) double the time range until the request fails, then go back one doubling. Then make all the requests (each for a different chunk of time) needed to get all of the data.  
 An ERDDAP™ administrator can lessen this problem by increasing the [Apache timeout settings](/docs/server-admin/deploy-install#apache-timeout).
         
-### Monitoring
+### Monitoring {#monitoring}
 We all want our data services to find their audience and be extensively used, but sometimes your ERDDAP™ may be used too much, causing problems, including super slow responses for all requests. Our plan to avoid problems is:
 
 *   Monitor ERDDAP™ via the [status.html web page](#status-page).  
@@ -23,13 +23,13 @@ We all want our data services to find their audience and be extensively used, bu
      
 *   Watch for out-of-date datasets via the *baseUrl*/erddap/outOfDateDatasets.html web page which is based on the optional [testOutOfDate](/docs/server-admin/datasets#testoutofdate) global attribute.  
      
-#### External Monitors
+#### External Monitors {#external-monitors}
 The methods listed above are ERDDAP's ways of monitoring itself. It is also possible to make or use external systems to monitor your ERDDAP. One project to do this is [Axiom's erddap-metrics project](https://github.com/axiom-data-science/erddap-metrics). Such external systems have some advantages:
 *   They can be customized to provide the information you want, displayed in the way you want.
 *   They can include information about ERDDAP™ that ERDDAP™ can't access easily or at all (for example, CPU usage, disk free space, ERDDAP™ response time as seen from the user's perspective, ERDDAP™ uptime,
 *   They can provide alerts (emails, phone calls, texts) to administrators when problems exceed some threshold.  
              
-### Multiple Simultaneous Requests
+### Multiple Simultaneous Requests {#multiple-simultaneous-requests}
 *   **Blacklist users making multiple simultaneous requests!**
     If it is clear that some user is making more than one simultaneous request, repeatedly and continuously, then add their IP address to ERDDAP's [&lt;requestBlacklist>](/docs/server-admin/datasets#requestblacklist) in your datasets.xml file.   Sometimes the requests are all from one IP address. Sometimes they are from multiple IP addresses, but clearly the same user. You can also blacklist people making tons of invalid requests or tons of mind-numbingly inefficient requests.
     
@@ -65,7 +65,7 @@ The methods listed above are ERDDAP's ways of monitoring itself. It is also poss
 
 Clearly, it is best if your server has a lot of cores, a lot of memory (so you can allocate a lot of memory to ERDDAP™, more than it ever needs), and a high bandwidth internet connection. Then, memory is rarely or never a limiting factor, but network bandwidth becomes the more common limiting factor. Basically, as there are more and more simultaneous requests, the speed to any given user decreases. That naturally slows down the number of requests coming in if each user is just submitting one request at a time.
     
-### ERDDAP™ Getting Data from THREDDS
+### ERDDAP™ Getting Data from THREDDS {#erddap-getting-data-from-thredds}
 If your ERDDAP™ gets some of its data from a THREDDS at your site, there are some advantages to making a copy of the THREDDS data files (at least for the most popular datasets) on another RAID that ERDDAP™ has access to so that ERDDAP™ can serve data from the files directly. At ERD, we do that for our most popular datasets.
 
 *   ERDDAP™ can get the data directly and not have to wait for THREDDS to reload the dataset or ...
@@ -78,7 +78,7 @@ In any case, don't ever run THREDDS and ERDDAP™ in the same Tomcat. Run them i
 
 We find that THREDDS periodically gets in a state where requests just hang. If your ERDDAP™ is getting data from a THREDDS and the THREDDS is in this state, ERDDAP™ has a defense (it says the THREDDS-based dataset isn't available), but it is still troublesome for ERDDAP™ because ERDDAP™ has to wait until the timeout each time it tries to reload a dataset from a hung THREDDS. Some groups (including ERD) avoid this by proactively restarting THREDDS frequently (e.g., nightly in a cron job).
 
-### Responding Slowly
+### Responding Slowly {#responding-slowly}
 *   **If ERDDAP™ Is Responding Slowly** or if just certain requests are responding slowly,  
     you may be able to figure out if the slowness is reasonable and temporary (e.g., because of lots of requests from scripts or WMS users), or if something is inexplicably wrong and you need to [shut down and restart Tomcat and ERDDAP™](#shut-down-and-restart).
     
@@ -155,7 +155,7 @@ We find that THREDDS periodically gets in a state where requests just hang. If y
     *   **Stuck?**  
         See our [section on getting additional support](/docs/intro#support). 
 
-### Shut Down and Restart
+### Shut Down and Restart {#shut-down-and-restart}
 *   **How to Shut Down and Restart Tomcat and ERDDAP™**  
     You don't need to shut down and restart Tomcat and ERDDAP if ERDDAP™ is temporarily slow, slow for some known reason (like lots of requests from scripts or WMS users), or to apply changes to datasets.xml file.
     
@@ -201,7 +201,7 @@ We find that THREDDS periodically gets in a state where requests just hang. If y
              
         5.  View ERDDAP™ in your browser to check that the restart succeeded. (Sometimes, you need to wait 30 seconds and try to load ERDDAP™ again in your browser for it to succeed.)  
              
-### Frequent Crashes or Freezes
+### Frequent Crashes or Freezes {#frequent-crashes-or-freezes}
 If ERDDAP™ becomes slow, crashes or freezes, something is wrong. Look in [ERDDAP's log file](#log) to try to figure out the cause. If you can't, please include the details and see our [section on getting additional support](/docs/intro#support).
 
 The most common problem is a troublesome user who is running several scripts at once and/or someone making a large number of invalid requests. If this happens, you should probably blacklist that user. When a blacklisted user makes a request, the error message in the response encourages them to email you to work out the problems. Then, you can encourage them to run just one script at a time and to fix the problems in their script (e.g., requesting data from a remote dataset that can't respond before timing out). See [&lt;requestBlacklist> in your datasets.xml file](/docs/server-admin/datasets#requestblacklist).
@@ -211,7 +211,7 @@ In extreme circumstances, Java may freeze for a minute or two while it does a fu
 If ERDDAP™ becomes slow or freezes and the problem isn't a troublesome user or a long garbage collection, you can usually solve the problem by [restarting ERDDAP™](#shut-down-and-restart). My experience is that ERDDAP™ can run for months without needing a restart.  
      
 
-### Monitor
+### Monitor {#monitor}
 You can monitor your ERDDAP's status by looking at the [/erddap/status.html page](#status-page), notably the statistics in the top section. If ERDDAP™ becomes slow or freezes and the problem isn't just extremely heavy usage, you can usually solve the problem by [restarting ERDDAP™](#shut-down-and-restart). There's additional metrics available through the Prometheus integration at /erddap/metrics.
 
 My experience is that ERDDAP™ can run for months without needing a restart. You should only need to restart it if you want to apply some changes you made to ERDDAP's setup.xml or when you need to install new versions of ERDDAP™, Java, Tomcat, or the operating system. If you need to restart ERDDAP™ frequently, something is wrong. Look in [ERDDAP's log file](#log) to try to figure out the cause. If you can't, please include the details and see our [section on getting additional support](/docs/intro#support). As a temporary solution, you might try using [Monit](https://mmonit.com/monit/) to monitor your ERDDAP™ and restart it if needed. Or, you could make a cron job to restart ERDDAP™ (proactively) periodically. It may be a little challenging to write a script to automate monitoring and restarting ERDDAP. Some tips that might help:
@@ -226,11 +226,11 @@ My experience is that ERDDAP™ can run for months without needing a restart. Yo
 
 If you do set up Monit or a cron job, it'd be great if you could share the details so others could benefit see our [section on getting additional support](/docs/intro#support) for where you can share.  
 
-#### Permgen
+#### Permgen {#permgen}
 If you repeatedly use Tomcat Manager to Reload (or Stop and Start) ERDDAP™, ERDDAP™ may fail to start up and throw java.lang.OutOfMemoryError: PermGen. The solution is to periodically (or every time?) [shut down and restart tomcat and ERDDAP™](#shut-down-and-restart), instead of just reloading ERDDAP.  
 \[Update: This problem was greatly minimized or fixed in ERDDAP™ version 1.24.\]  
      
-#### Log
+#### Log {#log}
 *   **[log.txt](#log)**  
     If ERDDAP™ doesn't start up or if something isn't working as expected, it is very useful to look at the error and diagnostic messages in the ERDDAP™ log file.
     *   The log file is *bigParentDirectory*/logs/log.txt  
@@ -252,14 +252,14 @@ If you repeatedly use Tomcat Manager to Reload (or Stop and Start) ERDDAP™, ER
     *   Whenever you restart ERDDAP™,  
         ERDDAP™ makes an archive copy of the log.txt and log.txt.previous files with a time stamp in the file's name. If there was trouble before the restart, it may be useful to analyze these archived files for clues as to what the trouble was. You can delete the archive files if they are no longer needed.  
          
-##### Parsing log.txt
+##### Parsing log.txt {#parsing-logtxt}
 ERDDAP's log.txt file isn't designed for parsing (although you might be able to create regular expressions that extract desired information). It is designed to help a human figure out what is going wrong when something is going wrong. When you submit a bug or problem report to ERDDAP™ developers, when possible, please include all of the information from the log.txt file related to the troublesome request.
 
 For efficiency reasons, ERDDAP™ only writes information to log.txt after a large chunk of information has accumulated. So if you visit log.txt right after an error has occurred, information related to the error may not yet have been written to log.txt. In order to get perfectly up-to-date information from log.txt, visit your ERDDAP's [status.html page](#status-page). When ERDDAP™ processes that request, it flushes all pending information to log.txt.
 
 For ERDDAP™ usage statistics, please use the [Apache and/or Tomcat log files](#tomcat-logs) instead of ERDDAP's log.txt. Note that ERDDAP's [status.html page](#status-page) (some) and [Daily Report](#daily-report) (more) have a large number of usage statistics precalculated for you.
     
-### Tomcat Logs
+### Tomcat Logs {#tomcat-logs}
 If ERDDAP™ doesn't start up because an error occurred very early in ERDDAP's startup, the error message will show up in Tomcat's log files (*tomcat*/logs/catalina.*today*.log or *tomcat*/logs/catalina.out), not in [ERDDAP's log.txt file](#log).
 
 Usage Statistics: For most of the information that people want to gather from a log file (e.g., usage statistics), please use the Apache and/or Tomcat log files. They are nicely formatted and have that type of information. There are numerous tools for analyzing them, for example, [AWStats](https://www.awstats.org), [ElasticSearch's Kibana](https://www.elastic.co/products/kibana), and [JMeter](https://jmeter.apache.org), but search the web to find the right tool for your purposes.
@@ -271,13 +271,13 @@ Also, because of [DHCP](https://en.wikipedia.org/wiki/Dynamic_Host_Configuration
 Alternatively, you can use something like [Google Analytics](https://analytics.google.com/analytics/web/provision/?authuser=0#/provision). But beware: when you use external services like Google Analytics, you are giving up your users' privacy by giving Google full access to their activity on your site which Google (and others?) can keep forever and use for any purpose (perhaps not technically, but probably in practice). Your users haven't consented to this and probably aren't aware that they will be tracked on your website, just as they probably aren't aware of the extent they are being tracked on almost all websites. These days, many users are very concerned that everything they do on the web is being monitored by these big companies (Google, Facebook, etc.) and by the government, and find this an unwarranted intrusion into their lives (as in the book, 1984). This has driven many users to install products like [Privacy Badger](https://www.eff.org/privacybadger/faq) to minimize tracking, to use alternative browsers like [Tor Browser](https://www.torproject.org/) (or turn off tracking in traditional browsers), and to use alternative search engines like [Duck Duck Go](https://duckduckgo.com/). If you use a service like Google Analytics, please at least document its use and the consequences by changing the &lt;standardPrivacyPolicy> tag in ERDDAP's  
 \[tomcat\]/webapps/erddap/WEB-INF/classes/gov/noaa/pfel/erddap/util/messages.xml file.
     
-### E-Mail Log
+### E-Mail Log {#e-mail-log}
 *   **emailLogYEAR-MM-DD.txt**  
     ERDDAP™ always writes the text of all out-going email messages in the current day's emailLogYEAR-MM-DD.txt file in *bigParentDirectory*/logs (*bigParentDirectory* is specified in [setup.xml](/docs/server-admin/deploy-install#setupxml)).
     *   If the server can't send out email messages, or if you have configured ERDDAP™ not to send out email messages, or if you are just curious, this file is a convenient way to see all of the email messages that have been sent out.
     *   You can delete previous days' email log files if they are no longer needed.  
          
-### Daily Report
+### Daily Report {#daily-report}
     The Daily Report has lots of useful information -- all of the information from your ERDDAP's [/erddap/status.html page](#status-page) and more.
     *   It is the most complete summary of your ERDDAP's status.
     *   Among other statistics, it includes a list of datasets that didn't load and the exceptions they generated.
@@ -285,18 +285,18 @@ Alternatively, you can use something like [Google Analytics](https://analytics.g
     *   Whenever it is generated, it is written to [ERDDAP's log.txt file](#log).
     *   Whenever it is generated, it is emailed to &lt;emailDailyReportsTo> and &lt;emailEverythingTo> (which are specified in [setup.xml](/docs/server-admin/deploy-install#setupxml)) provided you have set up the email system (in setup.xml).  
 
-### Status Page
+### Status Page {#status-page}
 You can view the status of your ERDDAP™ from any browser by going to &lt;baseUrl>/erddap/status.html
 *   This page is generated dynamically, so it always has up-to-the-moment statistics for your ERDDAP.
 *   It includes statistics regarding the number of requests, memory usage, thread stack traces, the taskThread, etc.
 *   Because the Status Page can be viewed by anyone, it doesn't include quite as much information as the [Daily Report](#daily-report).  
          
-### Adding/Changing Datasets
+### Adding/Changing Datasets {#addingchanging-datasets}
 ERDDAP™ usually rereads datasets.xml every *loadDatasetsMinMinutes* (specified in [setup.xml](/docs/server-admin/deploy-install#setupxml)). So you can make changes to datasets.xml any time, even while ERDDAP™ is running.  
 A new dataset will be detected soon, usually within *loadDatasetsMinMinutes*.  
 A changed dataset will be reloaded when it is *reloadEveryNMinutes* old (as specified in datasets.xml).  
     
-#### Flag 
+#### Flag {#flag}
 *   **[A Flag File](#flag) Tells ERDDAP™ to Try to Reload a Dataset As Soon As Possible**
     
     *   ERDDAP™ won't notice any changes to a dataset's setup in datasets.xml until ERDDAP™ reloads the dataset.  
@@ -307,7 +307,7 @@ A changed dataset will be reloaded when it is *reloadEveryNMinutes* old (as spec
         For EDDGridFromFiles and EDDTableFromFiles, the reloading dataset will look for new or changed files, read those, and incorporate them into the dataset. So the time to reload is dependent on the number of new or changed files.  
         If the dataset has active="false", ERDDAP™ will remove the dataset.  
          
-##### Bad Files Flag
+##### Bad Files Flag {#bad-files-flag}
 *   One variant of the /flag directory is the /badFilesFlag directory. (Added in ERDDAP™ v2.12.)  
     If you put a file in the *bigParentDirectory*/badFilesFlag directory with a datasetID as the file name (the file contents don't matter), then as soon as ERDDAP™ sees the badFilesFlag file, ERDDAP™ will:
     
@@ -318,7 +318,7 @@ A changed dataset will be reloaded when it is *reloadEveryNMinutes* old (as spec
     
     Thus, this causes ERDDAP™ to try again to work with the files previously (erroneously?) marked as bad.  
          
-##### Hard Flag
+##### Hard Flag {#hard-flag}
 *   Another variant of the /flag directory is the /hardFlag directory. (Added in ERDDAP™ v1.74.)  
     If you put a file in *bigParentDirectory*/hardFlag with a datasetID as the file name (the file contents don't matter), then as soon as ERDDAP™ sees the hardFlag file, ERDDAP™ will:
     
@@ -344,7 +344,7 @@ A changed dataset will be reloaded when it is *reloadEveryNMinutes* old (as spec
      
 *   Any time ERDDAP™ runs LoadDatasets to do a major reload (the timed reload controlled by &lt;loadDatasetsMinMinutes>) or a minor reload (as a result of an external or internal flag), ERDDAP™ reads all &lt;decompressedCacheMaxGB>, &lt;decompressedCacheMaxMinutesOld>, &lt;user>, &lt;requestBlacklist>, &lt;slowDownTroubleMillis>, and &lt;subscriptionEmailBlacklist> tags and switches to the new settings. So you can use a flag as a way to get ERDDAP™ to notice changes to those tags ASAP.
 
-##### Set Dataset Flag
+##### Set Dataset Flag {#set-dataset-flag}
 *  ERDDAP™ has a web service so that flags can be set via URLs.
     
     *   For example,  
@@ -358,13 +358,13 @@ A changed dataset will be reloaded when it is *reloadEveryNMinutes* old (as spec
     
     The flag system can serve as the basis for a more efficient mechanism for telling ERDDAP™ when to reload a dataset. For example, you could set a dataset's &lt;reloadEveryNMinutes> to a large number (e.g., 10080 = 1 week). Then, when you know the dataset has changed (perhaps because you added a file to the dataset's data directory), set a flag so that the dataset is reloaded as soon as possible. Flags are usually seen quickly. But if the LoadDatasets thread is already busy, it may be a while before it is available to act on the flag. But the flag system is much more responsive and much more efficient than setting &lt;reloadEveryNMinutes> to a small number.
     
-#### Removing Datasets
+#### Removing Datasets {#removing-datasets}
 If a dataset is active in ERDDAP™ and you want to deactivate it temporarily or permanently:
 1.  In datasets.xml for the dataset, set [active="false"](/docs/server-admin/datasets#active) in the dataset tag.
 2.  Wait for ERDDAP™ to remove the dataset during the next major reload or [set a flag](#flag) for the dataset to tell ERDDAP™ to notice this change as soon as possible. When you do this, ERDDAP™ doesn't throw out any information it may have stored about the dataset and certainly doesn't do anything to the actual data.
 3.  Then you can leave the active="false" dataset in datasets.xml or remove it.  
          
-#### When Are Datasets Reloaded?
+#### When Are Datasets Reloaded? {#when-are-datasets-reloaded}
 A thread called RunLoadDatasets is the master thread that controls when datasets are reloaded. RunLoadDatasets loops forever:
 
 1.  RunLoadDatasets notes the current time.
@@ -412,7 +412,7 @@ Notes:
         
           
          
-#### Cached Responses
+#### Cached Responses {#cached-responses}
 In general, ERDDAP™ doesn't cache (store) responses to user requests. The rationale was that most requests would be slightly different so the cache wouldn't be very effective. The biggest exceptions are requests for image files (which are cached since browsers and programs like Google Earth often re-request images) and requests for .nc files (because they can't be created on-the-fly). ERDDAP™ stores each dataset's cached files in a different directory: *bigParentDirectory*/cache/*datasetID* since a single cache directory might have a huge number of files which might become slow to access.  
 Files are removed from the cache for one of three reasons:
 *   All files in this cache are deleted when ERDDAP™ is restarted.
@@ -420,7 +420,7 @@ Files are removed from the cache for one of three reasons:
 *   Images showing error conditions are cached, but only for a few minutes (it's a difficult situation).
 *   Every time a dataset is reloaded, all files in that dataset's cache are deleted. Because requests may be for the "last" index in a gridded dataset, files in the cache may become invalid when a dataset is reloaded.  
          
-#### Stored Dataset Information
+#### Stored Dataset Information {#stored-dataset-information}
 For all types of datasets, ERDDAP™ gathers lots of information when a dataset is loaded and keeps that in memory. This allows ERDDAP™ to respond very quickly to searches, requests for lists of datasets, and requests for information about a dataset.
 
 For a few types of datasets (notably EDDGridCopy, EDDTableCopy, EDDGridFrom*Xxx*Files, and EDDTableFrom*Xxx*Files), ERDDAP™ stores on disk some information about the dataset that is reused when the dataset is reloaded. This greatly speeds the reloading process.
@@ -433,7 +433,7 @@ For a few types of datasets (notably EDDGridCopy, EDDTableCopy, EDDGridFrom*Xxx*
 *   To delete a dataset's stored information files from an ERDDAP™ that is running (even if the dataset isn't currently loaded), set a [hardFlag](#hard-flag) for that dataset. Remember that if a dataset is an aggregation of a large number of files, reloading the dataset may take considerable time.
 *   To delete a dataset's stored information files when ERDDAP™ isn't running, run [DasDds](/docs/server-admin/datasets#dasdds) for that dataset (which is easier than figuring in which directory the info is located and deleting the files by hand). Remember that if a dataset is an aggregation of a large number of files, reloading the dataset may take considerable time.  
          
-### Memory Status
+### Memory Status {#memory-status}
 ERDDAP™ shouldn't ever crash or freeze up. If it does, one of the most likely causes is insufficient memory. You can monitor memory usage by looking at the status.html web page, which includes a line like
 
 0 gc calls, 0 requests shed, and 0 dangerousMemoryEmails since last major LoadDatasets
@@ -454,7 +454,7 @@ If your ERDDAP™ is memory-stressed:
 *   Look at the requests in log.txt for inefficient or troublesome (but legitimate) requests. Add their IP addresses to &lt;requestBlacklist> in datasets.xml. The blacklist error message includes the ERDDAP™ administrator's email address with the hope that those users will contact you so that you can work with them to use ERDDAP™ more efficiently. It's good to keep a list of IP addresses you blacklist and why, so that you can work with the users if they contact you.
 *   Look at the requests in log.txt for requests from malicious users. Add their IP addresses to &lt;requestBlacklist> in datasets.xml. If similar requests are coming from multiple similar IP address, you can use some who-is services (e.g., [https://www.whois.com/whois/](https://www.whois.com/whois/)) to find out the range of IP addresses from that source and blacklist the entire range. See the [&lt;requestBlacklist> documentation](/docs/server-admin/datasets#requestblacklist).  
          
-#### OutOfMemoryError
+#### OutOfMemoryError {#outofmemoryerror}
 When you set up ERDDAP™, you specify the maximum amount of memory that Java can use via the [\-Xmx setting](/docs/server-admin/deploy-install#memory). If ERDDAP™ ever needs more memory than that, it will throw a java.lang.OutOfMemoryError. ERDDAP™ does a lot of checking to enable it to handle that error gracefully (e.g., so a troublesome request will fail, but the system retains its integrity). But sometimes, the error damages system integrity and you have to restart ERDDAP. Hopefully, that is rare.
 
 The quick and easy solution to an OutOfMemoryError is to increase the [\-Xmx setting](/docs/server-admin/deploy-install#memory), but you shouldn't ever increase the -Xmx setting to more than 80% of the physical memory in the server (e.g., for a 10GB server, don't set -Xmx above 8GB). Memory is relatively cheap, so it may be a good option to increase the memory in the server. But if you have maxed out the memory in the server or for other reasons can't increase it, you need to deal more directly with the cause of the OutOfMemoryError.
@@ -468,7 +468,7 @@ If you look in the [log.txt](#log) file to see what ERDDAP™ was doing when the
 *   It's always possible that several simultaneous large requests (on a really busy ERDDAP) can combine to cause memory trouble. For example, 8 requests, each using 1GB each, would cause problems for an -Xmx=8GB setup. But it is rare that each request would be at the peak of its memory use simultaneously. And you would easily be able to see that your ERDDAP™ is really busy with big requests. But, it's possible. It's hard to deal with this problem other than by increasing the -Xmx setting.
 *   There are other scenarios. If you look at the [log.txt](#log) file to see what ERDDAP™ was doing when the error arose, you can usually get a good clue as to the cause. In most cases, there is a way to minimize that problem (see above), but sometimes you just need more memory and a higher -Xmx setting.  
          
-### Too Many Open Files
+### Too Many Open Files {#too-many-open-files}
 Starting with ERDDAP™ v2.12, ERDDAP™ has a system to monitor the number of open files (which includes sockets and some other things, not just files) in Tomcat on Linux computers. If some files mistakenly never get closed (a "resource leak"), the number of open files may increase until it exceeds the maximum allowed by the operating system and numerous really bad things happen. So now, on Linux computers (because the information isn't available for Windows):
 
 *   There is an "Open Files" column on the far right of the status.html web page showing the percent of max files open. On Windows, it just shows "?".
@@ -491,7 +491,7 @@ If the percentage is ever >50%, you should:
         On many Linux variants, you have to restart the server to apply those changes.For both options, the "16384" above is an example. You choose the number that you think is best.
 *   Restart ERDDAP. The operating system will close any open files.  
          
-### Failed Requests
+### Failed Requests {#failed-requests}
 *   **Unusual Activity: >25% of requests failed**  
     As part of every reloadDatasets, which is usually every 15 minutes, ERDDAP™ looks at the percentage of requests which failed since the last reloadDatasets. If it is >25%, ERDDAP™ sends an email to the ERDDAP™ administrator with the subject "Unusual Activity: >25% of requests failed". That email includes a tally near the bottom entitled "Requester's IP Address (Failed) (since last Major LoadDatasets)". Search for that. It tells you the IP address of the computers making the most failed requests. You can then search for those IP addresses in the \[bigParentDirectory\]/logs/[log.txt](#log) file and see what type of requests they are making.
     
@@ -511,7 +511,7 @@ If the percentage is ever >50%, you should:
     
     If all else fails, there is a universal solution: add the user's IP number to the [&lt;requestBlacklist>](/docs/server-admin/datasets#requestblacklist). This isn't as bad or as drastic an option as it might seem. The user will then get an error message saying s/he has been blacklisted and telling them your (the ERDDAP™ administrator's) email address. Sometimes the user will contact you and you can resolve the problem. Sometimes the user doesn't contact you and you will see the exact same behavior coming from a different IP number the next day. Blacklist the new IP number and hope that they will eventually get the message. (Or this is your Groundhog Day, from which you will never escape. Sorry.)
     
-### robots.txt
+### robots.txt {#robotstxt}
     The search engine companies use web crawlers (e.g., GoogleBot) to examine all of the pages on the web to add the content to the search engines. For ERDDAP™, that is basically good. ERDDAP™ has lots of links between pages, so the crawlers will find all of the web pages and add them to the search engines. Then, users of the search engines will be able to find datasets on your ERDDAP.
     
     Unfortunately, some web crawlers (e.g., GoogleBot) are now filling out and submitting forms in order to find additional content. For web commerce sites, this is great. But this is terrible for ERDDAP™ because it just leads to an **infinite** number of undesirable and pointless attempts to crawl the actual data. This can lead to more requests for data than from all other users combined. And it fills the search engine with goofy, pointless subsets of the actual data.
@@ -551,7 +551,7 @@ If the percentage is ever >50%, you should:
     (But replace *your.institutions.url* with your ERDDAP's base URL.)  
     It may take a few days for the search engines to notice and for the changes to take effect.  
      
-### sitemap.xml
+### sitemap.xml {#sitemapxml}
 As the [https://www.sitemaps.org](https://www.sitemaps.org/) website says:
 
 > Sitemaps are an easy way for webmasters to inform search engines about pages on their sites that are available for crawling. In its simplest form, a Sitemap is an XML file that lists URLs for a site along with additional metadata about each URL (when it was last updated, how often it usually changes, and how important it is, relative to other URLs on the site) so that search engines can more intelligently crawl the site.
@@ -568,7 +568,7 @@ Actually, since ERDDAP™ is RESTful, search engine spiders can easily crawl you
     *   https://www.bing.com/webmaster/ping.aspx?siteMap=http://**www.yoursite.org**/erddap/sitemap.xml
     *   https://www.google.com/ping?sitemap=http://**www.yoursite.org**/erddap/sitemap.xml(I think) you just need to ping each search engine once, for all time. The search engines will then detect changes to sitemap.xml periodically.
      
-### Data Dissemination / Data Distribution Networks: Push and Pull Technology
+### Data Dissemination / Data Distribution Networks: Push and Pull Technology {#data-dissemination--data-distribution-networks-push-and-pull-technology}
 *   Normally, ERDDAP™ acts as an intermediary: it takes a request from a user; gets data from a remote data source; reformats the data; and sends it to the user.
 *   [Pull Technology](https://en.wikipedia.org/wiki/Pull_technology): ERDDAP™ also has the ability to actively get all of the available data from a remote data source and [store a local copy of the data](/docs/server-admin/datasets#eddgridcopy).
 *   [Push Technology](https://en.wikipedia.org/wiki/Push_technology): By using ERDDAP's [subscription services](https://coastwatch.pfeg.noaa.gov/erddap/information.html#subscriptions), other data servers can be notified as soon as new data is available so that they can request the data (by pulling the data).
@@ -584,10 +584,10 @@ This architecture puts each ERDDAP™ administrator in charge of determining whe
 *   A given ERDDAP™ can be both a source of data for some datasets and a redistribution site for other datasets.
 *   The resulting network is roughly similar to data distribution networks set up with programs like [Unidata's IDD/IDM](https://www.unidata.ucar.edu/projects/index.html#idd), but less rigidly structured.  
          
-### Security, Authentication, and Authorization
+### Security, Authentication, and Authorization {#security-authentication-and-authorization}
 By default, ERDDAP™ runs as an entirely public server (using http and/or https) with no login ([authentication](https://en.wikipedia.org/wiki/Authentication)) system and no restrictions to data access ([authorization](https://en.wikipedia.org/wiki/Authorization)).
 
-#### Security
+#### Security {#security}
 If you want to restrict access to some or all datasets to some users, you can use ERDDAP's built-in security system. When the security system is in use:
 
 *   ERDDAP™ uses [role-based access control](https://en.wikipedia.org/wiki/Role-based_access_control).
@@ -631,10 +631,10 @@ If you want to restrict access to some or all datasets to some users, you can us
     
 *   Email subscriptions can only be set up when a user has access to a dataset. If a user subscribes to a private dataset, the subscription continues to function after the user has logged out.
 
-##### Setup Security
+##### Setup Security {#setup-security}
 To set up the security/authentication/authorization system:
 
-*   Do the standard ERDDAP™ [initial setup](/docs/server-admin/deploy-install.md).
+*   Do the standard ERDDAP™ [initial setup](/docs/server-admin/deploy-install).
 *   In [setup.xml](/docs/server-admin/deploy-install#setupxml),
     *   Add/change the &lt;authenticate> value from nothing to custom (don't use this), email (don't use this), google (recommended), orcid (recommended), or oauth2 (which is google+orcid, recommended). See the comments about these options below.
     *   Add/change the &lt;baseHttpsUrl> value.
@@ -667,7 +667,7 @@ To set up the security/authentication/authorization system:
     </Connector>
 ```
     and change the location of the certificateKeystoreFile.
-##### Authorization
+##### Authorization {#authorization}
 *   [In datasets.xml, create a](#authorization) [&lt;user>](/docs/server-admin/datasets#user) tag for each user with username, password (if authorization=custom), and roles information. This is the authorization part of ERDDAP's security system.  
      
 *   In datasets.xml, add an [&lt;accessibleTo>](/docs/server-admin/datasets#accessibleto) tag to each dataset that shouldn't have public access. &lt;accessibleTo> lets you specify which roles have access to that dataset.  
@@ -680,7 +680,7 @@ To set up the security/authentication/authorization system:
      
 *   You can change the &lt;user> and &lt;accessibleTo> tags at any time. The changes will be applied at the next regular reload of any dataset, or ASAP if you use a [flag](#flag).
 
-##### Authentication
+##### Authentication {#authentication}
 [**Authentication (logging in)**](#authentication)  
 If you don't want to allow users to log in, don't specify a value for &lt;authentication> in setup.xml.  
 If you do want to allow users to log in, you must specify a value for &lt;authentication>. Currently, ERDDAP™ supports  
@@ -695,7 +695,7 @@ All &lt;authentication> options use a [cookie](https://en.wikipedia.org/wiki/HTT
 
 The details of the &lt;authentication> options are:
 
-###### Custom
+###### Custom {#custom}
 custom is ERDDAP's custom system for letting users log in by entering their User Name and Password in a form on a web page. If a user tries and fails to log in 3 times within 10 minutes, the user is blocked from trying to log in for 10 minutes. This prevents hackers from simply trying millions of passwords until they find the right one.
 
 This is somewhat secure because the User Name and Password are transmitted via https (not http), but authentication=google, orcid, or oauth2 are better because they free you from having to handle passwords. The custom approach requires you to collect a user's Name and a hash digest of their Password (use your phone! email isn't secure!) and store them in datasets.xml in [&lt;user>](/docs/server-admin/datasets#user) tags.
@@ -718,7 +718,7 @@ To increase the security of this option:
      
 *   Use an as-secure-as-possible method to pass the hash digest of the user's password from the user to the ERDDAP™ administrator (phone?).  
          
-###### email
+###### email {#email}
 The email authentication option uses a user's email account to authenticate the user (by sending them an email with a special link that they have to access in order to log in). Unlike other emails that ERDDAP™ sends, ERDDAP™ does not write these invitation emails to the email log file because they contain confidential information.  
 In theory, this is not very secure, because emails aren't always encrypted, so a bad guy with the ability to intercept emails could abuse this system by using a valid user's email address and intercepting the invitation email.  
 In practice, if you set up ERDDAP™ to use a Google email account to send emails, and if you set it up to use one of the TLS options for the connection, and if the user has a Google email account, this is somewhat secure because the emails are encrypted all the way from ERDDAP™ to the user.
@@ -770,11 +770,11 @@ To set up authentication=email:
      
 5.  Restart ERDDAP™ so that the changes to setup.xml and datasets.xml take effect.  
          
-###### Google, orcid, oauth2
+###### Google, orcid, oauth2 {#google-orcid-oauth2}
 *   [**google**](#google), [**orcid**](#orcid), and [**oauth2**](#oauth2)  (recommended)  
     All three of these options are the recommended ERDDAP™ authentication options. They are all the most secure options. The other options have significantly weaker security.  
      
-###### Google
+###### Google {#google}
 *   The google authentication option uses [Sign In with Google](https://developers.google.com/identity/gsi/web/guides/overview), which is an implementation of the [OAuth 2.0 authentication protocol](https://oauth.net/2/). ERDDAP™ users sign into their Google email account, including Google-managed accounts such as @noaa.gov accounts. This allows ERDDAP™ to verify the user's identity (name and email address) and access their profile image, but does not give ERDDAP™ access to their emails, their Google Drive, or any other private information.
     
     For ERDDAP™ v2.22 and below, ERDDAP™ used "Google Sign-In". Google says that system is deprecated after March 31, 2023. If you haven't already done so, please switch to ERDDAP™ v2.23+ to use the new "Sign In with Google"-based authentication system.
@@ -785,10 +785,10 @@ To set up authentication=email:
     
     For more information you can go to the [Google page](https://developers.google.com/identity/gsi/web/guides/get-google-api-clientid#content_security_policy) about CSP configuration. If you have any questions, contact chris.john at noaa.gov.  
          
-###### Orcid
+###### Orcid {#orcid}
 *   The orcid authentication option uses [Orcid authentication](https://members.orcid.org/api/integrate/orcid-sign-in), which is an implementation of the [OAuth 2.0 authentication protocol](https://oauth.net/2/). ERDDAP™ users sign into their [Orcid account](https://members.orcid.org/api/integrate/orcid-sign-in), which is commonly used by researchers to identify themselves. This allows ERDDAP™ to verify the user's Orcid identity and get their Orcid account number, but does not give ERDDAP™ access to their other Orcid account information.  
 
-###### Oauth2
+###### Oauth2 {#oauth2}
 *   The oauth2 option lets users sign in with either their Google account or their Orcid account.
 
 The google, orcid, and oauth2 options are the successors to the openid option, which was discontinued after ERDDAP™ version 1.68, and which was based on a version of openID that is now out-of-date. Please switch to the google, orcid, or oauth2 option.
@@ -812,7 +812,7 @@ To set up google, orcid, or oauth2 authentication:
 ```
     <authentication>oauth2</authentication>  
 ```
-###### Google setup
+###### Google setup {#google-setup}
 *   For the google and oauth2 options:  
     Follow the instructions below to set up Google authentication for your ERDDAP.  
      
@@ -841,7 +841,7 @@ To set up google, orcid, or oauth2 authentication:
          
     4.  Restart ERDDAP™ so that the changes to setup.xml and datasets.xml take effect.  
          
-###### Orcid setup
+###### Orcid setup {#orcid-setup}
 *   For the orcid and oauth2 options:  
     Follow the instructions below to set up Orcid authentication for your ERDDAP.  
     (For details, see [Orcid's authentication API documentation](https://members.orcid.org/api/integrate/orcid-sign-in).)  
@@ -880,22 +880,22 @@ To set up google, orcid, or oauth2 authentication:
     9.  Restart ERDDAP™ so that the changes to setup.xml and datasets.xml take effect.  
              
 
-###### Log In Either Way  
+###### Log In Either Way {#log-in-either-way}
 If you use the google, orcid, or oauth2 authentication options, and Google Sign-In or Orcid's Authentication API suddenly ceases to work (for whatever reason) or ceases to work as ERDDAP™ expects, users won't be able to log in to your ERDDAP. As a temporary (or permanent) solution, you can ask users to sign up with the other system (get a Google email account, or get an Orcid account). To do this:
 
 1.  Change the &lt;authentication> tag so that it allows the other authentication system. The oauth2 option allows users to log in with either system.
 2.  Duplicate each of the &lt;user> tags and change the username attribute from the Google email address to the corresponding Orcid account number (or vice-versa), but keep the roles attribute the same.
 
-###### OpenId
+###### OpenId {#openid}
 ERDDAP™ no longer supports the openid authentication option, which was based on a version of openID that is now out-of-date. Please use the google, orcid, or oauth2 options instead.
 
-###### BASIC
+###### BASIC {#basic}
 ERDDAP™ doesn't support BASIC authentication because:
 *   BASIC seems geared toward predefined web pages needing secure access or blanket on/off access to the whole site, but ERDDAP™ allows (restricted access) datasets to be added on-the-fly.
 *   BASIC authentication doesn't offer a way for users to log out!
 *   BASIC authentication is known to be not secure.
 
-##### Secure Data Sources
+##### Secure Data Sources {#secure-data-sources}
 If a data set is to have restricted access to ERDDAP™ users, the data source (from where ERDDAP™ gets the data) should not be publicly accessible. So how can ERDDAP™ get the data for restricted access datasets? Some options are:
 
 *   ERDDAP™ can serve data from local files (for example, via EDDTableFromFiles or EDDGridFromFiles).  
@@ -906,7 +906,7 @@ If a data set is to have restricted access to ERDDAP™ users, the data source (
     
     But in general, currently, ERDDAP™ can't deal with these data sources because it has no provisions for logging on to the data source. This is the reason why access to [EDDGridFromErddap and EDDTableFromErddap](/docs/server-admin/datasets#eddfromerddap) datasets can't be restricted. Currently, the local ERDDAP™ has no way to login and access the metadata information from the remote ERDDAP. And putting the "remote" ERDDAP™ behind your firewall and removing that dataset's accessibleTo restrictions doesn't solve the problem: since user requests for EDDXxxFromErddap data need to be redirected to the remote ERDDAP™, the remote ERDDAP™ must be accessible.
     
-#### Defenses Against Hackers
+#### Defenses Against Hackers {#defenses-against-hackers}
 There are bad guy hackers who try to exploit security weaknesses in server software like ERDDAP. ERDDAP™ follows the common security advice to have several layers of defenses:
 
 *   Restricted Privileges -- One of the most important defenses is to run Tomcat via a user called tomcat that doesn't have a password (so no one can log in as that user) and has limited file system privileges (e.g., read-only access to the data). See ERDDAP's instructions for [setting up tomcat](/docs/server-admin/deploy-install#tomcat).
@@ -916,15 +916,15 @@ There are bad guy hackers who try to exploit security weaknesses in server softw
 *   Dataset Security - Some types of datasets (notably, EDDTableFromDatabase) present additional security risks (e.g., SQL injection) and have their own security measures. See the information for those types of datasets in [Working with the datasets.xml File](/docs/server-admin/datasets), notably [EDDTableFromDatabase security](/docs/server-admin/datasets#database-security).
 *   Security Audit -- Although NOAA IT security refused our requests for scans for years, they now routinely scan my (Bob's) ERDDAP™ installation. Although the initial scans found some problems that I then fixed, subsequent scans haven't found problems with ERDDAP. The scans worry about a lot of things: notably, since tabledap requests look like SQL requests, they worry about SQL injection vulnerabilities. But those concerns are unfounded because ERDDAP™ always parses and validates queries and then separately builds the SQL query in a way that avoids injection vulnerabilities. The other thing they sometimes complain about is that our Java version or Tomcat versions aren't as up-to-date as they want, so we update them in response. I previously offered to show people the security reports, but I'm now told I can't do that.
 
-#### Questions? Suggestions?
+#### Questions? Suggestions? {#questions-suggestions}
 If you have any questions about ERDDAP's security system or have any questions, doubts, concerns, or suggestions about how it is set up, see our [section on getting additional support](/docs/intro#support).
     
 
-## Things You Don't Need To Know
+## Things You Don't Need To Know {#things-you-dont-need-to-know}
 
 These are details that you don't need to know until a need arises.
 
-### Second ERDDAP™
+### Second ERDDAP™ {#second-erddap}
 *   **Setting Up a Second ERDDAP™ for Testing/Development**  
     If you want to do this, there are two approaches:
     *   (Best) Install Tomcat and ERDDAP™ on a computer other than the computer that has your public ERDDAP. If you use your personal computer:
@@ -936,7 +936,7 @@ These are details that you don't need to know until a need arises.
         4.  In [setup.xml](/docs/server-admin/deploy-install#setupxml), set baseUrl to http://127.0.0.1:8080
         5.  After you start up this ERDDAP™, you should be able to see it at  
             [http://127.0.0.1:8080/erddap/status.html](http://127.0.0.1:8080/erddap/status.html) (or perhaps [http://localhost:8080/erddap/status.html](http://localhost:8080/erddap/status.html))
-#### Second Tomcat
+#### Second Tomcat {#second-tomcat}
 *   (Second Best) Install another Tomcat on the same computer as your public ERDDAP.
     1.  Do the installation one step at a time. Get Tomcat up and running first.  
         Change all of the port numbers associated with the second Tomcat (e.g., change 8080 to 8081) (see the [Multiple Tomcat Instances section](https://tomcat.apache.org/tomcat-8.0-doc/RUNNING.txt) halfway through that document).
@@ -946,23 +946,23 @@ These are details that you don't need to know until a need arises.
     5.  After you start up this ERDDAP™, you should be able to see it at  
         http://www.*yourDomainName*:8081/erddap/status.html  
              
-### Solid State Drives
+### Solid State Drives {#solid-state-drives}
 *   **Solid State Drives (SSDs) are great!**  
     The quickest, easiest, and cheapest way to speed up ERDDAP's access to tabular data is to put the data files on a Solid State Drive (SSD). Most tabular datasets are relatively small, so a 1 or 2 TB SSD is probably sufficient to hold all of the data files for all of your tabular datasets. SSD's eventually wear out if you write data to a cell, delete it, and write new data to that cell too many times. So if you just use your SSD to write the data once and read it many times, even a consumer-grade SSD should last a very long time, probably much longer than any Hard Disk Drive (HDD). Consumer-grade SSD's are now cheap (in 2018, ~$200 for 1 TB or ~$400 for 2 TB) and prices are still falling fast. When ERDDAP™ accesses a data file, an SSD offers both shorter latency (~0.1ms, versus ~3ms for an HDD, versus ~10(?)ms for a RAID, versus ~55ms for Amazon S3) and higher throughput (~500 MB/S, versus ~75 MB/s for an HDD, versus ~500 MB/s for a RAID). So you can get a big performance boost (up to 10X versus a HDD) for $200! Compared to most other possible changes to your system (a new server for $10,000? a new RAID for $35,000? a new network switch for $5000? etc.), this is by far the best Return On Investment (ROI). If/when the SSD dies (in 1, 2, ... 8 years), replace it. Don't rely on it as for long term, archival storage of the data, just for the front-end copy of the data. \[SSD's would be great for gridded data, too, but most gridded datasets are much larger, making the SSD very expensive.\]
     
     If your server isn't loaded with memory, additional memory for your server is also a great and relatively inexpensive way to speed up all aspects of ERDDAP.  
      
     
-### [Heavy Loads / Constraints](#heavy-loads--constraints)**  
+### [Heavy Loads / Constraints](#heavy-loads--constraints)** {#heavy-loads--constraints}
 With heavy use, a standalone ERDDAP™ may be constrained by various problems. For more information, see the [list of constraints and solutions](/docs/server-admin/scaling#heavy-loads--constraints).  
      
-### Grids, Clusters, and Federations
+### Grids, Clusters, and Federations {#grids-clusters-and-federations}
 Under very heavy use, a single standalone ERDDAP™ will run into one or more constraints and even the suggested solutions will be insufficient. For such situations, ERDDAP™ has features that make it easy to construct scalable grids (also called clusters or federations) of ERDDAPs which allow the system to handle very heavy use (e.g., for a large data center). For more information, see [grids, clusters, and federations of ERDDAPs](/docs/server-admin/scaling).  
      
-### Cloud Computing
+### Cloud Computing {#cloud-computing}
 Several companies are starting to offer [cloud computing services](https://en.wikipedia.org/wiki/Cloud_computing) (e.g., [Amazon Web Services](https://aws.amazon.com/)). [Web hosting companies](https://en.wikipedia.org/wiki/Web_hosting_service) have offered simpler services since the mid-1990's, but the "cloud" services have greatly expanded the flexibility of the systems and the range of services offered. You can use these services to set up a single ERDDAP™ or a grid/cluster of ERDDAPs to handle very heavy use. For more information, see [cloud computing with ERDDAP™](/docs/server-admin/scaling#cloud-computing).  
 
-### Amazon
+### Amazon {#amazon}
 *   **[Amazon Web Services (AWS) EC2 Installation Overview](#amazon)**  
     [Amazon Web Services (AWS)](https://aws.amazon.com/) is a [cloud computing service](https://en.wikipedia.org/wiki/Cloud_computing) that offers a wide range of computer infrastructure that you can rent by the hour. You can install ERDDAP™ on an [Elastic Compute Cloud (EC2)](https://aws.amazon.com/ec2/) instance (their name for a computer that you can rent by the hour). AWS has an excellent [AWS User Guide](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/concepts.html) and you can use Google to find answers to specific questions you might have. Brace yourself -- it is a fair amount of work to get started. But once you get one server up and running, you can easily rent as many additional resources (servers, databases, SSD-space, etc.) as you need, at a reasonable price. \[This isn't a recommendation or endorsement of Amazon Web Services. There are other cloud providers.\]
     
@@ -978,9 +978,9 @@ Several companies are starting to offer [cloud computing services](https://en.wi
     *   When you log into your EC2 instance, you will be logged in as the administrative user with the user name "ec2-user". ec2-user has sudo privileges. So, when you need to do something as the root user, use: sudo *someCommand*
     *   If your desktop/laptop computer is a Windows computer, you can use [FileZilla](https://stackoverflow.com/questions/16744863/connect-to-amazon-ec2-file-directory-using-filezilla-and-sftp), a free SFTP program, to transfer files to/from your EC2 instance. Or, you may have some other SFTP program that you prefer.
     *   [Install Apache](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/install-LAMP.html) on your EC2 instance.
-    *   Follow the standard [ERDDAP™ installation instructions](/docs/server-admin/deploy-install.md).  
+    *   Follow the standard [ERDDAP™ installation instructions](/docs/server-admin/deploy-install).  
          
-### WaitThenTryAgain Exception
+### WaitThenTryAgain Exception {#waitthentryagain-exception}
 A user may get an error message like  
 WaitThenTryAgainException:  
 There was a (temporary?) problem. Wait a minute, then try again. (In a browser, click the Reload button.)  
@@ -995,10 +995,10 @@ But it is possible for this system to get triggered excessively. The most common
 The detailed explanation of that specific error (above) is:  
 For each EDDGrid dataset, ERDDAP™ keeps the axis variable values in memory. They are used, for example, to convert requested axis values that use the "()" format into index numbers. For example, if the axis values are "10, 15, 20, 25", a request for (20) will be interpreted as a request for index #2 (0-based indices). When ERDDAP™ gets a request for data and gets the data from the source, it verifies that the axis values that it got from the source match the axis values in memory. Normally, they do. But sometimes the data source has changed in a significant way: for example, index values from the beginning of the axis variable may have been removed (e.g., "10, 15, 20, 25" may have become "20, 25, 30"). If that happens, it is clear that ERDDAP's interpretation of the request (e.g., "(20)" is index #2) is now wrong. So ERDDAP™ throws an exception and calls RequestReloadASAP. ERDDAP™ will update the dataset soon (often in a few seconds, usually within a minute). Other, similar problems also throw the WaitThenTryAgain exception.
     
-#### RequestReloadASAP
+#### RequestReloadASAP {#requestreloadasap}
 You may see RequestReloadASAP in the log.txt file right after an error message and often near a [WaitThenTryAgain Exception](#waitthentryagain-exception). It is basically an internal, programmatic way for ERDDAP™ to set a [flag](#flag) to signal that the dataset should be reloaded ASAP.  
      
-### Files Not Being Deleted
+### Files Not Being Deleted {#files-not-being-deleted}
 For a few ERDDAP™ installations, there has been a problem with some temporary files being created by ERDDAP™ staying open (mistakenly) and thus not being deleted. In a few cases, many of these files have accumulated and taken up a significant amount of disk space.
 
 Hopefully, these problems are fixed (as of ERDDAP™ v2.00). If you see this problem, please email the directory+names of the offending files to Chris.John at noaa.gov. You have a few options for dealing with the problem:
@@ -1006,15 +1006,15 @@ Hopefully, these problems are fixed (as of ERDDAP™ v2.00). If you see this pro
 *   If the files aren't big and aren't causing you to run out of disk space, you can ignore the problem.
 *   The simplest solution is to shut down tomcat/ERDDAP™ (after hours so fewer users are affected). During the shutdown, if the operating system doesn't delete the files, delete them by hand. Then restart ERDDAP.  
          
-### JSON-ld
+### JSON-ld {#json-ld}
 *   **[Semantic Markup of Datasets with json-ld (JSON Linked Data)](#json-ld)**  
     ERDDAP™ now uses [json-ld (JSON Linked Data)](https://json-ld.org) to make your data catalog and datasets part of the [semantic web](https://en.wikipedia.org/wiki/Semantic_Web), which is Tim Berners-Lee's idea to make web content more machine readable and machine "understandable". The json-ld content uses [schema.org](https://schema.org/) terms and definitions. Search engines ([Google in particular](https://developers.google.com/search/docs/data-types/datasets)) and other semantic tools can use this structured markup to facilitate discovery and indexing. The json-ld structured markup appears as invisible-to-humans &lt;script> code on the https://.../erddap/info/index.html web page (which is a semantic web [DataCatalog](https://schema.org/DataCatalog)) and on each https://.../erddap/info/*datasetID*/index.html web page (which is a semantic web [Dataset](https://schema.org/Dataset)). (Special thanks to Adam Leadbetter and Rob Fuller of the Marine Institute in Ireland for doing the hard parts of the work to make this part of ERDDAP.)  
      
-### Out-Of-Date URLs
+### Out-Of-Date URLs {#out-of-date-urls}
 Slowly but surely, the URLs that data providers have written into data files are becoming out-of-date (for example, http becomes https, websites are rearranged, and organizations like NODC/NGDC/NCDC are reorganized into NCEI). The resulting broken links are an ever-present problem faced by all websites. To deal with this, ERDDAP™ now has a system to automatically update out-of-date URLs. If GenerateDatasetsXml sees an out-of-date URL, it adds the up-to-date URL to &lt;addAttributes>. Also, when a dataset loads, if ERDDAP™ sees an out-of-date URL, it silently changes it to the up-to-date URL. The changes are controlled by a series of search-for/replace-with pairs defined in &lt;updateUrls> in ERDDAP's  
 \[tomcat\]/webapps/erddap/WEB-INF/classes/gov/noaa/pfel/erddap/util/messages.xml file. You can make changes there. If you have suggestions for changes, or if you think this should be turned into a service (like the Converters), please email Chris.John at noaa.gov.  
      
-### CORS
+### CORS {#cors}
 *   CORS ([Cross-Origin Resource Sharing](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing))  
     "is a mechanism that allows restricted resources (e.g. fonts \[or ERDDAP™ data\]) on a web page to be requested from another domain outside the domain from which the first resource was served" (Arun Ranganathan). Basically, CORS is a message that can be put in the HTTP header of a response, saying essentially, "it is okay with this site if certain other sites (specific ones, or all) grab resources (e.g., data) from this site and make it available on their site". Thus, it is an alternative to [JSONP](https://en.wikipedia.org/wiki/JSONP).
     
@@ -1022,7 +1022,7 @@ Slowly but surely, the URLs that data providers have written into data files are
     
     If you want to enable CORS for your ERDDAP™, there are [readily available instructions](https://enable-cors.org/index.html) describing how website administrators can enable a CORS header via their lower level server software (e.g., Apache or nginx). 
     
-### Palettes
+### Palettes {#palettes}
 *   Palettes are used by ERDDAP™ to convert a range of data values into a range of colors when making graphs and maps.
     
     Each palette is defined in a .cpt-style palette file as used by [GMT](https://www.soest.hawaii.edu/gmt/). All ERDDAP™ .cpt files are valid GMT .cpt files, but the opposite is not true. For use in ERDDAP™, .cpt files have:
@@ -1074,7 +1074,7 @@ Slowly but surely, the URLs that data providers have written into data files are
     
     Please don't remove or change any of the standard palettes. They are a standard feature of all ERDDAP™ installations. If you think a palette or collection of palettes should be included in the standard ERDDAP™ distribution because it/they would be of general use, please email them to Chris.John at noaa.gov.  
     
-### Colorbars
+### Colorbars {#colorbars}
 *   **How does ERDDAP™ generate the colors in a colorbar?**
     
     1.  The user selects one of the predefined [palettes](#palettes) or uses the default, e.g., Rainbow. Palettes are stored/defined in GMT-style .cpt Color Palette Table files. Each of ERDDAP's predefined palettes has a simple integer range, e.g., 0 to 1 (if there is just one section in the palette), or 0 to 4 (if there are four sections in the palette). Each segment in the file covers n to n+1, starting at n=0.
@@ -1086,10 +1086,10 @@ Slowly but surely, the URLs that data providers have written into data files are
     So how can you mimic what ERDDAP™ is doing? That isn't easy. Basically you need to duplicate the process that ERDDAP™ is using. If you are a Java programmer, you can use the same Java class that ERDDAP™ uses to do all of this:  
     *tomcat*/webapps/erddap/WEB-INF/classes/gov/noaa/pfel/coastwatch/sgt/CompoundColorMap.java.
     
-### Guidelines for Data Distribution Systems
+### Guidelines for Data Distribution Systems {#guidelines-for-data-distribution-systems}
 More general opinions about the design and evaluation of data distribution systems can be found [here](https://coastwatch.pfeg.noaa.gov/erddap/images/erddapTalk/erdData.html).  
      
-### ArchiveADataset
+### ArchiveADataset {#archiveadataset}
 Included in your ERDDAP™ installation is a command line tool called ArchiveADataset which can help you make an archive (a .zip or .tar.gz file) with part or all of a dataset stored in a series of netcdf-3 .nc data files in a file format that is suitable for submission to NOAA's NCEI archive (.nc for gridded datasets or [.ncCFMA](https://coastwatch.pfeg.noaa.gov/erddap/tabledap/documentation.html#ncCFMA) for tabular datasets, as specified by the [NCEI NetCDF Templates v2.0](https://www.ncei.noaa.gov/data/oceans/ncei/formats/netcdf/v2.0/index.html)).
 
 ArchiveADataset can make two different archive formats:
@@ -1153,7 +1153,7 @@ After you answer all of the questions, ArchiveADataset will:
     If you are preparing the archive for NCEI, these are the files that you will send to NCEI, perhaps via [Send2NCEI](https://www.nodc.noaa.gov/s2n/) or [ATRAC](https://www.ncdc.noaa.gov/atrac/index.html) (NCEI's Advanced Tracking and Resource tool for Archive Collections).
 5.  Delete all of the staged files so that only the archive file (e.g., .zip), the digest (e.g., .sha256.txt) of the archive, and (optionally) the .listOfFiles.txt files remain.
 
-#### ISO 19115 .xml Metadata Files  
+#### ISO 19115 .xml Metadata Files {#iso-19115-xml-metadata-files}
 The ArchiveADataset archive package does not include the ISO 19115 .xml metadata file for the dataset. If you want/need to submit an ISO 19115 file for your dataset to NCEI, you can send them the ISO 19115 .xml metadata file that ERDDAP™ created for the dataset (but NMFS people should get the ISO 19115 file for their datasets from InPort if ERDDAP™ isn't already serving that file).
 
 Problems? Suggestions? ArchiveADataset is new. If you have problems or suggestions, See our [section on getting additional support](/docs/intro#support).  

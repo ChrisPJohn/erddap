@@ -7,11 +7,11 @@ open fun [tryToEpochSeconds](try-to-epoch-seconds.md)(someDateTimeString: [Strin
 
 This tries to figure out the format of someDateTimeString then parse the value and convert it to epochSeconds.
 
-#### Return
+#### Return {#return}
 
 epochSeconds (or Double.NaN if trouble);
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

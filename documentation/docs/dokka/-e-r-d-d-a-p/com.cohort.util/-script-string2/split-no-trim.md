@@ -7,11 +7,11 @@ open fun [splitNoTrim](split-no-trim.md)(s: [String](https://docs.oracle.com/en/
 
 This splits the string at the specified character. A missing final string is treated as &quot;&quot; (not discarded as with String.split).
 
-#### Return
+#### Return {#return}
 
 a String[] with the strings (not canonical). s=null returns null. s=&quot;&quot; returns String[1]&#123;&quot;&quot;&#125;.
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

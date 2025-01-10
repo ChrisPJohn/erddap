@@ -7,11 +7,11 @@ open fun [max](max.md)(s1: [String](https://docs.oracle.com/en/java/javase/21/do
 
 This returns the string which sorts higher. null sorts low.
 
-#### Return
+#### Return {#return}
 
 the string which sorts higher.
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

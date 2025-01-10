@@ -7,11 +7,11 @@ open fun [caseInsensitiveIndexOf](case-insensitive-index-of.md)(ar: Array&lt;Any
 
 This finds the first element in Object[] where ar[i].toString().toLowerCase() equals to s.toLowerCase(). This could have been called indexOfIgnoreCase().
 
-#### Return
+#### Return {#return}
 
 the element number of ar which is equal to s (or -1 if s is null or not found)
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

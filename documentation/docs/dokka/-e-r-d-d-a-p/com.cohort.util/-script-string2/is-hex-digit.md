@@ -7,11 +7,11 @@ fun [isHexDigit](is-hex-digit.md)(c: Int): Boolean
 
 0..9, a..f, A..F Hex numbers are 0x followed by hexDigits.
 
-#### Return
+#### Return {#return}
 
 true if c is a valid hex digit
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

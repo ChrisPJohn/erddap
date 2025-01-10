@@ -7,11 +7,11 @@ open fun [binaryFindFirstGE](binary-find-first-g-e.md)(sar: Array&lt;[String](ht
 
 Find the first element which is &gt;= s in an ascending sorted array.
 
-#### Return
+#### Return {#return}
 
 the index of the first element which is &gt;= s in an ascending sorted array. If s &lt;the smallest element, this returns 0. If s is null or s &gt;the largest element, this returns sar.length (no element is appropriate).
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

@@ -7,11 +7,11 @@ open fun [center](center.md)(s: [String](https://docs.oracle.com/en/java/javase/
 
 Returns a String 'length' long, with 's' centered (using spaces as the added characters) within the resulting String. If s is already longer, then there will be no change.
 
-#### Return
+#### Return {#return}
 
 's' centered to make the result 'length' long.
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

@@ -7,11 +7,11 @@ open fun [makeString](make-string.md)(ch: Char, length: Int): [String](https://d
 
 This makes a new String of specified length, filled with ch. For safety, if length&gt;=1000000, it returns &quot;&quot;.
 
-#### Return
+#### Return {#return}
 
 a String 'length' long, filled with ch. If length &lt;0 or &gt;= 1000000, this returns &quot;&quot;.
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

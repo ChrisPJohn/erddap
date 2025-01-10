@@ -7,11 +7,11 @@ open fun [trimEnd](trim-end.md)(s: [String](https://docs.oracle.com/en/java/java
 
 This trims just the end of the string.
 
-#### Return
+#### Return {#return}
 
 s with just the end of the string trim'd. If s == null, this returns null.
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

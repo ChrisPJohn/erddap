@@ -9,11 +9,11 @@ This tries to quickly determine if the string is a correctly formatted number (i
 
 This may not be perfect. In the future, this may be changed to be perfect. That shouldn't affect its use.
 
-#### Return
+#### Return {#return}
 
 true if s is *probably* a number. This returns false if s is *definitely* not a number. &quot;NaN&quot; (case insensitive) returns true. (It is a numeric value of sorts.) null and &quot;&quot; return false.
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

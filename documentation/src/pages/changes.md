@@ -7,7 +7,7 @@ ERDDAP™ is a great example of [User-Driven Innovation](https://en.wikipedia.or
 
 Here are the changes associated with each ERDDAP™ release.
 
-## Version 2.25
+## Version 2.25 {#version-225}
 (released 2024-10-31)
 
 *   **New Features and Changes (for users):**
@@ -45,7 +45,7 @@ Here are the changes associated with each ERDDAP™ release.
     *   Full code base formatted to match the Google Style Guide.  
          
 
-## Version 2.24
+## Version 2.24 {#version-224}
 (released 2024-06-07)
 
 *   **New Features and Changes (for users):**
@@ -80,7 +80,7 @@ Here are the changes associated with each ERDDAP™ release.
     *   Changes to tests to reduce issues cross platform. Thanks Shane St. Savage.  
          
 
-## Version 2.23
+## Version 2.23 {#version-223}
 (released 2023-02-27)
 
 Note that this release was done by Bob Simons, thereby showing that he is still around and active during the transition to Chris John, his successor. Stating with this release, all code changes are being done by Chis John, unless specified otherwise.
@@ -105,7 +105,7 @@ Note that this release was done by Bob Simons, thereby showing that he is still 
     *   Some small changes and bug fixes.  
          
 
-## Version 2.22
+## Version 2.22 {#version-222}
 (released 2022-12-08)
 
 Note that this release was done by Bob Simons, thereby showing that he is still around and active during the transition to his successor.
@@ -125,7 +125,7 @@ Note that this release was done by Bob Simons, thereby showing that he is still 
     *   Some small changes and bug fixes.  
          
 
-## Version 2.21
+## Version 2.21 {#version-221}
 (released 2022-10-09)
 
 *   **New Features and Changes (for users):**
@@ -137,7 +137,7 @@ Note that this release was done by Bob Simons, thereby showing that he is still 
     *   BUG FIX: Sometimes, the new email system attempted to log in too often, which caused Google Email servers to reject all future log in attempts. Now, the email system avoids this and related problems.  
          
 
-## Version 2.20
+## Version 2.20 {#version-220}
 (released 2022-09-30)
 
 *   **Don't use v2.20. It is flawed.** But administrators still need to do the TO DO items listed below when upgrading to v2.21+.  
@@ -151,7 +151,7 @@ Note that this release was done by Bob Simons, thereby showing that he is still 
     *   CHANGED: The default for &lt;ipAddressMaxRequests> in datasets.xml was increased from 7 to 15. It's clear that some legitimate WMS clients can generate more than 7 simultaneous requests.  
          
 
-## Version 2.19
+## Version 2.19 {#version-219}
 (released 2022-09-01)
 
 *   **Don't use v2.19. It is flawed.** But administrators still need to do the TO DO items listed below when upgrading to v2.20+.  
@@ -218,7 +218,7 @@ Note that this release was done by Bob Simons, thereby showing that he is still 
     *   CHANGE: The ERDDAP™ testing system now uses an automated system to check that newly created test images are exactly as expected. Thanks to Chris John for the suggestion and Bob Simons for the implementation.  
          
 
-## Version 2.18
+## Version 2.18 {#version-218}
 (released 2022-02-23)
 
 *   **New Features and Changes (for users):**
@@ -227,7 +227,7 @@ Note that this release was done by Bob Simons, thereby showing that he is still 
     *   BUG FIX: .nc files weren't closed in some circumstances. Now they are. Thanks to Marco Alba, Roland Schweitzer, John Maurer, and others.  
          
 
-## Version 2.17
+## Version 2.17 {#version-217}
 (released 2022-02-16)
 
 *   **New Features and Changes (for users):**
@@ -251,7 +251,7 @@ Note that this release was done by Bob Simons, thereby showing that he is still 
     *   BUG FIX: EDDGridSideBySide didn't allow to variable's sourceNames in different child datasets to be the same. Now it does. Thanks to Joshua Stanford.  
          
 
-## Version 2.16
+## Version 2.16 {#version-216}
 (released 2021-12-17)
 
 *   **New Features and Changes (for users):**
@@ -284,7 +284,7 @@ Note that this release was done by Bob Simons, thereby showing that he is still 
     *   BUG FIX: Now EDDTableAggregateRows removes the actual\_range attribute whenever one or more of the child datasets doesn't ever know its variables' actual\_range (e.g., EDDTableFromDatabase). Thanks to Erik Geletti.  
          
 
-## version 2.15
+## version 2.15 {#version-215}
 (released 2021-11-19)
 
 *   **New Features and Changes (for users):**
@@ -327,7 +327,7 @@ Note that this release was done by Bob Simons, thereby showing that he is still 
     *   BUG FIX: GenerateDatasetsXml for EDDGridLon0360 and EDDGridLonPM180 now excludes source datasets with datasetID=~".\*\_LonPM180" and datasetID=~".\*\_Lon0360", respectively.  
          
 
-## Version 2.14
+## Version 2.14 {#version-214}
 (released 2021-07-02)
 
 *   **New Features and Changes (for users):**
@@ -345,7 +345,7 @@ Note that this release was done by Bob Simons, thereby showing that he is still 
     *   FIX: After a year of trouble with Cassandra, I finally successfully installed Cassandra (v2) again and so was able to rerun the tests with Cassandra v2. So now I can more confidently state that ERDDAP™ works with Cassandra v2 and v3. Thanks to ONC.  
          
 
-## Version 2.12
+## Version 2.12 {#version-212}
 (released 2021-05-14)
 
 *   **New Features and Changes (for users):**
@@ -414,7 +414,7 @@ Note that this release was done by Bob Simons, thereby showing that he is still 
     *   ADDED support for the invalid units "degree\_North" and "degree\_East" which are erroneously used by the recent files (since 2020-10-01) in the AVHRR Pathfinder Version 5.3 L3-Collated (L3C) SST datasets (nceiPH53sstd1day and nceiPH53sstn1day). ERDDAP™ can now standardize them to valid units. Thanks (not) to Ken Casey, et al.  
          
 
-## Version 2.11
+## Version 2.11 {#version-211}
 (released 2020-12-04)
 
 *   **New Features and Changes (for users):**
@@ -442,7 +442,7 @@ Note that this release was done by Bob Simons, thereby showing that he is still 
     *   KNOWN PROBLEM: As with ERDDAP™ 2.10, .ncml files which try to change an attribute, don't change the attribute. This is a known bug in netcdf-java which I have reported and they say will be fixed in the next release of netcdf-java.  
          
 
-## Version 2.10
+## Version 2.10 {#version-210}
 (released 2020-11-05)
 
 *   **New Features and Changes (for users):**
@@ -627,7 +627,7 @@ Note that this release was done by Bob Simons, thereby showing that he is still 
     *   BUG FIX: Now, an OutOfMemoryError while reading a data file while processing a user's request isn't a reason to add a file to the BadFiles list. Thanks to Bob Simons.  
          
 
-## Version 2.02
+## Version 2.02 {#version-202}
 (released 2019-08-21)
 
 *   **New Features and Changes (for users):**
@@ -679,7 +679,7 @@ Note that this release was done by Bob Simons, thereby showing that he is still 
     *   BUG FIX: Small changes to ISO 19115 files to make a different validator happy. Thanks to Chris MacDermaid and Anna Milan.  
          
 
-## Version 2.01
+## Version 2.01 {#version-201}
 (released 2019-07-02)
 
 *   **New Features and Changes (for users):**
@@ -689,7 +689,7 @@ Note that this release was done by Bob Simons, thereby showing that he is still 
     *   IMPROVED: GenerateDatasetsXml no longer prints a lengthy warning at the top of the output. Instead, please see [Editing GenerateDatasetsXml Output](https://erddap.github.io/setupDatasetsXml.html#EditingGDXOutput). Thanks to Steven Baum.
     *   IMPROVED: GenerateDatasetsXml now makes slightly different recommendations in different situations for &lt;updateEveryNMillis> for EDD...From...Files datasets. Also, GenerateDatasetsXml now discourages the original "extract" system for EDDTableFromFiles datasets.
 
-## Version 2.00
+## Version 2.00 {#version-200}
 (released 2019-06-26)
 
 *   **ERDDAP™ v2.00 is finally here! Yea!**  
@@ -821,7 +821,7 @@ Note that this release was done by Bob Simons, thereby showing that he is still 
         
     *   WARNING: The first time you run ERDDAP™ v2.0, datasets based on local data files will load **very** slowly because ERDDAP™ needs to recreate its database of files in a slightly different format. After the slow initial reload, they will load quickly, as before. Please be patient.  
          
-#### EDDTableFromHttpGet
+#### EDDTableFromHttpGet {#eddtablefromhttpget}
     *   [BIG NEW FEATURE: EDDTableFromHttpGet](#eddtablefromhttpget)  
         Until now, ERDDAP™ just read data and made it available to users. Now, ERDDAP™ has a simple, efficient system for ingesting real time data from sensors. Among other features, this dataset offers fine-grained versioning: it remembers every change made to the dataset, when it was made, and by whom. Usually, users will just want the latest version of the dataset, with all changes applied. But there is the option for users to request data from the dataset as it was at any point in time. This facilitates reproducible science. Thus, unlike most other near-real-time datasets, these datasets are eligible for [DOIs](https://en.wikipedia.org/wiki/Digital_object_identifier). because they meet the DOI requirement that the dataset is unchanging, except by aggregation. See [EDDTableFromHttpGet](/docs/server-admin/datasets#eddtablefromhttpget). Thanks to OOI (from long ago and now) for talking about the need for this and Eugene Burger for the reminder about working on what is important.  
          
@@ -922,7 +922,7 @@ Note that this release was done by Bob Simons, thereby showing that he is still 
          
     *   IMPROVED: In the jsonld output, the four "spatialCoverage GeoShape box" values are now minLat minLon maxLat maxLon. Previously, the lat and lon positions were reversed. Gee, it would be great if the schema.org definition of [GeoShape](https://schema.org/GeoShape) specified the correct order. Software developers should be able to write an implementation of a specification based on the specification alone, without guidance from experts. Thanks to Natasha Noy and Rob Fuller.
 
-## Version 1.82
+## Version 1.82 {#version-182}
 (released 2018-01-26)
 
 *   **New Features (for users):**  
@@ -1101,7 +1101,7 @@ Note that this release was done by Bob Simons, thereby showing that he is still 
     *   IMPROVED: To increase security, email addresses in the &lt;subscriptionEmailBlacklist> in your datasets.xml are now considered to be case-insensitive.  
          
 
-## Version 1.80
+## Version 1.80 {#version-180}
 (released 2017-08-04)
 
 *   **New Features (for users):**  
@@ -1171,7 +1171,7 @@ Note that this release was done by Bob Simons, thereby showing that he is still 
     *   IMPROVED: the state boundary color on maps was purple (Deep Purple for you Baby Boomers). Now it is gray (in between the national boundary gray and the land gray).
     *   BUG FIX: &lt;iso19115File> and &lt;fgdcFile> in datasets.xml were not always handled correctly. Now they are. Thanks to BCO-DMO.
 
-## Version 1.78
+## Version 1.78 {#version-178}
 (released 2017-05-27)
 
 *   **New Features (for users):**  
@@ -1183,7 +1183,7 @@ Note that this release was done by Bob Simons, thereby showing that he is still 
     *   IMPROVED: The order of lines in "Major LoadDatasets Time Series" on the status.html page is now newest on top to oldest at the bottom.
     *   BUG FIX: ERDDAP™ now writes .nccsv files with the time variable's actual\_range as an ISO-8601 String time. That fixes the bug with EDDTableFromErddap parsing info from a remote dataset and from the quickRestart file for all EDDTableFrom...Files datasets. (The time actual\_range will be wrong the first time the dataset loads in v1.78 but correct after it is reloaded, e.g., if you flag the dataset.)
 
-## Version 1.76
+## Version 1.76 {#version-176}
 (released 2017-05-12)
 
 *   **New Features (for users):**  
@@ -1247,7 +1247,7 @@ Note that this release was done by Bob Simons, thereby showing that he is still 
     *   BUG FIX: EDDGridFromMergeIRFiles.lowGetSourceMetadata() didn't add any global attributes. Now it does.  
          
 
-## Version 1.74
+## Version 1.74 {#version-174}
 (released 2016-10-07)
 
 *   **New Features (for users):**  
@@ -1335,7 +1335,7 @@ Note that this release was done by Bob Simons, thereby showing that he is still 
          
     *   IMPROVED: For EDDTableFrom...Files, &lt;sortFilesBySourceNames> now allows comma-separated (recommended) or space separated lists of variable source names. In either case, individual variable names may be surrounded by double quotes, e.g., if the name has an internal space.
 
-## Version 1.72
+## Version 1.72 {#version-172}
 (released 2016-05-12)
 
 *   **New Features (for users):** None.  
@@ -1352,7 +1352,7 @@ Note that this release was done by Bob Simons, thereby showing that he is still 
     *   IMPROVED: Many of the links to remote websites were out-of-date. Now they are up-to-date and use https: instead of http: whenever possible.
     *   Many small changes.
 
-## Version 1.70
+## Version 1.70 {#version-170}
 (released 2016-04-15)
 
 *   **New Features (for users):** None.  
@@ -1508,7 +1508,7 @@ Note that this release was done by Bob Simons, thereby showing that he is still 
         *   joid.jar and tsik.jar were removed from /lib and the classpath.
         *   If you get error messages about classes not found when you compile or run ERDDAP™ or one of its tools, compare your command line's classpath to ERDDAP's [current classpath](https://erddap.github.io/setup.html#classpath) to figure out which .jars are missing from your classpath.
 
-## Version 1.68
+## Version 1.68 {#version-168}
 (released 2016-02-08)
 
 *   **New Features (for users):** None.  
@@ -1545,7 +1545,7 @@ Note that this release was done by Bob Simons, thereby showing that he is still 
     *   Bug fix/New Feature: If a child dataset within EDDGridAggregateExistingDimension, EDDGridCopy, EDDGridFromEDDTable, EDDGridLonPM180, EDDGridSideBySide, EDDTableCopy, or EDDTableFromEDDGrid is a ...FromErddap dataset, that parent dataset now subscribes to the underlying ERDDAP™ dataset. If the underlying ERDDAP™ dataset is in the same ERDDAP™, the subscription and its validation are done directly; you won't get an email asking you to validate the subscription. Otherwise, if the subscription system for your ERDDAP™ is turned off, set the &lt;reloadEveryNMinutes> setting for the parent dataset to a smallish number (60?) so that it stays up-to-date.
     *   Bug fix/New Feature: If a child dataset within EDDGridAggregateExistingDimension, EDDGridCopy, EDDGridFromEDDTable, EDDGridLonPM180, EDDGridSideBySide, EDDTableCopy, or EDDTableFromEDDGrid has active="false", that child dataset is now skipped.
 
-## Version 1.66
+## Version 1.66 {#version-166}
 (released 2016-01-19)
 
 *   **New Features (for users):**
@@ -1595,7 +1595,7 @@ Note that this release was done by Bob Simons, thereby showing that he is still 
         Thanks to Susan Perkins.
     *   Bug fix: until recently (v1.64?), if a .../datasetID URL was requested, ERDDAP™ would add .html to the URL. In v1.64, this failed (an incorrectly formatted URL was generated and then failed). Now this works again. Thanks to Chris Fullilove.
 
-## Version 1.64
+## Version 1.64 {#version-164}
 (released 2015-08-19)
 
 *   **New Features (for users):**
@@ -1622,7 +1622,7 @@ Note that this release was done by Bob Simons, thereby showing that he is still 
     *   sea\_water\_practical\_salinity  
         If you use the CF standard name sea\_water\_salinity for any variable, I encourage you to switch to sea\_water\_practical\_salinity which is available in [version 29 of the CF Standard Name Table](https://cfconventions.org/Data/cf-standard-names/29/build/cf-standard-name-table.html) (and some previous versions -- I didn't know that). This name indicates that this is indeed a Practical Salinity value using Practical Salinity Units (PSU), as opposed to an older g/kg value. The canonical units are different, but still incredibly unhelpful: 1 (presumably implying PSU/PSS-78), as opposed to 1e-3 (presumably implying g/kg) for sea\_water\_salinity. \[Hey, Unidata and CF: We identify values that use other scales, for example Fahrenheit or Celsius, via a units string that is the name of the scale or some variation. Why can't we identify salinity units via their scale, e.g., PSS-78? I know: PSS-78 values are "unitless", but there is an implied scale, isn't there? If I invent a new practical salinity scale where the values are 0.875 times the PSS-78 values, should the canonical units still be "1"? How could a user tell them apart? Units of 1e-3 and 1 are neither descriptive nor helpful to users who are trying to figure out what the numbers indicate.\]
 
-## Version 1.62
+## Version 1.62 {#version-162}
 (released 2015-06-08)
 
 *   **New Features (for users):**
@@ -1652,7 +1652,7 @@ Note that this release was done by Bob Simons, thereby showing that he is still 
         Thanks to Charles Carleton.
     *   There were other small improvements, changes, and bug fixes.
 
-## Version 1.60
+## Version 1.60 {#version-160}
 (released 2015-03-12)
 
 *   **New Features (for users):** none
@@ -1669,7 +1669,7 @@ Note that this release was done by Bob Simons, thereby showing that he is still 
         There was a bug that could cause datasets of type=EDDGridFromFiles, EDDTableFromFiles, EDDGridCopy, EDDTableCopy, or their subclasses to not load occasionally with the error "NoSuchFileException: _someFileName_". The bug is related to uses of FileVisitor and was introduced in ERDDAP™ v1.56. The problem is rare and is most likely to affect datasets with a large number of frequently changing data files.
     *   There were some small improvements, changes, and bug fixes.
 
-## Version 1.58
+## Version 1.58 {#version-158}
 (released 2015-02-25)
 
 *   **New Features (for users):**
@@ -1698,7 +1698,7 @@ Note that this release was done by Bob Simons, thereby showing that he is still 
         This isn't useful yet, but is part of the move toward making as many of the unit tests runnable by other people as possible. Thanks to Terry Rankine.
     *   There were many small improvements, changes, and bug fixes.
 
-## Version 1.56
+## Version 1.56 {#version-156}
 (released 2014-12-16)
 
 *   **New Features (for users):** (None)
@@ -1715,7 +1715,7 @@ Note that this release was done by Bob Simons, thereby showing that he is still 
     *   Some improvements to EDDTableFromAsciiServiceNOS, notably to get some additional columns of information from the source. Thanks to Lynn DeWitt.
     *   Some small bug fixes related to the ISO 19115 that ERDDAP™ generates. Thanks to Anna Milan.
 
-## Version 1.54
+## Version 1.54 {#version-154}
 (released 2014-10-24)
 
 *   **New Features (for users):**
@@ -1732,7 +1732,7 @@ Note that this release was done by Bob Simons, thereby showing that he is still 
     *   The documentation for GenerateDatasetsXml was improved, notably to point out that the -i switch only works if you specify all the answers on the command line (e.g., script mode). And script mode is explained. Thanks to Thierry Valero.
     *   ERDDAP™ no longer allows two variables in a dataset to have the same sourceName. (If someone did it before, it probably led to error messages.) As before, ERDDAP™ doesn't allow two variables in a dataset to have the same destinationName.
 
-## Version 1.52
+## Version 1.52 {#version-152}
 (released 2014-10-03)
 
 *   **New Features:** (none)
@@ -1744,7 +1744,7 @@ Note that this release was done by Bob Simons, thereby showing that he is still 
     *   Bug fix: GenerateDatasetsXml.sh and DasDds.sh weren't in erddap.war for 1.48 and 1.50. Now they are. Thanks to Thierry Valero.
     *   Small changes to some speed tests in TestAll to make them less susceptible to chance. Thanks to Terry Rankine.
 
-## Version 1.50
+## Version 1.50 {#version-150}
 (released 2014-09-06)
 
 *   **New Features:** (none)
@@ -1752,7 +1752,7 @@ Note that this release was done by Bob Simons, thereby showing that he is still 
     *   This ERDDAP™ should be much faster than recent versions.
 *   **Things ERDDAP™ Administrators Need to Know and Do:** (nothing)
 
-## Version 1.48
+## Version 1.48 {#version-148}
 (released 2014-09-04)
 
 *   **New Features:**
@@ -1782,7 +1782,7 @@ Note that this release was done by Bob Simons, thereby showing that he is still 
     *   Tabular latitude and longitude variables can now have customized long\_name's, e.g., Profile Latitude. Previously, they could only be Latitude and Longitude.
     *   From now on, specify "defaultDataQuery" and "defaultGraphQuery" as attributes in the dataset's global metadata (i.e., &lt;addAtts>), not as separate &lt;defaultDataQuery> and &lt;defaultGraphQuery> tags. (Although, if you still specify them via the tags, ERDDAP™ will automatically create global attributes with the information.)
 
-## Version 1.46
+## Version 1.46 {#version-146}
 (released 2013-07-09)
 
 *   **New Features:**
@@ -1800,7 +1800,7 @@ Note that this release was done by Bob Simons, thereby showing that he is still 
         *   Or, figure out what has changed in the new messages.xml (via diff), and modify your  
             \[tomcat\]/content/erddap/messages.xml file accordingly.
 
-## Version 1.44
+## Version 1.44 {#version-144}
 (released 2013-05-30)
 
 *   **New Features:**
@@ -1893,7 +1893,7 @@ Note that this release was done by Bob Simons, thereby showing that he is still 
     *   GenerateDatasetsXml now makes a good suggestion for the &lt;reloadEveryNMinutes>. Thanks to the NOAA UAF project.
     *   Many small improvements to GenerateDatasetsXml. Thanks to the NOAA UAF project.
 
-## Version 1.42
+## Version 1.42 {#version-142}
 (released 2012-11-26)
 
 *   **New Features:**
@@ -1907,7 +1907,7 @@ Note that this release was done by Bob Simons, thereby showing that he is still 
     *   Adjusted to changes to the NOS COOPS ASCII services.
     *   Made several small changes and bug fixes.
 
-## Version 1.40
+## Version 1.40 {#version-140}
 (released 2012-10-25)
 
 *   **New Features:**
@@ -1938,7 +1938,7 @@ Note that this release was done by Bob Simons, thereby showing that he is still 
     *   Removed references to iGoogle since it will be discontinued.
     *   Made several small changes and bug fixes.
 
-## Version 1.38
+## Version 1.38 {#version-138}
 (released 2012-04-21)
 
 *   **New Features:**
@@ -1949,7 +1949,7 @@ Note that this release was done by Bob Simons, thereby showing that he is still 
     *   Comma Separated Value (CSV) Files -- ERDDAP™ now generates CSV files with just a comma between values (which Excel prefers), instead of comma+space. Thanks to Jeff deLaBeaujardiere.
     *   Million Datasets -- Several changes were made to support ERDDAPs having a huge number of datasets, perhaps even a million. Thanks to Steve Hankin and the UAF project.
 *   **Things ERDDAP™ Administrators Need to Know and Do:**
-#### Quick Restart
+#### Quick Restart {#quick-restart}
 *   [A](#quick-restart) quick restart system allows ERDDAP™ to restart much faster.  
     **Please add this to your setup.xml file** right after &lt;/datasetsRegex>:
 ```
@@ -2028,7 +2028,7 @@ Note that this release was done by Bob Simons, thereby showing that he is still 
     *   Bug fix: In tabledap, for datasets with altitudeMetersPerSourceUnit &lt; 0, queries with altitude constraints were handled incorrectly. Thanks to Kyle Wilcox.
     *   Bug fix: EDDGridAggregateFromExistingDimension now supports more diverse TDS URLs. Thanks to ?
 
-## Version 1.36
+## Version 1.36 {#version-136}
 (released 2011-08-01)
 
 *   **New Features:**
@@ -2102,7 +2102,7 @@ Note that this release was done by Bob Simons, thereby showing that he is still 
 *   **Changes:**
     *   Small changes
 
-## Version 1.34
+## Version 1.34 {#version-134}
 (released 2011-06-15)
 
 *   **Changes:**
@@ -2114,7 +2114,7 @@ Note that this release was done by Bob Simons, thereby showing that he is still 
     *   Small changes.
     *   ERDDAP™ administrators don't need to make any changes to their setup.xml or datasets.xml.
 
-## Version 1.32
+## Version 1.32 {#version-132}
 (released 2011-05-20)
 
 *   **Changes:**
@@ -2129,7 +2129,7 @@ Note that this release was done by Bob Simons, thereby showing that he is still 
     *   Possible solution to a possible memory leak on 64-bit Java. \[It didn't work.\]
     *   Small changes.
 
-## Version 1.30
+## Version 1.30 {#version-130}
 (released 2011-04-29)
 
 *   **New Features:**
@@ -2249,7 +2249,7 @@ Note that this release was done by Bob Simons, thereby showing that he is still 
     *   Bug fix: tabledap requests didn't properly handle altitude constraints when the dataset's altitudeMetersPerSourceUnit was -1. Thanks to Eric Bridger.
     *   Bug fix: EDDTableFrom...Files datasets now correctly handle requests which include =NaN and !=NaN.
     
-## Version 1.28
+## Version 1.28 {#version-128}
 (released 2010-08-27)
 
 *   **New Features:** none.
@@ -2257,7 +2257,7 @@ Note that this release was done by Bob Simons, thereby showing that he is still 
 *   **Bug Fix:** Fix a programming mistake (only in ver 1.26) that made ERDDAP™ very slow.  
      
 
-## Version 1.26
+## Version 1.26 {#version-126}
 (released 2010-08-25)
 
 *   **New Features:** none.
@@ -2292,7 +2292,7 @@ Note that this release was done by Bob Simons, thereby showing that he is still 
     *   Many small changes and bug fixes.
     
 
-## Version 1.24
+## Version 1.24 {#version-124}
 (released 2010-08-06)
 
 *   **New Features:**
@@ -2539,14 +2539,14 @@ Note that this release was done by Bob Simons, thereby showing that he is still 
     *   In TableWriterGeoJson, the excess ',' after bbox\[...\] has been removed. Thanks to Greg Williams.
     *   Many small changes and bug fixes.
     
-## Version 1.22
+## Version 1.22 {#version-122}
 (released 2009-07-05)
 
 *   The SlideSorter bug introduced in 1.20 is fixed.
 *   The OBIS bug introduced in 1.20 is fixed.
 *   The references to Jason datasets on the images/gadgets/GoogleGadgets page were removed.  
      
-## Version 1.20
+## Version 1.20 {#version-120}
 (released 2009-07-02)
 
 *   ERDDAP™ administrators, please add this to your setup.xml file:
@@ -2628,14 +2628,14 @@ Note that this release was done by Bob Simons, thereby showing that he is still 
 *   Bug fix: in EDDTableFromSOS, invalid info for one station threw an exception and caused the whole dataset to be rejected. Now, those stations are just ignored (and the error message is logged to log.txt). Thanks to Rick Blair.  
      
 
-## Version 1.18
+## Version 1.18 {#version-118}
 (released 2009-04-08)
 
 *   Bug fix: Starting in 1.14, the EDDTable Data Access Form and Make A Graph web page didn't properly deal with quoted constraints.
 *   Bug fix: Starting in 1.14, EDDTableFromDapSequence didn't handle time constraints correctly if the source time units weren't "seconds since 1970-01-01T00:00:00".  
      
 
-## Version 1.16
+## Version 1.16 {#version-116}
 (released 2009-03-26)
 
 *   ERDDAP™ administrators:
@@ -2649,15 +2649,15 @@ Note that this release was done by Bob Simons, thereby showing that he is still 
 *   A few small bug fixes.  
      
 
-## Version 1.14
+## Version 1.14 {#version-114}
 (released 2009-03-17)
 
 *   Changes for users:
     *   In grid data requests, ERDDAP™ now supports: [last-n](https://coastwatch.pfeg.noaa.gov/erddap/griddap/documentation.html#last) where n is an integer number of indices and [(last-d)](https://coastwatch.pfeg.noaa.gov/erddap/griddap/documentation.html#lastInParentheses) where d is a numeric value (for time, it is in seconds).
     *   In tabular data requests, String constraints now require [double quotes](https://coastwatch.pfeg.noaa.gov/erddap/tabledap/documentation.html#QuoteStrings) around the value, for example, &id="NDBC40121" This is required by the DAP protocol.
     *   In tabular data requests, ERDDAP™ now requires that [all constraints be properly percent encoded](https://coastwatch.pfeg.noaa.gov/erddap/tabledap/documentation.html#PercentEncode). Browsers do this automatically, so this mostly affects computer programs/scripts that are accessing ERDDAP.
-    #### Percent26
-    *   [Previously,](#percent26) the [embed a graph web page](https://coastwatch.pfeg.noaa.gov/erddap/images/embed.html) and the [ERDDAP™ Google Gadget web page](https://coastwatch.pfeg.noaa.gov/erddap/images/gadgets/GoogleGadgets.html) said to replace the "&" in the image's URL with "%26". From now on, you should replace the "&" in the image's URL with "&amp;". So you need to replace any "%26" in existing web pages and Google Gadgets with "&amp;". (Sorry)
+#### Percent26 {#percent26}
+*   [Previously,](#percent26) the [embed a graph web page](https://coastwatch.pfeg.noaa.gov/erddap/images/embed.html) and the [ERDDAP™ Google Gadget web page](https://coastwatch.pfeg.noaa.gov/erddap/images/gadgets/GoogleGadgets.html) said to replace the "&" in the image's URL with "%26". From now on, you should replace the "&" in the image's URL with "&amp;". So you need to replace any "%26" in existing web pages and Google Gadgets with "&amp;". (Sorry)
 *   ERDDAP™ administrators, please:
     *   Add the following to your [setup.xml](https://erddap.github.io/setup.html#setup.xml) file (and change the flagKeyKey value):
 ```
@@ -2751,7 +2751,7 @@ Note that this release was done by Bob Simons, thereby showing that he is still 
 *   Many small changes and bug fixes.  
      
 
-## Version 1.12
+## Version 1.12 {#version-112}
 (released 2008-10-31)
 
 *   EDDTableFromSOS once again works with NDBC SOS and works with the new NOS SOS.
@@ -2760,7 +2760,7 @@ Note that this release was done by Bob Simons, thereby showing that he is still 
 *   A few small changes.  
      
 
-## Version 1.10
+## Version 1.10 {#version-110}
 (released 2008-10-14)
 
 *   New "colorBar" metadata for data variables in datasets.xml defines the default color bar settings for graphs and maps. See [more information](https://erddap.github.io/setupDatasetsXml.html#colorBar). This is important because it greatly improves the appearance of the default graphs and maps produced by Make A Graph and because the default graphs and maps now have a consistent color bar even when the client changes the requested time or geographic range. Also, this was necessary for WMS.
@@ -2843,7 +2843,7 @@ Note that this release was done by Bob Simons, thereby showing that he is still 
         <wmsSampleBBox>0,-75,180,75</wmsSampleBBox>
 ```
 
-## Version 1.08
+## Version 1.08 {#version-108}
 (released 2008-07-13)
 
 *   A new web service in ERDDAP™, generateDatasetsXml, assists ERDDAP™ administrators by creating a rough draft of the XML needed to describe a dataset in datasets.xml
@@ -2861,14 +2861,14 @@ Note that this release was done by Bob Simons, thereby showing that he is still 
     *   Move &lt;theShortDescriptionHtml> from your messages.xml to your [setup.xml](https://erddap.github.io/setup.html#setup.xml) file. It specifies the text that appears in the middle of the left side of the ERDDAP™ home page. Also, add &lt;h1>ERDDAP&lt;/h1> (or some other headline) to the top of it. **Or,** copy &lt;theShortDescriptionHtml> in the new [setup.xml](https://erddap.github.io/setup.html#setup.xml) file (from the new erddapContent.zip) into your setup.xml.  
          
 
-## Version 1.06
+## Version 1.06 {#version-106}
 (released 2008-06-20)
 
 *   New support for IOOS DIF SOS data sources.
 *   Many small changes. A few small bug fixes.  
      
 
-## Version 1.04
+## Version 1.04 {#version-104}
 (released 2008-06-10)
 
 *   New Slide Sorter feature.
@@ -2876,7 +2876,7 @@ Note that this release was done by Bob Simons, thereby showing that he is still 
 *   Bug fix in EDDGrid.saveAsNc for variable with scale and addOffset.  
      
 
-## Version 1.02
+## Version 1.02 {#version-102}
 (released 2008-05-26)
 
 *   New EDDGridSideBySide allows for different axisVariables\[0\] sourceValues.
@@ -2884,7 +2884,7 @@ Note that this release was done by Bob Simons, thereby showing that he is still 
 *   Images from image requests are now cached for 1 hour.  
      
 
-## Version 1.00
+## Version 1.00 {#version-100}
 (released 2008-05-06)
 
 *   Make A Graph web pages and graphics commands in URLs.

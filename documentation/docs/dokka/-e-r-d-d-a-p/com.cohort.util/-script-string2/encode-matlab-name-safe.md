@@ -14,11 +14,11 @@ This is like encodeFileNameSafe, but further restricts the name to
 
 THIS WON'T BE CHANGED. FILE NAMES CREATED FOR EDDGridFromFile and EDDTableFromFile DEPEND ON SAME ENCODING OVER TIME.
 
-#### Return
+#### Return {#return}
 
 s with all of the non-variableNameSafe characters changed. If s is null, this returns &quot;x_1&quot;. If s is &quot;&quot;, this returns &quot;x_0&quot;.
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

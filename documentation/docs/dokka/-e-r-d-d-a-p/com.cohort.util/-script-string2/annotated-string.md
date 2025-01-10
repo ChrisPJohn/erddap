@@ -7,11 +7,11 @@ open fun [annotatedString](annotated-string.md)(s: [String](https://docs.oracle.
 
 This converts non-isPrintable characters to &quot;[#]&quot;. \\n generates both [10] and a newline character.
 
-#### Return
+#### Return {#return}
 
 s, but with non-32..126 characters replaced by [#]. The result ends with &quot;[end]&quot;. null returns &quot;[null][end]&quot;.
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

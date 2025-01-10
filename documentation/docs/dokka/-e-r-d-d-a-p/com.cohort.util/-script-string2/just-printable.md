@@ -7,11 +7,11 @@ open fun [justPrintable](just-printable.md)(s: [String](https://docs.oracle.com/
 
 This returns the string with all non-isPrintable characters removed.
 
-#### Return
+#### Return {#return}
 
 s with all the non-isPrintable characters removed. If s is null, this throws null pointer exception.
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

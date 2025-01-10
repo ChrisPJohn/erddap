@@ -9,11 +9,11 @@ This converts a string &quot;[units] since [isoDate]&quot; (e.g., &quot;minutes 
 
 WARNING: don't use the equations above. Use unitsSinceToEpochSeconds or epochSecondsToUnitsSince which correctly handle special cases.
 
-#### Return
+#### Return {#return}
 
 double[]&#123;baseSeconds, factorToGetSeconds&#125;
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 
@@ -22,7 +22,7 @@ JVM
 | tsUnits | e.g., &quot;minutes since 1985-01-01&quot;. This may include hours, minutes, seconds, decimal, and Z or timezone offset (default=Zulu). This is lenient. |
 | timeZone | Is a TimeZone from TimeZone.gettimeZone(id). For valid ID's, see the &quot;TZ database names&quot; column in the table at https://en.wikipedia.org/wiki/List_of_tz_database_time_zones If this is null, Zulu will be used. |
 
-#### Throws
+#### Throws {#throws}
 
 | | |
 |---|---|

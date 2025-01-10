@@ -55,3 +55,11 @@ cmd /C 'set "GIT_USER=<Your GitHub username>" && npm run deploy'
 ```
 
 If you are using GitHub pages for hosting, this command is a convenient way to build the website and push to the `gh-pages` branch.
+
+### Headers
+
+In order to have consistent anchor links across languages (and so be able to have links within the text), header ids were generated using:
+```
+npm run write-heading-ids
+```
+You can also manually add header ids.

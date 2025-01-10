@@ -7,11 +7,11 @@ open fun [removeNullOrEmpty](remove-null-or-empty.md)(sar: Array&lt;[String](htt
 
 This returns a String[] with just non-null and non-&quot;&quot; strings from the original array.
 
-#### Return
+#### Return {#return}
 
 a new String[] with just non-null and non-&quot;&quot; strings. sar=null returns null.
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

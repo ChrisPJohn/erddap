@@ -7,11 +7,11 @@ open fun [whichSuffix](which-suffix.md)(suffixes: Array&lt;[String](https://docs
 
 This finds the first element in suffixes (starting at element startAt) where the longerString ends with suffixes[i].
 
-#### Return
+#### Return {#return}
 
 the element number of suffixes which longerString ends with (or -1 if not found)
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

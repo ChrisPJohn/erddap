@@ -7,11 +7,11 @@ open fun [lineStartsWith](line-starts-with.md)(ar: Array&lt;Any&gt;, s: [String]
 
 This finds the first element in Object[] (starting at element 0) where the ar[i].toString value starts with s.
 
-#### Return
+#### Return {#return}
 
 the element number of ar which starts with s (or -1 if not found)
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 
@@ -25,11 +25,11 @@ open fun [lineStartsWith](line-starts-with.md)(ar: Array&lt;Any&gt;, s: [String]
 
 This finds the first element in Object[] (starting at element startAt) where the ar[i].toString value starts with s.
 
-#### Return
+#### Return {#return-1}
 
 the element number of ar which starts with s (or -1 if not found)
 
-#### Parameters
+#### Parameters {#parameters-1}
 
 JVM
 

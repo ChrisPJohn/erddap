@@ -7,11 +7,11 @@ open fun [noLongLines](no-long-lines.md)(s: [String](https://docs.oracle.com/en/
 
 If lines in s are &gt;=maxLength characters, this inserts &quot;\n&quot;+spaces at the previous non-DigitLetter + DigitLetter; or if none, this inserts &quot;\n&quot;+spaces at maxLength. Useful keywords for searching for this method: longer, longest, noLongerThan.
 
-#### Return
+#### Return {#return}
 
 s (perhaps the same, perhaps different), but with no long lines
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

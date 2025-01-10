@@ -9,17 +9,17 @@ This class makes some of the static methods in com.cohort.Calendar2 accessible t
 
 The underlying Calendar2 class is Copyright (c) 2005 Robert Simons (CoHortSoftware@gmail.com). See the MIT/X-like license in com/cohort/util/LICENSE.txt.
 
-#### Author
+#### Author {#author}
 
 Bob Simons (was bob.simons@noaa.gov, now BobSimons2.00@gmail.com) 2019-11-20
 
-## Constructors
+## Constructors {#constructors}
 
 | | |
 |---|---|
 | [ScriptCalendar2](-script-calendar2-constructor.md) | [JVM]<br/>constructor() |
 
-## Properties
+## Properties {#properties}
 
 | Name | Summary |
 |---|---|
@@ -38,7 +38,7 @@ Bob Simons (was bob.simons@noaa.gov, now BobSimons2.00@gmail.com) 2019-11-20
 | [YEAR](-y-e-a-r.md) | [JVM]<br/>val [YEAR](-y-e-a-r.md): Int = 1 |
 | [ZONE_OFFSET](-z-o-n-e_-o-f-f-s-e-t.md) | [JVM]<br/>val [ZONE_OFFSET](-z-o-n-e_-o-f-f-s-e-t.md): Int = 15<br/>in millis |
 
-## Functions
+## Functions {#functions}
 
 | Name | Summary |
 |---|---|

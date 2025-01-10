@@ -7,11 +7,11 @@ open fun [noLongerThanDots](no-longer-than-dots.md)(s: [String](https://docs.ora
 
 This is like noLongerThan, but if truncated, s.substring(0, max-3) + &quot;...&quot; is returned.
 
-#### Return
+#### Return {#return}
 
 s (if it is short) or the first max characters of s
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

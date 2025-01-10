@@ -7,11 +7,11 @@ open fun [roundingParseInt](rounding-parse-int.md)(s: [String](https://docs.orac
 
 Convert a string to an int, with rounding. Leading or trailing spaces are automatically removed. This won't throw an exception if the number isn't formatted right.
 
-#### Return
+#### Return {#return}
 
 the int value from the String (or Double.NaN if error).
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

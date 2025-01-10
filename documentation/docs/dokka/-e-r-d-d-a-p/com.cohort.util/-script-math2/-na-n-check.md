@@ -7,11 +7,11 @@ open fun [NaNCheck](-na-n-check.md)(d: Double): Double
 
 Checks if the value is NaN or infinite: returns Double.NaN if so; otherwise returns the original value.
 
-#### Return
+#### Return {#return}
 
 d (or NaN if !isFinite(d))
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

@@ -7,11 +7,11 @@ open fun [biggerDouble](bigger-double.md)(def: Double, mult: Double, max: Double
 
 This increases d to the next multiple of mult.
 
-#### Return
+#### Return {#return}
 
 the next multiple of mult bigger than d. It rounds to nearest mult, then changes it. If !Double.isFinite(d), it returns def.
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

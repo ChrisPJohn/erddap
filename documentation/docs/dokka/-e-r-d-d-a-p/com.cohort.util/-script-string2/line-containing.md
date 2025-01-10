@@ -7,11 +7,11 @@ open fun [lineContaining](line-containing.md)(ar: Array&lt;Any&gt;, s: [String](
 
 This finds the first element in Object[] where the ar[i].toString value contains the substring s.
 
-#### Return
+#### Return {#return}
 
 the element number of ar which is equal to s (or -1 if not found)
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 
@@ -25,11 +25,11 @@ open fun [lineContaining](line-containing.md)(ar: Array&lt;Any&gt;, s: [String](
 
 This finds the first element in Object[] (starting at element startAt) where the ar[i].toString value contains the substring s.
 
-#### Return
+#### Return {#return-1}
 
 the element number of ar which is equal to s (or -1 if not found)
 
-#### Parameters
+#### Parameters {#parameters-1}
 
 JVM
 

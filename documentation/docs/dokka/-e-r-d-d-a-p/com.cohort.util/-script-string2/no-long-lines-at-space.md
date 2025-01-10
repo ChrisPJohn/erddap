@@ -7,11 +7,11 @@ open fun [noLongLinesAtSpace](no-long-lines-at-space.md)(s: [String](https://doc
 
 This is like noLongLines, but will only break at spaces.
 
-#### Return
+#### Return {#return}
 
 the content of s, but with no long lines
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

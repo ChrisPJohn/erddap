@@ -7,11 +7,11 @@ open fun [columnLong](column-long.md)(colName: [String](https://docs.oracle.com/
 
 This gets the value from a column as a long.
 
-#### Return
+#### Return {#return}
 
 the value as a long (or Long.MAX_VALUE if column not found or other trouble)
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

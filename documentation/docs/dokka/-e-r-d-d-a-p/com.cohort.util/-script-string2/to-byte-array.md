@@ -7,11 +7,11 @@ open fun [toByteArray](to-byte-array.md)(s: [String](https://docs.oracle.com/en/
 
 This extracts the lower 8 bits of each char to form a byte array.
 
-#### Return
+#### Return {#return}
 
 the corresponding byte[] (or null if s is null)
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

@@ -14,11 +14,11 @@ This is like encodeMatlabNameSafe, but simpler and won't always retain all the i
 
 THIS WON'T BE CHANGED. SOME datasetIDs DEPEND ON SAME ENCODING OVER TIME.
 
-#### Return
+#### Return {#return}
 
 s with all of the non-variableNameSafe characters changed. If s is null, this returns &quot;null_&quot;. If s is &quot;&quot;, this returns &quot;nothing_&quot;.
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

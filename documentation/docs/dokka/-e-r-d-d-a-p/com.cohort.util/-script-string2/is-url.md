@@ -7,11 +7,11 @@ open fun [isUrl](is-url.md)(url: [String](https://docs.oracle.com/en/java/javase
 
 This indicates if 'url' is probably a valid url. This is like isRemote, but returns true for &quot;file://...&quot;.
 
-#### Return
+#### Return {#return}
 
 true if 'url' is probably a valid url. false if 'url' is not a valid url. Note that &quot;file://...&quot; is a url.
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

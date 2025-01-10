@@ -7,11 +7,11 @@ open fun [replaceAllIgnoreCase](replace-all-ignore-case.md)(s: [String](https://
 
 Returns a string where all occurences of oldS have been replaced with newS. If oldS occurs inside newS, it won't be replaced recursively (obviously). When finding oldS in s, their case is irrelevant.
 
-#### Return
+#### Return {#return}
 
 a modified version of s, with newS in place of all the olds. throws RuntimeException if s is null.
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

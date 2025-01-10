@@ -2,7 +2,7 @@
 title: "Scaling"
 ---
 # Scaling
-## ERDDAP™ - Heavy Loads, Grids, Clusters, Federations, and Cloud Computing    
+## ERDDAP™ - Heavy Loads, Grids, Clusters, Federations, and Cloud Computing {#erddap---heavy-loads-grids-clusters-federations-and-cloud-computing}
  
 
 # ERDDAP:  
@@ -11,33 +11,33 @@ title: "Scaling"
 
 The original version was written in June 2009. There have been no significant changes. This was last updated 2019-04-15.
 
-## DISCLAIMER
+## DISCLAIMER {#disclaimer}
 
 The contents of this web page are Bob Simons personal opinions and do not necessarily reflect any position of the Government or the National Oceanic and Atmospheric Administration. The calculations are simplistic, but I think the conclusions are correct. Did I use faulty logic or make a mistake in my calculations? If so, the fault is mine alone. Please send an email with the correction to erd dot data at noaa dot gov.  
  
 
 - - -
 
-## Heavy Loads / Constraints
+## Heavy Loads / Constraints {#heavy-loads--constraints}
 
 With heavy use, a standalone ERDDAP™ will be constrained (from most to least likely) by:
 
-### Remote Source Bandwidth
+### Remote Source Bandwidth {#remote-source-bandwidth}
 1.  A remote data source's bandwidth — Even with an efficient connection (e.g., via OPeNDAP), unless a remote data source has a very high bandwidth Internet connection, ERDDAP's responses will be constrained by how fast ERDDAP™ can get data from the data source. A solution is to copy the dataset onto ERDDAP's hard drive, perhaps with [EDDGridCopy](/docs/server-admin/datasets#eddgridcopy) or [EDDTableCopy](/docs/server-admin/datasets#eddtablecopy).  
      
-### ERDDAP's Server Bandwidth
+### ERDDAP's Server Bandwidth {#erddaps-server-bandwidth}
 2.  Unless ERDDAP's server has a very high bandwidth Internet connection, ERDDAP's responses will be constrained by how fast ERDDAP™ can get data from the data sources and how fast ERDDAP™ can return data to the clients. The only solution is to get a faster Internet connection.  
      
-### Memory
-3.  If there are many simultaneous requests, ERDDAP™ can run out of memory and temporarily refuse new requests. (ERDDAP™ has a couple of mechanisms to avoid this and to minimize the consequences if it does happen.) So the more memory in the server the better. On a 32-bit server, 4+ GB is really good, 2 GB is okay, less is not recommended. On a 64-bit server, you can almost entirely avoid the problem by getting lots of memory. See the [\-Xmx and -Xms settings](/docs/server-admin/deploy-install.md) for ERDDAP/Tomcat. An ERDDAP™ getting heavy usage on a computer with a 64-bit server with 8GB of memory and -Xmx set to 4000M is rarely, if ever, constrained by memory.  
+### Memory {#memory}
+3.  If there are many simultaneous requests, ERDDAP™ can run out of memory and temporarily refuse new requests. (ERDDAP™ has a couple of mechanisms to avoid this and to minimize the consequences if it does happen.) So the more memory in the server the better. On a 32-bit server, 4+ GB is really good, 2 GB is okay, less is not recommended. On a 64-bit server, you can almost entirely avoid the problem by getting lots of memory. See the [\-Xmx and -Xms settings](/docs/server-admin/deploy-install) for ERDDAP/Tomcat. An ERDDAP™ getting heavy usage on a computer with a 64-bit server with 8GB of memory and -Xmx set to 4000M is rarely, if ever, constrained by memory.  
      
-### Had Drive Bandwidth
+### Had Drive Bandwidth {#had-drive-bandwidth}
 4.  Accessing data stored on the server's hard drive is vastly faster than accessing remote data. Even so, if the ERDDAP™ server has a very high bandwidth Internet connection, it is possible that accessing data on the hard drive will be a bottleneck. A partial solution is to use faster (e.g., 10,000 RPM) magnetic hard drives or SSD drives (if it makes sense cost-wise). Another solution is to store different datasets on different drives, so that the cumulative hard drive bandwidth is much higher.  
      
-### Too Many Files Cached
+### Too Many Files Cached {#too-many-files-cached}
 5.  Too many files in a [cache](/docs/server-admin/additional-information#cached-responses) directory — ERDDAP™ caches all images, but only caches the data for certain types of data requests. It is possible for the cache directory for a dataset to have a large number of files temporarily. This will slow down requests to see if a file is in the cache (really!). &lt;cacheMinutes&gt; in [setup.xml](/docs/server-admin/deploy-install#setupxml) lets you set how long a file can be in the cache before it is deleted. Setting a smaller number would minimize this problem.  
      
-### CPU
+### CPU {#cpu}
 6.  Only two things take a lot of CPU time:
     *   NetCDF 4 and HDF 5 now support internal compression of data. Decompressing a large compressed NetCDF 4 / HDF 5 data file can take 10 or more seconds. (That's not an implementation fault. It's the nature of compression.) So, multiple simultaneous requests to datasets with data stored in compressed files can put a severe strain on any server. If this is a problem, the solution is to store popular datasets in uncompressed files, or get a server with a CPU with more cores.
     *   Making graphs (including maps): roughly 0.2 - 1 second per graph. So if there were many simultaneous unique requests for graphs (WMS clients often make 6 simultaneous requests!), there could be a CPU limitation. When multiple users are running WMS clients, this becomes a problem.  
@@ -45,7 +45,7 @@ With heavy use, a standalone ERDDAP™ will be constrained (from most to least l
 
 - - -
 
-## Multiple Identical ERDDAPs with Load Balancing?
+## Multiple Identical ERDDAPs with Load Balancing? {#multiple-identical-erddaps-with-load-balancing}
 
 The question often comes up: "To deal with heavy loads, can I set up multiple identical ERDDAPs with load balancing?" It's an interesting question because it quickly gets to the core of ERDDAP's design. The quick answer is "no". I know that is a disappointing answer, but there are a couple of direct reasons and some larger fundamental reasons why I designed ERDDAP™ to use a different approach (a federation of ERDDAPs, described in the bulk of this document), which I believe is a better solution.
 
@@ -71,7 +71,7 @@ In situations where a given data center needs multiple ERDDAPs to meet high dema
 
 - - -
 
-## [**Grids, Clusters, and Federations**](#grids-clusters-and-federations)
+## [**Grids, Clusters, and Federations**](#grids-clusters-and-federations) {#grids-clusters-and-federations}
 
 Under very heavy use, a single standalone ERDDAP™ will run into one or more of the [constraints](#heavy-loads--constraints) listed above and even the suggested solutions will be insufficient. For such situations, ERDDAP™ has features that make it easy to construct scalable grids (also called clusters or federations) of ERDDAPs which allow the system to handle very heavy use (e.g., for a large data center).
 
@@ -79,7 +79,7 @@ I'm using [grid](https://en.wikipedia.org/wiki/Grid_computing) as a general term
 
 The basic idea of designing a scalable system is to identify the potential bottlenecks and then design the system so that parts of the system can be replicated as needed to alleviate the bottlenecks. Ideally, each replicated part increases the capacity of that part of the system linearly (efficiency of scaling). The system isn't scalable unless there is a scalable solution for every bottleneck. [Scalability](https://en.wikipedia.org/wiki/Scalability) is different from efficiency (how quickly a task can be done — efficiency of the parts). Scalability allows the system to grow to handle any level of demand. **Efficiency** (of scaling and of the parts) determines how many servers, etc., will be needed to meet a given level of demand. Efficiency is very important, but always has limits. Scalability is the only practical solution to building a system that can handle **very** heavy use. Ideally, the system will be scalable and efficient.
 
-### Goals
+### Goals {#goals}
 The goals of this design are:
 
 *   To make a scalable architecture (one that is easily extensible by replicating any part that becomes over-burdened). To make an efficient system that maximizes the availability and throughput of the data given the available computing resources. (Cost is almost always an issue.)
@@ -89,7 +89,7 @@ The goals of this design are:
 *   To make a system that fails gracefully and in a limited way if any part becomes over-burdened. (The time required to copy a large datasets will always limit the system's ability to deal with sudden increases in the demand for a specific dataset.)
 *   (If possible) To make an architecture that isn't tied to any specific [cloud computing](#cloud-computing) service or other external services (because it doesn't need them).
 
-### Recommendations
+### Recommendations {#recommendations}
 Our recommendations are
 ![grid/cluster diagram](/img/cluster.png)
 
@@ -103,7 +103,7 @@ Our recommendations are
         3.  The composite ERDDAP™ has to receive the data (using extra bandwidth), reformat it (using extra CPU time and memory), and transmit the data to the user (using extra bandwidth).By redirecting the data request and allowing the other ERDDAP™ to send the response directly to the user, the composite ERDDAP™ spends essentially no CPU time, memory, or bandwidth on data requests.
     *   The redirect is transparent to the user regardless of the client software (a browser or any other software or command line tool).
 
-### Grid Parts
+### Grid Parts {#grid-parts}
 [The parts of the grid are:](#grid-parts)
 
 **A**: For every remote data source that has a high-bandwidth OPeNDAP server, you can connect directly to the remote server. If the remote server is an ERDDAP™, use EDDGridFromErddap or EDDTableFromERDDAP to serve the data in the Composite ERDDAP. If the remote server is some other type of DAP server, e.g., THREDDS, Hyrax, or GrADS, use EDDGridFromDap.
@@ -117,14 +117,14 @@ Our recommendations are
 **C**: For every ERDDAP-able data source that has a low-bandwidth server (or is a slow service for other reasons), consider setting up another ERDDAP™ and storing a copy of the dataset on that ERDDAP's hard drives, perhaps with [EDDGridCopy](/docs/server-admin/datasets#eddgridcopy) and/or [EDDTableCopy](/docs/server-admin/datasets#eddtablecopy). If several such ERDDAPs aren't getting many requests for data, you can consolidate them into one ERDDAP.  
 **C** servers must be publicly accessible.
 
-#### Composite ERDDAP
+#### Composite ERDDAP {#composite-erddap}
 **D**: The composite ERDDAP™ is a regular ERDDAP™ except that it just serves data from other ERDDAPs.
 
 *   Because the composite ERDDAP™ has information in memory about all of the datasets, it can quickly respond to requests for lists of datasets (full text searches, category searches, the list of all datasets), and requests for an individual dataset's Data Access Form, Make A Graph form, or WMS info page. These are all small, dynamically generated, HTML pages based on information which is held in memory. So the responses are very fast.
 *   Because requests for actual data are quickly redirected to the other ERDDAPs, the composite ERDDAP™ can quickly respond to requests for actual data without using any CPU time, memory, or bandwidth.
 *   By shifting as much work as possible (CPU, memory, bandwidth) from the Composite ERDDAP™ to the other ERDDAPs, the composite ERDDAP™ can appear to serve data from all of the datasets and yet still keep up with very large numbers of data requests from a large number of users.
 *   Preliminary tests indicate that the composite ERDDAP™ can respond to most requests in ~1ms of CPU time, or 1000 requests/second. So an 8 core processor should be able to respond to about 8000 requests/second. Although it is possible to envision bursts of higher activity which would cause slowdowns, that is a lot of throughput. It is likely that data center bandwidth will be the bottleneck long before the composite ERDDAP™ becomes the bottleneck.
-##### Up-to-date max(time)?
+##### Up-to-date max(time)? {#up-to-date-maxtime}
 The EDDGrid/TableFromErddap in the composite ERDDAP™ only changes its stored information about each source dataset when the source dataset is ["reload"ed](/docs/server-admin/datasets#reloadeverynminutes) and some piece of metadata changes (e.g., the time variable's actual\_range), thereby generating a subscription notification. If the source dataset has data that changes frequently (for example, new data every second) and uses the ["update"](/docs/server-admin/datasets#updateeverynmillis) system to notice frequent changes to the underlying data, the EDDGrid/TableFromErddap won't be notified about these frequent changes until the next dataset "reload", so the EDDGrid/TableFromErddap won't be perfectly up-to-date. You can minimize this problem by changing the source dataset's &lt;reloadEveryNMinutes&gt; to a smaller value (60? 15?) so that there are more subscription notifications to tell the EDDGrid/TableFromErddap to update its information about the source dataset.
 
 Or, if your data management system knows when the source dataset has new data (e.g., via a script that copies a data file into place), and if that isn't super frequent (e.g., every 5 minutes, or less frequent), there's a better solution:
@@ -134,7 +134,7 @@ Or, if your data management system knows when the source dataset has new data (e
 3.  Have the script contact the source dataset's [flag URL](/docs/server-admin/additional-information#set-dataset-flag) right after it copies a new data file into place.  
      That will lead to the source dataset being perfectly up-to-date and cause it to generate a subscription notification, which will be sent to the EDDGrid/TableFromErddap dataset. That will lead the EDDGrid/TableFromErddap dataset to be perfectly up-to-date (well, within 5 seconds of new data being added). And all that will be done efficiently (without unnecessary dataset reloads).
 
-#### Multiple Composite ERDDAPs
+#### Multiple Composite ERDDAPs {#multiple-composite-erddaps}
 *   In very extreme cases, or for fault tolerance, you may want to set up more than one composite ERDDAP. It is likely that other parts of the system (notably, the data center's bandwidth) will become a problem long before the composite ERDDAP™ becomes a bottleneck. So the solution is probably to set up additional, geographically diverse, data centers (mirrors), each with one composite ERDDAP™ and servers with ERDDAPs and (at least) mirror copies of the datasets which are in high demand. Such a setup also provides fault tolerance and data backup (via copying). In this case, it is best if the composite ERDDAPs have different URLs.
     
     If you really want all of the composite ERDDAPs to have the same URL, use a front end system that assigns a given user to just one of the composite ERDDAPs (based on the IP address), so that all of the user's requests go to just one of the composite ERDDAPs. There are two reasons:
@@ -148,13 +148,13 @@ Or, if your data management system knows when the source dataset has new data (e
     
 *   \[For a fascinating design of a high performance system running on one server, see this [detailed description of Mailinator](https://mailinator.blogspot.com/2007/01/architecture-of-mailinator.html).\]
 
-### Datasets in Very High Demand
+### Datasets in Very High Demand {#datasets-in-very-high-demand}
 In the really unusual case that one of the **A**, **B**, or **C** ERDDAPs can't keep up with the requests because of bandwidth or hard drive limitations, it makes sense to copy the data (again) on to another server+hardDrive+ERDDAP, perhaps with [EDDGridCopy](/docs/server-admin/datasets#eddgridcopy) and/or [EDDTableCopy](/docs/server-admin/datasets#eddtablecopy). While it may seem ideal to have the original dataset and the copied dataset appear seamlessly as one dataset in the composite ERDDAP™, this is difficult because the two datasets will be in slightly different states at different times (notably, after the original gets new data, but before the copied dataset gets its copy). Therefore, I recommend that the datasets be given slightly different titles (e.g., "... (copy #1)" and "... (copy #2)", or perhaps "(mirror #*n*)" or "(server #*n*)") and appear as separate datasets in the composite ERDDAP. Users are used to seeing lists of [mirror sites](https://en.wikipedia.org/wiki/Website#mirror_site) at popular file download sites, so this shouldn't surprise or disappoint them. Because of bandwidth limitations at a given site, it may make sense to have the mirror located at another site. If the mirror copy is at a different data center, accessed just by that data center's composite ERDDAP™, the different titles (e.g., "mirror #1) aren't necessary.
 
-### RAIDs versus Regular Hard Drives
+### RAIDs versus Regular Hard Drives {#raids-versus-regular-hard-drives}
 If a large dataset or a group of datasets are not heavily used, it may make sense to store the data on a RAID since it offers fault tolerance and since you don't need the processing power or bandwidth of another server. But if a dataset is heavily used, it may make more sense to copy the data on another server + ERDDAP™ + hard drive (similar to [what Google does](https://storagemojo.com/2007/02/19/googles-disk-failure-experience/)) rather than to use one server and a RAID to store multiple datasets since you get to use both server+hardDrive+ERDDAPs in the grid until one of them fails.
 
-### Failures
+### Failures {#failures}
 What happens if...
 
 *   There is a burst of requests for one dataset (e.g., all students in a class simultaneously request similar data)?  
@@ -166,10 +166,10 @@ What happens if...
     requests for metadata are small and are handled by information that is in memory, and  
     requests for data (which may be large) are redirected to the child ERDDAPs.
 
-### Simple, Scalable
+### Simple, Scalable {#simple-scalable}
 This system is easy to set up and administer, and easily extensible when any part of it becomes over-burdened. The only real limitations for a given data center are the data center's bandwidth and the cost of the system.
 
-### Bandwidth
+### Bandwidth {#bandwidth}
 Note the approximate bandwidth of commonly used components of the system:
 
 | Component | Approximate Bandwidth (GBytes/s) |
@@ -194,10 +194,10 @@ Note that [Cloud Computing](#cloud-computing) and web hosting services offer all
 
 For general information on designing scalable, high capacity, fault-tolerant systems, see Michael T. Nygard's book [Release It](https://www.amazon.com/Release-Production-Ready-Software-Pragmatic-Programmers/dp/0978739213).
 
-### Like Legos
+### Like Legos {#like-legos}
 Software designers often try to use good [software design patterns](https://en.wikipedia.org/wiki/Software_design_pattern) to solve problems. Good patterns are good because they encapsulate good, easy to create and work with, general-purpose solutions that lead to systems with good properties. Pattern names are not standardized, so I'll call the pattern that ERDDAP™ uses the Lego Pattern. Each Lego (each ERDDAP) is a simple, small, standard, stand-alone, brick (data server) with a defined interface that allows it to be linked to other legos (ERDDAPs). The parts of ERDDAP™ that make up this system are: the subscription and flagURL systems (which allows for communication between ERDDAPs), the EDD...FromErddap redirect system, and the system of RESTful requests for data which can be generated by users or other ERDDAPs. Thus, given two or more legos (ERDDAPs), you can create a huge number of different shapes (network topologies of ERDDAPs). Sure, the design and features of ERDDAP™ could have been done differently, not Lego-like, perhaps just to enable and optimize for one specific topology. But we feel that ERDDAP's Lego-like design offers a good, general-purpose solution that enables any ERDDAP™ administrator (or group of administrators) to create all kinds of different federation topologies. For example, a single organization could set up three (or more) ERDDAPs as shown in the [ERDDAP™ Grid/Cluster Diagram above](#recommendations). Or a distributed group (IOOS? CoastWatch? NCEI? NWS? NOAA? USGS? DataONE? NEON? LTER? OOI? BODC? ONC? JRC? WMO?) can set up one ERDDAP™ in each small outpost (so the data can stay close to the source) and then set up a composite ERDDAP™ in the central office with virtual datasets (which are always perfectly up-to-date) from each of the small outpost ERDDAPs. Indeed, all of the ERDDAPs, installed at various institutions around the world, which get data from other ERDDAPs and/or provide data to other ERDDAPs, form a giant network of ERDDAPs. How cool is that?! So, as with Lego's, the possibilities are endless. That's why this is a good pattern. That's why this is a good design for ERDDAP.
 
-### Different Types of Requests
+### Different Types of Requests {#different-types-of-requests}
 One of the real-life complications of this discussion of data server topologies is that there are different types of requests and different ways to optimize for the different types of requests. This is mostly a separate issue (How fast can the ERDDAP™ with the data respond to the request for data?) from the topology discussion (which deals with the relationships between data servers and which server has the actual data). ERDDAP™, of course, tries to deal with all types of requests efficiently, but handles some better than others.
 
 *   Many requests are simple.  
@@ -209,13 +209,13 @@ One of the real-life complications of this discussion of data server topologies 
 *   Some requests are hard and thus are time consuming.  
     For example: Give me this subset of a dataset (which might be in any of the 10,000+ data files, or might be from compressed data files that each take 10 seconds to decompress). ERDDAP™ v2.0 introduced some new, faster ways to deal with these requests, notably by allowing the request-handling thread to spawn several worker threads which tackle different subsets of the request. But there is another approach to this problem which ERDDAP™ does not yet support: subsets of the data files for a given dataset could be stored and analyzed on separate computers, and then the results combined on the original server. This approach is called [MapReduce](https://en.wikipedia.org/wiki/MapReduce) and is exemplified by [Hadoop](https://en.wikipedia.org/wiki/Apache_Hadoop), the first (?) open-source MapReduce program, which was based on ideas from a Google paper. (If you need MapReduce in ERDDAP, please send an email request to erd.data at noaa.gov.) Google's [BigQuery](https://cloud.google.com/bigquery/) is interesting because it seems to be an implementation of MapReduce applied to subsetting tabular datasets, which is one of ERDDAP's main goals. It is likely that you can create an ERDDAP™ dataset from a BigQuery dataset via [EDDTableFromDatabase](/docs/server-admin/datasets#eddtablefromdatabase) because BigQuery can be accessed via a JDBC interface.
 
-### These are my opinions.
+### These are my opinions. {#these-are-my-opinions}
 
 Yes, the calculations are simplistic (and now slightly dated), but I think the conclusions are correct. Did I use faulty logic or make a mistake in my calculations? If so, the fault is mine alone. Please send an email with the correction to erd dot data at noaa dot gov.
 
 - - -
 
-## [**Cloud Computing**](#cloud-computing)
+## [**Cloud Computing**](#cloud-computing) {#cloud-computing}
 
 Several companies offer cloud computing services (e.g., [Amazon Web Services](https://aws.amazon.com/) and [Google Cloud Platform](https://cloud.google.com/)). [Web hosting companies](https://en.wikipedia.org/wiki/Web_hosting_service) have offered simpler services since the mid-1990's, but the "cloud" services have greatly expanded the flexibility of the systems and the range of services offered. Since the ERDDAP™ grid just consists of ERDDAPs and since ERDDAPs are Java web applications that can run in Tomcat (the most common application server) or other application servers, it should be relatively easy to set up an ERDDAP™ grid on a cloud service or web hosting site. The advantages of these services are:
 
@@ -238,10 +238,10 @@ The disadvantages of these services are:
         If one OC-12 connection can transmit ~150,000 GB/month, the Data Transfer costs could be as much as 150,000 GB @ $0.09/GB = $13,500/month, which is a significant cost. Clearly, if you have a dozen hard-working ERDDAPs on a cloud service, your monthly Data Transfer fees could be substantial (up to $162,000/month). (Again, it isn't that the service is overpriced, it is that we are using and buying a lot of the service.)
     *   Data storage — Amazon charges $50/month per TB. (Compare that to buying a 4TB enterprise drive outright for ~$50/TB, although the RAID to put it in and administrative costs add to the total cost.) So if you need to store lots of data in the cloud, it might be fairly expensive (e.g., 100TB would cost $5000/month). But unless you have a really large amount of data, this is a smaller issue than the bandwidth/data transfer costs. (Again, it isn't that the service is overpriced, it is that we are using and buying a lot of the service.)  
          
-### Subsetting
+### Subsetting {#subsetting}
 *   The subsetting problem: The only way to efficiently distribute data from data files is to have the program which is distributing the data (e.g., ERDDAP) running on a server which has the data stored on a local hard drive (or similarly fast access to a SAN or local RAID). Local file systems allow ERDDAP™ (and underlying libraries, such as netcdf-java) to request specific byte ranges from the files and get responses very quickly. Many types of data requests from ERDDAP™ to the file (notably gridded data requests where the stride value is > 1) can't be done efficiently if the program has to request the entire file or big chunks of a file from a non-local (hence slower) data storage system and then extract a subset. If the cloud setup doesn't give ERDDAP™ fast access to byte ranges of the files (as fast as with local files), ERDDAP's access to the data will be a severe bottleneck and negate other benefits of using a cloud service.
 
-### Hosted Data
+### Hosted Data {#hosted-data}
 An alternative to the above cost benefit analysis (which is based on the data owner (e.g., NOAA) paying for their data to be stored in the cloud) arrived around 2012, when Amazon (and to a lesser extent, some other cloud providers) started hosting some datasets in their cloud (AWS S3) for free (presumably with the hope that they could recover their costs if users would rent AWS EC2 compute instances to work with that data). Clearly, this makes cloud computing vastly more cost effective, because the time and cost up uploading the data and hosting it are now zero. With ERDDAP™ v2.0, there are new features to facilitate running ERDDAP in a cloud:
 
 *   Now, a EDDGridFromFiles or EDDTableFromFiles dataset can be created from data files which are remote and accessible via the internet (e.g., AWS S3 buckets) by using the &lt;cacheFromUrl&gt; and &lt;cacheSizeGB&gt; options. ERDDAP™ will maintain a local cache of the most recently used data files.
@@ -255,7 +255,7 @@ These changes solve the problem of AWS S3 not offering local, block-level file s
 
 - - -
 
-## [Remote Replication of Datasets](#remote-replication-of-datasets)
+## [Remote Replication of Datasets](#remote-replication-of-datasets) {#remote-replication-of-datasets}
 
 There is a common problem that is related to the above discussion of grids and federations of ERDDAPs: remote replication of datasets. The basic problem is: a data provider maintains a dataset that changes occasionally and a user wants to maintain an up-to-date local copy of this dataset (for any of a variety of reasons). Clearly, there are a huge number of variations of this. Some variations are much harder to deal with than others.
 
@@ -277,7 +277,7 @@ There is a common problem that is related to the above discussion of grids and f
 
 There are obviously a huge number of variations of possible types of changes to the source dataset and of the user's needs and expectations. Many of the variations are very difficult to solve. The best solution for one situation is often not the best solution for another situation — there isn't yet a universal great solution.
 
-### [**Relevant ERDDAP™ Tools**](#relevant-erddap-tools)
+### [**Relevant ERDDAP™ Tools**](#relevant-erddap-tools) {#relevant-erddap-tools}
 
 ERDDAP™ offers several tools which can be used as part of a system which seeks to maintain a remote copy of a dataset:
 
@@ -294,11 +294,11 @@ ERDDAP™ offers several tools which can be used as part of a system which seeks
     can offer access to the source files for a given dataset, including an Apache-style directory listing of the files (a "Web Accessible Folder") which has each file's download URL, last modified time, and size. One downside of using the "files" system is that the source files may have different variable names and different metadata than the dataset as it appears in ERDDAP. If a remote ERDDAP™ dataset offers access to its source files, that opens up the possibility of a poor-man's version of rsync: it becomes easy for a local system to see which remote files have changed and need to be downloaded. (See the [cacheFromUrl option](#cache-from-url) below which can make use of this.)  
      
 
-### [Solutions](#solutions)
+### [Solutions](#solutions) {#solutions}
 
 Although there are a huge number of variations to the problem and an infinite number of possible solutions, there are just a handful of basic approaches to solutions:
 
-#### Custom, Brute Force Solutions
+#### Custom, Brute Force Solutions {#custom-brute-force-solutions}
 An obvious solution is to handcraft a custom solution, which is therefore optimized for a given situation: make a system which detects/identifies which data has changed, and sends that information to the user so the user can request the changed data. Well, you can do this, but there are disadvantages:
 
 *   Custom solutions are a lot of work.
@@ -307,7 +307,7 @@ An obvious solution is to handcraft a custom solution, which is therefore optimi
 
 I discourage taking this approach because it is almost always better to look for general solutions, built and maintained by someone else, which can be easily reused in different situations.  
      
-#### rsync
+#### rsync {#rsync}
 [rsync](https://en.wikipedia.org/wiki/Rsync) is the existing, stunningly good, general purpose solution to keeping a collection of files on a source computer in sync on a user's remote computer. The way it works is:
 
 1.  some event (e.g., an ERDDAP™ subscription system event) triggers running rsync,  
@@ -326,24 +326,24 @@ There is an item on the ERDDAP™ To Do list to try to add support for rsync ser
 
 There are other programs which do more or less what rsync does, sometimes oriented to dataset replication (although often at a file-copy level), e.g., Unidata's [IDD](https://www.unidata.ucar.edu/projects/index.html#idd).
     
-#### Cache From Url
+#### Cache From Url {#cache-from-url}
 [The cacheFromUrl](/docs/server-admin/datasets#cachefromurl) setting is available (starting with ERDDAP™ v2.0) for all of ERDDAP's dataset types that make datasets from files (basically, all subclasses of [EDDGridFromFiles](/docs/server-admin/datasets#eddgridfromfiles) and [EDDTableFromFiles](/docs/server-admin/datasets#eddtablefromfiles)). cacheFromUrl makes it trivial to automatically download and maintain the local data files by copying them from a remote source via the cacheFromUrl setting. The remote files can be in a Web Accessible Folder or a directory-like file list offered by THREDDS, Hyrax, an S3 bucket, or ERDDAP's "files" system.
     
 If the source of the remote files is a remote ERDDAP™ dataset that offers the source files via the ERDDAP™ "files" system, then you can [subscribe](https://coastwatch.pfeg.noaa.gov/erddap/information.html#subscriptions) to the remote dataset, and use the [flag URL](/docs/server-admin/additional-information#flag) for your local dataset as the action for the subscription. Then, whenever the remote dataset changes, it will contact the flag URL for your dataset, which will tell it to reload ASAP, which will detect and download the changed remote data files. All of this happens very quickly (usually ~5 seconds plus the time needed to download the changed files). This approach works great if the source dataset changes are new files being periodically added and when the existing files never change. This approach doesn't work well if data is frequently appended to all (or most) of the existing source data files, because then your local dataset is frequently downloading the entire remote dataset. (This is where an rsync-like approach is needed.)
     
-#### ArchiveADataset
+#### ArchiveADataset {#archiveadataset}
 ERDDAP™'s [ArchiveADataset](/docs/server-admin/additional-information#archiveadataset) is a good solution when data is added to a dataset frequently, but older data is never changed. Basically, an ERDDAP™ administrator can run ArchiveADataset (perhaps in a script, perhaps run by cron) and specify a subset of a dataset that they want to extract (perhaps in multiple files) and package in a .zip or .tgz file, so that you can send the file to interested people or groups (e.g., NCEI for archiving) or make it available for downloading. For example, you could run ArchiveADataset everyday at 12:10 am and have it make a .zip of all the data from 12:00 am the previous day until 12:00 am today. (Or, do this weekly, monthly, or yearly, as needed.) Because the packaged file is generated offline, there is no danger of a timeout or too much data, as there would be for a standard ERDDAP™ request.  
      
-#### ERDDAP™'s standard request system
+#### ERDDAP™'s standard request system {#erddaps-standard-request-system}
 ERDDAP™'s standard request system is an alternative good solution when data is added to a dataset frequently, but older data is never changed. Basically, anyone can use standard requests to get data for a specific range of time. For example, at 12:10 am everyday, you could make a request for all of the data from a remote dataset from 12:00 am the previous day until 12:00 am today. The limitation (compared to the ArchiveADataset approach) is the risk of a timeout or there being too much data for a single file. You can avoid the limitation by making more frequent requests for smaller time periods.  
      
-#### EDDTableFromHttpGet
+#### EDDTableFromHttpGet {#eddtablefromhttpget}
 \[This option doesn't yet exist, but seems possible to build in the near future.\]  
 The new [EDDTableFromHttpGet](/docs/server-admin/datasets#eddtablefromhttpget) dataset type in ERDDAP™ v2.0 makes it possible to envision another solution. The underlying files maintained by this type of dataset are essentially log files that record changes to the dataset. It should be possible to build a system that maintains a local dataset by periodically (or based on a trigger) requesting all of the changes that have been made to the remote dataset since that last request. That should be as efficient (or more) than rsync and would handle many difficult scenarios, but would only work if the remote and local datasets are EDDTableFromHttpGet datasets.
 
 If anyone wants to work on this, please contact erd.data at noaa.gov .
     
-#### Distributed Data
+#### Distributed Data {#distributed-data}
 None of the solutions above does a great job of solving the hard variations of the problem because replication of near real time (NRT) datasets is very hard, partly because of all the possible scenarios.
 
 There is a great solution: don't even try to replicate the data.  
@@ -357,5 +357,5 @@ Instead, use the one authoritative source (one dataset on one ERDDAP), maintaine
 
 No, this isn't a solution for all possible situations, but it is a great solution for the vast majority. If there are problems/weaknesses with this solution in certain situations, it is often worth working to solve those problems or living with those weaknesses because of the stunning advantages of this solution. If/when this solution is really unacceptable for a given situation, e.g., when you really must have a local copy of the data, then consider the other solutions discussed above.  
      
-### Conclusion
+### Conclusion {#conclusion}
 While there is no single, simple solution which perfectly solves all the problems in all scenarios (as rsync and Distributed Data almost are), hopefully there are sufficient tools and options so that you can find an acceptable solution for your particular situation.  

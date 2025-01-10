@@ -13,11 +13,11 @@ This tests if s is a valid jsonp function name. The functionName MUST be a serie
 
  Note that JavaScript allows Unicode characters, but this does not.
 
-#### Return
+#### Return {#return}
 
 true if s is a valid jsonp function name.
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

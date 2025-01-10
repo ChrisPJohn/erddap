@@ -7,11 +7,11 @@ open fun [roundDiv](round-div.md)(num: Int, den: Int): Int
 
 A div that rounds. Positive numbers only. e.g., 1/4 goes to 0; 3/4 goes to 1; den = 0 throws an exception.
 
-#### Return
+#### Return {#return}
 
 num/den, but rounded to the next larger (abs) int
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

@@ -7,11 +7,11 @@ open fun [indexOfChar](index-of-char.md)(s: [String](https://docs.oracle.com/en/
 
 This indexOf is a little different: it finds the first instance in s of any char in car.
 
-#### Return
+#### Return {#return}
 
 The first instance in s of any char in car. If not found, it returns -1.
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

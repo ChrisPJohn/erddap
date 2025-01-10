@@ -7,11 +7,11 @@ open fun [lineContainingIgnoreCase](line-containing-ignore-case.md)(ar: Array&lt
 
 This finds the first element in Object[] (starting at element startAt) where the ar[i].toString value contains the substring s (ignoring the case of ar and s).
 
-#### Return
+#### Return {#return}
 
 the element number of ar which is equal to s (or -1 if not found)
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

@@ -9,11 +9,11 @@ This is different from String2.modifyToBeFileNameSafe -- this encodes non-fileNa
 
 THIS WON'T BE CHANGED. FILE NAMES CREATED FOR EDDGridCopy and EDDTableCopy DEPEND ON SAME ENCODING OVER TIME.
 
-#### Return
+#### Return {#return}
 
 s with all of the non-fileNameSafe characters changed. If s is null, this returns &quot;x-1&quot;. If s is &quot;&quot;, this returns &quot;x-0&quot;.
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

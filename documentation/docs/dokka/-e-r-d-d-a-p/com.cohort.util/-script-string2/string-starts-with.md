@@ -7,11 +7,11 @@ open fun [stringStartsWith](string-starts-with.md)(ar: Array&lt;Any&gt;, s: [Str
 
 This returns the first element in Object[] (starting at element 0) where the ar[i].toString value starts with s.
 
-#### Return
+#### Return {#return}
 
 the first element ar (as a String) which starts with s (or null if not found)
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

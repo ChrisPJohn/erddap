@@ -21,7 +21,7 @@ ERDDAP™ can run on any server that supports Java and Tomcat (and other applica
 **The standard ERDDAP™ installation instructions for Linux, Macs, and Windows computers are:**
 
 0. Make sure any dependencies are installed. On non-Windows machines (Linux and Mac), you need csh.
-## Java
+## Java {#java}
 1.  [For ERDDAP™ v2.19+, set up Java 21.](#java)
     For security reasons, it is almost always best to use the latest version of Java 21.  
     Please download and install the latest version of  
@@ -32,7 +32,7 @@ ERDDAP™ can run on any server that supports Java and Tomcat (and other applica
     
     ERDDAP™ has been tested and used extensively with 21, not other versions. For various reasons, we don't test with nor support other versions of Java.  
      
-## Tomcat
+## Tomcat {#tomcat}
 2.  [Set up](#tomcat) [Tomcat](https://tomcat.apache.org).  
     Tomcat is the most widely used Java Application Server, which is Java software that stands between the operating system's network services and Java server software like ERDDAP™. It is Free and Open Source Software (FOSS).
     
@@ -49,7 +49,7 @@ ERDDAP™ can run on any server that supports Java and Tomcat (and other applica
             If you download it, [download the "Core" "tar.gz" Tomcat distribution](https://tomcat.apache.org/download-10.cgi) and unpack it in /Library/Tomcat.
         *   On Windows, you can [download the "Core" "zip" Tomcat distribution](https://tomcat.apache.org/download-10.cgi) (which doesn't mess with the Windows registry and which you control from a DOS command line) and unpack it in an appropriate directory. (For development, we use the "Core" "zip" distribution. We make a /programs directory and unpack it there.) Or you can download the "Core" "64-bit Windows zip" distribution, which includes more features. If the distribution is a Windows installer, it will probably put Tomcat in, for example, /Program Files/apache-tomcat-10.0.23 .  
              
-### server.xml
+### server.xml {#serverxml}
 *   [server.xml](#serverxml) - In _tomcat_/conf/server.xml file, there are two changes that you should make to each of the two &lt;Connector&gt; tags- one for
 ```
         <Connector port="8080" 
@@ -61,13 +61,13 @@ ERDDAP™ can run on any server that supports Java and Tomcat (and other applica
     1.  (Recommended) Increase the connectionTimeout parameter value, perhaps to 300000 (milliseconds) (which is 5 minutes).
     2.  (Recommended) Add a new parameter: relaxedQueryChars="\[\]|" This is optional and slightly less secure, but removes the need for users to percent-encode these characters when they occur in the parameters of a user's request URL.  
              
-### content.xml
+### content.xml {#contentxml}
 *   context.xml -- Resources Cache - In _tomcat_/conf/context.xml, right before the &lt;/Context&gt; tag, change the Resources tag (or add it if it isn't already there) to set the cacheMaxSize parameter to 80000:  
     &lt;Resources cachingAllowed="true" cacheMaxSize="80000" /&gt;  
     This avoids numerous warnings in catalina.out that all start with  
     "WARNING \[main\] org.apache.catalina.webresources.Cache.getResource Unable to add the resource at \[/WEB-INF/classes/...]"  
          
-### Apache Timeout
+### Apache Timeout {#apache-timeout}
 *   On Linux computers, change the Apache timeout settings so that time-consuming user requests don't timeout (with what often appears as a "Proxy" or "Bad Gateway" error). As the root user:
     1.  Modify the Apache httpd.conf file (usually in /etc/httpd/conf/ ):  
         Change the existing &lt;Timeout&gt; setting (or add one at the end of the file) to 3600 (seconds), instead of the default 60 or 120 seconds.  
@@ -99,7 +99,7 @@ ERDDAP™ can run on any server that supports Java and Tomcat (and other applica
                 This is important, because it prevents other users from reading possibly sensitive information in ERDDAP™ setup files.
             
               
-### Memory
+### Memory {#memory}
 *   Set Tomcat's Environment Variables
     
     On Linux and Macs:  
@@ -137,17 +137,17 @@ The -Xmx and -Xms memory settings are important because ERDDAP™ works better w
     *   With Java 21, you choose 64 bit Java when you download a version of Java marked "64 bit".
     
     With 64 bit Java, Tomcat and Java can use very high -Xmx and -Xms settings. The more physical memory in the server the better. As a simplistic suggestion: we recommend you set -Xmx and -Xms to (in 'M'egaBytes) to 1/2 (or less) of the computer's physical memory. You can see if Tomcat, Java, and ERDDAP™ are indeed running in 64 bit mode by searching for " bit," in ERDDAP's Daily Report email or in the _bigParentDirectory_/logs/[log.txt](/docs/server-admin/additional-information#log) file (_bigParentDirectory_ is specified in [setup.xml](#setupxml)).
-#### Garbage Collection
+#### Garbage Collection {#garbage-collection}
 *   In ERDDAP™'s [log.txt](/docs/server-admin/additional-information#log) file, you will see many "GC (Allocation Failure)" messages.  
     This is usually not a problem. It is a frequent message from a normally operating Java saying that it just finished a minor garbage collection because it ran out of room in Eden (the section of the Java heap for very young objects). Usually the message shows you _memoryUseBefore_\-&gt;_memoryUseAfter_. If those two numbers are close together, it means that the garbage collection wasn't productive. The message is only a sign of trouble if it is very frequent (every few seconds), not productive, and the numbers are large and not growing, which together indicate that Java needs more memory, is struggling to free up memory, and is unable to free up memory. This may happen during a stressful time, then go away. But if it persists, that is a sign of trouble.
 *   If you see java.lang.OutOfMemoryError's in ERDDAP™'s [log.txt](/docs/server-admin/additional-information#log) file, see [OutOfMemoryError](/docs/server-admin/additional-information#outofmemoryerror) for tips on how to diagnose and resolve the problems.  
          
-### Permissions
+### Permissions {#permissions}
 *   [On Linux and Macs, change the permissions](#permissions) of all \*.sh files in _tomcat_/bin/ to be executable by the owner, e.g., with
 ```
     chmod +x \*.sh  
 ```
-### Fonts
+### Fonts {#fonts}
 *   [Fonts for images:](#fonts) We strongly prefer the free [DejaVu fonts](https://dejavu-fonts.github.io/) to the other Java fonts. Using these fonts is strongly recommended but not required.
     
     If you choose not to use the DejaVu fonts, you need to change the fontFamily setting in setup.xml to &lt;fontFamily&gt;SansSerif&lt;/fontFamily&gt;, which is available with all Java distributions. If you set fontFamily to the name of a font that isn't available, ERDDAP™ won't load and will print a list of available fonts in the log.txt file. You must use one of those fonts.
@@ -162,7 +162,7 @@ The -Xmx and -Xms memory settings are important because ERDDAP™ works better w
     *   On Macs: for each font file, double click on it and then click Install Font.
     *   On Windows 7 and 10: in Windows Explorer, select all of the font files. Right click. Click on Install.  
              
-### Test Tomcat
+### Test Tomcat {#test-tomcat}
 *   Test your Tomcat installation.
     *   Linux:
         *   As user "tomcat", run _tomcat_/bin/startup.sh
@@ -181,7 +181,7 @@ The -Xmx and -Xms memory settings are important because ERDDAP™ works better w
         *   You should see the Tomcat "Congratulations" page.  
             If there is trouble, see the Tomcat log file _tomcat_/logs/catalina.out.
             
-### Troubles with the Tomcat installation?
+### Troubles with the Tomcat installation? {#troubles-with-the-tomcat-installation}
 *   On Linux and Mac, if you can't reach Tomcat or ERDDAP™ (or perhaps you just can't reach them from a computer outside your firewall), you can test if Tomcat is listening to port 8080, by typing (as root) on a command line of the server:
 ```  
     netstat -tuplen | grep 8080  
@@ -195,7 +195,7 @@ The -Xmx and -Xms memory settings are important because ERDDAP™ works better w
 *   See the [Tomcat](https://tomcat.apache.org/) website or search the web for help, but please let us know the problems you had and the solutions you found.
 *   See our [section on getting additional support](/docs/intro#support).
              
-### ERDDAP™ Content
+### ERDDAP™ Content {#erddap-content}
 3.  [Set up the _tomcat_/content/erddap configuration files.](#erddap-content)  
     On Linux, Mac, and Windows, download [erddapContent.zip](https://github.com/ERDDAP/erddapContent/releases/download/content1.0.0/erddapContent.zip) (version 1.0.0, 20333 bytes, MD5=2B8D2A5AE5ED73E3A42B529C168C60B5, dated 2024-10-14) and unzip it into _tomcat_, creating _tomcat_/content/erddap .
 
@@ -207,10 +207,10 @@ The -Xmx and -Xms memory settings are important because ERDDAP™ works better w
     [2.23](https://github.com/ERDDAP/erddap/releases/download/v2.23/erddapContent.zip) (19,810 bytes, MD5=1E26F62E7A06191EE6868C40B9A29362, dated 2023-02-27)
     and unzip it into _tomcat_, creating _tomcat_/content/erddap . \]
     
-#### Other Directory
+#### Other Directory {#other-directory}
 For Red Hat Enterprise Linux (RHEL) or for other situations where you aren't allowed to modify the Tomcat directory or where you want/need to put the ERDDAP™ content directory in some other location for some other reason (for example, if you use Jetty instead of Tomcat), unzip erddapContent.zip into the desired directory (to which only user=tomcat has access) and set the erddapContentDirectory system property (e.g., erddapContentDirectory=~tomcat/content/erddap) so ERDDAP™ can find this new content directory.
     
-### setup.xml
+### setup.xml {#setupxml}
 *   [Read the comments in _tomcat_/content/erddap/**setup.xml**](#setupxml) and make the requested changes. setup.xml is the file with all of the settings which specify how your ERDDAP™ behaves.  
     For the initial setup, you MUST at least change these settings:
 ```
@@ -236,17 +236,17 @@ For Red Hat Enterprise Linux (RHEL) or for other situations where you aren't all
         chmod -R o-rwx _bigParentDirectory_
 ```
 
-### Environment Variables
+### Environment Variables {#environment-variables}
 Starting with ERDDAP™ v2.13, ERDDAP™ administrators can override any value in setup.xml by specifying an environment variable named ERDDAP\__valueName_ before running ERDDAP™. For example, use ERDDAP\_baseUrl overrides the &lt;baseUrl&gt; value. This can be handy when deploying ERDDAP™ with a container like Docker, as you can put standard settings in setup.xml and then supply special settings via environment variables. If you supply secret information to ERDDAP™ via this method, be sure to check that the information will remain secret. ERDDAP™ only reads environment variables once per startup, in the first second of startup, so one way to use this is: set the environment variables, start ERDDAP, wait until ERDDAP™ is started, then unset the environment variables.
     
-### datasets.xml
+### datasets.xml {#datasetsxml}
 *   Read the comments in [**Working with the datasets.xml File**](/docs/server-admin/datasets). Later, after you get ERDDAP™ running for the first time (usually with just the default datasets), you will modify the XML in _tomcat_/content/erddap/**datasets.xml** to specify all of the datasets you want your ERDDAP™ to serve. This is where you will you spend the bulk of your time while setting up ERDDAP™ and later while maintaining your ERDDAP™.  
      
 *   (Unlikely) Now or (slightly more likely) in the future, if you want to modify erddap's CSS file, make a copy of _tomcat_/content/erddap/images/erddapStart2.css called erddap2.css and then make changes to it. Changes to erddap2.css only take effect when ERDDAP™ is restarted and often also require the user to clear the browser's cached files.  
      
 ERDDAP™ will not work correctly if the setup.xml or datasets.xml file isn't a well-formed XML file. So, after you edit these files, it is a good idea to verify that the result is well-formed XML by pasting the XML text into an XML checker like [xmlvalidation](https://www.xmlvalidation.com/).  
      
-###  Install the erddap.war file
+###  Install the erddap.war file {#install-the-erddapwar-file}
 4. On Linux, Mac, and Windows, download [erddap.war](https://github.com/ERDDAP/erddap/releases/download/v2.25.1/erddap.war) into _tomcat_/webapps .  
     (version 2.25_1, 592,292,039 bytes, MD5=652AFC9D1421F00B5F789DA2C4732D4C, dated 2024-11-07)
     
@@ -261,7 +261,7 @@ ERDDAP™ will not work correctly if the setup.xml or datasets.xml file isn't a 
     [2.24](https://github.com/ERDDAP/erddap/releases/download/v2.24/erddap.war) (568,748,187 bytes, MD5=970fbee172e28b0b8a07756eecbc898e, dated 2024-06-07)
     \]
     
-#### ProxyPass
+#### ProxyPass {#proxypass}
 5.  Use ProxyPass so users don't have to put the port number, e.g., :8080, in the URL.  
     On Linux computers, if Tomcat is running in Apache, please modify the Apache httpd.conf file (usually in /etc/httpd/conf/ ) to allow HTTP traffic to/from ERDDAP™ without requiring the port number, e.g., :8080, in the URL. As the root user:
     1.  Modify the existing &lt;VirtualHost&gt; tag (if there is one), or add one at the end of the file:
@@ -276,7 +276,7 @@ ERDDAP™ will not work correctly if the setup.xml or datasets.xml file isn't a 
 ```
     2.  Then restart Apache: /usr/sbin/apachectl -k graceful (but sometimes it is in a different directory).  
          
-### NGINX
+### NGINX {#nginx}
 (UNCOMMON) If you are using [NGINX](https://www.nginx.com/) (a web server and load balancer):  
 in order to get NGINX and ERDDAP™ working correctly with https, you need to put the following snippet inside the Tomcat server.xml &lt;Host&gt; block:
 ```
@@ -296,7 +296,7 @@ And in the nginx config file, you need to set these headers:
 ```
 (Thanks to Kyle Wilcox.)  
      
-### Start Tomcat
+### Start Tomcat {#start-tomcat}
 *   (I don't recommend using the Tomcat Web Application Manager. If you don't fully shutdown and startup Tomcat, sooner or later you will have PermGen memory issues.)  
      
 *   (In Linux or Mac OS, if you have created a special user to run Tomcat, e.g., tomcat, remember to do the following steps as that user.)  
@@ -310,11 +310,11 @@ And in the nginx config file, you need to set these headers:
 *   Start Tomcat with (in Linux or Mac OS) _tomcat_/bin/startup.sh  
     or (in Windows) _tomcat_\\bin\\startup.bat  
 
-##  Is ERDDAP™ running?
+##  Is ERDDAP™ running? {#is-erddap-running}
 Use a browser to try to view http://_www.YourServer.org_/erddap/status.html  
 ERDDAP™ starts up without any datasets loaded. Datasets are loaded in a background thread and so become available one-by-one.
 
-### Troubleshooting
+### Troubleshooting {#troubleshooting}
 *   When a request from a user comes in, it goes to Apache (on Linux and Mac OS computers), then Tomcat, then ERDDAP™.
 *   You can see what comes to Apache (and related errors) in the Apache log files.
 *   [You](/docs/server-admin/additional-information#tomcat-logs) can see what comes to Tomcat (and related errors) in the Tomcat log files (_tomcat_/logs/catalina.out and other files in that directory).
@@ -322,23 +322,23 @@ ERDDAP™ starts up without any datasets loaded. Datasets are loaded in a backgr
 *   Tomcat doesn't start ERDDAP™ until Tomcat gets a request for ERDDAP™. So you can see in the Tomcat log files if it started ERDDAP™ or if there is an error message related to that attempt.
 *   When ERDDAP™ starts up, it renames the old ERDDAP™ log.txt file (logArchivedAt_CurrentTime_.txt) and creates a new log.txt file. So if the log.txt file is old, it is a sign that ERDDAP™ hasn't recently restarted. ERDDAP™ writes log info to a buffer and only writes the buffer to the log file periodically, but you can force ERDDAP™ to write the buffer to the log file by visiting .../erddap/status.html.
 
-### Trouble: Old Version of Java
+### Trouble: Old Version of Java {#trouble-old-version-of-java}
 If you are using a version of Java that is too old for ERDDAP, ERDDAP™ won't run and you will see an error message in Tomcat's log file like  
 Exception in thread "main" java.lang.UnsupportedClassVersionError:  
 _some/class/name_: Unsupported major.minor version _someNumber_  
 The solution is to update to the most recent version of Java and make sure that Tomcat is using it.
 
-### Trouble: Slow Startup First Time
+### Trouble: Slow Startup First Time {#trouble-slow-startup-first-time}
 Tomcat has to do a lot of work the first time an application like ERDDAP™ is started; notably, it has to unpack the erddap.war file (which is like a .zip file). On some servers, the first attempt to view ERDDAP™ stalls (30 seconds?) until this work is finished. On other servers, the first attempt will fail immediately. But if you wait 30 seconds and try again, it will succeed if ERDDAP™ was installed correctly.  
 There is no fix for this. This is simply how Tomcat works. But it only occurs the first time after you install a new version of ERDDAP™.
 
-## Shut down and restart
+## Shut down and restart {#shut-down-and-restart}
 In the future, to shut down (and restart) ERDDAP, see [How to Shut Down and Restart Tomcat and ERDDAP](/docs/server-admin/additional-information#shut-down-and-restart).  
-## Trouble?
+## Trouble? {#trouble}
 Troubles installing Tomcat or ERDDAP? See our [section on getting additional support](/docs/intro#support).
-## Email Notification of New Versions of ERDDAP
+## Email Notification of New Versions of ERDDAP {#email-notification-of-new-versions-of-erddap}
 If you want to receive an email whenever a new version of ERDDAP™ is available or other important ERDDAP™ announcements, you can join the ERDDAP™ announcements list [here](https://groups.google.com/g/erddap-announce). This list averages roughly one email every three months.  
-## Customize
+## Customize {#customize}
 [Customize your ERDDAP™ to highlight your organization (not NOAA ERD).](#customize)
     *   Change the banner that appears at the top of all ERDDAP™ .html pages by editing the &lt;startBodyHtml5&gt; tag in your datasets.xml file. (If there isn't one, copy the default from ERDDAP's  
         \[tomcat\]/webapps/erddap/WEB-INF/classes/gov/noaa/pfel/erddap/util/messages.xml file into datasets.xml and edit it.) For example, you could:

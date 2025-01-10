@@ -13,11 +13,11 @@ This indicates if ch is printable with System.err.println() and Graphics.drawStr
 - newline is not included. It should be caught separately and dealt with.
 - This requires further study into all standard fonts on all platforms to see if other characters can be accepted.
 
-#### Return
+#### Return {#return}
 
 true if ch is a printable character
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

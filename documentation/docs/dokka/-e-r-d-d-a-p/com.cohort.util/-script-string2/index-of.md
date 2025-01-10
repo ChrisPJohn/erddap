@@ -7,11 +7,11 @@ open fun [indexOf](index-of.md)(iArray: Array&lt;Int&gt;, i: Int, fromIndex: Int
 
 Finds the first instance of i at or after fromIndex (0.. ) in iArray.
 
-#### Return
+#### Return {#return}
 
 The first instance of i. If not found, it returns -1.
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 
@@ -26,11 +26,11 @@ open fun [indexOf](index-of.md)(iArray: Array&lt;Int&gt;, i: Int): Int
 
 Finds the first instance of i in iArray.
 
-#### Return
+#### Return {#return-1}
 
 The first instance of i. If not found, it returns -1.
 
-#### Parameters
+#### Parameters {#parameters-1}
 
 JVM
 
@@ -44,11 +44,11 @@ open fun [indexOf](index-of.md)(cArray: Array&lt;Char&gt;, c: Char, fromIndex: I
 
 Finds the first instance of c at or after fromIndex (0.. ) in cArray.
 
-#### Return
+#### Return {#return-2}
 
 The first instance of c. If not found, it returns -1.
 
-#### Parameters
+#### Parameters {#parameters-2}
 
 JVM
 
@@ -63,11 +63,11 @@ open fun [indexOf](index-of.md)(cArray: Array&lt;Char&gt;, c: Char): Int
 
 Finds the first instance of c in cArray.
 
-#### Return
+#### Return {#return-3}
 
 The first instance of c. If not found, it returns -1.
 
-#### Parameters
+#### Parameters {#parameters-3}
 
 JVM
 
@@ -81,11 +81,11 @@ open fun [indexOf](index-of.md)(s: [String](https://docs.oracle.com/en/java/java
 
 This indexOf is a little different: it finds the first instance in s of any char in car.
 
-#### Return
+#### Return {#return-4}
 
 The first instance in s of any char in car. If not found, it returns -1.
 
-#### Parameters
+#### Parameters {#parameters-4}
 
 JVM
 
@@ -100,11 +100,11 @@ open fun [indexOf](index-of.md)(dArray: Array&lt;Double&gt;, d: Double, fromInde
 
 Finds the first instance of d at or after fromIndex (0.. ) in dArray (tested with Math2.almostEqual5).
 
-#### Return
+#### Return {#return-5}
 
 The first instance of d. If not found, it returns -1.
 
-#### Parameters
+#### Parameters {#parameters-5}
 
 JVM
 
@@ -119,11 +119,11 @@ open fun [indexOf](index-of.md)(dArray: Array&lt;Double&gt;, d: Double): Int
 
 Finds the first instance of d in dArray (tested with Math2.almostEqual5).
 
-#### Return
+#### Return {#return-6}
 
 The first instance of d. If not found, it returns -1.
 
-#### Parameters
+#### Parameters {#parameters-6}
 
 JVM
 
@@ -137,11 +137,11 @@ open fun [indexOf](index-of.md)(ar: Array&lt;Any&gt;, s: [String](https://docs.o
 
 This finds the first element in Object[] where the ar[i].toString value equals to s.
 
-#### Return
+#### Return {#return-7}
 
 the element number of ar which is equal to s (or -1 if ar is null, or s is null or not found)
 
-#### Parameters
+#### Parameters {#parameters-7}
 
 JVM
 
@@ -155,11 +155,11 @@ open fun [indexOf](index-of.md)(ar: Array&lt;Any&gt;, s: [String](https://docs.o
 
 This finds the first element in Object[] (starting at element startAt) where the ar[i].toString value equals s.
 
-#### Return
+#### Return {#return-8}
 
 the element number of ar which is equal to s (or -1 if ar is null, or s is null or not found)
 
-#### Parameters
+#### Parameters {#parameters-8}
 
 JVM
 

@@ -12,11 +12,11 @@ This tests if s is a valid variableName:
 
  Note that Java allows Unicode characters, but this does not.
 
-#### Return
+#### Return {#return}
 
 true if s is a valid variableName.
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

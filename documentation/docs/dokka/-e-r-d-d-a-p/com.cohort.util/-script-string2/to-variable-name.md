@@ -7,11 +7,11 @@ open fun [toVariableName](to-variable-name.md)(s: [String](https://docs.oracle.c
 
 This suggests a camel-case variable name.
 
-#### Return
+#### Return {#return}
 
 a valid variable name asciiLowerCaseLetter+asciiDigitLetter*, using camel case. This is a simplistic suggestion. Different strings may return the same variable name. null returns &quot;null&quot;. &quot;&quot; returns &quot;a&quot;.
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

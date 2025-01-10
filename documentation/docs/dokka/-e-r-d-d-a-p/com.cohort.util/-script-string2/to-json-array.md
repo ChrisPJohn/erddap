@@ -7,11 +7,11 @@ open fun [toJsonArray](to-json-array.md)(sa: Array&lt;[String](https://docs.orac
 
 The converts a string[] into a JSON array of strings.
 
-#### Return
+#### Return {#return}
 
 e.g., [&quot;aa&quot;, &quot;bb&quot;, &quot;cc&quot;]. If sa is null, this returns null (as a String).
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

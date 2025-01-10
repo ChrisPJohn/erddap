@@ -7,11 +7,11 @@ open fun [left](left.md)(s: [String](https://docs.oracle.com/en/java/javase/21/d
 
 Returns a String 'length' long, with 's' left-justified (using spaces as the added characters) within the resulting String. If s is already longer, then there will be no change.
 
-#### Return
+#### Return {#return}
 
 's' left-justified to make the result 'length' long.
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

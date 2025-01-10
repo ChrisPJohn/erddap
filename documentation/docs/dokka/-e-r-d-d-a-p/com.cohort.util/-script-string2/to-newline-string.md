@@ -9,11 +9,11 @@ Generates a newline-separated string, with a newline at the end.
 
 WARNING: This is simplistic. It doesn't do anything special for strings with internal newlines.
 
-#### Return
+#### Return {#return}
 
 a String with the values, with a '\n' after each value, even the last. Returns null if ar is null. null elements are represented as &quot;[null]&quot;.
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 
@@ -26,11 +26,11 @@ open fun [toNewlineString](to-newline-string.md)(ar: Array&lt;Int&gt;): [String]
 
 This generates a newline-separated (always '\n') String from the array.
 
-#### Return
+#### Return {#return-1}
 
 a newline-separated String (or null if ar is null)
 
-#### Parameters
+#### Parameters {#parameters-1}
 
 JVM
 
@@ -43,11 +43,11 @@ open fun [toNewlineString](to-newline-string.md)(ar: Array&lt;Double&gt;): [Stri
 
 This generates a newline-separated (always '\n') String from the array.
 
-#### Return
+#### Return {#return-2}
 
 a newline-separated String (or null if ar is null)
 
-#### Parameters
+#### Parameters {#parameters-2}
 
 JVM
 

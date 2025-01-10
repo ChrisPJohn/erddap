@@ -7,11 +7,11 @@ open fun [findNth](find-nth.md)(s: [String](https://docs.oracle.com/en/java/java
 
 This returns the index of the nth occurrence of findS in s. If s == null, or &quot;&quot;, or nth &lt;0, or nth occurence not found, return -1. If s.length()==0 or nth==0, return -1;
 
-#### Return
+#### Return {#return}
 
 This returns the index of the nth occurrence of findS in s.
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

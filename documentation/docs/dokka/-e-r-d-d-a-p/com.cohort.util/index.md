@@ -2,7 +2,7 @@
 
 # Package-level declarations
 
-## Types
+## Types {#types}
 
 | Name | Summary |
 |---|---|

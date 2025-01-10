@@ -7,6 +7,6 @@ open fun [whichWord](which-word.md)(longerString: [String](https://docs.oracle.c
 
 This tries to find the first one of the words in the longerString. This is case-sensitive.
 
-#### Return
+#### Return {#return}
 
 index of the matching word (or -1 if no match or other trouble)

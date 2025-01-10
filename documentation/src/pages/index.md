@@ -2,7 +2,7 @@
 title: "ERDDAP™ Documentation"
 ---
 
-## ERDDAP™ information
+## ERDDAP™ information {#erddap-information}
 
 ERDDAP™ is a scientific data server that gives users a simple, consistent way to download subsets of
 gridded and tabular scientific datasets in common file formats and make graphs and maps.
@@ -22,11 +22,11 @@ Below you will find relevant links for asking questions and how to contribute.
 [Search ERDDAPs](/searchMutlipleErddaps)
 
 
-## Set Up Your Own ERDDAP™
+## Set Up Your Own ERDDAP™ {#set-up-your-own-erddap}
 
 ERDDAP™ is a [Free and Open Source](https://en.wikipedia.org/wiki/Free_and_open-source_software), all-Java (servlet), web application that runs in a web application server (for example, Tomcat (recommended), or Jetty (it works, but we don't support it)). This web page is mostly for people ("ERDDAP™ administrators") who want to set up their own ERDDAP™ installation at their own website.
 
-### Why use ERDDAP™ to distribute your data?
+### Why use ERDDAP™ to distribute your data? {#why-use-erddap-to-distribute-your-data}
 
 Because the small effort to set up ERDDAP™ brings many benefits.
 
@@ -42,12 +42,12 @@ Because the small effort to set up ERDDAP™ brings many benefits.
 
 You can [customize](/docs/server-admin/deploy-install#customize) your ERDDAP's appearance so ERDDAP™ reflects your organization and fits in with the rest of your website.
 
-## Is the installation procedure hard? Can I do it?
+## Is the installation procedure hard? Can I do it? {#is-the-installation-procedure-hard-can-i-do-it}
 
 The initial installation takes some time, but it isn't very hard. You can do it. If you get stuck, email me at erd dot data at noaa dot gov . I will help you.  
 Or, you can join the [ERDDAP™ Google Group / Mailing List](https://groups.google.com/g/erddap) and post your question there.
 
-## Who Uses ERDDAP™
+## Who Uses ERDDAP™ {#who-uses-erddap}
 
 ERDDAP™ has been installed by approximately 100 organizations in at least 17 countries
 
@@ -126,12 +126,12 @@ ERDDAP™ has been installed by approximately 100 organizations in at least 17 c
 
 This is a list of just some of the organizations where ERDDAP™ has been installed by some individual or some group. It does not imply that the individual, the group, or the organization recommends or endorses ERDDAP.
 
-### ERDDAP™ is recommended within NOAA and CNRS
+### ERDDAP™ is recommended within NOAA and CNRS {#erddap-is-recommended-within-noaa-and-cnrs}
 [NOAA's Data Access Procedural Directive](https://www.ngdc.noaa.gov/wiki/index.php/Data_Access_Technical_Recommendations#Software_implementations) includes ERDDAP™ in its list of recommended data servers for use by groups within NOAA. ERDDAP™ is favorably mentioned in section 4.2.3 of the  
 [Guide de bonnes pratiques sur la gestion des données de la recherche  
 (Research Data Management Best Practices Guide)](https://mi-gt-donnees.pages.math.unistra.fr/guide/04-traiter.html#deposer-et-structurer-dans-des-plateformes-de-gestion-de-donnees-locales) of the Centre National de la Recherche Scientifique (CNRS) in France.
 
-## Slide Shows
+## Slide Shows {#slide-shows}
 
 Here are some PowerPoint slide shows and documents that Bob Simons has created related to ERDDAP.
 

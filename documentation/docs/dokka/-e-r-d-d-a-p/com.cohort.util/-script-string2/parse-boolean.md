@@ -7,11 +7,11 @@ open fun [parseBoolean](parse-boolean.md)(s: [String](https://docs.oracle.com/en
 
 This converts a string to a boolean.
 
-#### Return
+#### Return {#return}
 
 false if s is &quot;false&quot;, &quot;f&quot;, or &quot;0&quot;. Case and leading/trailing spaces don't matter. All other values (and null) are treated as true.
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

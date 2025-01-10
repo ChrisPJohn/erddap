@@ -7,11 +7,11 @@ open fun [findWholeWord](find-whole-word.md)(s: [String](https://docs.oracle.com
 
 This finds (case-sensitive) the first whole word instance of 'word' in s. It will find 'word' at the start or end of s. I.e., the character before and after (if any) mustn't be a letter or digit or '_'.
 
-#### Return
+#### Return {#return}
 
 -1 if not found (or trouble, e.g., find=null)
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

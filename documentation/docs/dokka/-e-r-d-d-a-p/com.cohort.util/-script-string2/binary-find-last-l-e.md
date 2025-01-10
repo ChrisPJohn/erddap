@@ -7,11 +7,11 @@ open fun [binaryFindLastLE](binary-find-last-l-e.md)(sar: Array&lt;[String](http
 
 Find the last element which is &lt;= s in an ascending sorted array.
 
-#### Return
+#### Return {#return}
 
 the index of the last element which is &lt;= s in an ascending sorted array. If s is null or s &lt;the smallest element, this returns -1 (no element is appropriate). If s &gt;the largest element, this returns sar.length-1.
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

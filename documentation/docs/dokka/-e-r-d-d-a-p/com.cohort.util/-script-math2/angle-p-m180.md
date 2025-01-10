@@ -7,11 +7,11 @@ fun [anglePM180](angle-p-m180.md)(degrees: Double): Double
 
 This converts an angle (in degrees) into the range &gt;=-180 to &lt;180 (180 becomes -180).
 
-#### Return
+#### Return {#return}
 
 the angle (in degrees) in the range &gt;=-180 to &lt;180. If isMV(angle), it returns 0.
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

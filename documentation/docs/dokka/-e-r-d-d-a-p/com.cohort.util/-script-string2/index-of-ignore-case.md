@@ -7,11 +7,11 @@ open fun [indexOfIgnoreCase](index-of-ignore-case.md)(s: [String](https://docs.o
 
 Finds the first instance of 'find' at or after fromIndex (0..), ignoring case.
 
-#### Return
+#### Return {#return}
 
 the first instance of 'find' at or after fromIndex (0..), ignoring case.
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 
@@ -25,11 +25,11 @@ open fun [indexOfIgnoreCase](index-of-ignore-case.md)(s: [String](https://docs.o
 
 Finds the first instance of 'find' at or after fromIndex (0..), ignoring case.
 
-#### Return
+#### Return {#return-1}
 
 the first instance of 'find' at or after fromIndex (0..), ignoring case.
 
-#### Parameters
+#### Parameters {#parameters-1}
 
 JVM
 

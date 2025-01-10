@@ -7,11 +7,11 @@ open fun [min](min.md)(s1: [String](https://docs.oracle.com/en/java/javase/21/do
 
 This returns the string which sorts lower. null sorts low.
 
-#### Return
+#### Return {#return}
 
 the string which sorts lower.
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

@@ -7,11 +7,11 @@ open fun [biggerAngle](bigger-angle.md)(d: Double): Double
 
 This increases the double degrees value (nicely), and returns it as a string.
 
-#### Return
+#### Return {#return}
 
 the next multiple 15. It rounds to nearest mult, then changes it. If !Double.isFinite(d), it returns d.
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

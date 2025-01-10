@@ -7,11 +7,11 @@ open fun [toJson65536](to-json65536.md)(s: [String](https://docs.oracle.com/en/j
 
 This variant doesn't encode high characters.
 
-#### Return
+#### Return {#return}
 
 the JSON-encoded string surrounded by &quot;'s.
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

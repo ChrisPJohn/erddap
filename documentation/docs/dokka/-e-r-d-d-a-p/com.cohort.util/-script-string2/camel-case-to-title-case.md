@@ -7,11 +7,11 @@ open fun [camelCaseToTitleCase](camel-case-to-title-case.md)(s: [String](https:/
 
 This converts &quot;camelCase99String&quot; to &quot;Camel Case 99 String&quot;
 
-#### Return
+#### Return {#return}
 
 the string with spaces before capital letters. null returns null. &quot;&quot; returns &quot;&quot;.
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

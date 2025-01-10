@@ -7,6 +7,6 @@ open fun [stringToUtf8Bytes](string-to-utf8-bytes.md)(s: [String](https://docs.o
 
 This returns the UTF-8 encoding of the string (or null if trouble). The inverse of this is utf8BytesToString. This won't throw an exception and returns ERROR (as bytes) if trouble.
 
-#### Return
+#### Return {#return}
 
 the byte[]. null in returns null. length=0 returns BAR_ZERO.

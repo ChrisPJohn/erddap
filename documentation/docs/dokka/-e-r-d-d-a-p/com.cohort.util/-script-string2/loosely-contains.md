@@ -7,11 +7,11 @@ open fun [looselyContains](loosely-contains.md)(s: [String](https://docs.oracle.
 
 This goes beyond indexOfIgnoreCase by looking after punctuation removed.
 
-#### Return
+#### Return {#return}
 
 true if find is loosely in s. Return false if s or find !isSomething.
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

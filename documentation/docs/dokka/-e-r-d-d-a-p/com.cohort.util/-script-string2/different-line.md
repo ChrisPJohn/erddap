@@ -7,11 +7,11 @@ open fun [differentLine](different-line.md)(oldS: [String](https://docs.oracle.c
 
 Given two strings with internal newlines, oldS and newS, this a message indicating where they differ.
 
-#### Return
+#### Return {#return}
 
 a message indicating where they differ, or &quot;&quot; if there is no difference.
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

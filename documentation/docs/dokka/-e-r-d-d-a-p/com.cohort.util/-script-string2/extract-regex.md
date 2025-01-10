@@ -7,11 +7,11 @@ open fun [extractRegex](extract-regex.md)(s: [String](https://docs.oracle.com/en
 
 This returns the first section of s (starting at fromIndex) which matches regex. !!! Note that . in the regex doesn't match line terminators in s !!!
 
-#### Return
+#### Return {#return}
 
 the section of s which matches regex, or null if not found
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 
@@ -21,7 +21,7 @@ JVM
 | regex | the regular expression, see java.util.regex.Pattern. |
 | fromIndex | the starting index in s |
 
-#### Throws
+#### Throws {#throws}
 
 | | |
 |---|---|

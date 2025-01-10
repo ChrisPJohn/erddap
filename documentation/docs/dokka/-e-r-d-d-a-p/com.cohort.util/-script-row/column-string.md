@@ -7,11 +7,11 @@ open fun [columnString](column-string.md)(colName: [String](https://docs.oracle.
 
 This gets the value from a column as a String.
 
-#### Return
+#### Return {#return}
 
 the value as a String (or &quot;&quot; if column not found)
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

@@ -7,11 +7,11 @@ open fun [passwordDigest](password-digest.md)(algorithm: [String](https://docs.o
 
 This returns the hash digest of stringToUtf8Bytes(password) as a String of lowercase hex digits. Lowercase because the digest authentication standard uses lower case; so mimic them. And lowercase is easier to type.
 
-#### Return
+#### Return {#return}
 
 the algorithm's hash digest of the password (many lowercase hex digits, as a String), or null if password is null or there is trouble.
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

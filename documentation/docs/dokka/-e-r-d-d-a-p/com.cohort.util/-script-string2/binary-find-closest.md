@@ -7,11 +7,11 @@ open fun [binaryFindClosest](binary-find-closest.md)(sar: Array&lt;[String](http
 
 Find the closest element to s in an ascending sorted array.
 
-#### Return
+#### Return {#return}
 
 the index of the element closest to s. If s is null, this returns -1.
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

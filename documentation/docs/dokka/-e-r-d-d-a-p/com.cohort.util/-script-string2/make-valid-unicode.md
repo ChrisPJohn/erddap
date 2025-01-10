@@ -7,11 +7,11 @@ open fun [makeValidUnicode](make-valid-unicode.md)(s: [String](https://docs.orac
 
 This makes s valid Unicode by converting invalid characters (e.g., #128) with \\uhhhh (literally 2 backslashes, so no info is lost). The invalid characters are often Windows charset characters #127 - 159.
 
-#### Return
+#### Return {#return}
 
 the valid Unicode string.
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

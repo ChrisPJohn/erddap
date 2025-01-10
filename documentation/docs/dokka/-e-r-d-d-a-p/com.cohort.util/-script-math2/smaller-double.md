@@ -7,11 +7,11 @@ open fun [smallerDouble](smaller-double.md)(def: Double, mult: Double, min: Doub
 
 This decreases d to the previous multiple of mult.
 
-#### Return
+#### Return {#return}
 
 the next multiple of mult smaller than d. It rounds to nearest mult, then changes it. If !Double.isFinite(d), it returns def.
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

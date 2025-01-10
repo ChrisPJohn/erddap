@@ -13,32 +13,32 @@ Our goals in setting up the governance structures of ERDDAP™ are to ensure tha
 3. Necessary decisions are actually taken, even when there is no clear consensus among the community. There is a single path for the appeal or escalation of a decision when needed.
 
 
-### Governance Structure<a id="governance-structure"></a>
+### Governance Structure {#governance-structure}
 
 ERDDAP™ is evolving from a Founder-Leader model of Governance. We have added a [Strategic Insight Group](/StrategicInsightGroup) who guides and ensures ERDDAP™ development is funded. For more information about the SIG and what they do please visit the [SIG page](/StrategicInsightGroup)
 
 We are also establishing a formal Technical Board.
 
 
-### ERDDAP™ Technical Board<a id="erddap-technical-board"></a>
+### ERDDAP™ Technical Board {#erddap-technical-board}
 
 The ERDDAP™ [Technical Board](/technical-board) is responsible for the technical direction of ERDDAP™. It makes decisions on prioritization of work, feature roadmaps, dependencies, and any processes that impact development work. The board will also review design documents for significant new features. The board works to establish a consensus on the right path to take.
 
 The ERDDAP™ Technical Board meets as needed.
 
 
-### NATD<a id="natd"></a>
+### NATD {#natd}
 
 This is not a democracy, it’s a meritocracy. We try to operate more on consensus than on votes, seeking agreement from the people who will have to do the work. Chris John, as NOAA Appointed Technical Director (NATD), plays the role of lead developer to the project. He has a casting vote on the Technical Board, should it come to a vote. This capacity is not used lightly.
 
 The community functions best when it can reach broad consensus about a way forward. However, it is not uncommon in the open-source world for there to be multiple good arguments, no clear consensus, and for open questions to divide communities rather than enrich them. The debate absorbs the energy that might otherwise have gone towards the creation of a solution. In many cases, there is no one ‘right’ answer, and what is needed is a decision more than a debate. The NATD acts to provide clear leadership on difficult issues, and set the pace for the project.
 
 
-### Appointments<a id="appointments"></a>
+### Appointments {#appointments}
 
 The ERDDAP™ SIG has their own process for membership. Chris, as developer lead, is responsible for nominating members for the Technical Board who then get approved by the SIG. If you would like to be on the Technical Board, reach out to [chris.john@noaa.gov](mailto:chris.john@noaa.gov).
 
 
-### Contributing<a id="contributing"></a>
+### Contributing {#contributing}
 
 There are many ways you can contribute to ERDDAP™. See our page about [contributing](/docs/contributing).

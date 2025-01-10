@@ -12,11 +12,11 @@ This is like modifyToBeFileNameSafe, but restricts the name to:
 
  Note that Java allows Unicode characters, but this does not. See also the safer encodeMatlabNameSafe(String s). Note, this does not check for names that are too long (many system have an 80 or 255 char limit).
 
-#### Return
+#### Return {#return}
 
 a safe variable name (but perhaps two s's lead to the same result)
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

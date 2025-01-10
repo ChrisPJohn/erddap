@@ -7,11 +7,11 @@ open fun [toJson](to-json.md)(f: Float): [String](https://docs.oracle.com/en/jav
 
 This makes a JSON version of a float.
 
-#### Return
+#### Return {#return}
 
 &quot;null&quot; if not finite. Return an integer if it ends with &quot;.0&quot;. Else returns the number as a string.
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 
@@ -24,11 +24,11 @@ open fun [toJson](to-json.md)(d: Double): [String](https://docs.oracle.com/en/ja
 
 This makes a JSON version of a number.
 
-#### Return
+#### Return {#return-1}
 
 &quot;null&quot; if not finite. Return an integer if it ends with &quot;.0&quot;. Else returns the number as a string.
 
-#### Parameters
+#### Parameters {#parameters-1}
 
 JVM
 
@@ -41,11 +41,11 @@ open fun [toJson](to-json.md)(s: [String](https://docs.oracle.com/en/java/javase
 
 This makes a JSON version of a string (\\, \f, \n, \r, \t and \&quot; are escaped with a backslash character and double quotes are added before and after). null is returned as null. This variant encodes char #127 and above.
 
-#### Return
+#### Return {#return-2}
 
 the JSON-encoded string surrounded by &quot;'s.
 
-#### Parameters
+#### Parameters {#parameters-2}
 
 JVM
 
@@ -58,11 +58,11 @@ open fun [toJson](to-json.md)(s: [String](https://docs.oracle.com/en/java/javase
 
 This makes a JSON version of a string (\\, \f, \n, \r, \t and \&quot; are escaped with a backslash character and double quotes are added before and after). null is returned as null. This variant encodes char #127 and above as \\uhhhh.
 
-#### Return
+#### Return {#return-3}
 
 the JSON-encoded string surrounded by &quot;'s.
 
-#### Parameters
+#### Parameters {#parameters-3}
 
 JVM
 
@@ -76,11 +76,11 @@ open fun [toJson](to-json.md)(s: [String](https://docs.oracle.com/en/java/javase
 
 This is a variant of toJson that lets you encode newlines or not.
 
-#### Return
+#### Return {#return-4}
 
 the JSON-encoded string surrounded by &quot;'s.
 
-#### Parameters
+#### Parameters {#parameters-4}
 
 JVM
 

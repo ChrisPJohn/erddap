@@ -7,11 +7,11 @@ open fun [getNMatchingCharacters](get-n-matching-characters.md)(s1: [String](htt
 
 This determines the number of initial characters that match.
 
-#### Return
+#### Return {#return}
 
 the number of characters that are the same at the start of both strings.
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

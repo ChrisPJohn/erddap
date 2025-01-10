@@ -7,11 +7,11 @@ open fun [csvToIntArray](csv-to-int-array.md)(csv: [String](https://docs.oracle.
 
 This converts a comma-separated-value String into an int[]. Invalid values are converted to Integer.MAX_VALUE.
 
-#### Return
+#### Return {#return}
 
 the corresponding int[]. csv=null returns null. csv=&quot;&quot; is converted to int[1]&#123;Integer.MAX_VALUE&#125;.
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

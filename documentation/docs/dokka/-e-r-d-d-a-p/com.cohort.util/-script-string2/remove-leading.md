@@ -7,11 +7,11 @@ open fun [removeLeading](remove-leading.md)(s: [String](https://docs.oracle.com/
 
 This removes leading ch's.
 
-#### Return
+#### Return {#return}
 
 s or a new string without leading ch's. null returns null.
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

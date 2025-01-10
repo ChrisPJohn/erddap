@@ -7,11 +7,11 @@ open fun [parseFloat](parse-float.md)(s: [String](https://docs.oracle.com/en/jav
 
 Parse as a float with either &quot;.&quot; or &quot;,&quot; as the decimal point. Leading or trailing spaces are automatically removed.
 
-#### Return
+#### Return {#return}
 
 the corresponding float (or Float.NaN if not properly formatted)
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

@@ -7,11 +7,11 @@ open fun [ifSomethingConcat](if-something-concat.md)(a: [String](https://docs.or
 
 This cleverly concatenates the 2 strings (with separator, as appropriate).
 
-#### Return
+#### Return {#return}
 
 a.trim(), a.trim()+separator+b.trim(), b.trim(), or &quot;&quot;
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

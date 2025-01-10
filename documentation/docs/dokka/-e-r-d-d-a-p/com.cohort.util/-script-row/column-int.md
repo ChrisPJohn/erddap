@@ -7,11 +7,11 @@ open fun [columnInt](column-int.md)(colName: [String](https://docs.oracle.com/en
 
 This gets the value from a column as an int.
 
-#### Return
+#### Return {#return}
 
 the value as an int (or Int.MAX_VALUE if column not found or other trouble)
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

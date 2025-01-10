@@ -7,11 +7,11 @@ open fun [extractAllCaptureGroupsAsStringArray](extract-all-capture-groups-as-st
 
 This repeatedly finds the regex and extracts the specified captureGroup.
 
-#### Return
+#### Return {#return}
 
 a String[] with the found strings in their original order.
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

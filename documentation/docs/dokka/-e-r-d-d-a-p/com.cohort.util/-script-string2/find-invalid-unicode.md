@@ -7,11 +7,11 @@ open fun [findInvalidUnicode](find-invalid-unicode.md)(s: [String](https://docs.
 
 This returns the index of the first non-Unicode character. Currently, valid characters are #32 - #126, #160+.
 
-#### Return
+#### Return {#return}
 
 the index of the first non-utf-8 character, or -1 if all valid.
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

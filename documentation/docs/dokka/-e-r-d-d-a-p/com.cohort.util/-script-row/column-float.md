@@ -7,11 +7,11 @@ open fun [columnFloat](column-float.md)(colName: [String](https://docs.oracle.co
 
 This gets the value from a column as a float.
 
-#### Return
+#### Return {#return}
 
 the value as a float (or NaN if column not found or other trouble)
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

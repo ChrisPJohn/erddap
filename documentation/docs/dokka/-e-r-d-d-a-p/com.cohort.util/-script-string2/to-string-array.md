@@ -7,11 +7,11 @@ open fun [toStringArray](to-string-array.md)(aa: Array&lt;Any&gt;): Array&lt;[St
 
 This converts an Object[] into a String[]. If you have an ArrayList or a Vector, use arrayList.toArray().
 
-#### Return
+#### Return {#return}
 
 the corresponding String[] by calling toString() for each object
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

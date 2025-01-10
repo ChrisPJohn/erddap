@@ -7,11 +7,11 @@ fun [isIDFirstLetter](is-i-d-first-letter.md)(c: Int): Boolean
 
 First letters for identifiers (e.g., variable names, method names) can be all isLetter()'s plus $ and _.
 
-#### Return
+#### Return {#return}
 
 true if c is a valid character for the first character if a Java ID
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

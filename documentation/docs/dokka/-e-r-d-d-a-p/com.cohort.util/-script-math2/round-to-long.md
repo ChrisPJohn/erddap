@@ -7,11 +7,11 @@ fun [roundToLong](round-to-long.md)(d: Double): Long
 
 Safely rounds a double to a long.
 
-#### Return
+#### Return {#return}
 
 Long.MAX_VALUE if d is too small, too big, or NaN; otherwise d, rounded to the nearest int. Undesirable: d.5 rounds up for positive numbers, down for negative.
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

@@ -12,7 +12,7 @@ To add a dataset to an ERDDAP™ installation, the ERDDAP™ administrator must 
 
 The first thing GenerateDatasetsXml asks is what type of dataset you want to create. GenerateDatasetsXml has a special option, **EDDTableFromEML**, which uses the information in an [Ecological Metadata Language (EML)](https://knb.ecoinformatics.org/external//emlparser/docs/index.html) XML file to generate the chunk of XML for datasets.xml to create an [EDDTableFromAsciiFiles](/docs/server-admin/datasets#eddtablefromasciifiles) dataset from each data table in an EML file. This works very well for most EML files, mostly because EML files do an excellent job of storing all of the needed metadata for a dataset in an easy-to-work-with format. The information that GenerateDatasetsXml needs to create the datasets is in the EML file, including the URL for the data file, which GenerateDatasetsXml downloads, parses, and compares to the description in the EML file. (Many groups would do well to switch to EML, which is a great system for documenting any tabular scientific dataset, not just ecological data. And many groups that create XML schemas would do well to use EML as a case study for XML schema that are clear, to the point, not excessively deep (i.e., too many levels), and easy for humans and computers to work with.)
 
-## Questions
+## Questions {#questions}
 
 Here are all the questions GenerateDatasetsXml will ask, with comments about how you should answer if you want to process just one EML file or a batch of EML files:
 
@@ -48,28 +48,28 @@ EML plus ERDDAP™ is a great combination, since ERDDAP™ can give users more d
 
 See our [section on getting additional support](/docs/intro#support).
  
-## Design Details
+## Design Details {#design-details}
 
 Here are the design details of the EDDTableFromEML option in GenerateDatasetsXml.  
 Some are related to differences in how EML and ERDDAP™ do things and how GenerateDatasetsXml deals with these problems.
 
-### One dataTable Becomes One ERDDAP™ Dataset
+### One dataTable Becomes One ERDDAP™ Dataset {#one-datatable-becomes-one-erddap-dataset}
 One EML file may have multiple &lt;dataTable&gt;s. ERDDAP™ makes one ERDDAP™ dataset per EML dataTable. The datasetID for the dataset is  
 *EMLName*\_t*tableNumber* (when EMLname is text) or  
 *system\_EMLName*\_t*tableNumber* (when EMLname is a number).  
 For example, table #1 in the file knb-lter-sbc.28, becomes ERDDAP™ datasetID=knb\_lter\_sbc\_28\_t1,  
      
-### EML versus CF+ACDD
+### EML versus CF+ACDD {#eml-versus-cfacdd}
 Almost all of the metadata in the EML files gets into ERDDAP, but in a different format. ERDDAP™ uses the [CF](https://cfconventions.org/Data/cf-conventions/cf-conventions-1.8/cf-conventions.html) and [ACDD](https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3) metadata standards. They are complementary metadata systems that use key=value pairs for global metadata and for each variable's metadata.  
 Yes, the EML representation of the metadata is nicer than the CF+ACDD representation. I'm not suggesting using the CF+ACDD representation as a replacement for the EML. Please think of CF+ACDD as part of the bridge from the EML world to the OPeNDAP/CF/ACDD world.  
      
-### Small Changes
+### Small Changes {#small-changes}
 ERDDAP™ makes a lot of small changes. For example, ERDDAP™ uses the EML non-DOI alternateIdentifier plus a dataTable number as the ERDDAP™ datasetID, but slightly changes alternateIdentifier to make it a valid variable name in most computer languages, e.g., knb-lter-sbc.33 dataTable #1 becomes knb\_lter\_sbc\_33\_t1.  
      
-### DocBook
+### DocBook {#docbook}
 EML uses DocBook's markup system to provide structure to blocks of text in EML files. CF and ACDD require that metadata be plain text. So GenerateDatasetsXml converts the marked up text into plain text that looks like the formatted version of the text. The inline tags are sanitized with square brackets, e.g., \[emphasized\], and left in the plain text.  
      
-### Data Files
+### Data Files {#data-files}
 Since the EML dataTable includes the URL of the actual data file, GenerateDatasetsXml will:
 1.  Download the data file.
 2.  Store it in the same directory as the EML file.
@@ -77,20 +77,20 @@ Since the EML dataTable includes the URL of the actual data file, GenerateDatase
 4.  Compare the description of the data in the EML with the actual data in the file.
 5.  If GenerateDatasetsXml finds differences, it deals with them, or asks the operator if the differences are okay, or returns an error message. The details are in various items below.  
          
-### .zip'd Data Files
+### .zip'd Data Files {#zipd-data-files}
 If the referenced data file is a .zip file, it must contain just one file. That file will be used for the ERDDAP™ dataset. If there is more than 1 file. ERDDAP™ will reject that dataset. If needed, this could be modified. (In practice, all SBC LTER zip files have just one data file.)  
      
-### StorageType
+### StorageType {#storagetype}
 If a column's storageType isn't specified, ERDDAP™ uses its best guess based on the data in the data file. This works pretty well.  
      
-### Units  
+### Units {#units}
 ERDDAP™ uses [UDUNITS formatting for units](https://www.unidata.ucar.edu/software/udunits/). GenerateDatasetsXml is able to convert EML units to UDUNITS cleanly about 95% of the time. The remaining 5% results in a readable description of the units, e.g., "biomassDensityUnitPerAbundanceUnit" in EML becomes "biomass density unit per abundance unit" in ERDDAP. Technically this isn't allowed. I don't think it's so bad under the circumstances. \[If necessary, units that can't be made UDUNITS compatible could be moved to the variable's comment attribute.\]  
      
-### EML version 2.1.1
+### EML version 2.1.1 {#eml-version-211}
 This support for EML v2.1.1 files was added to GenerateDatasetsXml in 2016 with the hope that there would be some uptake in the EML community. As of 2020, that has not happened. The ERDDAP™ developers would be happy to add support for more recent versions of EML, but only if the new features will actually be used. Please email erd.data at noaa.gov if you want support for more recent versions of EML and will actually use this feature.  
      
 
-## Issues with the EML Files
+## Issues with the EML Files {#issues-with-the-eml-files}
 
 There are some issues/problems with the EML files that cause problems when a software client (such as the EDDTableFromEML option in GenerateDatasetsXML) tries to interpret/process the EML files.
 
@@ -102,7 +102,7 @@ There are some issues/problems with the EML files that cause problems when a sof
 
 Here are the issues:
 
-### Separate Date and Time Columns
+### Separate Date and Time Columns {#separate-date-and-time-columns}
 Some data files have separate columns for date and for time, but no unified date+time column. Currently, GenerateDatasetsXml creates a dataset with these separate columns, but it isn't ideal because:
 
 *   It is best if datasets in ERDDAP™ have a combined date+time column called "time".
@@ -112,11 +112,11 @@ There are two possible solutions:
 1.  Edit the source data file to add a new column in the datafile (and describe it in the EML) where the date and time columns are merged into one column. Then rerun GenerateDatasetsXml so it finds the new column.
 2.  Use the [Derived Variables](/docs/server-admin/datasets#script-sourcenamesderived-variables) feature in ERDDAP™ to define a new variable in datasets.xml which is created by concatenating the date and the time columns. One of the examples deals specifically with this situation.  
          
-### Inconsistent Column Names
+### Inconsistent Column Names {#inconsistent-column-names}
 The EML files list the data file's columns and their names. Unfortunately, they are often different from the column names in the actual data file. Normally, the column order in the EML file is the same as the column order in the data file, even if the names vary slightly, but not always. GenerateDatasetsXml tries to match the column names. When it can't (which is common), it will stop, show you the EML/data filename pairs, and ask if they are correctly aligned. If you enter 's' to skip a table, GeneratedDatasetsXml will print an error message and go on to the next table.  
 The solution is to change the erroneous column names in the EML file to match the column names in the data file.  
      
-### Different Column Order
+### Different Column Order {#different-column-order}
 There are several cases where the EML specified the columns in a different order than they exist in the data file. GenerateDatasetsXml will stop and ask the operator if the matchups are okay or if the dataset should be skipped. If it is skipped, there will be an error message in the results file, e.g.,:
 ```
       &lt;-- SKIPPED (USUALLY BECAUSE THE COLUMN NAMES IN THE DATAFILE ARE IN
@@ -133,7 +133,7 @@ The solution is to fix the column order in these EML files so that they match th
 
 It would be nice if the EML checker checked that the columns and column order in the source file match the columns and column order in the EML file.
     
-### Incorrect numHeaderLines
+### Incorrect numHeaderLines {#incorrect-numheaderlines}
 Several dataTables incorrectly state numHeaderLines=1, e.g., ...sbc.4011. This causes ERDDAP™ to read the first line of data as the column names. I tried to manually SKIP all of these dataTables. They are obvious because the unmatched source col names are all data values. And if there are files that incorrectly have numHeaderLines=0, my system doesn't make it obvious. Here's an example from the SBC LTER failures file:
 ```
       &lt;-- SKIPPED (USUALLY BECAUSE THE COLUMN NAMES IN THE DATAFILE ARE IN
@@ -152,18 +152,18 @@ So the error may appear as if GenerateDatasetsXml thinks that the first line wit
 
 It would be nice if the EML checker checked the numHeaderLines value.
     
-### numHeaderLines = 0
+### numHeaderLines = 0 {#numheaderlines--0}
 Some source files don't have column names. ERDDAP™ accepts that if the EML describes the same number of columns.
 
 In my opinion: this seems very dangerous. There could be columns in a different order or with different units (see below) and there is no way to catch those problems. It is much better if all ASCII data files have a row with column names.
     
-### DateTime Format Strings
+### DateTime Format Strings {#datetime-format-strings}
 EML has a standard way to describe date time formats. but there is considerable variation in its use in EML files. (I was previously wrong about this. I see the EML documentation for formatString which appears to match the [Java DateTimeFormatter specification](https://docs.oracle.com/javase/8/docs/api/index.html?java/time/format/DateTimeFomatter.html), but which lacks the important guidelines about its use, with the result that formatString is often/usually improperly used.) There are several instances with incorrect case, and/or incorrect duplication of a letter, and/or non-standard formatting. That puts an unreasonable burden on clients, especially software clients like GenerateDatasetsXml. GenerateDatasetsXml tries to convert the incorrectly defined formats in the EML files into  
 [the date/time format that ERDDAP™ requires](/docs/server-admin/datasets#string-time-units), which is almost identical to for Java/Joda time format specification, but is slightly more forgiving.
 
 It would be nice if the EML checker required strict adherence to the Java/Joda/ERDDAP time units specification and verified that date time values in the data table could be parsed correctly with the specified format.
     
-### DateTime But No Time Zone
+### DateTime But No Time Zone {#datetime-but-no-time-zone}
 GenerateDatasetsXml looks for a column with dateTime and a specified time zone (either Zulu: from time units ending in 'Z' or a column name or attribute definition that includes "gmt" or "utc", or local: from "local" in the column name or attribute definition). Also acceptable is a file with a date column but no time column. Also acceptable is a file with no date or time information.
 
 GenerateDatasetsXml treats all "local" times as being from the time zone which you can specify for a given batch of files, e.g., for SBC LTER, use US/Pacific. The information is sometimes in the comments, but not in a form that is easy for a computer program to figure out.
@@ -183,22 +183,22 @@ EXAMPLE from SBC LTER: [https://sbclter.msi.ucsb.edu/external/InformationManagem
 
 It would be nice if EML/LTER required the inclusion of a column with Zulu (UTC, GMT) time zone times in all relevant source data files. Next best is to add a system to EML to specify a time\_zone attribute using standard names (from the [TZ column](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)).
     
-### Missing missing\_value
+### Missing missing\_value {#missing-missing_value}
 Some columns use a missing\_value but don't list it in the EML metadata, e.g., precipitation\_mm in knb-lter-sbc.5011 uses -999. If no missing value is specified in the EML, GenerateDatasetsXml automatically searches for common missing values (e.g., 99, -99, 999, -999, 9999, -9999, etc) and creates that metadata. But other missing missing\_values are not caught.
 
 It would be nice if the EML checker looked for missing missing\_values.
     
-### Small Problems
+### Small Problems {#small-problems}
 There are a lot of small problems (spelling, punctuation) which will probably only be found by a human inspecting each dataset.
 
 It would be nice if the EML checker looked for spelling and grammatical errors. This is a difficult problem because words in science are often flagged by spell checkers. Human editing is probably needed.
     
-### Invalid Unicode Characters
+### Invalid Unicode Characters {#invalid-unicode-characters}
 Some of the EML content contains invalid Unicode characters. These are probably characters from the Windows charset that were incorrectly copied and pasted into the UTF-8 EML files. GenerateDatasetsXml sanitizes these characters to e.g., \[#128\], so they are easy to search for in the ERDDAP™ datasets.xml file.
 
 It would be nice if the EML checker checked for this. It is easy to find and easy to fix.
     
-### Different Column Units](#differentColumnUnits)  
+### Different Column Units](#differentColumnUnits) {#different-column-unitsdifferentcolumnunits}
 Some EML dataTables define columns that are inconsistent with the columns in the data file, notably because they have different units. GenerateDatasetsXml flags these. It is up to the operator to decide if the differences are okay or not. These appear in the failures file as "SKIPPED" dataTables. EXAMPLE in SBC LTER failures file:
 ```
       < SKIPPED (USUALLY BECAUSE THE COLUMN NAMES IN THE DATAFILE ARE IN
@@ -213,11 +213,11 @@ Some EML dataTables define columns that are inconsistent with the columns in the
 ```
 It would be nice if the EML checker checked that the units match. Unfortunately, this is probably impossible to catch and then impossible to resolve without contacting the dataset creator, given that the source file doesn't include units. The discrepancy for the example above was only noticeable because the units were included in the source column name and the EML column name. How many other dataTables have this problem but are undetectable?
     
-### Different Versions of EML
+### Different Versions of EML {#different-versions-of-eml}
 GenerateDatasetsXml is designed to work with EML 2.1.1. Other versions of EML will work to the extent that they match 2.1.1 or that GenerateDatasetsXml has special code to deal with it. This is a rare problem. When it occurs, the solution is to convert your files to EML 2.1.1, or send the EML file to erd.data at noaa.gov, so I can make changes to GenerateDatasetsXml to deal with the differences.
 
 Bob added support for EML files to GenerateDatasetsXml in 2016 with the hope that there would be some uptake in the EML community. As of 2020, that has not happened. Bob is happy to add support for more recent versions of EML, but only if the new features will actually be used. Please email erd.data at noaa.gov if you want support for more recent versions of EML and will actually use this feature.
     
-### Trouble Parsing the Data File
+### Trouble Parsing the Data File {#trouble-parsing-the-data-file}
 Rarely, a dataTable may be rejected with the error "unexpected number of items on line #120 (observed=52, expected=50)" An error message like this means that a line in the datafile had a different number of values than the other lines. It may be a problem in ERDDAP™ (e.g., not parsing the file correctly) or in the file. EXAMPLE from SBC LTER:  
 [https://sbclter.msi.ucsb.edu/external/InformationManagement/eml\_2018\_erddap/](https://sbclter.msi.ucsb.edu/external/InformationManagement/eml_2018_erddap/) dataTable #3, see datafile=LTER\_monthly\_bottledata\_registered\_stations\_20140429.txt  

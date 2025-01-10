@@ -7,11 +7,11 @@ open fun [isEmailAddress](is-email-address.md)(email: [String](https://docs.orac
 
 This indicates if 'email' is a valid email address.
 
-#### Return
+#### Return {#return}
 
 true if 'email' is a valid email address.
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

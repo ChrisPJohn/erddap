@@ -7,11 +7,11 @@ open fun [reduceHashCode](reduce-hash-code.md)(hashCode: Int): [String](https://
 
 This reduces a hash code (currently to a 10 digit unsigned number -- no loss of information). For much stronger than hashCode, use String2.md5Hex or even String2.md5Hex12.
 
-#### Return
+#### Return {#return}
 
 the reduced version
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

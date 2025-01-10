@@ -7,11 +7,11 @@ open fun [lineStartsWithIgnoreCase](line-starts-with-ignore-case.md)(ar: Array&l
 
 This variant of lineStartsWith startsAt index=0.
 
-#### Return
+#### Return {#return}
 
 the element number of ar which starts with s (or -1 if not found)
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 
@@ -25,11 +25,11 @@ open fun [lineStartsWithIgnoreCase](line-starts-with-ignore-case.md)(ar: Array&l
 
 This is like lineStartsWith, but ignores case.
 
-#### Return
+#### Return {#return-1}
 
 the element number of ar which starts with s (or -1 if not found)
 
-#### Parameters
+#### Parameters {#parameters-1}
 
 JVM
 

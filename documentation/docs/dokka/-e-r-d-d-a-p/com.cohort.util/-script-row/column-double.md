@@ -7,11 +7,11 @@ open fun [columnDouble](column-double.md)(colName: [String](https://docs.oracle.
 
 This gets the value from a column as a double.
 
-#### Return
+#### Return {#return}
 
 the value as a double (or NaN if column not found or other trouble)
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

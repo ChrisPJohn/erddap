@@ -7,11 +7,11 @@ open fun [modifyToBeASCII](modify-to-be-a-s-c-i-i.md)(s: [String](https://docs.o
 
 This converts the string to plain ascii (0..127). Diacritics are stripped off high ASCII characters. Some high ASCII characters are crudely converted to similar characters (the conversion is always character-for-character, so the string length will be unchanged). Other characters become '?'. The result will be the same length as s.
 
-#### Return
+#### Return {#return}
 
 the string converted to plain ascii (0..127).
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

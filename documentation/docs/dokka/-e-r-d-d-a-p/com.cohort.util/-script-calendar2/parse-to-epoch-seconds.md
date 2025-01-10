@@ -7,11 +7,11 @@ open fun [parseToEpochSeconds](parse-to-epoch-seconds.md)(sourceTime: [String](h
 
 This converts a sourceTime string into a double with epochSeconds.
 
-#### Return
+#### Return {#return}
 
 the epochSeconds value or NaN if trouble
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 
@@ -26,11 +26,11 @@ open fun [parseToEpochSeconds](parse-to-epoch-seconds.md)(sourceTime: [String](h
 
 A variant of parseToEpochSeconds that uses the Zulu time zone.
 
-#### Return
+#### Return {#return-1}
 
 the epochSeconds value or NaN if trouble
 
-#### Parameters
+#### Parameters {#parameters-1}
 
 JVM
 

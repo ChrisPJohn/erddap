@@ -7,11 +7,11 @@ Many ERDDAP™ installations don't have authentication enabled and thus don't pr
 
 Some ERDDAP™ installations do have authentication enabled. Currently, ERDDAP™ only supports authentication via Google-managed email accounts, which includes email accounts at NOAA and many universities. If an ERDDAP™ has authentication enabled, anyone with a Google-managed email account can log in, but they will only have access to the private datasets that the ERDDAP™ administrator has explicitly authorized them to access.
 
-## Updated instructions
+## Updated instructions {#updated-instructions}
 
 Some of the information below is out of date. Until this gets updated you can use [this blog post](https://shospital.github.io/blog/posts/blog-post/erddap_private_dataset.html) for recent steps on getting data from a private dataset with scripts.
 
-## Humans With Browsers
+## Humans With Browsers {#humans-with-browsers}
 
 Human users of ERDDAP™ can log into ERDDAP™ in a browser in order to gain access to private datasets that they are authorized to access.
 
@@ -31,7 +31,7 @@ To log in:
 4.  Don't use your browser's Back button. Use the "ERDDAP" link at the top of the above, then use other links to go to ERDDAP™ pages you are interested in. If a cached web page says you aren't logged in, reload the page.  
      
 
-## Scripts
+## Scripts {#scripts}
 
 \[This is slightly modified from information provided by Lynn DeWitt, who did the hard job of figuring this out. Lynn, thank you very much!  
 If you have corrections or suggestions, please email erd.data @ noaa.gov .\]

@@ -7,7 +7,7 @@ open fun [countAll](count-all.md)(s: [String](https://docs.oracle.com/en/java/ja
 
 This counts all occurrences of findS in s. if (s == null || findS == null || findS.length() == 0) return 0;
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 
@@ -21,7 +21,7 @@ open fun [countAll](count-all.md)(s: [String](https://docs.oracle.com/en/java/ja
 
 This counts all occurrences of findS in s. if (s == null || findS == null || findS.length() == 0) return 0;
 
-#### Parameters
+#### Parameters {#parameters-1}
 
 JVM
 

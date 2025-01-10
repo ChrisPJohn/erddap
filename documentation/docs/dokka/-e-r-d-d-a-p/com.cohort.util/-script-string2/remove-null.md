@@ -7,11 +7,11 @@ open fun [removeNull](remove-null.md)(sar: Array&lt;[String](https://docs.oracle
 
 This returns a String[] with just non-null strings from the original array.
 
-#### Return
+#### Return {#return}
 
 a new String[] with just non-null strings. sar=null returns null.
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 

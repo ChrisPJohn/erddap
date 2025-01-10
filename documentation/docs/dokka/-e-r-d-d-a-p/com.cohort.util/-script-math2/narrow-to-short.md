@@ -7,11 +7,11 @@ fun [narrowToShort](narrow-to-short.md)(i: Int): Short
 
 Safely narrows an int to a short.
 
-#### Return
+#### Return {#return}
 
 Short.MAX_VALUE if i is too small or too big; otherwise i.
 
-#### Parameters
+#### Parameters {#parameters}
 
 JVM
 
@@ -24,11 +24,11 @@ fun [narrowToShort](narrow-to-short.md)(i: Long): Short
 
 Safely narrows a long to a short.
 
-#### Return
+#### Return {#return-1}
 
 Short.MAX_VALUE if i is too small or too big; otherwise i.
 
-#### Parameters
+#### Parameters {#parameters-1}
 
 JVM
 
