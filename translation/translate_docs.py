@@ -99,13 +99,7 @@ dont_translate_strings = [
     # main() below has a test for this.
     # phrases in quotes
     "\" since \"",
-    "\"{0}\"",
-    "\"{1}\"",
-    "\"{count}\"",
-    "\"\*\*\"",
-    "\"[in_i]\"",
-    "\"[todd'U]\"",
-    "\"%{vol}\"",
+    
     "\"&amp;units=...\"",
     "\"&C;\"",
     "\"&micro;\"", # otherwise it is often dropped from the translation.   Only used in one place
@@ -120,7 +114,7 @@ dont_translate_strings = [
     "\"count\"",
     "\"days since Jan 1, 1900\"",
     "\"deg\"",
-    "\"deg{north}\"",
+
     "\"degree\"",
     "\"degree_north\"",
     "\"extended\"",
@@ -153,7 +147,7 @@ dont_translate_strings = [
     "\"per\"",
     "\"PER\"",
     "\"Range\"",
-    "\"s{since 1970-01-01T00:00:00Z}\"",
+
     "\"Sea Surface Temperature\"",
     "\"searchFor=wind%20speed\"",
     "\"seconds since\"",
@@ -175,7 +169,432 @@ dont_translate_strings = [
     "'*'",
     "'^'",
     "'='",
+    # <kbd> was here
 
+    # All psuedo entities (used for param names, proper nouns, substitutions)
+    #  MUST be here by themselves
+    #  OR in <kbd>&pseudoEntity;</kbd> above
+    #  so code in postProcessHtml works correctly.
+    # postProcessHtml() REQUIRES that "pseudoEntity" only use [a-zA-Z0-9].
+    "&acceptEncodingHtml;",
+    "&acceptEncodingHtmlh3tErddapUrl;",
+    "&adminContact;",
+    "&advancedSearch;",
+    "&algorithm;",
+    "&bgcolor;",
+    "&BroughtToYouBy;",
+    "&C;",
+    # above is <kbd>&category;</kbd>
+    "&convertTimeReference;",
+    "&cookiesHelp;",
+    "&dataFileTypeInfo1;",
+    "&dataFileTypeInfo2;",
+    "&descriptionUrl;",
+    "&datasetListRef;",
+    "&e0;",
+    "&EasierAccessToScientificData;",
+    "&elevation;",
+    "&encodedDefaultPIppQuery;",
+    "&erddapIs;",
+    "&erddapUrl;",
+    "&erddapVersion;",
+    "&exceptions;",
+    "&externalLinkHtml;",
+    "&F;",
+    "&FALSE;",
+    "&format;",
+    "&fromInfo;",
+    "&g;",
+    "&griddapExample;",
+    "&headingType;",
+    "&height;",
+    "&htmlQueryUrl;",
+    "&htmlQueryUrlWithSpaces;",
+    "&htmlTooltipImage;",
+    "&info;",
+    "&initialHelp;",
+    "&jsonQueryUrl;",
+    "&langCode;",
+    "&language;",
+    "&layers;",
+    "&license;",
+    "&likeThis;",
+    "&loginInfo;",
+
+    # these <tag>s were gathered by code in main that matches a regex in messages.xml
+    
+    "&makeAGraphListRef;",
+    "&makeAGraphRef;",
+    "&nbsp;",
+    "&niceProtocol;",
+    "&NTU;",
+    "&offerValidMinutes;",
+    "&partNumberA;",
+    "&partNumberB;",
+    "&plainLinkExamples1;",
+    "&plainLinkExamples2;",
+    "&plainLinkExamples3;",
+    "&plainLinkExamples4;",
+    "&plainLinkExamples5;",
+    "&plainLinkExamples6;",
+    "&plainLinkExamples7;",
+    "&plainLinkExamples8;",
+    "&protocolName;",
+    "&PSU;",
+    "&requestFormatExamplesHtml;",
+    "&requestGetCapabilities;",
+    "&requestGetMap;",
+    "&resultsFormatExamplesHtml;",
+    # above is <kbd>&safeEmail;</kbd>
+    "&sampleUrl;",
+    "&secondPart;",
+    # above is <kbd>&searchButton;</kbd>
+    "&serviceWMS;",
+    "&sheadingType;",
+    "&ssUse;",
+    "&standardLicense;",
+    "&styles;",
+    "&subListUrl;",
+    "&tabledapExample;",
+    "&tagline;",
+    "&tEmailAddress;",
+    "&tErddapUrl;",
+    "&time;",
+    "&transparentTRUEFALSE;",
+    "&TRUE;",
+    "&tTimestamp;",
+    "&tWmsGetCapabilities130;",
+    "&tWmsOpaqueExample130Replaced;",
+    "&tWmsOpaqueExample130;",
+    "&tWmsTransparentExample130Replaced;",
+    "&tWmsTransparentExample130;",
+    "&tYourName;",
+    "&unitsStandard;",
+    "&variable;",
+    "&version;",
+    "&versionLink;",
+    "&versionResponse;",
+    "&versionStringLink;",
+    "&versionStringResponse;",
+    "&widgetEmailAddress;",
+    "&widgetFrequencyOptions;",
+    "&widgetGriddedOptions;",
+    "&widgetSelectGroup;",
+    "&widgetSubmitButton;",
+    "&widgetTabularOptions;",
+    "&widgetYourName;",
+    "&width;",
+    "&wmsVersion;",
+    "&wmsManyDatasets;",
+    "&WMSSEPARATOR;",
+    "&WMSSERVER;",
+
+    # things that are never translated
+    "@noaa.gov",
+    ".bz2",
+    ".fileType",
+    ".gzip",
+    ".gz",
+    ".hdf",
+    ".htmlTable",
+    ".itx",
+    ".jsonlCSV1",
+    ".jsonlCSV", # must be after the .jsonlCSV1
+    ".jsonlKVP",
+    ".json", # must be after the longer versions
+    ".kml",
+    ".mat",
+    ".nccsv",
+    ".nc", # must be after .nccsv
+    ".tar",
+    ".tgz",
+    ".tsv",
+    ".xhtml",
+    ".zip",
+    ".z",
+
+    # text (proper nouns, parameter names, phrases, etc) that shouldn't be translated
+    "1230768000 seconds since 1970-01-01T00:00:00Z",
+    "2452952 \"days since -4712-01-01\"",
+    "2009-01-21T23:00:00Z",
+    "60000=AS=AMERICA SAMOA",
+    "64000=FM=FEDERATED STATES OF MICRONESIA",
+    "66000=GU=GUAM",
+    "68000=MH=MARSHALL ISLANDS",
+    "69000=MP=NORTHERN MARIANA ISLANDS",
+    "70000=PW=PALAU",
+    "72000=PR=PUERTO RICO",
+    "74000=UM=U.S. MINOR OUTLYING ISLANDS",
+    "78000=VI=VIRGIN ISLANDS OF THE UNITED STATES",
+    "actual\_range",
+    "addAttributes",
+    "add\_offset",
+    "ADD \_FillValue ATTRIBUTES",
+    "AJAX",
+    "algorithm=Nearest",
+    "algorithms for oligotrophic oceans: A novel approach",
+    "allDatasets",
+    "ArcGIS for Server",
+    "ArcGIS",
+    "Ardour",
+    "Audacity",
+    "Awesome ERDDAP",
+    "axisVariable",
+    "based on three-band reflectance difference, J. Geophys.",
+    "beginTime",
+    "bob dot simons at noaa dot gov",
+    "bob.simons at noaa.gov",
+    
+    "categoryAttributes",
+    "centeredTime",
+
+    "COARDS",
+    "colorBarMaximum",
+    "colorBarMinimum",
+    "Conda",
+    "content-encoding",
+    "contributor\_name",
+    "contributor\_role",
+    "coverage\_content\_type",
+    "creator\_name",
+    "creator\_email",
+    "creator\_url",
+    "curl",
+    # "DAP",  is below, after OPeNDAP
+    "d, day, days,",
+    "datasetID/variable/algorithm/nearby", # before datasetID
+    "datasetID",
+    "datasets.xml",
+    "dataVariable",
+    "data\_max",
+    "data\_min",
+    "date\_created",
+    "date\_modified",
+    "date\_issued",
+    "Davis, J.C. 1986. Statistics and Data Analysis in Geology, 2nd Ed. John Wiley and Sons. New York, New York.",
+    "days since 2010-01-01",
+    "deflate",
+    "degree_C",
+    "degree_F",
+    "degrees_east",
+    "degrees_north",
+    "destinationName",
+    "DODS",
+    "DOI",
+
+    "drawLandMask",
+    "Earth Science &amp; Atmosphere &amp; Atmospheric Pressure &amp; Atmospheric Pressure Measurements",
+    "Earth Science &amp; Atmosphere &amp; Atmospheric Pressure &amp; Sea Level Pressure",
+    "Earth Science &amp; Atmosphere &amp; Atmospheric Pressure &amp; Static Pressure",
+    "EDDGrid",
+    
+    "endTime",
+    "ERDDAP™",
+    "erddapContentDirectory",
+    "featureType",
+    "=~tomcat/content/erddap",
+    "_tomcat_/content/erddap",
+    "_tomcat_\\bin\\startup.bat",
+    "_tomcat_\\bin\\setenv.bat",
+    "/erddap/outOfDateDatasets.html",
+    "outOfDateDatasets.html",
+    "/erddap/status.html",
+    "ERDDAP", # before ERD and DAP
+    "erd dot data at noaa dot gov",
+    "erd.data at noaa.gov",
+    "ERD",
+    "ESPRESSO",
+    "ESPreSSO",
+    "ESRI .asc",
+    "ESRI GeoServices REST",
+    "excludedWord",
+    "Ferret",
+    "FileInfo.com",
+    
+    "FIPS",
+    "GetCapabilities",
+    "GetMap",
+    "Gimp",
+    "GNOME",
+    "Google Charts",
+    "Google Earth",
+    "Google Visualization",
+    # "gzip", #is below after x-gzip
+    "h, hr, hrs, hour, hours,",
+    "HDF",
+    
+    # "http://127.0.0.1:8080",
+    # "https://coastwatch.pfeg.noaa.gov/erddap/files/jplMURSST41/.csv",
+    # "https://coastwatch.pfeg.noaa.gov/erddap/files/jplMURSST41/",
+    # "https://coastwatch.pfeg.noaa.gov/erddap/info/cwwcNDBCMet/index.html",
+    # "https://coastwatch.pfeg.noaa.gov/erddap/tabledap/cwwcNDBCMet.nccsvMetadata",
+    # "https://coastwatch.pfeg.noaa.gov/erddap/griddap/jplAquariusSSS3MonthV5.html",
+    # "https://coastwatch.pfeg.noaa.gov/erddap/index.html",
+    # "https://coastwatch.pfeg.noaa.gov",
+    # "https://oceanwatch.pfeg.noaa.gov/thredds/catalog/catalog.xml",
+    # "https://oceanwatch.pfeg.noaa.gov/thredds/catalog/Satellite/aggregsatMH/chla/catalog.xml",
+    # "https://oceanwatch.pfeg.noaa.gov/thredds/Satellite/aggregsatMH/chla/catalog.html",
+    # "https://oceanwatch.pfeg.noaa.gov/thredds/dodsC/satellite/BA/ssta/5day",
+    # "https://oceanwatch.pfeg.noaa.gov",
+    "HTTP GET",
+    "Hyrax",
+    "InverseDistance",
+    "IOOS DIF SOS",
+    "IOOS Animal Telemetry Network",
+    "ioos\_category",
+    "infoUrl",
+    "IrfanView",
+    "Java",
+    "java.net.URLEncoder",
+    "keywords\_vocabulary",
+    "KT\_",
+    "Leaflet",
+    "long\_name",
+    "long_name",
+    "m, min, mins, minute, minutes,",
+    "mashups",
+    "Matlab",
+    "maximum=37.0",
+    "minimum=32.0",
+    "missing\_value",
+    "Metadata\_Conventions",
+    "mon, mons, month, months,",
+    "ms, msec, msecs, millis, millisecond, milliseconds,",
+    "NASA's Panoply",
+    "National Oceanic and Atmospheric Administration",
+    "NCO",
+    "Ncview",
+    "Nearest, Bilinear, Scaled",
+    "NetCDF",
+    "NMFS",
+    "NOAA",
+    "now-7days", # before now-
+    "now-",
+    "ODV .txt",
+    "OGC",
+    "OOSTethys",
+    "OPeNDAP",
+    "DAP", # out of place, so that it is after ERDDAP and OPeNDAP
+    "OpenID",
+    "OpenLayers",
+    "OpenSearch",
+    "Oracle",
+    "orderByClosest",
+    "orderByCount",
+    "orderByLimit",
+    "orderByMax",
+    "orderByMean",
+    "orderByMinMax",
+    "orderBy", # must be after the longer versions
+    "Panoply",
+    "Photoshop",
+    
+    "Practical Salinity Units",
+    "processing\_level",
+    "protocol=griddap",
+    "protocol=tabledap",
+    "PSU",
+    "publisher\_name",
+    "publisher\_email",
+    "publisher\_url",
+    "Pull",
+    "Push",
+    "Python",
+    "real\_time",
+    "Res., 117, C01011, doi:10.1029/2011JC007395.",
+    "RESTful", # before REST
+    "REST",
+    "ROA",
+    "RSS",
+    "s, sec, secs, second, seconds,",
+    "Satellite Application Facility",
+    "scale\_factor",
+    "Sea Surface Temperature",
+    "searchEngine=lucene",
+    "shutdown.bat",
+    "SOAP+XML",
+    "SOS",
+    "sourceName",
+    "sourceUrl",
+    "sst",
+    "standard\_name\_vocabulary",
+    "standard\_name",
+    "stationID",
+    "StickX",
+    "StickY",
+    
+    "subsetVariables",
+    "Surface Skin Temperature",
+    "SWFSC", # before WFS
+    "Synthetic Aperture Focusing",
+    "tabledap",
+    "testOutOfDate",
+    "time\_precision",
+    "time\_zone",
+    "Todd",
+    "uDig",
+    "UDUNITS",
+    "Unidata",
+    "URN",
+    "valid\_max",
+    "valid\_min",
+    "valid\_range",
+    "WCS",
+    "week, weeks,",
+    "WFS",
+    "wget",
+    "Wikipedia",
+    "WMS",
+    "x-gzip",
+    "gzip", # must be after x-gzip
+    "yr, yrs, year, or years",
+    "yyyy-MM-ddTHH:mm:ssZ", # before yyyy-MM-dd
+    "yyyy-MM-dd",
+    "Zulu",
+    "\*.sh",
+
+    "\\\\uhhh",
+    "\\uhhhh",
+    "\\\\u*hhhh*",
+    "\\u*hhhh*",
+    "uhhhh",
+    "\\\\r\\\\n",
+    "\\\\n",
+    "\\r\\n",
+    "\\n",
+    "\r\n",
+    "\\[",
+    "\\]",
+    "\[",
+    "\]",
+    "http://",
+    "https://",
+    "https:",
+    "https",
+    "http",
+    "httpGetRequiredVariables",
+    
+    "\\d{7}",
+    "\\\\uffff",
+    "\\uffff",
+    "\\\\u0000",
+    "\\u0000"
+    "=",
+    "|", # Used to define tables, needs to be kept as |
+]
+
+pre_matcher_dont_translate_strings = [
+    "S(\\d{7})\\d{7}\\.L3b.\*",
+    "S(\\\\d{7})\\\\d{7}\\\\.L3b.\\\*",
+    "\"{0}\"",
+    "\"{1}\"",
+    "\"{count}\"",
+    "\"\\*\\*\"",
+    "\"[in_i]\"",
+    "\"[todd'U]\"",
+    "\"%{vol}\"",
+    "\"deg{north}\"",
+    "\"s{since 1970-01-01T00:00:00Z}\"",
     # lots of things that shouldn't be translated are within <kbd> and <strong>
     "<kbd>\"long_name=Sea Surface Temperature\"</kbd>",
     "<kbd>{0} : {1}</kbd>",
@@ -344,132 +763,13 @@ dont_translate_strings = [
     "<kbd>yyyy-MM-ddTHH:mm:ssZ</kbd>",
     "<pre>curl --compressed -g \"https://coastwatch.pfeg.noaa.gov/erddap/files/cwwcNDBCMet/nrt/NDBC_41008_met.nc\" -o ndbc/41008.nc</pre>",
     "<pre>curl --compressed \"https://coastwatch.pfeg.noaa.gov/erddap/files/cwwcNDBCMet/nrt/NDBC_{41008,41009,41010}_met.nc\" -o ndbc/#1.nc</pre>",
-
-    # All psuedo entities (used for param names, proper nouns, substitutions)
-    #  MUST be here by themselves
-    #  OR in <kbd>&pseudoEntity;</kbd> above
-    #  so code in postProcessHtml works correctly.
-    # postProcessHtml() REQUIRES that "pseudoEntity" only use [a-zA-Z0-9].
-    "&acceptEncodingHtml;",
-    "&acceptEncodingHtmlh3tErddapUrl;",
-    "&adminContact;",
-    "&advancedSearch;",
-    "&algorithm;",
-    "&bgcolor;",
-    "&BroughtToYouBy;",
-    "&C;",
-    # above is <kbd>&category;</kbd>
-    "&convertTimeReference;",
-    "&cookiesHelp;",
-    "&dataFileTypeInfo1;",
-    "&dataFileTypeInfo2;",
-    "&descriptionUrl;",
-    "&datasetListRef;",
-    "&e0;",
-    "&EasierAccessToScientificData;",
-    "&elevation;",
-    "&encodedDefaultPIppQuery;",
-    "&erddapIs;",
-    "&erddapUrl;",
-    "&erddapVersion;",
-    "&exceptions;",
-    "&externalLinkHtml;",
-    "&F;",
-    "&FALSE;",
-    "&format;",
-    "&fromInfo;",
-    "&g;",
-    "&griddapExample;",
-    "&headingType;",
-    "&height;",
-    "&htmlQueryUrl;",
-    "&htmlQueryUrlWithSpaces;",
-    "&htmlTooltipImage;",
-    "&info;",
-    "&initialHelp;",
-    "&jsonQueryUrl;",
-    "&langCode;",
-    "&language;",
-    "&layers;",
-    "&license;",
-    "&likeThis;",
-    "&loginInfo;",
-
-    # these <tag>s were gathered by code in main that matches a regex in messages.xml
-    "&lt;/att&gt;",
+"&lt;/att&gt;",
     "&lt;addAttributes&gt;",
     "&lt;subsetVariables&gt;",
     "&lt;time_precision&gt;",
     "&lt;units_standard&gt;",
     "&lt;updateUrls&gt;",
     "&lt;",
-    "&makeAGraphListRef;",
-    "&makeAGraphRef;",
-    "&nbsp;",
-    "&niceProtocol;",
-    "&NTU;",
-    "&offerValidMinutes;",
-    "&partNumberA;",
-    "&partNumberB;",
-    "&plainLinkExamples1;",
-    "&plainLinkExamples2;",
-    "&plainLinkExamples3;",
-    "&plainLinkExamples4;",
-    "&plainLinkExamples5;",
-    "&plainLinkExamples6;",
-    "&plainLinkExamples7;",
-    "&plainLinkExamples8;",
-    "&protocolName;",
-    "&PSU;",
-    "&requestFormatExamplesHtml;",
-    "&requestGetCapabilities;",
-    "&requestGetMap;",
-    "&resultsFormatExamplesHtml;",
-    # above is <kbd>&safeEmail;</kbd>
-    "&sampleUrl;",
-    "&secondPart;",
-    # above is <kbd>&searchButton;</kbd>
-    "&serviceWMS;",
-    "&sheadingType;",
-    "&ssUse;",
-    "&standardLicense;",
-    "&styles;",
-    "&subListUrl;",
-    "&tabledapExample;",
-    "&tagline;",
-    "&tEmailAddress;",
-    "&tErddapUrl;",
-    "&time;",
-    "&transparentTRUEFALSE;",
-    "&TRUE;",
-    "&tTimestamp;",
-    "&tWmsGetCapabilities130;",
-    "&tWmsOpaqueExample130Replaced;",
-    "&tWmsOpaqueExample130;",
-    "&tWmsTransparentExample130Replaced;",
-    "&tWmsTransparentExample130;",
-    "&tYourName;",
-    "&unitsStandard;",
-    "&variable;",
-    "&version;",
-    "&versionLink;",
-    "&versionResponse;",
-    "&versionStringLink;",
-    "&versionStringResponse;",
-    "&widgetEmailAddress;",
-    "&widgetFrequencyOptions;",
-    "&widgetGriddedOptions;",
-    "&widgetSelectGroup;",
-    "&widgetSubmitButton;",
-    "&widgetTabularOptions;",
-    "&widgetYourName;",
-    "&width;",
-    "&wmsVersion;",
-    "&wmsManyDatasets;",
-    "&WMSSEPARATOR;",
-    "&WMSSERVER;",
-
-    # things that are never translated
     "{ }",
     "{east}",
     "{north}",
@@ -489,154 +789,13 @@ dont_translate_strings = [
     "[standardDisclaimerOfExternalLinks]",
     "[standardPrivacyPolicy]",
     "[standardShortDescriptionHtml]",
-    "@noaa.gov",
-    ".bz2",
-    ".fileType",
-    ".gzip",
-    ".gz",
-    ".hdf",
-    ".htmlTable",
-    ".itx",
-    ".jsonlCSV1",
-    ".jsonlCSV", # must be after the .jsonlCSV1
-    ".jsonlKVP",
-    ".json", # must be after the longer versions
-    ".kml",
-    ".mat",
-    ".nccsv",
-    ".nc", # must be after .nccsv
-    ".tar",
-    ".tgz",
-    ".tsv",
-    ".xhtml",
-    ".zip",
-    ".z",
-
-    # text (proper nouns, parameter names, phrases, etc) that shouldn't be translated
-    "1230768000 seconds since 1970-01-01T00:00:00Z",
-    "2452952 \"days since -4712-01-01\"",
-    "2009-01-21T23:00:00Z",
-    "60000=AS=AMERICA SAMOA",
-    "64000=FM=FEDERATED STATES OF MICRONESIA",
-    "66000=GU=GUAM",
-    "68000=MH=MARSHALL ISLANDS",
-    "69000=MP=NORTHERN MARIANA ISLANDS",
-    "70000=PW=PALAU",
-    "72000=PR=PUERTO RICO",
-    "74000=UM=U.S. MINOR OUTLYING ISLANDS",
-    "78000=VI=VIRGIN ISLANDS OF THE UNITED STATES",
-    "AJAX",
-    "algorithm=Nearest",
-    "algorithms for oligotrophic oceans: A novel approach",
-    "allDatasets",
-    "ArcGIS for Server",
-    "ArcGIS",
-    "Ardour",
-    "Audacity",
-    "Awesome ERDDAP",
-    "based on three-band reflectance difference, J. Geophys.",
-    "beginTime",
-    "bob dot simons at noaa dot gov",
-    "bob.simons at noaa.gov",
     "C., Lee Z., and Franz, B.A. (2012). Chlorophyll-a",
-    "categoryAttributes",
-    "centeredTime",
     "Chronological Julian Dates (CJD)",
-    "COARDS",
-    "colorBarMaximum",
-    "colorBarMinimum",
-    "Conda",
-    "content-encoding",
-    "curl",
-    # "DAP",  is below, after OPeNDAP
-    "d, day, days,",
-    "datasetID/variable/algorithm/nearby", # before datasetID
-    "datasetID",
-    "datasets.xml",
-    "Davis, J.C. 1986. Statistics and Data Analysis in Geology, 2nd Ed. John Wiley and Sons. New York, New York.",
-    "days since 2010-01-01",
-    "deflate",
-    "degree_C",
-    "degree_F",
-    "degrees_east",
-    "degrees_north",
-    "DODS",
-    "DOI",
     "E = &sum;(w Y)/&sum;(w)",
-    "Earth Science &amp; Atmosphere &amp; Atmospheric Pressure &amp; Atmospheric Pressure Measurements",
-    "Earth Science &amp; Atmosphere &amp; Atmospheric Pressure &amp; Sea Level Pressure",
-    "Earth Science &amp; Atmosphere &amp; Atmospheric Pressure &amp; Static Pressure",
-    "EDDGrid",
     "encodeURIComponent()",
-    "endTime",
-    "ERDDAP™",
-    "erddapContentDirectory",
-    "=~tomcat/content/erddap",
-    "_tomcat_/content/erddap",
-    "_tomcat_\\bin\\startup.bat",
-    "_tomcat_\\bin\\setenv.bat",
-    "ERDDAP", # before ERD and DAP
-    "erd dot data at noaa dot gov",
-    "erd.data at noaa.gov",
-    "ERD",
-    "ESPRESSO",
-    "ESPreSSO",
-    "ESRI .asc",
-    "ESRI GeoServices REST",
-    "excludedWord",
-    "Ferret",
-    "FileInfo.com",
     "fileType={0}",
-    "FIPS",
-    "GetCapabilities",
-    "GetMap",
-    "Gimp",
-    "GNOME",
-    "Google Charts",
-    "Google Earth",
-    "Google Visualization",
-    # "gzip", #is below after x-gzip
-    "h, hr, hrs, hour, hours,",
-    "HDF",
     "http<strong>s</strong>",
-    "https://coastwatch.pfeg.noaa.gov/erddap/files/jplMURSST41/.csv",
-    "https://coastwatch.pfeg.noaa.gov/erddap/files/jplMURSST41/",
-    "HTTP GET",
-    "Hyrax",
-    "InverseDistance",
-    "IOOS DIF SOS",
-    "IOOS Animal Telemetry Network",
-    "IrfanView",
-    "Java",
-    "java.net.URLEncoder",
-    "Leaflet",
-    "long_name",
-    "m, min, mins, minute, minutes,",
-    "mashups",
-    "Matlab",
-    "maximum=37.0",
-    "minimum=32.0",
-    "mon, mons, month, months,",
-    "ms, msec, msecs, millis, millisecond, milliseconds,",
-    "NASA's Panoply",
-    "National Oceanic and Atmospheric Administration",
-    "NCO",
-    "Ncview",
-    "Nearest, Bilinear, Scaled",
-    "NetCDF",
-    "NMFS",
-    "NOAA",
-    "now-7days", # before now-
-    "now-",
-    "ODV .txt",
-    "OGC",
-    "OOSTethys",
-    "OPeNDAP",
-    "DAP", # out of place, so that it is after ERDDAP and OPeNDAP
-    "OpenID",
-    "OpenLayers",
-    "OpenSearch",
-    "Oracle",
+    "position={1}",
     "orderBy(\"stationID, time\")", # before orderBy
     "orderByClosest(\"stationID, time/2hours\")",
     "orderByCount(\"stationID, time/1day\")",
@@ -644,73 +803,17 @@ dont_translate_strings = [
     "orderByMax(\"stationID, time/1day, 10\")",
     "orderByMax(\"stationID, time/1day, temperature\")",
     "orderByMinMax(\"stationID, time/1day, temperature\")",
-    "orderByClosest",
-    "orderByCount",
-    "orderByLimit",
-    "orderByMax",
-    "orderByMean",
-    "orderByMinMax",
-    "orderBy", # must be after the longer versions
-    "Panoply",
-    "Photoshop",
-    "position={1}",
-    "Practical Salinity Units",
-    "protocol=griddap",
-    "protocol=tabledap",
-    "PSU",
-    "Pull",
-    "Push",
-    "Python",
-    "Res., 117, C01011, doi:10.1029/2011JC007395.",
-    "RESTful", # before REST
-    "REST",
-    "ROA",
-    "RSS",
-    "s, sec, secs, second, seconds,",
-    "Satellite Application Facility",
-    "Sea Surface Temperature",
-    "searchEngine=lucene",
-    "shutdown.bat",
-    "SOAP+XML",
-    "SOS",
-    "sst",
-    "stationID",
-    "StickX",
-    "StickY",
     "<strong>lines</strong>",
     "<strong>linesAndMarkers</strong>",
     "<strong>markers</strong>",
     "<strong>sticks</strong>",
     "<strong>surface</strong>",
     "<strong>vectors</strong>",
-    "subsetVariables",
-    "Surface Skin Temperature",
-    "SWFSC", # before WFS
-    "Synthetic Aperture Focusing",
-    "tabledap",
-    "Todd",
-    "uDig",
-    "UDUNITS",
-    "Unidata",
-    "URN",
-    "WCS",
-    "week, weeks,",
-    "WFS",
-    "wget",
-    "Wikipedia",
-    "WMS",
-    "x-gzip",
-    "gzip", # must be after x-gzip
-    "yr, yrs, year, or years",
-    "yyyy-MM-ddTHH:mm:ssZ", # before yyyy-MM-dd
-    "yyyy-MM-dd",
-    "Zulu",
-    "\*.sh",
 ]
 
 # For testing
 # language_code_list  = [
-#    "fr",
+#    "ja",
 # ]
 
 def get_file_name(file_path):
@@ -796,9 +899,37 @@ def is_index_in_tag(string, index, opening_tag, closing_tag):
 
     return False
 
+class ImageMatcher:
+  def getMatch(self, chunk):
+    self.match = re.search(r"[!]\[(.*?)\]\((.*?)\)", chunk)
+
+  def getStart(self):
+    if self.match:
+        return self.match.start()
+    else:
+        return -1
+    
+  def getEnd(self):
+    if self.match:
+        return self.match.end()
+    else:
+        return -1
+
+  def processMatch(self, processed_line, idx, chunk):
+    # before link text
+    processed_line["translate_text"][idx] = chunk[:self.match.start()]
+    # link text
+    processed_line["translate_text"].append(self.match.group(1))
+    # text after the link
+    processed_line["translate_text"].append(chunk[self.match.end():])
+    # update format {idx} -> {idx} + "[" +"{legnth-2}" +"]" + "(" + match.group(2) + ")" + "{length-1}"
+    placeholder = "{"+ str(idx) +"}"
+    processed_line["format"] = processed_line["format"].replace(placeholder, placeholder + "![{" + str(len(processed_line["translate_text"]) -2) + "}](" + self.match.group(2) + "){" + str(len(processed_line["translate_text"]) -1) + "}")
+    return processed_line
+
 class LinkMatcher:
   def getMatch(self, chunk):
-    self.match = re.search(r"\[(.*?)\]\((.*?)\)", chunk)
+    self.match = re.search(r"\[((?:[^][]|\[[^]]*\])*)]\(([^)]*?)\)", chunk)
 
   def getStart(self):
     if self.match:
@@ -872,6 +1003,31 @@ class EscapedTagMatcher:
     processed_line["format"] = processed_line["format"].replace(placeholder, placeholder + self.match.group(0) + "{" + str(len(processed_line["translate_text"]) -1) + "}")
     return processed_line
   
+class StarEmphasisMatcher:
+  def getMatch(self, chunk):
+    self.match = re.search(r"\\\*(.*?)\\\*", chunk)
+  def getStart(self):
+    if self.match:
+        return self.match.start()
+    else:
+        return -1
+  def getEnd(self):
+    if self.match:
+        return self.match.end()
+    else:
+        return -1
+  def processMatch(self, processed_line, idx, chunk):
+    # before tag text
+    processed_line["translate_text"][idx] = chunk[:self.match.start()]
+    # The match text
+    processed_line["translate_text"].append(self.match.group(1))
+    # text after the tag
+    processed_line["translate_text"].append(chunk[self.match.end():])
+    # update format {idx} -> {idx} + "*" + {length-1} + "*" + "{length-2}"
+    placeholder = "{"+ str(idx) +"}"
+    processed_line["format"] = processed_line["format"].replace(placeholder, placeholder + "\\*" + "{" + str(len(processed_line["translate_text"]) -2) + "}\\*{"  + str(len(processed_line["translate_text"]) -1) + "}")
+    return processed_line
+  
 class BoldMatcher:
   def getMatch(self, chunk):
     self.match = re.search(r"\*\*(.*?)\*\*", chunk)
@@ -925,24 +1081,36 @@ class ItalicMatcher:
 
 class ParenthesisMatcher:
   def getMatch(self, chunk):
-    self.match = re.search(r"\((.*?)\)", chunk)
+    # This is getting the first outermost pair of parenthesis, so if there are nested parenthesis
+    # eg. a statement (with a parenthetical [and a link](http://example.com) in it)
+    # this matches the outermost paired parenthesis.
+    """Finds the outermost matching parentheses in a given text."""
+    stack = []
+    start_index = -1
+    self.start = -1
+    self.end = -1
+    for i, char in enumerate(chunk):
+        if char == '(':
+            if not stack:
+                start_index = i
+            stack.append(i)
+        elif char == ')' and stack:
+            stack.pop()
+            if not stack:
+                self.start = start_index
+                self.end = i+1
+                return # get the earliest "outer" pair
   def getStart(self):
-    if self.match:
-        return self.match.start()
-    else:
-        return -1
+    return self.start
   def getEnd(self):
-    if self.match:
-        return self.match.end()
-    else:
-        return -1
+    return self.end
   def processMatch(self, processed_line, idx, chunk):
     # before tag text
-    processed_line["translate_text"][idx] = chunk[:self.match.start()]
-    # The match text
-    processed_line["translate_text"].append(self.match.group(1))
+    processed_line["translate_text"][idx] = chunk[:self.start]
+    # The text inside the parenthesis
+    processed_line["translate_text"].append(chunk[(self.start+1):(self.end-1)])
     # text after the tag
-    processed_line["translate_text"].append(chunk[self.match.end():])
+    processed_line["translate_text"].append(chunk[self.end:])
     # update format {idx} -> {idx} + "*" + {length-1} + "*" + "{length-2}"
     placeholder = "{"+ str(idx) +"}"
     processed_line["format"] = processed_line["format"].replace(placeholder, placeholder + " (" + "{" + str(len(processed_line["translate_text"]) -2) + "}) {"  + str(len(processed_line["translate_text"]) -1) + "}")
@@ -968,16 +1136,43 @@ class BracesMatcher:
     processed_line["translate_text"].append(chunk[self.match.end():])
     # update format {idx} -> {idx} + "<" + match.group(0) + ">" + "{length-1}"
     placeholder = "{"+ str(idx) +"}"
-    processed_line["format"] = processed_line["format"].replace(placeholder, placeholder + self.match.group(0) + "{" + str(len(processed_line["translate_text"]) -1) + "}")
+    processed_line["format"] = processed_line["format"].replace(placeholder, placeholder + self.match.group(0) + " {" + str(len(processed_line["translate_text"]) -1) + "}")
+    return processed_line
+  
+class UrlMatcher:
+  def getMatch(self, chunk):
+    self.match = re.search(r"(?:http|https|ftp)://[^ \)<]+(?<![.,?!])", chunk)
+
+  def getStart(self):
+    if self.match:
+        return self.match.start()
+    else:
+        return -1
+  def getEnd(self):
+    if self.match:
+        return self.match.end()
+    else:
+        return -1
+  def processMatch(self, processed_line, idx, chunk):
+    # before tag text
+    processed_line["translate_text"][idx] = chunk[:self.match.start()]
+    # text after the tag
+    processed_line["translate_text"].append(chunk[self.match.end():])
+    # update format {idx} -> {idx} + "<" + match.group(0) + ">" + "{length-1}"
+    placeholder = "{"+ str(idx) +"}"
+    processed_line["format"] = processed_line["format"].replace(placeholder, placeholder + " " + self.match.group(0) + " {" + str(len(processed_line["translate_text"]) -1) + "}")
     return processed_line
 
 markdown_matchers = [
+    ImageMatcher(),
     LinkMatcher(),
     TagMatcher(),
     EscapedTagMatcher(),
+    StarEmphasisMatcher(),
     BoldMatcher(),
     ItalicMatcher(),
     ParenthesisMatcher(),
+    UrlMatcher(),
 ]
 def preprocess_file(text):
     line_info = []
@@ -1075,21 +1270,32 @@ def preprocess_file(text):
                 formatting = match.group(0)
                 processed_line["format"] = formatting + processed_line["format"]
                 processed_line["translate_text"][0] = processed_line["translate_text"][0][len(formatting):]
-        
+
+        for no_translate in pre_matcher_dont_translate_strings:
+            for idx, chunk in enumerate(processed_line["translate_text"]):
+                index = chunk.find(no_translate)
+                if index > -1:
+                    # If there's more than one, we will find it later in the for loop,
+                    # this iterates over chunks that are appended during the iteration
+                    processed_line["translate_text"][idx] = chunk[:index]
+                    processed_line["translate_text"].append(chunk[index+len(no_translate):])
+                    placeholder = "{"+ str(idx) +"}"
+                    processed_line["format"] = processed_line["format"].replace(placeholder, placeholder + no_translate + "{" + str(len(processed_line["translate_text"]) -1) + "}")
+
         idx = 0
         while idx < len(processed_line["translate_text"]):
             chunk = processed_line["translate_text"][idx]
             best_match = None
             for matcher in markdown_matchers:
                 matcher.getMatch(chunk)
-                if not best_match:
-                    if matcher.getStart() > -1:
+                if matcher.getStart() > -1:
+                    if not best_match:
                         best_match = matcher
-                elif matcher.getEnd() > -1 and matcher.getEnd() > best_match.getEnd():
-                    best_match = matcher
+                    elif matcher.getStart() > -1 and (matcher.getStart() < best_match.getStart() or (matcher.getStart() == best_match.getStart() and matcher.getEnd() > best_match.getEnd())):
+                        best_match = matcher
             if best_match:
                 processed_line = best_match.processMatch(processed_line, idx, chunk)
-                # reprocess this chunk, don't increment the index
+                # reprocess this chunk, don't incerment the index
             else:
                 idx = idx + 1
 
@@ -1109,8 +1315,13 @@ def preprocess_file(text):
     return line_info
 
 def postprocess_line(format, chunks):
-    # text = text.replace(start_no_translate + "&amp;", start_no_translate + "&")
-    # text = text.replace(start_no_translate + "<kbd>&amp;", start_no_translate + "<kbd>&")
+    # escape special characters in translation
+    for idx, chunk in enumerate(chunks):
+        chunks[idx] = chunks[idx].replace('<', '&lt;')
+        chunks[idx] = chunks[idx].replace('>', '&gt;')
+        chunks[idx] = chunks[idx].replace('!', '&#33;')
+        chunks[idx] = chunks[idx].replace('{', '&#123;')
+        chunks[idx] = chunks[idx].replace('}', '&#125;')
     index = 0
     end_span = 0
     count = 0
@@ -1120,8 +1331,10 @@ def postprocess_line(format, chunks):
         if index > -1 and end_span > -1:
             chunk_id = format[index+1:end_span]
             if index + 5 > end_span and chunk_id.isdigit() and int(chunk_id) < len(chunks):
-                format = format[0:index] + chunks[int(chunk_id)] + format[end_span+1:]
+                chunk = chunks[int(chunk_id)]
+                format = format[0:index] + chunk + format[end_span+1:]
                 count = count + 1
+                index = index + len(chunk)
             else:
                 index = index + 1
     format = fix_invalid_escapes(format)
@@ -1135,7 +1348,11 @@ def translate_markdown(file_contents, output_file, to_code):
     for line in file_contents:
         translated_text = []
         for chunk in line["translate_text"]:
-            translated_text.append(argostranslate.translate.translate(chunk, from_code=from_code, to_code=to_code))
+            # Empty or just white space strings, just append.
+            if not chunk.strip():
+               translated_text.append(chunk)
+            else:
+                translated_text.append(argostranslate.translate.translate(chunk, from_code=from_code, to_code=to_code))
 
         translated_file.append(postprocess_line(line["format"], translated_text))
     
@@ -1249,7 +1466,7 @@ def fix_invalid_escapes(text):
   Returns:
     The string with invalid escape sequences fixed.
   """
-  pattern = r"(?<!\\)\\([^ntbrf\"'\\\0])"
+  pattern = r"(?<!\\)\\([^ntbfr\"'\\\0])"
   while True:
     match = re.search(pattern, text)
     if match:
@@ -1298,7 +1515,7 @@ for page in pages_list:
     translate_markdown_all(page, "/docusaurus-plugin-content-pages/" + get_file_name(page))
 
 # translate markdown docs
-docs_dir = "documentation/docs"
+docs_dir = "documentation/docs/"
 docs_list = find_files(docs_dir, ".md")
 for doc in docs_list:
     # page output: i18n/{lang_code}/docusaurus-plugin-content-docs/current/{docName}.md
